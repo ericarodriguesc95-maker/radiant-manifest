@@ -27,6 +27,7 @@ const App = () => (
             <Route path="/financas" element={<FinancasPage />} />
             <Route path="/comunidade" element={<ComunidadePage />} />
             <Route path="/vision-board" element={<VisionBoardPage />} />
+            <Route path="/reprogramacao" element={<ReprogramacaoPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

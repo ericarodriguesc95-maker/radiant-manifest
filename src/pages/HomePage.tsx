@@ -39,13 +39,14 @@ const HomePage = () => {
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3">
           {[
-            { icon: Brain, label: "Reprogramação Mental", color: "bg-secondary text-secondary-foreground" },
-            { icon: Sparkles, label: "Meditação", color: "bg-secondary text-secondary-foreground" },
-            { icon: BookOpen, label: "Skincare", color: "bg-secondary text-secondary-foreground" },
-            { icon: Droplets, label: "Saúde & Fitness", color: "bg-secondary text-secondary-foreground" },
-          ].map(({ icon: Icon, label, color }) => (
+            { icon: Brain, label: "Reprogramação Mental", color: "bg-secondary text-secondary-foreground", to: "/reprogramacao" },
+            { icon: Sparkles, label: "Meditação", color: "bg-secondary text-secondary-foreground", to: "/reprogramacao" },
+            { icon: BookOpen, label: "Skincare", color: "bg-secondary text-secondary-foreground", to: "/guias" },
+            { icon: Droplets, label: "Saúde & Fitness", color: "bg-secondary text-secondary-foreground", to: "/guias" },
+          ].map(({ icon: Icon, label, color, to }) => (
             <button
               key={label}
+              onClick={() => navigate(to)}
               className={`${color} rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-card active:scale-[0.98]`}
             >
               <Icon className="h-5 w-5 text-gold" />
