@@ -25,6 +25,7 @@ const App = () => (
             <Route path="/metas" element={<MetasPage />} />
             <Route path="/financas" element={<FinancasPage />} />
             <Route path="/comunidade" element={<ComunidadePage />} />
+            <Route path="/vision-board" element={<VisionBoardPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
