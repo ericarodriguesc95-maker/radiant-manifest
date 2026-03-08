@@ -10,6 +10,7 @@ import FinancasPage from "@/pages/FinancasPage";
 import ComunidadePage from "@/pages/ComunidadePage";
 import VisionBoardPage from "@/pages/VisionBoardPage";
 import ReprogramacaoPage from "@/pages/ReprogramacaoPage";
+import GuiasPage from "@/pages/GuiasPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
