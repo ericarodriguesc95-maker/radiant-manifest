@@ -9,6 +9,7 @@ import MetasPage from "@/pages/MetasPage";
 import FinancasPage from "@/pages/FinancasPage";
 import ComunidadePage from "@/pages/ComunidadePage";
 import VisionBoardPage from "@/pages/VisionBoardPage";
+import ReprogramacaoPage from "@/pages/ReprogramacaoPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/financas" element={<FinancasPage />} />
             <Route path="/comunidade" element={<ComunidadePage />} />
             <Route path="/vision-board" element={<VisionBoardPage />} />
+            <Route path="/reprogramacao" element={<ReprogramacaoPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
