@@ -8,6 +8,7 @@ import HomePage from "@/pages/HomePage";
 import MetasPage from "@/pages/MetasPage";
 import FinancasPage from "@/pages/FinancasPage";
 import ComunidadePage from "@/pages/ComunidadePage";
+import VisionBoardPage from "@/pages/VisionBoardPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/metas" element={<MetasPage />} />
             <Route path="/financas" element={<FinancasPage />} />
             <Route path="/comunidade" element={<ComunidadePage />} />
+            <Route path="/vision-board" element={<VisionBoardPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
