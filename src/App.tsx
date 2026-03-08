@@ -9,6 +9,7 @@ import MetasPage from "@/pages/MetasPage";
 import FinancasPage from "@/pages/FinancasPage";
 import ComunidadePage from "@/pages/ComunidadePage";
 import VisionBoardPage from "@/pages/VisionBoardPage";
+import ReprogramacaoPage from "@/pages/ReprogramacaoPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
