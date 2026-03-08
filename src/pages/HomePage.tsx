@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
 import MonthlyCalendar from "@/components/MonthlyCalendar";
