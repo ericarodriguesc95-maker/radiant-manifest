@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import MonthlyCalendar from "@/components/MonthlyCalendar";
 import HabitTracker from "@/components/HabitTracker";
