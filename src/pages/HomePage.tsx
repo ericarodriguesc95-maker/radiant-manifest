@@ -9,6 +9,7 @@ import NotificationsPanel from "@/components/NotificationsPanel";
 
 const HomePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen">
