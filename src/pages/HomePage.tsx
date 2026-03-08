@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
+import DailyDevotional from "@/components/DailyDevotional";
 import MonthlyCalendar from "@/components/MonthlyCalendar";
 import HabitTracker from "@/components/HabitTracker";
 import NotificationsPanel from "@/components/NotificationsPanel";
@@ -33,8 +33,11 @@ const HomePage = () => {
       {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
 
       <div className="px-5 space-y-6 pb-6">
-        {/* Daily Affirmation */}
-        <AffirmationCard />
+        {/* Guias do Dia */}
+        <section className="space-y-3">
+          <DailyDevotional />
+          <AffirmationCard />
+        </section>
 
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3">
@@ -75,3 +78,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
