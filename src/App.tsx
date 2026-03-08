@@ -10,6 +10,7 @@ import FinancasPage from "@/pages/FinancasPage";
 import ComunidadePage from "@/pages/ComunidadePage";
 import VisionBoardPage from "@/pages/VisionBoardPage";
 import ReprogramacaoPage from "@/pages/ReprogramacaoPage";
+import GuiasPage from "@/pages/GuiasPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/comunidade" element={<ComunidadePage />} />
             <Route path="/vision-board" element={<VisionBoardPage />} />
             <Route path="/reprogramacao" element={<ReprogramacaoPage />} />
+            <Route path="/guias" element={<GuiasPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
