@@ -15,10 +15,9 @@ export default function GuiasPage() {
       </div>
 
       <Tabs defaultValue="skincare" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-6">
+        <TabsList className="grid w-full grid-cols-2 mb-6">
           <TabsTrigger value="skincare">Skincare</TabsTrigger>
           <TabsTrigger value="emagrecimento">Saúde</TabsTrigger>
-          <TabsTrigger value="performance">Performance</TabsTrigger>
         </TabsList>
 
         {/* Skincare Tab */}
