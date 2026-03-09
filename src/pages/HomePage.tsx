@@ -6,6 +6,7 @@ import DailyDevotional from "@/components/DailyDevotional";
 import MonthlyCalendar from "@/components/MonthlyCalendar";
 import HabitTracker from "@/components/HabitTracker";
 import NotificationsPanel from "@/components/NotificationsPanel";
+import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 
 const HomePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
