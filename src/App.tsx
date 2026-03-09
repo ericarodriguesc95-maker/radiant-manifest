@@ -11,6 +11,7 @@ import ComunidadePage from "@/pages/ComunidadePage";
 import VisionBoardPage from "@/pages/VisionBoardPage";
 import ReprogramacaoPage from "@/pages/ReprogramacaoPage";
 import GuiasPage from "@/pages/GuiasPage";
+import AltaPerformancePage from "@/pages/AltaPerformancePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
