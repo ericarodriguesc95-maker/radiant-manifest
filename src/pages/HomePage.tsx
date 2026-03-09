@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap } from "lucide-react";
+import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
@@ -22,13 +22,21 @@ const HomePage = () => {
             Glow Up <span className="text-gold">✦</span>
           </h1>
         </div>
-        <button
-          onClick={() => setShowNotifications(!showNotifications)}
-          className="relative p-2 rounded-full hover:bg-muted transition-colors"
-        >
-          <Bell className="h-5 w-5 text-foreground" />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-gold" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowNotifications(!showNotifications)}
+            className="relative p-2 rounded-full hover:bg-muted transition-colors"
+          >
+            <Bell className="h-5 w-5 text-foreground" />
+            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-gold" />
+          </button>
+          <button
+            onClick={() => navigate("/settings")}
+            className="p-2 rounded-full hover:bg-muted transition-colors"
+          >
+            <Settings className="h-5 w-5 text-foreground" />
+          </button>
+        </div>
       </header>
 
       {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
