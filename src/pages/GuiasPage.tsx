@@ -1,4 +1,4 @@
-import { Sparkles, Sun, Moon, Droplets, Heart, Flame, Apple, Dumbbell } from "lucide-react";
+import { Sparkles, Sun, Moon, Droplets, Heart, Flame, Apple, Dumbbell, BookOpen, Headphones, GraduationCap, Palette, TrendingUp, ExternalLink } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
