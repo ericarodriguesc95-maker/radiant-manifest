@@ -73,6 +73,11 @@ const HomePage = () => {
           <h2 className="text-lg font-display font-semibold mb-3">Hábitos de Hoje</h2>
           <HabitTracker />
         </section>
+
+        {/* Notification Settings */}
+        <section>
+          <NotificationSettingsCard />
+        </section>
       </div>
     </div>
   );
