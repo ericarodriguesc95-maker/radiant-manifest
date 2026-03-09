@@ -221,6 +221,7 @@ export default function GuiasPage() {
           </Card>
         </TabsContent>
 
+
         {/* Performance Tab */}
         <TabsContent value="performance" className="space-y-6">
           {/* Study Techniques */}
