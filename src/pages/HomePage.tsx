@@ -6,6 +6,7 @@ import DailyDevotional from "@/components/DailyDevotional";
 import MonthlyCalendar from "@/components/MonthlyCalendar";
 import HabitTracker from "@/components/HabitTracker";
 import NotificationsPanel from "@/components/NotificationsPanel";
+import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 
 const HomePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -71,6 +72,11 @@ const HomePage = () => {
         <section>
           <h2 className="text-lg font-display font-semibold mb-3">Hábitos de Hoje</h2>
           <HabitTracker />
+        </section>
+
+        {/* Notification Settings */}
+        <section>
+          <NotificationSettingsCard />
         </section>
       </div>
     </div>
