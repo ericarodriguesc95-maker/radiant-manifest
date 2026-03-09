@@ -31,6 +31,7 @@ const App = () => (
             <Route path="/vision-board" element={<VisionBoardPage />} />
             <Route path="/reprogramacao" element={<ReprogramacaoPage />} />
             <Route path="/guias" element={<GuiasPage />} />
+            <Route path="/alta-performance" element={<AltaPerformancePage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
