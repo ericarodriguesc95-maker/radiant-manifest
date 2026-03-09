@@ -1,7 +1,6 @@
 import { Sparkles, Sun, Moon, Droplets, Heart, Flame, Apple, Dumbbell } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function GuiasPage() {
   return (
