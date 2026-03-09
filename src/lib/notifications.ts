@@ -71,14 +71,15 @@ function getRandomItem<T>(arr: T[]): T {
 export function sendNotification(title: string, body: string, tag: string) {
   if (!("Notification" in window) || Notification.permission !== "granted") return;
 
-  const notification = new Notification(title, {
+  const options: NotificationOptions & { renotify?: boolean } = {
     body,
     icon: "/favicon.ico",
     badge: "/favicon.ico",
     tag,
-    renotify: true,
     silent: false,
-  });
+  };
+
+  const notification = new Notification(title, options);
 
   notification.onclick = () => {
     window.focus();
