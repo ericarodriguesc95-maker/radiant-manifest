@@ -290,6 +290,13 @@ export default function GuiasPage() {
                 </div>
                 <ExternalLink className="h-4 w-4 text-primary flex-shrink-0" />
               </a>
+              <a href="https://www.youtube.com/@joeljota" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-foreground">Joel Jota</p>
+                  <p className="text-xs text-muted-foreground">Alta performance, disciplina, mentalidade vencedora</p>
+                </div>
+                <ExternalLink className="h-4 w-4 text-primary flex-shrink-0" />
+              </a>
             </CardContent>
           </Card>
 
