@@ -233,23 +233,51 @@ export default function GuiasPage() {
               </div>
               <CardDescription>Métodos cientificamente validados para aprendizado</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-foreground">Pomodoro + Revisão Espaçada</p>
-                <p className="text-sm text-muted-foreground">25min foco intenso + 5min pausa. Revise em 1h, 1 dia, 1 semana, 1 mês</p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-foreground">Método Feynman</p>
-                <p className="text-sm text-muted-foreground">Explique o conceito como se ensinasse para uma criança - revela lacunas</p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-foreground">Active Recall</p>
-                <p className="text-sm text-muted-foreground">Teste-se constantemente sem consultar - fortalece memória de longo prazo</p>
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-semibold text-foreground">Interleaving</p>
-                <p className="text-sm text-muted-foreground">Alterne entre assuntos diferentes - melhora associação de conceitos</p>
-              </div>
+            <CardContent>
+              <Accordion type="multiple" className="w-full">
+                <AccordionItem value="pomodoro">
+                  <AccordionTrigger className="text-sm font-semibold text-foreground">Pomodoro + Revisão Espaçada</AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground space-y-2">
+                    <p>A técnica Pomodoro consiste em dividir o estudo em blocos de <strong className="text-foreground">25 minutos de foco intenso</strong> seguidos de <strong className="text-foreground">5 minutos de pausa</strong>. A cada 4 ciclos, faça uma pausa maior de 15-30 min.</p>
+                    <p>Combine com a <strong className="text-foreground">Revisão Espaçada</strong>: revise o conteúdo após 1 hora, 1 dia, 1 semana e 1 mês. Isso combate a curva do esquecimento e consolida a memória de longo prazo.</p>
+                    <p className="text-xs italic">💡 Use apps como Forest ou Toggl para cronometrar seus pomodoros.</p>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="feynman">
+                  <AccordionTrigger className="text-sm font-semibold text-foreground">Método Feynman</AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground space-y-2">
+                    <p>Criado pelo físico Richard Feynman, este método tem 4 passos:</p>
+                    <ol className="list-decimal list-inside space-y-1">
+                      <li><strong className="text-foreground">Escolha um conceito</strong> e estude-o</li>
+                      <li><strong className="text-foreground">Explique como se ensinasse a uma criança</strong> — use linguagem simples</li>
+                      <li><strong className="text-foreground">Identifique lacunas</strong> — onde travou? Volte e estude mais</li>
+                      <li><strong className="text-foreground">Simplifique e use analogias</strong> — refine sua explicação</li>
+                    </ol>
+                    <p className="text-xs italic">💡 Gravar áudios explicando o assunto é uma ótima forma de praticar.</p>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="active-recall">
+                  <AccordionTrigger className="text-sm font-semibold text-foreground">Active Recall</AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground space-y-2">
+                    <p>Em vez de reler anotações passivamente, <strong className="text-foreground">teste-se constantemente</strong>. Feche o livro e tente lembrar o que acabou de estudar.</p>
+                    <p>Técnicas práticas:</p>
+                    <ul className="list-disc list-inside space-y-1">
+                      <li>Crie flashcards (Anki é excelente para isso)</li>
+                      <li>Escreva perguntas sobre o conteúdo e responda sem consultar</li>
+                      <li>Faça resumos de memória após cada sessão de estudo</li>
+                    </ul>
+                    <p className="text-xs italic">💡 Estudos mostram que testar a si mesmo é 50% mais eficaz que reler.</p>
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="interleaving">
+                  <AccordionTrigger className="text-sm font-semibold text-foreground">Interleaving</AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground space-y-2">
+                    <p>Em vez de estudar um único assunto por horas, <strong className="text-foreground">alterne entre tópicos diferentes</strong> numa mesma sessão.</p>
+                    <p>Exemplo: 30min de matemática → 30min de história → 30min de ciências. Isso força o cérebro a <strong className="text-foreground">diferenciar e conectar conceitos</strong>, melhorando a retenção.</p>
+                    <p className="text-xs italic">💡 Parece mais difícil no início, mas os resultados a longo prazo são muito superiores ao estudo em blocos.</p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </CardContent>
           </Card>
 
