@@ -261,6 +261,23 @@ const ComunidadePage = () => {
     setMediaType(null);
   };
 
+  const handleStickerGifSelect = (url: string, type: "gif" | "sticker") => {
+    setShowStickerPicker(false);
+    // For emoji stickers, send as text post with large emoji
+    if (url.startsWith("emoji:")) {
+      const emoji = url.replace("emoji:", "");
+      // Set as media so it renders large
+      setMediaFile(null);
+      setMediaPreview(url);
+      setMediaType("sticker");
+      return;
+    }
+    // For GIF/animated sticker URLs
+    setMediaFile(null);
+    setMediaPreview(url);
+    setMediaType(type);
+  };
+
   // Audio recording
   const startRecording = async () => {
     try {
