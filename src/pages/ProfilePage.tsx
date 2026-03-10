@@ -15,6 +15,7 @@ interface ProfileData {
   display_name: string | null;
   avatar_url: string | null;
   cover_url: string | null;
+  cover_position: number;
   bio: string | null;
   created_at: string;
 }
