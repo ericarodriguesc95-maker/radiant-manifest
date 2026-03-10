@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Heart, MessageCircle, Send, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -55,6 +55,25 @@ const ComunidadePage = () => {
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [newPost, setNewPost] = useState("");
   const [showComments, setShowComments] = useState<string | null>(null);
+
+  // Pick up pending conquista from HomePage
+  useEffect(() => {
+    const pending = sessionStorage.getItem("pending-conquista");
+    if (pending) {
+      sessionStorage.removeItem("pending-conquista");
+      const post: Post = {
+        id: Date.now().toString(),
+        author: "Você",
+        avatar: "💎",
+        text: pending,
+        likes: 0,
+        liked: false,
+        comments: [],
+        time: "agora",
+      };
+      setPosts(prev => [post, ...prev]);
+    }
+  }, []);
 
   const toggleLike = (id: string) => {
     setPosts(prev =>

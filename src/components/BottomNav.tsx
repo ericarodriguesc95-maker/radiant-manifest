@@ -1,10 +1,10 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Target, Wallet, Users, LayoutGrid, Zap } from "lucide-react";
+import { Home, Target, Wallet, Users, Zap, Compass } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const tabs = [
   { to: "/", icon: Home, label: "Home" },
-  { to: "/vision-board", icon: LayoutGrid, label: "Visão" },
+  { to: "/jornada", icon: Compass, label: "Jornada" },
   { to: "/metas", icon: Target, label: "Metas" },
   { to: "/alta-performance", icon: Zap, label: "Performance" },
   { to: "/financas", icon: Wallet, label: "Finanças" },
