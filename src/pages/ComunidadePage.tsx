@@ -819,9 +819,12 @@ const ComunidadePage = () => {
             <div key={post.id} className="bg-card rounded-2xl border border-border overflow-hidden animate-fade-in">
               {/* Post header */}
               <div className="flex items-center gap-3 p-4 pb-2">
-                <Avatar url={post.avatar_url} name={post.display_name} userId={post.user_id} />
+                <Avatar url={post.avatar_url} name={post.display_name} userId={post.user_id} clickable />
                 <div className="flex-1">
-                  <p className="text-sm font-body font-semibold">
+                  <p
+                    className="text-sm font-body font-semibold cursor-pointer hover:text-gold transition-colors"
+                    onClick={() => setViewingProfileUserId(post.user_id)}
+                  >
                     {post.user_id === user?.id ? "Você" : post.display_name}
                   </p>
                   <p className="text-[10px] text-muted-foreground font-body">{formatTime(post.created_at)}</p>
