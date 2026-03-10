@@ -200,6 +200,8 @@ const ComunidadePage = () => {
           sendNotification("📣 Menção", `${name} mencionou você: "${(n.comment_text || "").slice(0, 60)}"`, `mention-${n.id}`);
         } else if (n.type === "welcome") {
           sendNotification("🦋 Nova integrante!", `${name} entrou para o Glow Up!`, `welcome-${n.id}`);
+        } else if (n.type === "new_post") {
+          sendNotification("📝 Novo post!", `${name} publicou: "${(n.comment_text || "").slice(0, 60)}"`, `new_post-${n.id}`);
         }
       })
       .subscribe();
