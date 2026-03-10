@@ -3,6 +3,7 @@ import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Pape
 import EmojiPicker from "@/components/EmojiPicker";
 import MentionInput, { renderTextWithMentions } from "@/components/MentionInput";
 import { useOnlinePresence } from "@/hooks/useOnlinePresence";
+import { sendNotification, requestNotificationPermission } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Leaderboard from "@/components/Leaderboard";
@@ -167,6 +168,43 @@ const ComunidadePage = () => {
     return () => { supabase.removeChannel(channel); };
   }, [fetchPosts]);
 
+  // Realtime push notifications for likes, comments, mentions
+  useEffect(() => {
+    if (!user) return;
+    requestNotificationPermission();
+
+    const channel = supabase
+      .channel("my-push-notifications")
+      .on("postgres_changes", {
+        event: "INSERT",
+        schema: "public",
+        table: "notifications",
+        filter: `user_id=eq.${user.id}`,
+      }, async (payload: any) => {
+        const n = payload.new;
+        if (!n || n.from_user_id === user.id) return;
+
+        // Fetch from_user name
+        const { data: prof } = await supabase
+          .from("profiles")
+          .select("display_name")
+          .eq("user_id", n.from_user_id)
+          .single();
+        const name = prof?.display_name || "Alguém";
+
+        if (n.type === "like") {
+          sendNotification("❤️ Curtida", `${name} curtiu seu post!`, `like-${n.id}`);
+        } else if (n.type === "comment") {
+          sendNotification("💬 Comentário", `${name} comentou: "${(n.comment_text || "").slice(0, 60)}"`, `comment-${n.id}`);
+        } else if (n.type === "mention") {
+          sendNotification("📣 Menção", `${name} mencionou você: "${(n.comment_text || "").slice(0, 60)}"`, `mention-${n.id}`);
+        }
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [user]);
+
   useEffect(() => {
     const pending = sessionStorage.getItem("pending-conquista");
     if (pending && user) {
@@ -264,6 +302,36 @@ const ComunidadePage = () => {
     return `${m}:${s}`;
   };
 
+  // Extract mentioned user_ids from text
+  const extractMentionedUserIds = (text: string): string[] => {
+    const mentions = text.match(/@(\S+(?:\s\S+)?)/g);
+    if (!mentions) return [];
+    const ids: string[] = [];
+    mentions.forEach(m => {
+      const name = m.slice(1).trim();
+      const found = allUsers.find(u => u.display_name?.toLowerCase() === name.toLowerCase());
+      if (found) ids.push(found.user_id);
+    });
+    return [...new Set(ids)];
+  };
+
+  // Send mention notifications
+  const sendMentionNotifications = async (text: string, postId: string) => {
+    if (!user) return;
+    const mentionedIds = extractMentionedUserIds(text);
+    for (const uid of mentionedIds) {
+      if (uid !== user.id) {
+        await supabase.from("notifications").insert({
+          user_id: uid,
+          from_user_id: user.id,
+          type: "mention",
+          post_id: postId,
+          comment_text: text.slice(0, 100),
+        });
+      }
+    }
+  };
+
   const createPost = async () => {
     if ((!newPost.trim() && !mediaFile) || !user) return;
     setUploading(true);
@@ -273,12 +341,19 @@ const ComunidadePage = () => {
       media = await uploadMedia(mediaFile);
     }
 
-    await supabase.from("community_posts").insert({
+    const postText = newPost.trim() || (media ? `📎 ${media.type === "image" ? "Imagem" : media.type === "audio" ? "Áudio" : "Documento"}` : "");
+
+    const { data: insertedPost } = await supabase.from("community_posts").insert({
       user_id: user.id,
-      text: newPost.trim() || (media ? `📎 ${media.type === "image" ? "Imagem" : media.type === "audio" ? "Áudio" : "Documento"}` : ""),
+      text: postText,
       media_url: media?.url || null,
       media_type: media?.type || null,
-    });
+    }).select("id").single();
+
+    // Send mention notifications
+    if (insertedPost) {
+      await sendMentionNotifications(postText, insertedPost.id);
+    }
 
     setNewPost("");
     clearMedia();
@@ -316,6 +391,9 @@ const ComunidadePage = () => {
         user_id: postOwnerId, from_user_id: user.id, type: "comment", post_id: postId, comment_text: text,
       });
     }
+    // Send mention notifications from comment
+    await sendMentionNotifications(text, postId);
+
     setCommentTexts(prev => ({ ...prev, [postId]: "" }));
     setExpandedComments(prev => new Set(prev).add(postId));
     fetchPosts();
