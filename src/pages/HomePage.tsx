@@ -20,10 +20,19 @@ const HomePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUpdates, setShowUpdates] = useState(false);
   const [hasUnreadUpdates, setHasUnreadUpdates] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [completedHabits, setCompletedHabits] = useState<Set<string>>(new Set());
   const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  // Check admin role
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("user_roles" as any).select("role").eq("user_id", user.id).eq("role", "admin").then(({ data }) => {
+      setIsAdmin((data as any[])?.length > 0);
+    });
+  }, [user]);
 
   const streakCount = parseInt(localStorage.getItem("glow-up-streak") || "0");
 
