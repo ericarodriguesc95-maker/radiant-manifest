@@ -602,7 +602,17 @@ const ComunidadePage = () => {
 
               {/* Post content */}
               <div className="px-4 pb-3">
-                <p className="text-sm font-body leading-relaxed">{post.text}</p>
+                {editingPostId === post.id ? (
+                  <textarea
+                    value={editPostText}
+                    onChange={e => setEditPostText(e.target.value)}
+                    className="w-full bg-muted/50 text-sm font-body rounded-xl px-3 py-2 outline-none resize-none border border-gold/30 focus:border-gold"
+                    rows={3}
+                    autoFocus
+                  />
+                ) : (
+                  <p className="text-sm font-body leading-relaxed">{post.text}</p>
+                )}
 
                 {/* Post media */}
                 {post.media_url && post.media_type === "image" && (
