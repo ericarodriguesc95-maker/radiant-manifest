@@ -78,6 +78,13 @@ const HomePage = () => {
         </div>
         <div className="flex items-center gap-2">
           <button
+            onClick={() => (window as any).__startGlowTour?.()}
+            className="p-2 rounded-full hover:bg-muted transition-colors"
+            title="Tour guiado"
+          >
+            <MapPin className="h-5 w-5 text-foreground" />
+          </button>
+          <button
             onClick={() => setShowUpdates(true)}
             className="relative p-2 rounded-full hover:bg-muted transition-colors"
             title="Novidades do App"
