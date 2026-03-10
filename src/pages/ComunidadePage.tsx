@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText, Pencil, Check, Smile } from "lucide-react";
+import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText, Pencil, Check, Smile, Bell, UserPlus, UserMinus, Settings } from "lucide-react";
 import EmojiPicker from "@/components/EmojiPicker";
 import MentionInput, { renderTextWithMentions } from "@/components/MentionInput";
 import { useOnlinePresence } from "@/hooks/useOnlinePresence";
 import GifStickerPicker from "@/components/GifStickerPicker";
+import NotificationsPanel from "@/components/NotificationsPanel";
 import { sendNotification, requestNotificationPermission } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Leaderboard from "@/components/Leaderboard";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -39,12 +41,18 @@ interface PostWithProfile {
 
 const ComunidadePage = () => {
   const { user, profile } = useAuth();
+  const navigate = useNavigate();
   const [posts, setPosts] = useState<PostWithProfile[]>([]);
   const [newPost, setNewPost] = useState("");
   const [loading, setLoading] = useState(true);
   const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set());
   const [commentTexts, setCommentTexts] = useState<Record<string, string>>({});
   const [allUsers, setAllUsers] = useState<{ user_id: string; display_name: string | null; avatar_url: string | null }[]>([]);
+
+  // Follow system
+  const [followingSet, setFollowingSet] = useState<Set<string>>(new Set());
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   // Online presence
   const onlineUsers = useOnlinePresence(user?.id);
@@ -77,13 +85,24 @@ const ComunidadePage = () => {
   const docInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch all users for mention suggestions
+  // Fetch all users for mention suggestions + follows + unread count
   useEffect(() => {
+    if (!user) return;
     const fetchUsers = async () => {
       const { data } = await supabase.from("profiles").select("user_id, display_name, avatar_url");
       if (data) setAllUsers(data.filter(u => u.user_id !== user?.id));
     };
-    if (user) fetchUsers();
+    const fetchFollows = async () => {
+      const { data } = await supabase.from("user_follows").select("following_id").eq("follower_id", user.id);
+      if (data) setFollowingSet(new Set(data.map((f: any) => f.following_id)));
+    };
+    const fetchUnread = async () => {
+      const { count } = await supabase.from("notifications").select("*", { count: "exact", head: true }).eq("user_id", user.id).eq("read", false);
+      setUnreadCount(count || 0);
+    };
+    fetchUsers();
+    fetchFollows();
+    fetchUnread();
   }, [user]);
 
   const fetchPosts = useCallback(async () => {
@@ -204,7 +223,11 @@ const ComunidadePage = () => {
           sendNotification("🦋 Nova integrante!", `${name} entrou para o Glow Up!`, `welcome-${n.id}`);
         } else if (n.type === "new_post") {
           sendNotification("📝 Novo post!", `${name} publicou: "${(n.comment_text || "").slice(0, 60)}"`, `new_post-${n.id}`);
+        } else if (n.type === "follow") {
+          sendNotification("👤 Nova seguidora!", `${name} começou a te seguir!`, `follow-${n.id}`);
         }
+        // Update unread count
+        setUnreadCount(prev => prev + 1);
       })
       .subscribe();
 
@@ -336,6 +359,27 @@ const ComunidadePage = () => {
       if (found) ids.push(found.user_id);
     });
     return [...new Set(ids)];
+  };
+
+  // Follow/unfollow
+  const toggleFollow = async (targetUserId: string) => {
+    if (!user) return;
+    const isFollowing = followingSet.has(targetUserId);
+    if (isFollowing) {
+      await supabase.from("user_follows").delete().eq("follower_id", user.id).eq("following_id", targetUserId);
+      setFollowingSet(prev => { const n = new Set(prev); n.delete(targetUserId); return n; });
+    } else {
+      await supabase.from("user_follows").insert({ follower_id: user.id, following_id: targetUserId });
+      setFollowingSet(prev => new Set(prev).add(targetUserId));
+      // Get a valid post_id for the notification (use the user's latest post or a dummy)
+      const { data: latestPost } = await supabase.from("community_posts").select("id").eq("user_id", targetUserId).order("created_at", { ascending: false }).limit(1).single();
+      const postId = latestPost?.id;
+      if (postId) {
+        await supabase.from("notifications").insert({
+          user_id: targetUserId, from_user_id: user.id, type: "follow", post_id: postId,
+        });
+      }
+    }
   };
 
   // Send mention notifications
@@ -572,10 +616,33 @@ const ComunidadePage = () => {
 
   return (
     <div className="min-h-screen">
-      <header className="px-5 pt-12 pb-4">
-        <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Nossa</p>
-        <h1 className="text-2xl font-display font-bold">Comunidade <span className="text-gold">✦</span></h1>
+      <header className="px-5 pt-12 pb-4 flex items-center justify-between">
+        <div>
+          <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Nossa</p>
+          <h1 className="text-2xl font-display font-bold">Comunidade <span className="text-gold">✦</span></h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setShowNotifications(!showNotifications)}
+            className="relative p-2 rounded-full hover:bg-muted transition-colors"
+          >
+            <Bell className="h-5 w-5 text-foreground" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-gold text-[9px] font-bold text-primary-foreground flex items-center justify-center">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => navigate("/settings")}
+            className="p-2 rounded-full hover:bg-muted transition-colors"
+          >
+            <Settings className="h-5 w-5 text-foreground" />
+          </button>
+        </div>
       </header>
+
+      {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); setUnreadCount(0); }} />}
 
       <div className="px-5 space-y-4 pb-6">
         <Leaderboard />
@@ -754,6 +821,23 @@ const ComunidadePage = () => {
                   </p>
                   <p className="text-[10px] text-muted-foreground font-body">{formatTime(post.created_at)}</p>
                 </div>
+                {post.user_id !== user?.id && (
+                  <button
+                    onClick={() => toggleFollow(post.user_id)}
+                    className={cn(
+                      "flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-body font-medium transition-colors border",
+                      followingSet.has(post.user_id)
+                        ? "border-gold/30 text-gold bg-gold/10"
+                        : "border-border text-muted-foreground hover:border-gold hover:text-gold"
+                    )}
+                  >
+                    {followingSet.has(post.user_id) ? (
+                      <><UserMinus className="h-3 w-3" /> Seguindo</>
+                    ) : (
+                      <><UserPlus className="h-3 w-3" /> Seguir</>
+                    )}
+                  </button>
+                )}
                 {post.user_id === user?.id && (
                   <div className="flex items-center gap-1">
                     {editingPostId === post.id ? (

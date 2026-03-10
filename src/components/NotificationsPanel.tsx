@@ -7,7 +7,7 @@ import { ptBR } from "date-fns/locale";
 
 interface Notification {
   id: string;
-  type: "like" | "comment" | "mention" | "welcome" | "new_post";
+  type: "like" | "comment" | "mention" | "welcome" | "new_post" | "follow";
   from_name: string;
   from_avatar: string | null;
   comment_text: string | null;
@@ -127,6 +127,8 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
                   <UserPlus className="h-2.5 w-2.5 text-gold" />
                 ) : n.type === "new_post" ? (
                   <FileText className="h-2.5 w-2.5 text-gold" />
+                ) : n.type === "follow" ? (
+                  <UserPlus className="h-2.5 w-2.5 text-gold" />
                 ) : (
                   <MessageCircle className="h-2.5 w-2.5 text-gold" />
                 )}
@@ -135,7 +137,7 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
             <div className="flex-1 min-w-0">
               <p className="text-xs font-body">
                 <span className="font-semibold">{n.from_name}</span>{" "}
-                {n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : "comentou no seu post"}
+                {n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : n.type === "follow" ? "começou a te seguir 👤" : "comentou no seu post"}
               </p>
               {n.comment_text && (
                 <p className="text-[11px] font-body text-muted-foreground mt-0.5 truncate">"{n.comment_text}"</p>
