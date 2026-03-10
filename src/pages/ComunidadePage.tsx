@@ -538,6 +538,23 @@ const ComunidadePage = () => {
     });
   };
 
+  const handlePostStickerReaction = async (postId: string, postOwnerId: string, url: string, type: "gif" | "sticker") => {
+    if (!user) return;
+    setPostStickerPickerId(null);
+    // Post a comment with the sticker/gif as text marker
+    const stickerText = type === "sticker" && url.startsWith("emoji:") 
+      ? url.replace("emoji:", "") 
+      : `[${type}:${url}]`;
+    await supabase.from("post_comments").insert({ post_id: postId, user_id: user.id, text: stickerText });
+    if (postOwnerId !== user.id) {
+      await supabase.from("notifications").insert({
+        user_id: postOwnerId, from_user_id: user.id, type: "comment", post_id: postId, comment_text: `reagiu com ${type === "gif" ? "um GIF" : "uma figurinha"}`,
+      });
+    }
+    setExpandedComments(prev => new Set(prev).add(postId));
+    fetchPosts();
+  };
+
   const toggleAudioPlayback = (url: string) => {
     if (playingAudio === url) {
       audioRef.current?.pause();
