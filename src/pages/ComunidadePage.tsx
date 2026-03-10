@@ -361,6 +361,27 @@ const ComunidadePage = () => {
     return [...new Set(ids)];
   };
 
+  // Follow/unfollow
+  const toggleFollow = async (targetUserId: string) => {
+    if (!user) return;
+    const isFollowing = followingSet.has(targetUserId);
+    if (isFollowing) {
+      await supabase.from("user_follows").delete().eq("follower_id", user.id).eq("following_id", targetUserId);
+      setFollowingSet(prev => { const n = new Set(prev); n.delete(targetUserId); return n; });
+    } else {
+      await supabase.from("user_follows").insert({ follower_id: user.id, following_id: targetUserId });
+      setFollowingSet(prev => new Set(prev).add(targetUserId));
+      // Get a valid post_id for the notification (use the user's latest post or a dummy)
+      const { data: latestPost } = await supabase.from("community_posts").select("id").eq("user_id", targetUserId).order("created_at", { ascending: false }).limit(1).single();
+      const postId = latestPost?.id;
+      if (postId) {
+        await supabase.from("notifications").insert({
+          user_id: targetUserId, from_user_id: user.id, type: "follow", post_id: postId,
+        });
+      }
+    }
+  };
+
   // Send mention notifications
   const sendMentionNotifications = async (text: string, postId: string) => {
     if (!user) return;
