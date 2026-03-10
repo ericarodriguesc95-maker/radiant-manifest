@@ -22,6 +22,7 @@ import SettingsPage from "@/pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 import ProfilePage from "@/pages/ProfilePage";
 import DiarioPage from "@/pages/DiarioPage";
+import AdminActivityPage from "@/pages/AdminActivityPage";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const AppRoutes = () => (
       <Route path="/alta-performance" element={<AltaPerformancePage />} />
       <Route path="/diario" element={<DiarioPage />} />
       <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/admin/atividade" element={<AdminActivityPage />} />
       <Route path="/perfil/:userId" element={<ProfilePage />} />
     </Route>
     <Route path="*" element={<NotFound />} />

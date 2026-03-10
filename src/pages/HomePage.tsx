@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin } from "lucide-react";
+import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
@@ -20,10 +20,19 @@ const HomePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUpdates, setShowUpdates] = useState(false);
   const [hasUnreadUpdates, setHasUnreadUpdates] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [completedHabits, setCompletedHabits] = useState<Set<string>>(new Set());
   const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  // Check admin role
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("user_roles" as any).select("role").eq("user_id", user.id).eq("role", "admin").then(({ data }) => {
+      setIsAdmin((data as any[])?.length > 0);
+    });
+  }, [user]);
 
   const streakCount = parseInt(localStorage.getItem("glow-up-streak") || "0");
 
@@ -77,6 +86,15 @@ const HomePage = () => {
           </h1>
         </div>
         <div className="flex items-center gap-2">
+          {isAdmin && (
+            <button
+              onClick={() => navigate("/admin/atividade")}
+              className="p-2 rounded-full hover:bg-muted transition-colors"
+              title="Painel Admin"
+            >
+              <Shield className="h-5 w-5 text-gold" />
+            </button>
+          )}
           <button
             onClick={() => (window as any).__startGlowTour?.()}
             className="p-2 rounded-full hover:bg-muted transition-colors"
