@@ -9,7 +9,7 @@ export default function BottomNav() {
 
   const tabs = [
     { to: "/", icon: Home, label: "Home" },
-    { to: "/jornada", icon: Compass, label: "Jornada" },
+    { to: "/diario", icon: BookOpen, label: "Diário" },
     { to: "/metas", icon: Target, label: "Metas" },
     { to: "/alta-performance", icon: Zap, label: "Performance" },
     { to: "/financas", icon: Wallet, label: "Finanças" },
