@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN cover_position INTEGER NOT NULL DEFAULT 50;

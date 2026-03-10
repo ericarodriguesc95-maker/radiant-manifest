@@ -15,6 +15,7 @@ interface ProfileData {
   display_name: string | null;
   avatar_url: string | null;
   cover_url: string | null;
+  cover_position: number;
   bio: string | null;
   created_at: string;
 }
@@ -55,6 +56,10 @@ const ProfilePage = () => {
   const [editBio, setEditBio] = useState("");
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
+  const [repositioningCover, setRepositioningCover] = useState(false);
+  const [coverPosition, setCoverPosition] = useState(50);
+  const [dragStartY, setDragStartY] = useState<number | null>(null);
+  const [dragStartPos, setDragStartPos] = useState(50);
 
   // Followers/Following list modal
   const [showListType, setShowListType] = useState<"followers" | "following" | null>(null);
@@ -69,7 +74,7 @@ const ProfilePage = () => {
     setLoading(true);
 
     const [{ data: prof }, { count: followers }, { count: following }, { data: postsData }] = await Promise.all([
-      supabase.from("profiles").select("user_id, display_name, avatar_url, cover_url, bio, created_at").eq("user_id", userId).single(),
+      supabase.from("profiles").select("user_id, display_name, avatar_url, cover_url, cover_position, bio, created_at").eq("user_id", userId).single(),
       supabase.from("user_follows").select("*", { count: "exact", head: true }).eq("following_id", userId),
       supabase.from("user_follows").select("*", { count: "exact", head: true }).eq("follower_id", userId),
       supabase.from("community_posts").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
@@ -79,6 +84,7 @@ const ProfilePage = () => {
       setProfile(prof as ProfileData);
       setEditName(prof.display_name || "");
       setEditBio(prof.bio || "");
+      setCoverPosition((prof as any).cover_position ?? 50);
     }
     setFollowersCount(followers || 0);
     setFollowingCount(following || 0);
@@ -207,10 +213,35 @@ const ProfilePage = () => {
     const { error } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
     if (!error) {
       const { data } = supabase.storage.from("avatars").getPublicUrl(path);
-      await supabase.from("profiles").update({ cover_url: data.publicUrl }).eq("user_id", user.id);
-      setProfile(prev => prev ? { ...prev, cover_url: data.publicUrl } : null);
+      await supabase.from("profiles").update({ cover_url: data.publicUrl, cover_position: 50 }).eq("user_id", user.id);
+      setProfile(prev => prev ? { ...prev, cover_url: data.publicUrl, cover_position: 50 } : null);
+      setCoverPosition(50);
+      setRepositioningCover(true);
     }
     setUploadingCover(false);
+  };
+
+  const saveCoverPosition = async () => {
+    if (!user) return;
+    await supabase.from("profiles").update({ cover_position: coverPosition }).eq("user_id", user.id);
+    setProfile(prev => prev ? { ...prev, cover_position: coverPosition } : null);
+    setRepositioningCover(false);
+  };
+
+  const handleCoverDragStart = (clientY: number) => {
+    setDragStartY(clientY);
+    setDragStartPos(coverPosition);
+  };
+
+  const handleCoverDragMove = (clientY: number) => {
+    if (dragStartY === null) return;
+    const delta = dragStartY - clientY;
+    const newPos = Math.max(0, Math.min(100, dragStartPos + delta * 0.5));
+    setCoverPosition(newPos);
+  };
+
+  const handleCoverDragEnd = () => {
+    setDragStartY(null);
   };
 
   const saveProfile = async () => {
@@ -269,25 +300,78 @@ const ProfilePage = () => {
       {/* Cover photo */}
       <div className="relative h-44 bg-gradient-to-br from-gold/20 via-gold/10 to-background overflow-hidden">
         {profile.cover_url && (
-          <img src={profile.cover_url} alt="" className="w-full h-full object-cover" />
+          <img
+            src={profile.cover_url}
+            alt=""
+            className={`w-full h-full object-cover ${repositioningCover ? "cursor-grab active:cursor-grabbing" : ""}`}
+            style={{ objectPosition: `center ${coverPosition}%` }}
+            onMouseDown={(e) => { if (repositioningCover) { e.preventDefault(); handleCoverDragStart(e.clientY); } }}
+            onMouseMove={(e) => { if (repositioningCover) handleCoverDragMove(e.clientY); }}
+            onMouseUp={() => { if (repositioningCover) handleCoverDragEnd(); }}
+            onMouseLeave={() => { if (repositioningCover) handleCoverDragEnd(); }}
+            onTouchStart={(e) => { if (repositioningCover) handleCoverDragStart(e.touches[0].clientY); }}
+            onTouchMove={(e) => { if (repositioningCover) { e.preventDefault(); handleCoverDragMove(e.touches[0].clientY); } }}
+            onTouchEnd={() => { if (repositioningCover) handleCoverDragEnd(); }}
+            draggable={false}
+          />
         )}
+
+        {/* Reposition overlay */}
+        {repositioningCover && (
+          <div className="absolute inset-0 bg-black/30 flex items-center justify-center pointer-events-none z-10">
+            <p className="text-white text-sm font-body bg-black/50 backdrop-blur-sm rounded-full px-4 py-2">
+              ↕ Arraste para ajustar
+            </p>
+          </div>
+        )}
+
+        {/* Reposition action buttons */}
+        {repositioningCover && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+            <button
+              onClick={() => { setCoverPosition(profile.cover_position); setRepositioningCover(false); }}
+              className="px-4 py-1.5 bg-card/90 backdrop-blur-sm rounded-full text-foreground text-xs font-body font-medium hover:bg-card transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={saveCoverPosition}
+              className="px-4 py-1.5 bg-gold/90 backdrop-blur-sm rounded-full text-primary-foreground text-xs font-body font-medium hover:bg-gold transition-colors"
+            >
+              Salvar posição
+            </button>
+          </div>
+        )}
+
         <button
           onClick={() => navigate(-1)}
           className="absolute top-10 left-4 p-2 bg-card/80 backdrop-blur-sm rounded-full text-foreground hover:bg-card transition-colors z-10"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        {isMe && (
-          <label
-            htmlFor="cover-upload"
-            className="absolute bottom-3 right-3 p-2 bg-card/80 backdrop-blur-sm rounded-full text-foreground hover:bg-card transition-colors z-20 cursor-pointer"
-          >
-            {uploadingCover ? (
-              <div className="h-4 w-4 border-2 border-gold border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <Camera className="h-4 w-4" />
+
+        {isMe && !repositioningCover && (
+          <div className="absolute bottom-3 right-3 flex gap-2 z-20">
+            {profile.cover_url && (
+              <button
+                onClick={() => setRepositioningCover(true)}
+                className="p-2 bg-card/80 backdrop-blur-sm rounded-full text-foreground hover:bg-card transition-colors cursor-pointer"
+                title="Reposicionar capa"
+              >
+                <Image className="h-4 w-4" />
+              </button>
             )}
-          </label>
+            <label
+              htmlFor="cover-upload"
+              className="p-2 bg-card/80 backdrop-blur-sm rounded-full text-foreground hover:bg-card transition-colors cursor-pointer"
+            >
+              {uploadingCover ? (
+                <div className="h-4 w-4 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <Camera className="h-4 w-4" />
+              )}
+            </label>
+          </div>
         )}
       </div>
 
