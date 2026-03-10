@@ -83,6 +83,7 @@ const ComunidadePage = () => {
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [showStickerPicker, setShowStickerPicker] = useState(false);
+  const [postStickerPickerId, setPostStickerPickerId] = useState<string | null>(null);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const docInputRef = useRef<HTMLInputElement>(null);
