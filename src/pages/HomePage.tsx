@@ -79,7 +79,7 @@ const HomePage = () => {
         </div>
       </header>
 
-      {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
+      {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); fetchUnread(); }} />}
 
       <div className="px-5 space-y-6 pb-6">
         {/* Daily Streak */}
