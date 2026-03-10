@@ -596,7 +596,7 @@ const ComunidadePage = () => {
             <div key={post.id} className="bg-card rounded-2xl border border-border overflow-hidden animate-fade-in">
               {/* Post header */}
               <div className="flex items-center gap-3 p-4 pb-2">
-                <Avatar url={post.avatar_url} name={post.display_name} />
+                <Avatar url={post.avatar_url} name={post.display_name} userId={post.user_id} />
                 <div className="flex-1">
                   <p className="text-sm font-body font-semibold">
                     {post.user_id === user?.id ? "Você" : post.display_name}
