@@ -7,7 +7,7 @@ import { ptBR } from "date-fns/locale";
 
 interface Notification {
   id: string;
-  type: "like" | "comment" | "mention";
+  type: "like" | "comment" | "mention" | "welcome";
   from_name: string;
   from_avatar: string | null;
   comment_text: string | null;
