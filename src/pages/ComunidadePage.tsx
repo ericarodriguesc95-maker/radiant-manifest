@@ -356,21 +356,31 @@ const ComunidadePage = () => {
   };
 
   const createPost = async () => {
-    if ((!newPost.trim() && !mediaFile) || !user) return;
+    const hasSticker = mediaPreview && (mediaType === "gif" || mediaType === "sticker") && !mediaFile;
+    if ((!newPost.trim() && !mediaFile && !hasSticker) || !user) return;
     setUploading(true);
 
-    let media: { url: string; type: string } | null = null;
+    let mediaUrl: string | null = null;
+    let finalMediaType: string | null = null;
+
     if (mediaFile) {
-      media = await uploadMedia(mediaFile);
+      const media = await uploadMedia(mediaFile);
+      if (media) { mediaUrl = media.url; finalMediaType = media.type; }
+    } else if (hasSticker && mediaPreview) {
+      // Sticker or GIF URL (no file upload needed)
+      mediaUrl = mediaPreview;
+      finalMediaType = mediaType;
     }
 
-    const postText = newPost.trim() || (media ? `📎 ${media.type === "image" ? "Imagem" : media.type === "audio" ? "Áudio" : "Documento"}` : "");
+    const postText = newPost.trim() || (mediaUrl
+      ? (finalMediaType === "gif" ? "GIF" : finalMediaType === "sticker" ? "✨" : `📎 ${finalMediaType === "image" ? "Imagem" : finalMediaType === "audio" ? "Áudio" : "Documento"}`)
+      : "");
 
     const { data: insertedPost } = await supabase.from("community_posts").insert({
       user_id: user.id,
       text: postText,
-      media_url: media?.url || null,
-      media_type: media?.type || null,
+      media_url: mediaUrl,
+      media_type: finalMediaType,
     }).select("id").single();
 
     // Send mention notifications + notify all users about new post
