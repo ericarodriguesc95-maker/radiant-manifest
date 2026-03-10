@@ -693,17 +693,40 @@ const ComunidadePage = () => {
                               <p className="text-xs font-body font-semibold">
                                 {comment.user_id === user?.id ? "Você" : comment.display_name}
                               </p>
-                              <p className="text-xs font-body text-foreground/80">{comment.text}</p>
+                              {editingCommentId === comment.id ? (
+                                <div className="flex items-center gap-1 mt-1">
+                                  <input
+                                    type="text"
+                                    value={editCommentText}
+                                    onChange={e => setEditCommentText(e.target.value)}
+                                    onKeyDown={e => { if (e.key === "Enter") saveEditComment(); }}
+                                    className="flex-1 bg-transparent text-xs font-body outline-none border-b border-gold/30 focus:border-gold"
+                                    autoFocus
+                                  />
+                                  <button onClick={saveEditComment} className="text-gold p-0.5"><Check className="h-3 w-3" /></button>
+                                  <button onClick={() => setEditingCommentId(null)} className="text-muted-foreground p-0.5"><X className="h-3 w-3" /></button>
+                                </div>
+                              ) : (
+                                <p className="text-xs font-body text-foreground/80">{comment.text}</p>
+                              )}
                             </div>
                             <div className="flex items-center gap-2 mt-0.5 px-1">
                               <span className="text-[10px] text-muted-foreground font-body">{formatTime(comment.created_at)}</span>
-                              {comment.user_id === user?.id && (
-                                <button
-                                  onClick={() => deleteComment(comment.id)}
-                                  className="text-[10px] text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
-                                >
-                                  excluir
-                                </button>
+                              {comment.user_id === user?.id && editingCommentId !== comment.id && (
+                                <>
+                                  <button
+                                    onClick={() => startEditComment(comment)}
+                                    className="text-[10px] text-muted-foreground hover:text-gold transition-colors opacity-0 group-hover:opacity-100"
+                                  >
+                                    editar
+                                  </button>
+                                  <button
+                                    onClick={() => deleteComment(comment.id)}
+                                    className="text-[10px] text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
+                                  >
+                                    excluir
+                                  </button>
+                                </>
                               )}
                             </div>
                           </div>
