@@ -38,6 +38,79 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          comment_text: string | null
+          created_at: string
+          from_user_id: string
+          id: string
+          post_id: string
+          read: boolean
+          type: string
+          user_id: string
+        }
+        Insert: {
+          comment_text?: string | null
+          created_at?: string
+          from_user_id: string
+          id?: string
+          post_id: string
+          read?: boolean
+          type: string
+          user_id: string
+        }
+        Update: {
+          comment_text?: string | null
+          created_at?: string
+          from_user_id?: string
+          id?: string
+          post_id?: string
+          read?: boolean
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_comments: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          text: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          text: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          text?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       post_likes: {
         Row: {
           created_at: string

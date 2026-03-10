@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
@@ -10,15 +10,43 @@ import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
 import PostConquista from "@/components/PostConquista";
 import StreakMedals from "@/components/StreakMedals";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const HABITS_COUNT = 6;
 
 const HomePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [completedHabits, setCompletedHabits] = useState<Set<string>>(new Set());
+  const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const streakCount = parseInt(localStorage.getItem("glow-up-streak") || "0");
+
+  const fetchUnread = useCallback(async () => {
+    if (!user) return;
+    const { count } = await supabase
+      .from("notifications")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .eq("read", false);
+    setUnreadCount(count || 0);
+  }, [user]);
+
+  useEffect(() => { fetchUnread(); }, [fetchUnread]);
+
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel("notif-count")
+      .on("postgres_changes", {
+        event: "INSERT", schema: "public", table: "notifications",
+        filter: `user_id=eq.${user.id}`,
+      }, () => fetchUnread())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user, fetchUnread]);
 
   return (
     <div className="min-h-screen">
@@ -36,7 +64,11 @@ const HomePage = () => {
             className="relative p-2 rounded-full hover:bg-muted transition-colors"
           >
             <Bell className="h-5 w-5 text-foreground" />
-            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-gold" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-gold text-[9px] font-bold text-primary-foreground flex items-center justify-center">
+                {unreadCount > 9 ? "9+" : unreadCount}
+              </span>
+            )}
           </button>
           <button
             onClick={() => navigate("/settings")}
@@ -47,7 +79,7 @@ const HomePage = () => {
         </div>
       </header>
 
-      {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
+      {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); fetchUnread(); }} />}
 
       <div className="px-5 space-y-6 pb-6">
         {/* Daily Streak */}
