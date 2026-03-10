@@ -764,14 +764,14 @@ const ComunidadePage = () => {
                   )}
 
                   <div className="flex items-center gap-2 p-3">
-                    <Avatar url={profile?.avatar_url || null} name={profile?.display_name || null} size="h-7 w-7" />
+                    <Avatar url={profile?.avatar_url || null} name={profile?.display_name || null} size="h-7 w-7" userId={user?.id} />
                     <div className="flex-1 flex items-center bg-muted/50 rounded-full px-3 py-1.5">
-                      <input
-                        type="text"
+                      <MentionInput
                         value={commentTexts[post.id] || ""}
-                        onChange={e => setCommentTexts(prev => ({ ...prev, [post.id]: e.target.value }))}
+                        onChange={(val) => setCommentTexts(prev => ({ ...prev, [post.id]: val }))}
                         onKeyDown={e => { if (e.key === "Enter") addComment(post.id, post.user_id); }}
-                        placeholder="Escreva um comentário..."
+                        placeholder="Comentar... Use @ para mencionar"
+                        users={allUsers}
                         className="flex-1 bg-transparent text-xs font-body outline-none placeholder:text-muted-foreground"
                       />
                       <EmojiPicker
