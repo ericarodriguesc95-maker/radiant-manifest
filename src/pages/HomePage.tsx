@@ -86,6 +86,15 @@ const HomePage = () => {
           </h1>
         </div>
         <div className="flex items-center gap-2">
+          {isAdmin && (
+            <button
+              onClick={() => navigate("/admin/atividade")}
+              className="p-2 rounded-full hover:bg-muted transition-colors"
+              title="Painel Admin"
+            >
+              <Shield className="h-5 w-5 text-gold" />
+            </button>
+          )}
           <button
             onClick={() => (window as any).__startGlowTour?.()}
             className="p-2 rounded-full hover:bg-muted transition-colors"
