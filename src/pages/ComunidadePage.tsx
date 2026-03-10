@@ -546,7 +546,11 @@ const ComunidadePage = () => {
     if (!mediaPreview) return null;
     return (
       <div className="relative inline-flex items-center gap-2 bg-muted/60 rounded-xl px-3 py-2 text-xs font-body text-foreground">
-        {mediaType === "image" && mediaPreview !== "audio" && mediaPreview !== "document" ? (
+        {mediaType === "sticker" && mediaPreview.startsWith("emoji:") ? (
+          <span className="text-4xl">{mediaPreview.replace("emoji:", "")}</span>
+        ) : mediaType === "gif" || (mediaType === "sticker" && !mediaPreview.startsWith("emoji:")) ? (
+          <img src={mediaPreview} alt="preview" className="h-16 rounded-lg object-cover" />
+        ) : mediaType === "image" && mediaPreview !== "audio" && mediaPreview !== "document" ? (
           <img src={mediaPreview} alt="preview" className="h-16 w-16 rounded-lg object-cover" />
         ) : mediaType === "audio" ? (
           <div className="flex items-center gap-2">
