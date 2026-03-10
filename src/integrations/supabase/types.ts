@@ -14,6 +14,65 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_update_reads: {
+        Row: {
+          id: string
+          read_at: string
+          update_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          read_at?: string
+          update_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          read_at?: string
+          update_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_update_reads_update_id_fkey"
+            columns: ["update_id"]
+            isOneToOne: false
+            referencedRelation: "app_updates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      app_updates: {
+        Row: {
+          created_at: string
+          description: string
+          how_to_use: string | null
+          icon: string
+          id: string
+          title: string
+          version: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          how_to_use?: string | null
+          icon?: string
+          id?: string
+          title: string
+          version: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          how_to_use?: string | null
+          icon?: string
+          id?: string
+          title?: string
+          version?: string
+        }
+        Relationships: []
+      }
       community_posts: {
         Row: {
           created_at: string
