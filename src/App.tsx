@@ -13,6 +13,7 @@ import VisionBoardPage from "@/pages/VisionBoardPage";
 import ReprogramacaoPage from "@/pages/ReprogramacaoPage";
 import GuiasPage from "@/pages/GuiasPage";
 import AltaPerformancePage from "@/pages/AltaPerformancePage";
+import JornadaPage from "@/pages/JornadaPage";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
