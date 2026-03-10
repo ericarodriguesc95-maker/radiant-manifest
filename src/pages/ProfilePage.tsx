@@ -55,8 +55,6 @@ const ProfilePage = () => {
   const [editBio, setEditBio] = useState("");
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
-  const avatarInputRef = useRef<HTMLInputElement>(null);
-  const coverInputRef = useRef<HTMLInputElement>(null);
 
   // Followers/Following list modal
   const [showListType, setShowListType] = useState<"followers" | "following" | null>(null);
