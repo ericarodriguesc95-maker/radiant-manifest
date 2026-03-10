@@ -127,6 +127,8 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
                   <UserPlus className="h-2.5 w-2.5 text-gold" />
                 ) : n.type === "new_post" ? (
                   <FileText className="h-2.5 w-2.5 text-gold" />
+                ) : n.type === "follow" ? (
+                  <UserPlus className="h-2.5 w-2.5 text-gold" />
                 ) : (
                   <MessageCircle className="h-2.5 w-2.5 text-gold" />
                 )}
