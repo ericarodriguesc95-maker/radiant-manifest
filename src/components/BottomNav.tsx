@@ -1,15 +1,21 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Target, Wallet, Users, Zap, Compass } from "lucide-react";
+import { Home, Target, Wallet, Users, Zap, Compass, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
-const tabs = [
-  { to: "/", icon: Home, label: "Home" },
-  { to: "/jornada", icon: Compass, label: "Jornada" },
-  { to: "/metas", icon: Target, label: "Metas" },
-  { to: "/alta-performance", icon: Zap, label: "Performance" },
-  { to: "/financas", icon: Wallet, label: "Finanças" },
-  { to: "/comunidade", icon: Users, label: "Girls" },
-];
+export default function BottomNav() {
+  const location = useLocation();
+  const { user } = useAuth();
+
+  const tabs = [
+    { to: "/", icon: Home, label: "Home" },
+    { to: "/jornada", icon: Compass, label: "Jornada" },
+    { to: "/metas", icon: Target, label: "Metas" },
+    { to: "/alta-performance", icon: Zap, label: "Performance" },
+    { to: "/financas", icon: Wallet, label: "Finanças" },
+    { to: "/comunidade", icon: Users, label: "Girls" },
+    { to: user ? `/perfil/${user.id}` : "/comunidade", icon: User, label: "Perfil" },
+  ];
 
 export default function BottomNav() {
   const location = useLocation();
