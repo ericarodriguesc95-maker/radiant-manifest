@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText, Pencil, Check } from "lucide-react";
 import EmojiPicker from "@/components/EmojiPicker";
+import MentionInput, { renderTextWithMentions } from "@/components/MentionInput";
+import { useOnlinePresence } from "@/hooks/useOnlinePresence";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Leaderboard from "@/components/Leaderboard";
@@ -40,6 +42,10 @@ const ComunidadePage = () => {
   const [loading, setLoading] = useState(true);
   const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set());
   const [commentTexts, setCommentTexts] = useState<Record<string, string>>({});
+  const [allUsers, setAllUsers] = useState<{ user_id: string; display_name: string | null; avatar_url: string | null }[]>([]);
+
+  // Online presence
+  const onlineUsers = useOnlinePresence(user?.id);
 
   // Edit state
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
@@ -67,6 +73,15 @@ const ComunidadePage = () => {
   const imageInputRef = useRef<HTMLInputElement>(null);
   const docInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+
+  // Fetch all users for mention suggestions
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const { data } = await supabase.from("profiles").select("user_id, display_name, avatar_url");
+      if (data) setAllUsers(data.filter(u => u.user_id !== user?.id));
+    };
+    if (user) fetchUsers();
+  }, [user]);
 
   const fetchPosts = useCallback(async () => {
     if (!user) return;
@@ -381,14 +396,25 @@ const ComunidadePage = () => {
     return name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
   };
 
-  const Avatar = ({ url, name, size = "h-9 w-9" }: { url: string | null; name: string | null; size?: string }) => (
-    url ? (
-      <img src={url} alt="" className={`${size} rounded-full object-cover`} />
-    ) : (
-      <div className={`${size} rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold`}>
-        {getInitials(name)}
-      </div>
-    )
+  const Avatar = ({ url, name, size = "h-9 w-9", userId }: { url: string | null; name: string | null; size?: string; userId?: string }) => (
+    <div className="relative shrink-0">
+      {url ? (
+        <img src={url} alt="" className={`${size} rounded-full object-cover`} />
+      ) : (
+        <div className={`${size} rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold`}>
+          {getInitials(name)}
+        </div>
+      )}
+      {userId && (
+        <span
+          className={cn(
+            "absolute -bottom-0.5 -right-0.5 block rounded-full border-2 border-card",
+            size.includes("7") || size.includes("8") ? "h-2.5 w-2.5" : "h-3 w-3",
+            onlineUsers.has(userId) ? "bg-emerald-400" : "bg-muted-foreground/40"
+          )}
+        />
+      )}
+    </div>
   );
 
   const MediaPreviewBadge = () => {
@@ -428,11 +454,13 @@ const ComunidadePage = () => {
         {/* Create post */}
         <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
           <div className="flex items-start gap-3">
-            <Avatar url={profile?.avatar_url || null} name={profile?.display_name || null} size="h-8 w-8" />
-            <textarea
+            <Avatar url={profile?.avatar_url || null} name={profile?.display_name || null} size="h-8 w-8" userId={user?.id} />
+            <MentionInput
               value={newPost}
-              onChange={e => setNewPost(e.target.value)}
-              placeholder="Compartilhe com as girls..."
+              onChange={setNewPost}
+              placeholder="Compartilhe com as girls... Use @ para mencionar"
+              users={allUsers}
+              as="textarea"
               rows={2}
               className="flex-1 bg-transparent text-sm font-body outline-none resize-none placeholder:text-muted-foreground"
             />
@@ -568,7 +596,7 @@ const ComunidadePage = () => {
             <div key={post.id} className="bg-card rounded-2xl border border-border overflow-hidden animate-fade-in">
               {/* Post header */}
               <div className="flex items-center gap-3 p-4 pb-2">
-                <Avatar url={post.avatar_url} name={post.display_name} />
+                <Avatar url={post.avatar_url} name={post.display_name} userId={post.user_id} />
                 <div className="flex-1">
                   <p className="text-sm font-body font-semibold">
                     {post.user_id === user?.id ? "Você" : post.display_name}
@@ -611,7 +639,7 @@ const ComunidadePage = () => {
                     autoFocus
                   />
                 ) : (
-                  <p className="text-sm font-body leading-relaxed">{post.text}</p>
+                  <p className="text-sm font-body leading-relaxed">{renderTextWithMentions(post.text)}</p>
                 )}
 
                 {/* Post media */}
@@ -687,7 +715,7 @@ const ComunidadePage = () => {
                     <div className="px-4 pt-3 space-y-3">
                       {post.comments.map(comment => (
                         <div key={comment.id} className="flex gap-2.5 group">
-                          <Avatar url={comment.avatar_url} name={comment.display_name} size="h-7 w-7" />
+                          <Avatar url={comment.avatar_url} name={comment.display_name} size="h-7 w-7" userId={comment.user_id} />
                           <div className="flex-1 min-w-0">
                             <div className="bg-muted/50 rounded-xl px-3 py-2">
                               <p className="text-xs font-body font-semibold">
@@ -707,7 +735,7 @@ const ComunidadePage = () => {
                                   <button onClick={() => setEditingCommentId(null)} className="text-muted-foreground p-0.5"><X className="h-3 w-3" /></button>
                                 </div>
                               ) : (
-                                <p className="text-xs font-body text-foreground/80">{comment.text}</p>
+                                <p className="text-xs font-body text-foreground/80">{renderTextWithMentions(comment.text)}</p>
                               )}
                             </div>
                             <div className="flex items-center gap-2 mt-0.5 px-1">
@@ -736,14 +764,14 @@ const ComunidadePage = () => {
                   )}
 
                   <div className="flex items-center gap-2 p-3">
-                    <Avatar url={profile?.avatar_url || null} name={profile?.display_name || null} size="h-7 w-7" />
+                    <Avatar url={profile?.avatar_url || null} name={profile?.display_name || null} size="h-7 w-7" userId={user?.id} />
                     <div className="flex-1 flex items-center bg-muted/50 rounded-full px-3 py-1.5">
-                      <input
-                        type="text"
+                      <MentionInput
                         value={commentTexts[post.id] || ""}
-                        onChange={e => setCommentTexts(prev => ({ ...prev, [post.id]: e.target.value }))}
+                        onChange={(val) => setCommentTexts(prev => ({ ...prev, [post.id]: val }))}
                         onKeyDown={e => { if (e.key === "Enter") addComment(post.id, post.user_id); }}
-                        placeholder="Escreva um comentário..."
+                        placeholder="Comentar... Use @ para mencionar"
+                        users={allUsers}
                         className="flex-1 bg-transparent text-xs font-body outline-none placeholder:text-muted-foreground"
                       />
                       <EmojiPicker
