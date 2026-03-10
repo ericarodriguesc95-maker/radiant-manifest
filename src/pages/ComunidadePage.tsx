@@ -725,6 +725,16 @@ const ComunidadePage = () => {
               )}
             </Button>
           </div>
+
+          {/* Sticker/GIF picker popup */}
+          {showStickerPicker && (
+            <div className="mt-2">
+              <GifStickerPicker
+                onSelect={handleStickerGifSelect}
+                onClose={() => setShowStickerPicker(false)}
+              />
+            </div>
+          )}
         </div>
 
         {/* Feed */}
