@@ -735,7 +735,7 @@ const ComunidadePage = () => {
                                   <button onClick={() => setEditingCommentId(null)} className="text-muted-foreground p-0.5"><X className="h-3 w-3" /></button>
                                 </div>
                               ) : (
-                                <p className="text-xs font-body text-foreground/80">{comment.text}</p>
+                                <p className="text-xs font-body text-foreground/80">{renderTextWithMentions(comment.text)}</p>
                               )}
                             </div>
                             <div className="flex items-center gap-2 mt-0.5 px-1">
