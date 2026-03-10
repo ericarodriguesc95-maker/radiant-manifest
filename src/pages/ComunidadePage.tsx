@@ -715,7 +715,7 @@ const ComunidadePage = () => {
                     <div className="px-4 pt-3 space-y-3">
                       {post.comments.map(comment => (
                         <div key={comment.id} className="flex gap-2.5 group">
-                          <Avatar url={comment.avatar_url} name={comment.display_name} size="h-7 w-7" />
+                          <Avatar url={comment.avatar_url} name={comment.display_name} size="h-7 w-7" userId={comment.user_id} />
                           <div className="flex-1 min-w-0">
                             <div className="bg-muted/50 rounded-xl px-3 py-2">
                               <p className="text-xs font-body font-semibold">
