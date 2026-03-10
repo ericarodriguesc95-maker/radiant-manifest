@@ -311,16 +311,16 @@ const ProfilePage = () => {
             )} />
           )}
           {isMe && (
-            <button
-              onClick={() => avatarInputRef.current?.click()}
-              className="absolute bottom-0 right-0 p-1.5 bg-gold rounded-full text-primary-foreground shadow-sm"
+            <label
+              htmlFor="avatar-upload"
+              className="absolute bottom-0 right-0 p-1.5 bg-gold rounded-full text-primary-foreground shadow-sm cursor-pointer"
             >
               {uploadingAvatar ? (
                 <div className="h-3 w-3 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
               ) : (
                 <Camera className="h-3 w-3" />
               )}
-            </button>
+            </label>
           )}
         </div>
 
