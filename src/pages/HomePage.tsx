@@ -18,6 +18,8 @@ const HABITS_COUNT = 6;
 
 const HomePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showUpdates, setShowUpdates] = useState(false);
+  const [hasUnreadUpdates, setHasUnreadUpdates] = useState(false);
   const [completedHabits, setCompletedHabits] = useState<Set<string>>(new Set());
   const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
