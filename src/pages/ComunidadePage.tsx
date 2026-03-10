@@ -1057,16 +1057,6 @@ const ComunidadePage = () => {
         )}
       </div>
 
-      {/* Profile Modal */}
-      {viewingProfileUserId && (
-        <UserProfileModal
-          userId={viewingProfileUserId}
-          onClose={() => setViewingProfileUserId(null)}
-          isFollowing={followingSet.has(viewingProfileUserId)}
-          onToggleFollow={toggleFollow}
-          isOnline={onlineUsers.has(viewingProfileUserId)}
-        />
-      )}
     </div>
   );
 };
