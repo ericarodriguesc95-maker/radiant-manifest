@@ -980,7 +980,7 @@ const ComunidadePage = () => {
                             <div className="bg-muted/50 rounded-xl px-3 py-2">
                               <p
                                 className="text-xs font-body font-semibold cursor-pointer hover:text-gold transition-colors"
-                                onClick={() => setViewingProfileUserId(comment.user_id)}
+                                onClick={() => navigate(`/perfil/${comment.user_id}`)}
                               >
                                 {comment.user_id === user?.id ? "Você" : comment.display_name}
                               </p>
