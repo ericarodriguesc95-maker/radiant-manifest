@@ -109,6 +109,8 @@ export type Database = {
           event_date: string
           id: string
           is_completed: boolean
+          recurrence: string | null
+          recurrence_parent_id: string | null
           reminder_minutes: number | null
           start_time: string | null
           title: string
@@ -123,6 +125,8 @@ export type Database = {
           event_date: string
           id?: string
           is_completed?: boolean
+          recurrence?: string | null
+          recurrence_parent_id?: string | null
           reminder_minutes?: number | null
           start_time?: string | null
           title: string
@@ -137,13 +141,23 @@ export type Database = {
           event_date?: string
           id?: string
           is_completed?: boolean
+          recurrence?: string | null
+          recurrence_parent_id?: string | null
           reminder_minutes?: number | null
           start_time?: string | null
           title?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "calendar_events_recurrence_parent_id_fkey"
+            columns: ["recurrence_parent_id"]
+            isOneToOne: false
+            referencedRelation: "calendar_events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       community_posts: {
         Row: {
