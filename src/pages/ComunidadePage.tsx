@@ -5,7 +5,7 @@ import MentionInput, { renderTextWithMentions } from "@/components/MentionInput"
 import { useOnlinePresence } from "@/hooks/useOnlinePresence";
 import GifStickerPicker from "@/components/GifStickerPicker";
 import NotificationsPanel from "@/components/NotificationsPanel";
-import UserProfileModal from "@/components/UserProfileModal";
+
 import { sendNotification, requestNotificationPermission } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -570,7 +570,7 @@ const ComunidadePage = () => {
   const Avatar = ({ url, name, size = "h-9 w-9", userId, clickable = false }: { url: string | null; name: string | null; size?: string; userId?: string; clickable?: boolean }) => (
     <div
       className={cn("relative shrink-0", clickable && "cursor-pointer")}
-      onClick={clickable && userId ? () => setViewingProfileUserId(userId) : undefined}
+      onClick={clickable && userId ? () => navigate(`/perfil/${userId}`) : undefined}
     >
       {url ? (
         <img src={url} alt="" className={`${size} rounded-full object-cover`} />
@@ -823,7 +823,7 @@ const ComunidadePage = () => {
                 <div className="flex-1">
                   <p
                     className="text-sm font-body font-semibold cursor-pointer hover:text-gold transition-colors"
-                    onClick={() => setViewingProfileUserId(post.user_id)}
+                    onClick={() => navigate(`/perfil/${post.user_id}`)}
                   >
                     {post.user_id === user?.id ? "Você" : post.display_name}
                   </p>
@@ -980,7 +980,7 @@ const ComunidadePage = () => {
                             <div className="bg-muted/50 rounded-xl px-3 py-2">
                               <p
                                 className="text-xs font-body font-semibold cursor-pointer hover:text-gold transition-colors"
-                                onClick={() => setViewingProfileUserId(comment.user_id)}
+                                onClick={() => navigate(`/perfil/${comment.user_id}`)}
                               >
                                 {comment.user_id === user?.id ? "Você" : comment.display_name}
                               </p>
@@ -1057,16 +1057,6 @@ const ComunidadePage = () => {
         )}
       </div>
 
-      {/* Profile Modal */}
-      {viewingProfileUserId && (
-        <UserProfileModal
-          userId={viewingProfileUserId}
-          onClose={() => setViewingProfileUserId(null)}
-          isFollowing={followingSet.has(viewingProfileUserId)}
-          onToggleFollow={toggleFollow}
-          isOnline={onlineUsers.has(viewingProfileUserId)}
-        />
-      )}
     </div>
   );
 };
