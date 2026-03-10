@@ -74,6 +74,15 @@ const ComunidadePage = () => {
   const docInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
+  // Fetch all users for mention suggestions
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const { data } = await supabase.from("profiles").select("user_id, display_name, avatar_url");
+      if (data) setAllUsers(data.filter(u => u.user_id !== user?.id));
+    };
+    if (user) fetchUsers();
+  }, [user]);
+
   const fetchPosts = useCallback(async () => {
     if (!user) return;
 
