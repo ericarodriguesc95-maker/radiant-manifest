@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText, Pencil, Check } from "lucide-react";
 import EmojiPicker from "@/components/EmojiPicker";
+import MentionInput, { renderTextWithMentions } from "@/components/MentionInput";
+import { useOnlinePresence } from "@/hooks/useOnlinePresence";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Leaderboard from "@/components/Leaderboard";
