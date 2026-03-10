@@ -5,7 +5,7 @@ import MentionInput, { renderTextWithMentions } from "@/components/MentionInput"
 import { useOnlinePresence } from "@/hooks/useOnlinePresence";
 import GifStickerPicker from "@/components/GifStickerPicker";
 import NotificationsPanel from "@/components/NotificationsPanel";
-import UserProfileModal from "@/components/UserProfileModal";
+
 import { sendNotification, requestNotificationPermission } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
