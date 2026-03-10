@@ -503,6 +503,9 @@ const ComunidadePage = () => {
               >
                 <Mic className="h-4.5 w-4.5" />
               </button>
+
+              {/* Emoji picker */}
+              <EmojiPicker onSelect={(emoji) => setNewPost(prev => prev + emoji)} />
             </div>
 
             <Button
