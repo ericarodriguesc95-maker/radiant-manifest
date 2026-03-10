@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText } from "lucide-react";
+import EmojiPicker from "@/components/EmojiPicker";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Leaderboard from "@/components/Leaderboard";
@@ -502,6 +503,9 @@ const ComunidadePage = () => {
               >
                 <Mic className="h-4.5 w-4.5" />
               </button>
+
+              {/* Emoji picker */}
+              <EmojiPicker onSelect={(emoji) => setNewPost(prev => prev + emoji)} />
             </div>
 
             <Button
@@ -659,10 +663,14 @@ const ComunidadePage = () => {
                         placeholder="Escreva um comentário..."
                         className="flex-1 bg-transparent text-xs font-body outline-none placeholder:text-muted-foreground"
                       />
+                      <EmojiPicker
+                        size="sm"
+                        onSelect={(emoji) => setCommentTexts(prev => ({ ...prev, [post.id]: (prev[post.id] || "") + emoji }))}
+                      />
                       <button
                         onClick={() => addComment(post.id, post.user_id)}
                         disabled={!commentTexts[post.id]?.trim()}
-                        className="text-gold disabled:text-muted-foreground transition-colors ml-2"
+                        className="text-gold disabled:text-muted-foreground transition-colors ml-1"
                       >
                         <Send className="h-3.5 w-3.5" />
                       </button>
