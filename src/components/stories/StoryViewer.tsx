@@ -352,11 +352,35 @@ const StoryViewer = ({ group, onClose }: StoryViewerProps) => {
           </div>
         )}
 
-        {story.media_type === "text" ? (
-          <div className="w-full h-full flex items-center justify-center px-8" style={{ backgroundColor: story.bg_color || "#C8A45C" }}>
-            <p className="text-white text-center text-2xl font-display leading-relaxed">{story.text_content}</p>
-          </div>
-        ) : story.media_type === "video" ? (
+        {story.media_type === "text" ? (() => {
+          const raw = story.text_content || "";
+          const metaMatch = raw.match(/^<!--meta:(.*?)-->/);
+          let text = raw;
+          let fontFamily = "'Playfair Display', serif";
+          let fontSize = 24;
+          let textAlign: "left" | "center" | "right" = "center";
+          if (metaMatch) {
+            try {
+              const meta = JSON.parse(metaMatch[1]);
+              const fontMap: Record<string, string> = {
+                playfair: "'Playfair Display', serif",
+                inter: "'Inter', sans-serif",
+                "arial-black": "'Arial Black', sans-serif",
+                georgia: "'Georgia', serif",
+                mono: "'Courier New', monospace",
+              };
+              fontFamily = fontMap[meta.font] || fontFamily;
+              fontSize = meta.size || fontSize;
+              textAlign = meta.align || textAlign;
+            } catch {}
+            text = raw.replace(/^<!--meta:.*?-->/, "");
+          }
+          return (
+            <div className="w-full h-full flex items-center justify-center px-8" style={{ backgroundColor: story.bg_color || "#C8A45C" }}>
+              <p className="text-white leading-relaxed max-w-sm" style={{ fontFamily, fontSize: `${fontSize}px`, textAlign }}>{text}</p>
+            </div>
+          );
+        })() : story.media_type === "video" ? (
           <video src={story.media_url || ""} className="max-h-full max-w-full object-contain" autoPlay playsInline onEnded={goNext} />
         ) : (
           <div className="w-full h-full relative">
