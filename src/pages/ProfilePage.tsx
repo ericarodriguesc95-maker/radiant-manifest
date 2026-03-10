@@ -280,7 +280,7 @@ const ProfilePage = () => {
         {isMe && (
           <label
             htmlFor="cover-upload"
-            className="absolute bottom-3 right-3 p-2 bg-card/80 backdrop-blur-sm rounded-full text-foreground hover:bg-card transition-colors z-10 cursor-pointer"
+            className="absolute bottom-3 right-3 p-2 bg-card/80 backdrop-blur-sm rounded-full text-foreground hover:bg-card transition-colors z-20 cursor-pointer"
           >
             {uploadingCover ? (
               <div className="h-4 w-4 border-2 border-gold border-t-transparent rounded-full animate-spin" />
