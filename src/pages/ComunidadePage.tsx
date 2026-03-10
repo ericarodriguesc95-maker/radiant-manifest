@@ -570,7 +570,7 @@ const ComunidadePage = () => {
   const Avatar = ({ url, name, size = "h-9 w-9", userId, clickable = false }: { url: string | null; name: string | null; size?: string; userId?: string; clickable?: boolean }) => (
     <div
       className={cn("relative shrink-0", clickable && "cursor-pointer")}
-      onClick={clickable && userId ? () => setViewingProfileUserId(userId) : undefined}
+      onClick={clickable && userId ? () => navigate(`/perfil/${userId}`) : undefined}
     >
       {url ? (
         <img src={url} alt="" className={`${size} rounded-full object-cover`} />
