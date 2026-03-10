@@ -695,13 +695,25 @@ const ComunidadePage = () => {
 
               {/* Emoji picker */}
               <EmojiPicker onSelect={(emoji) => setNewPost(prev => prev + emoji)} />
+
+              {/* Sticker/GIF picker */}
+              <button
+                onClick={() => setShowStickerPicker(prev => !prev)}
+                className={cn(
+                  "p-2 rounded-lg transition-colors",
+                  showStickerPicker ? "text-gold bg-gold/10" : "text-muted-foreground hover:text-gold hover:bg-gold/10"
+                )}
+                title="Figurinhas e GIFs"
+              >
+                <Smile className="h-4.5 w-4.5" />
+              </button>
             </div>
 
             <Button
               variant="gold"
               size="sm"
               onClick={createPost}
-              disabled={(!newPost.trim() && !mediaFile) || uploading}
+              disabled={(!newPost.trim() && !mediaFile && !mediaPreview) || uploading}
             >
               {uploading ? (
                 <span className="flex items-center gap-1.5">
