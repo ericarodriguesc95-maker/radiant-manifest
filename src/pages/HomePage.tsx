@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
@@ -10,15 +10,43 @@ import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
 import PostConquista from "@/components/PostConquista";
 import StreakMedals from "@/components/StreakMedals";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const HABITS_COUNT = 6;
 
 const HomePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [completedHabits, setCompletedHabits] = useState<Set<string>>(new Set());
+  const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const streakCount = parseInt(localStorage.getItem("glow-up-streak") || "0");
+
+  const fetchUnread = useCallback(async () => {
+    if (!user) return;
+    const { count } = await supabase
+      .from("notifications")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", user.id)
+      .eq("read", false);
+    setUnreadCount(count || 0);
+  }, [user]);
+
+  useEffect(() => { fetchUnread(); }, [fetchUnread]);
+
+  useEffect(() => {
+    if (!user) return;
+    const channel = supabase
+      .channel("notif-count")
+      .on("postgres_changes", {
+        event: "INSERT", schema: "public", table: "notifications",
+        filter: `user_id=eq.${user.id}`,
+      }, () => fetchUnread())
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user, fetchUnread]);
 
   return (
     <div className="min-h-screen">
