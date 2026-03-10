@@ -53,6 +53,9 @@ const HomePage = () => {
         {/* Daily Streak */}
         <DailyStreak completedHabits={completedHabits} requiredHabits={["meditate", "goals"]} />
 
+        {/* Streak Medals */}
+        <StreakMedals streak={streakCount} />
+
         {/* Guias do Dia */}
         <section className="space-y-3">
           <DailyDevotional />
