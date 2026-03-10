@@ -83,6 +83,7 @@ const ComunidadePage = () => {
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [showStickerPicker, setShowStickerPicker] = useState(false);
+  const [postStickerPickerId, setPostStickerPickerId] = useState<string | null>(null);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const docInputRef = useRef<HTMLInputElement>(null);
@@ -537,6 +538,23 @@ const ComunidadePage = () => {
     });
   };
 
+  const handlePostStickerReaction = async (postId: string, postOwnerId: string, url: string, type: "gif" | "sticker") => {
+    if (!user) return;
+    setPostStickerPickerId(null);
+    // Post a comment with the sticker/gif as text marker
+    const stickerText = type === "sticker" && url.startsWith("emoji:") 
+      ? url.replace("emoji:", "") 
+      : `[${type}:${url}]`;
+    await supabase.from("post_comments").insert({ post_id: postId, user_id: user.id, text: stickerText });
+    if (postOwnerId !== user.id) {
+      await supabase.from("notifications").insert({
+        user_id: postOwnerId, from_user_id: user.id, type: "comment", post_id: postId, comment_text: `reagiu com ${type === "gif" ? "um GIF" : "uma figurinha"}`,
+      });
+    }
+    setExpandedComments(prev => new Set(prev).add(postId));
+    fetchPosts();
+  };
+
   const toggleAudioPlayback = (url: string) => {
     if (playingAudio === url) {
       audioRef.current?.pause();
@@ -970,7 +988,27 @@ const ComunidadePage = () => {
                       : <ChevronDown className="h-3 w-3" />
                   )}
                 </button>
+                <button
+                  onClick={() => setPostStickerPickerId(prev => prev === post.id ? null : post.id)}
+                  className={cn(
+                    "flex items-center gap-1.5 text-sm font-body transition-colors",
+                    postStickerPickerId === post.id ? "text-gold" : "text-muted-foreground hover:text-foreground"
+                  )}
+                  title="Reagir com figurinha"
+                >
+                  <Smile className="h-4 w-4" />
+                </button>
               </div>
+
+              {/* Post sticker reaction picker */}
+              {postStickerPickerId === post.id && (
+                <div className="px-4 pb-3 border-t border-border animate-fade-in">
+                  <GifStickerPicker
+                    onSelect={(url, type) => handlePostStickerReaction(post.id, post.user_id, url, type)}
+                    onClose={() => setPostStickerPickerId(null)}
+                  />
+                </div>
+              )}
 
               {/* Comments section */}
               {expandedComments.has(post.id) && (
@@ -1001,6 +1039,22 @@ const ComunidadePage = () => {
                                   <button onClick={saveEditComment} className="text-gold p-0.5"><Check className="h-3 w-3" /></button>
                                   <button onClick={() => setEditingCommentId(null)} className="text-muted-foreground p-0.5"><X className="h-3 w-3" /></button>
                                 </div>
+                              ) : /^\[gif:(.+)\]$/.test(comment.text) ? (
+                                <img
+                                  src={comment.text.match(/^\[gif:(.+)\]$/)?.[1] || ""}
+                                  alt="GIF"
+                                  className="mt-1 rounded-lg max-w-[200px] max-h-40"
+                                  loading="lazy"
+                                />
+                              ) : /^\[sticker:(.+)\]$/.test(comment.text) ? (
+                                <img
+                                  src={comment.text.match(/^\[sticker:(.+)\]$/)?.[1] || ""}
+                                  alt="Sticker"
+                                  className="mt-1 rounded-lg max-w-[150px] max-h-36"
+                                  loading="lazy"
+                                />
+                              ) : comment.text.length <= 4 && /^[\p{Emoji}]+$/u.test(comment.text) ? (
+                                <span className="text-4xl mt-1 block">{comment.text}</span>
                               ) : (
                                 <p className="text-xs font-body text-foreground/80">{renderTextWithMentions(comment.text)}</p>
                               )}
