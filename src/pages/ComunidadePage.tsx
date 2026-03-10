@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Heart, MessageCircle, Send, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Leaderboard from "@/components/Leaderboard";
 
 interface Post {
   id: string;
@@ -107,6 +108,9 @@ const ComunidadePage = () => {
       </header>
 
       <div className="px-5 space-y-4 pb-6">
+        {/* Leaderboard */}
+        <Leaderboard />
+
         {/* Create post */}
         <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
           <div className="flex items-start gap-3">

@@ -9,6 +9,7 @@ import NotificationsPanel from "@/components/NotificationsPanel";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
 import PostConquista from "@/components/PostConquista";
+import StreakMedals from "@/components/StreakMedals";
 
 const HABITS_COUNT = 6;
 
@@ -51,6 +52,9 @@ const HomePage = () => {
       <div className="px-5 space-y-6 pb-6">
         {/* Daily Streak */}
         <DailyStreak completedHabits={completedHabits} requiredHabits={["meditate", "goals"]} />
+
+        {/* Streak Medals */}
+        <StreakMedals streak={streakCount} />
 
         {/* Guias do Dia */}
         <section className="space-y-3">
