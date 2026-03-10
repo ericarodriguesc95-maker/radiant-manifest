@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN cover_url TEXT DEFAULT NULL;
