@@ -444,7 +444,15 @@ const ProfilePage = () => {
                 )}
               </div>
               {profile.bio && (
-                <p className="text-sm font-body text-muted-foreground mt-1">{profile.bio}</p>
+                <p className="text-sm font-body text-muted-foreground mt-1 whitespace-pre-wrap break-words">
+                  {profile.bio.split(/(https?:\/\/[^\s]+)/g).map((part, i) =>
+                    /^https?:\/\//.test(part) ? (
+                      <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-gold hover:underline break-all">
+                        {part.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                      </a>
+                    ) : part
+                  )}
+                </p>
               )}
               {!profile.bio && isMe && (
                 <button onClick={() => setEditing(true)} className="text-xs font-body text-muted-foreground mt-1 hover:text-gold transition-colors">
