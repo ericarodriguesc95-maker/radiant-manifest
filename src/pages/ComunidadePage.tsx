@@ -988,7 +988,27 @@ const ComunidadePage = () => {
                       : <ChevronDown className="h-3 w-3" />
                   )}
                 </button>
+                <button
+                  onClick={() => setPostStickerPickerId(prev => prev === post.id ? null : post.id)}
+                  className={cn(
+                    "flex items-center gap-1.5 text-sm font-body transition-colors",
+                    postStickerPickerId === post.id ? "text-gold" : "text-muted-foreground hover:text-foreground"
+                  )}
+                  title="Reagir com figurinha"
+                >
+                  <Smile className="h-4 w-4" />
+                </button>
               </div>
+
+              {/* Post sticker reaction picker */}
+              {postStickerPickerId === post.id && (
+                <div className="px-4 pb-3 border-t border-border animate-fade-in">
+                  <GifStickerPicker
+                    onSelect={(url, type) => handlePostStickerReaction(post.id, post.user_id, url, type)}
+                    onClose={() => setPostStickerPickerId(null)}
+                  />
+                </div>
+              )}
 
               {/* Comments section */}
               {expandedComments.has(post.id) && (
