@@ -823,7 +823,7 @@ const ComunidadePage = () => {
                 <div className="flex-1">
                   <p
                     className="text-sm font-body font-semibold cursor-pointer hover:text-gold transition-colors"
-                    onClick={() => setViewingProfileUserId(post.user_id)}
+                    onClick={() => navigate(`/perfil/${post.user_id}`)}
                   >
                     {post.user_id === user?.id ? "Você" : post.display_name}
                   </p>
