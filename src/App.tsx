@@ -58,6 +58,7 @@ const AppRoutes = () => (
       <Route path="/reprogramacao" element={<ReprogramacaoPage />} />
       <Route path="/guias" element={<GuiasPage />} />
       <Route path="/alta-performance" element={<AltaPerformancePage />} />
+      <Route path="/diario" element={<DiarioPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/perfil/:userId" element={<ProfilePage />} />
     </Route>
