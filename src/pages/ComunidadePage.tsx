@@ -311,8 +311,34 @@ const ComunidadePage = () => {
     fetchPosts();
   };
 
+  const startEditPost = (post: PostWithProfile) => {
+    setEditingPostId(post.id);
+    setEditPostText(post.text);
+  };
+
+  const saveEditPost = async () => {
+    if (!editingPostId || !editPostText.trim()) return;
+    await supabase.from("community_posts").update({ text: editPostText.trim() }).eq("id", editingPostId);
+    setEditingPostId(null);
+    setEditPostText("");
+    fetchPosts();
+  };
+
   const deleteComment = async (commentId: string) => {
     await supabase.from("post_comments").delete().eq("id", commentId);
+    fetchPosts();
+  };
+
+  const startEditComment = (comment: Comment) => {
+    setEditingCommentId(comment.id);
+    setEditCommentText(comment.text);
+  };
+
+  const saveEditComment = async () => {
+    if (!editingCommentId || !editCommentText.trim()) return;
+    await supabase.from("post_comments").update({ text: editCommentText.trim() }).eq("id", editingCommentId);
+    setEditingCommentId(null);
+    setEditCommentText("");
     fetchPosts();
   };
 
