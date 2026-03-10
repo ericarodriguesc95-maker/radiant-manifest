@@ -396,14 +396,25 @@ const ComunidadePage = () => {
     return name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
   };
 
-  const Avatar = ({ url, name, size = "h-9 w-9" }: { url: string | null; name: string | null; size?: string }) => (
-    url ? (
-      <img src={url} alt="" className={`${size} rounded-full object-cover`} />
-    ) : (
-      <div className={`${size} rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold`}>
-        {getInitials(name)}
-      </div>
-    )
+  const Avatar = ({ url, name, size = "h-9 w-9", userId }: { url: string | null; name: string | null; size?: string; userId?: string }) => (
+    <div className="relative shrink-0">
+      {url ? (
+        <img src={url} alt="" className={`${size} rounded-full object-cover`} />
+      ) : (
+        <div className={`${size} rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold`}>
+          {getInitials(name)}
+        </div>
+      )}
+      {userId && (
+        <span
+          className={cn(
+            "absolute -bottom-0.5 -right-0.5 block rounded-full border-2 border-card",
+            size.includes("7") || size.includes("8") ? "h-2.5 w-2.5" : "h-3 w-3",
+            onlineUsers.has(userId) ? "bg-emerald-400" : "bg-muted-foreground/40"
+          )}
+        />
+      )}
+    </div>
   );
 
   const MediaPreviewBadge = () => {
