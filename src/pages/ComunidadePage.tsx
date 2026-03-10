@@ -352,9 +352,23 @@ const ComunidadePage = () => {
       media_type: media?.type || null,
     }).select("id").single();
 
-    // Send mention notifications
+    // Send mention notifications + notify all users about new post
     if (insertedPost) {
       await sendMentionNotifications(postText, insertedPost.id);
+
+      // Notify all other users about the new post
+      const mentionedIds = extractMentionedUserIds(postText);
+      for (const u of allUsers) {
+        if (u.user_id !== user.id && !mentionedIds.includes(u.user_id)) {
+          await supabase.from("notifications").insert({
+            user_id: u.user_id,
+            from_user_id: user.id,
+            type: "new_post",
+            post_id: insertedPost.id,
+            comment_text: postText.slice(0, 100),
+          });
+        }
+      }
     }
 
     setNewPost("");
