@@ -84,6 +84,7 @@ const ProfilePage = () => {
       setProfile(prof as ProfileData);
       setEditName(prof.display_name || "");
       setEditBio(prof.bio || "");
+      setCoverPosition((prof as any).cover_position ?? 50);
     }
     setFollowersCount(followers || 0);
     setFollowingCount(following || 0);
