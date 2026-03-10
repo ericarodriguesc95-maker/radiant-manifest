@@ -651,6 +651,9 @@ const ComunidadePage = () => {
       {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); setUnreadCount(0); }} />}
 
       <div className="px-5 space-y-4 pb-6">
+        {/* Stories */}
+        <StoryBar />
+
         <Leaderboard />
 
         {/* Create post */}
