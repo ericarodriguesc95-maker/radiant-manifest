@@ -213,10 +213,35 @@ const ProfilePage = () => {
     const { error } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
     if (!error) {
       const { data } = supabase.storage.from("avatars").getPublicUrl(path);
-      await supabase.from("profiles").update({ cover_url: data.publicUrl }).eq("user_id", user.id);
-      setProfile(prev => prev ? { ...prev, cover_url: data.publicUrl } : null);
+      await supabase.from("profiles").update({ cover_url: data.publicUrl, cover_position: 50 }).eq("user_id", user.id);
+      setProfile(prev => prev ? { ...prev, cover_url: data.publicUrl, cover_position: 50 } : null);
+      setCoverPosition(50);
+      setRepositioningCover(true);
     }
     setUploadingCover(false);
+  };
+
+  const saveCoverPosition = async () => {
+    if (!user) return;
+    await supabase.from("profiles").update({ cover_position: coverPosition }).eq("user_id", user.id);
+    setProfile(prev => prev ? { ...prev, cover_position: coverPosition } : null);
+    setRepositioningCover(false);
+  };
+
+  const handleCoverDragStart = (clientY: number) => {
+    setDragStartY(clientY);
+    setDragStartPos(coverPosition);
+  };
+
+  const handleCoverDragMove = (clientY: number) => {
+    if (dragStartY === null) return;
+    const delta = dragStartY - clientY;
+    const newPos = Math.max(0, Math.min(100, dragStartPos + delta * 0.5));
+    setCoverPosition(newPos);
+  };
+
+  const handleCoverDragEnd = () => {
+    setDragStartY(null);
   };
 
   const saveProfile = async () => {
