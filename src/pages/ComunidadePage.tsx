@@ -168,6 +168,43 @@ const ComunidadePage = () => {
     return () => { supabase.removeChannel(channel); };
   }, [fetchPosts]);
 
+  // Realtime push notifications for likes, comments, mentions
+  useEffect(() => {
+    if (!user) return;
+    requestNotificationPermission();
+
+    const channel = supabase
+      .channel("my-push-notifications")
+      .on("postgres_changes", {
+        event: "INSERT",
+        schema: "public",
+        table: "notifications",
+        filter: `user_id=eq.${user.id}`,
+      }, async (payload: any) => {
+        const n = payload.new;
+        if (!n || n.from_user_id === user.id) return;
+
+        // Fetch from_user name
+        const { data: prof } = await supabase
+          .from("profiles")
+          .select("display_name")
+          .eq("user_id", n.from_user_id)
+          .single();
+        const name = prof?.display_name || "Alguém";
+
+        if (n.type === "like") {
+          sendNotification("❤️ Curtida", `${name} curtiu seu post!`, `like-${n.id}`);
+        } else if (n.type === "comment") {
+          sendNotification("💬 Comentário", `${name} comentou: "${(n.comment_text || "").slice(0, 60)}"`, `comment-${n.id}`);
+        } else if (n.type === "mention") {
+          sendNotification("📣 Menção", `${name} mencionou você: "${(n.comment_text || "").slice(0, 60)}"`, `mention-${n.id}`);
+        }
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [user]);
+
   useEffect(() => {
     const pending = sessionStorage.getItem("pending-conquista");
     if (pending && user) {
