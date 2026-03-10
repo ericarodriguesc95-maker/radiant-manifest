@@ -56,6 +56,10 @@ const ProfilePage = () => {
   const [editBio, setEditBio] = useState("");
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
+  const [repositioningCover, setRepositioningCover] = useState(false);
+  const [coverPosition, setCoverPosition] = useState(50);
+  const [dragStartY, setDragStartY] = useState<number | null>(null);
+  const [dragStartPos, setDragStartPos] = useState(50);
 
   // Followers/Following list modal
   const [showListType, setShowListType] = useState<"followers" | "following" | null>(null);
