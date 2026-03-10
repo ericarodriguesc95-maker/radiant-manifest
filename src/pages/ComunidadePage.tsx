@@ -663,10 +663,14 @@ const ComunidadePage = () => {
                         placeholder="Escreva um comentário..."
                         className="flex-1 bg-transparent text-xs font-body outline-none placeholder:text-muted-foreground"
                       />
+                      <EmojiPicker
+                        size="sm"
+                        onSelect={(emoji) => setCommentTexts(prev => ({ ...prev, [post.id]: (prev[post.id] || "") + emoji }))}
+                      />
                       <button
                         onClick={() => addComment(post.id, post.user_id)}
                         disabled={!commentTexts[post.id]?.trim()}
-                        className="text-gold disabled:text-muted-foreground transition-colors ml-2"
+                        className="text-gold disabled:text-muted-foreground transition-colors ml-1"
                       >
                         <Send className="h-3.5 w-3.5" />
                       </button>
