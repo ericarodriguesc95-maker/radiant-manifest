@@ -803,6 +803,23 @@ const ComunidadePage = () => {
                   />
                 )}
 
+                {/* Sticker (emoji) */}
+                {post.media_url && post.media_type === "sticker" && post.media_url.startsWith("emoji:") && (
+                  <div className="mt-3 text-center">
+                    <span className="text-7xl">{post.media_url.replace("emoji:", "")}</span>
+                  </div>
+                )}
+
+                {/* GIF or animated sticker */}
+                {post.media_url && (post.media_type === "gif" || (post.media_type === "sticker" && !post.media_url.startsWith("emoji:"))) && (
+                  <img
+                    src={post.media_url}
+                    alt={post.media_type === "gif" ? "GIF" : "Sticker"}
+                    className="mt-3 rounded-xl max-w-[280px] max-h-60"
+                    loading="lazy"
+                  />
+                )}
+
                 {post.media_url && post.media_type === "audio" && (
                   <button
                     onClick={() => toggleAudioPlayback(post.media_url!)}
