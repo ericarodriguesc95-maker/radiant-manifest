@@ -5,6 +5,7 @@ import MentionInput, { renderTextWithMentions } from "@/components/MentionInput"
 import { useOnlinePresence } from "@/hooks/useOnlinePresence";
 import GifStickerPicker from "@/components/GifStickerPicker";
 import NotificationsPanel from "@/components/NotificationsPanel";
+import UserProfileModal from "@/components/UserProfileModal";
 import { sendNotification, requestNotificationPermission } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -53,6 +54,7 @@ const ComunidadePage = () => {
   const [followingSet, setFollowingSet] = useState<Set<string>>(new Set());
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [viewingProfileUserId, setViewingProfileUserId] = useState<string | null>(null);
 
   // Online presence
   const onlineUsers = useOnlinePresence(user?.id);
@@ -565,8 +567,11 @@ const ComunidadePage = () => {
     return name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
   };
 
-  const Avatar = ({ url, name, size = "h-9 w-9", userId }: { url: string | null; name: string | null; size?: string; userId?: string }) => (
-    <div className="relative shrink-0">
+  const Avatar = ({ url, name, size = "h-9 w-9", userId, clickable = false }: { url: string | null; name: string | null; size?: string; userId?: string; clickable?: boolean }) => (
+    <div
+      className={cn("relative shrink-0", clickable && "cursor-pointer")}
+      onClick={clickable && userId ? () => setViewingProfileUserId(userId) : undefined}
+    >
       {url ? (
         <img src={url} alt="" className={`${size} rounded-full object-cover`} />
       ) : (
@@ -814,9 +819,12 @@ const ComunidadePage = () => {
             <div key={post.id} className="bg-card rounded-2xl border border-border overflow-hidden animate-fade-in">
               {/* Post header */}
               <div className="flex items-center gap-3 p-4 pb-2">
-                <Avatar url={post.avatar_url} name={post.display_name} userId={post.user_id} />
+                <Avatar url={post.avatar_url} name={post.display_name} userId={post.user_id} clickable />
                 <div className="flex-1">
-                  <p className="text-sm font-body font-semibold">
+                  <p
+                    className="text-sm font-body font-semibold cursor-pointer hover:text-gold transition-colors"
+                    onClick={() => setViewingProfileUserId(post.user_id)}
+                  >
                     {post.user_id === user?.id ? "Você" : post.display_name}
                   </p>
                   <p className="text-[10px] text-muted-foreground font-body">{formatTime(post.created_at)}</p>
@@ -967,10 +975,13 @@ const ComunidadePage = () => {
                     <div className="px-4 pt-3 space-y-3">
                       {post.comments.map(comment => (
                         <div key={comment.id} className="flex gap-2.5 group">
-                          <Avatar url={comment.avatar_url} name={comment.display_name} size="h-7 w-7" userId={comment.user_id} />
+                          <Avatar url={comment.avatar_url} name={comment.display_name} size="h-7 w-7" userId={comment.user_id} clickable />
                           <div className="flex-1 min-w-0">
                             <div className="bg-muted/50 rounded-xl px-3 py-2">
-                              <p className="text-xs font-body font-semibold">
+                              <p
+                                className="text-xs font-body font-semibold cursor-pointer hover:text-gold transition-colors"
+                                onClick={() => setViewingProfileUserId(comment.user_id)}
+                              >
                                 {comment.user_id === user?.id ? "Você" : comment.display_name}
                               </p>
                               {editingCommentId === comment.id ? (
@@ -1045,6 +1056,17 @@ const ComunidadePage = () => {
           ))
         )}
       </div>
+
+      {/* Profile Modal */}
+      {viewingProfileUserId && (
+        <UserProfileModal
+          userId={viewingProfileUserId}
+          onClose={() => setViewingProfileUserId(null)}
+          isFollowing={followingSet.has(viewingProfileUserId)}
+          onToggleFollow={toggleFollow}
+          isOnline={onlineUsers.has(viewingProfileUserId)}
+        />
+      )}
     </div>
   );
 };
