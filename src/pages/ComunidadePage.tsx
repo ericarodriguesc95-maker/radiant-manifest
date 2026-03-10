@@ -1039,6 +1039,22 @@ const ComunidadePage = () => {
                                   <button onClick={saveEditComment} className="text-gold p-0.5"><Check className="h-3 w-3" /></button>
                                   <button onClick={() => setEditingCommentId(null)} className="text-muted-foreground p-0.5"><X className="h-3 w-3" /></button>
                                 </div>
+                              ) : /^\[gif:(.+)\]$/.test(comment.text) ? (
+                                <img
+                                  src={comment.text.match(/^\[gif:(.+)\]$/)?.[1] || ""}
+                                  alt="GIF"
+                                  className="mt-1 rounded-lg max-w-[200px] max-h-40"
+                                  loading="lazy"
+                                />
+                              ) : /^\[sticker:(.+)\]$/.test(comment.text) ? (
+                                <img
+                                  src={comment.text.match(/^\[sticker:(.+)\]$/)?.[1] || ""}
+                                  alt="Sticker"
+                                  className="mt-1 rounded-lg max-w-[150px] max-h-36"
+                                  loading="lazy"
+                                />
+                              ) : comment.text.length <= 4 && /^[\p{Emoji}]+$/u.test(comment.text) ? (
+                                <span className="text-4xl mt-1 block">{comment.text}</span>
                               ) : (
                                 <p className="text-xs font-body text-foreground/80">{renderTextWithMentions(comment.text)}</p>
                               )}
