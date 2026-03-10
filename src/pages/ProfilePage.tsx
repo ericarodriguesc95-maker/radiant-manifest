@@ -55,8 +55,6 @@ const ProfilePage = () => {
   const [editBio, setEditBio] = useState("");
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
-  const avatarInputRef = useRef<HTMLInputElement>(null);
-  const coverInputRef = useRef<HTMLInputElement>(null);
 
   // Followers/Following list modal
   const [showListType, setShowListType] = useState<"followers" | "following" | null>(null);
@@ -263,9 +261,9 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen pb-6">
       {/* Hidden file inputs - outside overflow-hidden */}
-      <input ref={coverInputRef} type="file" accept="image/*" className="hidden"
+      <input id="cover-upload" type="file" accept="image/*" className="hidden"
         onChange={e => { const f = e.target.files?.[0]; if (f) uploadCover(f); e.target.value = ""; }} />
-      <input ref={avatarInputRef} type="file" accept="image/*" className="hidden"
+      <input id="avatar-upload" type="file" accept="image/*" className="hidden"
         onChange={e => { const f = e.target.files?.[0]; if (f) uploadAvatar(f); e.target.value = ""; }} />
 
       {/* Cover photo */}
@@ -280,16 +278,16 @@ const ProfilePage = () => {
           <ArrowLeft className="h-5 w-5" />
         </button>
         {isMe && (
-          <button
-            onClick={(e) => { e.stopPropagation(); coverInputRef.current?.click(); }}
-            className="absolute bottom-3 right-3 p-2 bg-card/80 backdrop-blur-sm rounded-full text-foreground hover:bg-card transition-colors z-10"
+          <label
+            htmlFor="cover-upload"
+            className="absolute bottom-3 right-3 p-2 bg-card/80 backdrop-blur-sm rounded-full text-foreground hover:bg-card transition-colors z-10 cursor-pointer"
           >
             {uploadingCover ? (
               <div className="h-4 w-4 border-2 border-gold border-t-transparent rounded-full animate-spin" />
             ) : (
               <Camera className="h-4 w-4" />
             )}
-          </button>
+          </label>
         )}
       </div>
 
@@ -311,16 +309,16 @@ const ProfilePage = () => {
             )} />
           )}
           {isMe && (
-            <button
-              onClick={() => avatarInputRef.current?.click()}
-              className="absolute bottom-0 right-0 p-1.5 bg-gold rounded-full text-primary-foreground shadow-sm"
+            <label
+              htmlFor="avatar-upload"
+              className="absolute bottom-0 right-0 p-1.5 bg-gold rounded-full text-primary-foreground shadow-sm cursor-pointer"
             >
               {uploadingAvatar ? (
                 <div className="h-3 w-3 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
               ) : (
                 <Camera className="h-3 w-3" />
               )}
-            </button>
+            </label>
           )}
         </div>
 
