@@ -78,6 +78,16 @@ const HomePage = () => {
         </div>
         <div className="flex items-center gap-2">
           <button
+            onClick={() => setShowUpdates(true)}
+            className="relative p-2 rounded-full hover:bg-muted transition-colors"
+            title="Novidades do App"
+          >
+            <Gift className="h-5 w-5 text-foreground" />
+            {hasUnreadUpdates && (
+              <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-gold animate-pulse" />
+            )}
+          </button>
+          <button
             onClick={() => setShowNotifications(!showNotifications)}
             className="relative p-2 rounded-full hover:bg-muted transition-colors"
           >
@@ -97,6 +107,7 @@ const HomePage = () => {
         </div>
       </header>
 
+      {showUpdates && <AppUpdatesModal onClose={() => { setShowUpdates(false); setHasUnreadUpdates(false); }} />}
       {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); fetchUnread(); }} />}
 
       <div className="px-5 space-y-6 pb-6">
