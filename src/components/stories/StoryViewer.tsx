@@ -403,7 +403,7 @@ const StoryViewer = ({ group, onClose }: StoryViewerProps) => {
 
       {/* Reaction picker */}
       {showReactions && !isPanelOpen && (
-        <div className="absolute bottom-20 left-4 bg-card/95 backdrop-blur-md rounded-2xl px-3 py-2 flex gap-1 z-30 shadow-lg">
+        <div className="absolute bottom-20 left-4 right-4 bg-card/95 backdrop-blur-md rounded-2xl px-3 py-2 flex flex-wrap gap-1 z-30 shadow-lg justify-center">
           {REACTION_EMOJIS.map((emoji) => (
             <button
               key={emoji}
