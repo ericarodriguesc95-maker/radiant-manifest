@@ -71,6 +71,7 @@ const ComunidadePage = () => {
   // Audio playback state for feed
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [showStickerPicker, setShowStickerPicker] = useState(false);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const docInputRef = useRef<HTMLInputElement>(null);
