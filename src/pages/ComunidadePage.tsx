@@ -821,6 +821,23 @@ const ComunidadePage = () => {
                   </p>
                   <p className="text-[10px] text-muted-foreground font-body">{formatTime(post.created_at)}</p>
                 </div>
+                {post.user_id !== user?.id && (
+                  <button
+                    onClick={() => toggleFollow(post.user_id)}
+                    className={cn(
+                      "flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-body font-medium transition-colors border",
+                      followingSet.has(post.user_id)
+                        ? "border-gold/30 text-gold bg-gold/10"
+                        : "border-border text-muted-foreground hover:border-gold hover:text-gold"
+                    )}
+                  >
+                    {followingSet.has(post.user_id) ? (
+                      <><UserMinus className="h-3 w-3" /> Seguindo</>
+                    ) : (
+                      <><UserPlus className="h-3 w-3" /> Seguir</>
+                    )}
+                  </button>
+                )}
                 {post.user_id === user?.id && (
                   <div className="flex items-center gap-1">
                     {editingPostId === post.id ? (
