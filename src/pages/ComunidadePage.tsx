@@ -16,41 +16,7 @@ interface Post {
   time: string;
 }
 
-const initialPosts: Post[] = [
-  {
-    id: "1",
-    author: "Marina Silva",
-    avatar: "🦋",
-    text: "Dia 30 de meditação consecutiva! O Ho'oponopono mudou minha vida. Quem mais pratica? 🧘‍♀️✨",
-    likes: 24,
-    liked: false,
-    comments: [
-      { author: "Ana Clara", text: "Inspiração demais! 💫" },
-      { author: "Juliana", text: "Comecei ontem! Vamos juntas 🙏" },
-    ],
-    time: "2h",
-  },
-  {
-    id: "2",
-    author: "Camila Santos",
-    avatar: "🌸",
-    text: "Meta do mês: skincare completa todas as noites. Quem topa o desafio? Postem suas rotinas! 💆‍♀️",
-    likes: 18,
-    liked: true,
-    comments: [{ author: "Beatriz", text: "Bora! Minha pele precisa 😅" }],
-    time: "5h",
-  },
-  {
-    id: "3",
-    author: "Fernanda Oliveira",
-    avatar: "👑",
-    text: "Consegui minha promoção! Obrigada ao planejamento SMART daqui. Vocês são incríveis, girls! 🎉💛",
-    likes: 56,
-    liked: false,
-    comments: [],
-    time: "1d",
-  },
-];
+const initialPosts: Post[] = [];
 
 const ComunidadePage = () => {
   const [posts, setPosts] = useState<Post[]>(initialPosts);

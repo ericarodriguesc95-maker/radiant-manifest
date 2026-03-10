@@ -9,15 +9,7 @@ interface LeaderEntry {
   medals: number;
 }
 
-const MOCK_LEADERBOARD: LeaderEntry[] = [
-  { rank: 1, name: "Marina Silva", avatar: "🦋", streak: 45, medals: 4 },
-  { rank: 2, name: "Camila Santos", avatar: "🌸", streak: 32, medals: 3 },
-  { rank: 3, name: "Fernanda Oliveira", avatar: "👑", streak: 28, medals: 3 },
-  { rank: 4, name: "Ana Clara", avatar: "💫", streak: 21, medals: 2 },
-  { rank: 5, name: "Juliana Costa", avatar: "🌺", streak: 14, medals: 2 },
-  { rank: 6, name: "Beatriz Lima", avatar: "✨", streak: 9, medals: 1 },
-  { rank: 7, name: "Larissa Rocha", avatar: "🌙", streak: 7, medals: 1 },
-];
+const MOCK_LEADERBOARD: LeaderEntry[] = [];
 
 function getRankIcon(rank: number) {
   if (rank === 1) return <Crown className="h-4 w-4 text-gold" />;
