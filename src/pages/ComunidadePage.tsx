@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Heart, MessageCircle, Send, Image as ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Leaderboard from "@/components/Leaderboard";
 
 interface Post {
   id: string;
