@@ -975,10 +975,13 @@ const ComunidadePage = () => {
                     <div className="px-4 pt-3 space-y-3">
                       {post.comments.map(comment => (
                         <div key={comment.id} className="flex gap-2.5 group">
-                          <Avatar url={comment.avatar_url} name={comment.display_name} size="h-7 w-7" userId={comment.user_id} />
+                          <Avatar url={comment.avatar_url} name={comment.display_name} size="h-7 w-7" userId={comment.user_id} clickable />
                           <div className="flex-1 min-w-0">
                             <div className="bg-muted/50 rounded-xl px-3 py-2">
-                              <p className="text-xs font-body font-semibold">
+                              <p
+                                className="text-xs font-body font-semibold cursor-pointer hover:text-gold transition-colors"
+                                onClick={() => setViewingProfileUserId(comment.user_id)}
+                              >
                                 {comment.user_id === user?.id ? "Você" : comment.display_name}
                               </p>
                               {editingCommentId === comment.id ? (
