@@ -354,6 +354,9 @@ const ComunidadePage = () => {
         user_id: postOwnerId, from_user_id: user.id, type: "comment", post_id: postId, comment_text: text,
       });
     }
+    // Send mention notifications from comment
+    await sendMentionNotifications(text, postId);
+
     setCommentTexts(prev => ({ ...prev, [postId]: "" }));
     setExpandedComments(prev => new Set(prev).add(postId));
     fetchPosts();
