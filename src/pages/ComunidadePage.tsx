@@ -454,11 +454,13 @@ const ComunidadePage = () => {
         {/* Create post */}
         <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
           <div className="flex items-start gap-3">
-            <Avatar url={profile?.avatar_url || null} name={profile?.display_name || null} size="h-8 w-8" />
-            <textarea
+            <Avatar url={profile?.avatar_url || null} name={profile?.display_name || null} size="h-8 w-8" userId={user?.id} />
+            <MentionInput
               value={newPost}
-              onChange={e => setNewPost(e.target.value)}
-              placeholder="Compartilhe com as girls..."
+              onChange={setNewPost}
+              placeholder="Compartilhe com as girls... Use @ para mencionar"
+              users={allUsers}
+              as="textarea"
               rows={2}
               className="flex-1 bg-transparent text-sm font-body outline-none resize-none placeholder:text-muted-foreground"
             />
