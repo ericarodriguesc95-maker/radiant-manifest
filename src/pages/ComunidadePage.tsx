@@ -576,9 +576,27 @@ const ComunidadePage = () => {
                   <p className="text-[10px] text-muted-foreground font-body">{formatTime(post.created_at)}</p>
                 </div>
                 {post.user_id === user?.id && (
-                  <button onClick={() => deletePost(post.id)} className="text-muted-foreground hover:text-destructive transition-colors p-1">
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    {editingPostId === post.id ? (
+                      <>
+                        <button onClick={saveEditPost} className="text-gold hover:text-gold/80 transition-colors p-1" title="Salvar">
+                          <Check className="h-3.5 w-3.5" />
+                        </button>
+                        <button onClick={() => setEditingPostId(null)} className="text-muted-foreground hover:text-foreground transition-colors p-1" title="Cancelar">
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button onClick={() => startEditPost(post)} className="text-muted-foreground hover:text-gold transition-colors p-1" title="Editar">
+                          <Pencil className="h-3.5 w-3.5" />
+                        </button>
+                        <button onClick={() => deletePost(post.id)} className="text-muted-foreground hover:text-destructive transition-colors p-1" title="Excluir">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </>
+                    )}
+                  </div>
                 )}
               </div>
 
