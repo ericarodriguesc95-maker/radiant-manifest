@@ -322,8 +322,7 @@ const ProfilePage = () => {
               )}
             </button>
           )}
-          <input ref={avatarInputRef} type="file" accept="image/*" className="hidden"
-            onChange={e => { const f = e.target.files?.[0]; if (f) uploadAvatar(f); e.target.value = ""; }} />
+        </div>
         </div>
 
         {/* Name & bio */}
