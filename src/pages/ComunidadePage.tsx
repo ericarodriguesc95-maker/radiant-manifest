@@ -265,6 +265,36 @@ const ComunidadePage = () => {
     return `${m}:${s}`;
   };
 
+  // Extract mentioned user_ids from text
+  const extractMentionedUserIds = (text: string): string[] => {
+    const mentions = text.match(/@(\S+(?:\s\S+)?)/g);
+    if (!mentions) return [];
+    const ids: string[] = [];
+    mentions.forEach(m => {
+      const name = m.slice(1).trim();
+      const found = allUsers.find(u => u.display_name?.toLowerCase() === name.toLowerCase());
+      if (found) ids.push(found.user_id);
+    });
+    return [...new Set(ids)];
+  };
+
+  // Send mention notifications
+  const sendMentionNotifications = async (text: string, postId: string) => {
+    if (!user) return;
+    const mentionedIds = extractMentionedUserIds(text);
+    for (const uid of mentionedIds) {
+      if (uid !== user.id) {
+        await supabase.from("notifications").insert({
+          user_id: uid,
+          from_user_id: user.id,
+          type: "mention",
+          post_id: postId,
+          comment_text: text.slice(0, 100),
+        });
+      }
+    }
+  };
+
   const createPost = async () => {
     if ((!newPost.trim() && !mediaFile) || !user) return;
     setUploading(true);
@@ -274,12 +304,19 @@ const ComunidadePage = () => {
       media = await uploadMedia(mediaFile);
     }
 
-    await supabase.from("community_posts").insert({
+    const postText = newPost.trim() || (media ? `📎 ${media.type === "image" ? "Imagem" : media.type === "audio" ? "Áudio" : "Documento"}` : "");
+
+    const { data: insertedPost } = await supabase.from("community_posts").insert({
       user_id: user.id,
-      text: newPost.trim() || (media ? `📎 ${media.type === "image" ? "Imagem" : media.type === "audio" ? "Áudio" : "Documento"}` : ""),
+      text: postText,
       media_url: media?.url || null,
       media_type: media?.type || null,
-    });
+    }).select("id").single();
+
+    // Send mention notifications
+    if (insertedPost) {
+      await sendMentionNotifications(postText, insertedPost.id);
+    }
 
     setNewPost("");
     clearMedia();
