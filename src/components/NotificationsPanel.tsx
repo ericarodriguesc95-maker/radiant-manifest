@@ -121,6 +121,8 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
               <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-card flex items-center justify-center">
                 {n.type === "like" ? (
                   <Heart className="h-2.5 w-2.5 fill-red-400 text-red-400" />
+                ) : n.type === "mention" ? (
+                  <AtSign className="h-2.5 w-2.5 text-gold" />
                 ) : (
                   <MessageCircle className="h-2.5 w-2.5 text-gold" />
                 )}
