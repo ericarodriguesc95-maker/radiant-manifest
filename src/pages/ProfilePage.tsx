@@ -323,7 +323,6 @@ const ProfilePage = () => {
             </button>
           )}
         </div>
-        </div>
 
         {/* Name & bio */}
         <div className="mt-3">
