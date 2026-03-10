@@ -85,13 +85,24 @@ const ComunidadePage = () => {
   const docInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch all users for mention suggestions
+  // Fetch all users for mention suggestions + follows + unread count
   useEffect(() => {
+    if (!user) return;
     const fetchUsers = async () => {
       const { data } = await supabase.from("profiles").select("user_id, display_name, avatar_url");
       if (data) setAllUsers(data.filter(u => u.user_id !== user?.id));
     };
-    if (user) fetchUsers();
+    const fetchFollows = async () => {
+      const { data } = await supabase.from("user_follows").select("following_id").eq("follower_id", user.id);
+      if (data) setFollowingSet(new Set(data.map((f: any) => f.following_id)));
+    };
+    const fetchUnread = async () => {
+      const { count } = await supabase.from("notifications").select("*", { count: "exact", head: true }).eq("user_id", user.id).eq("read", false);
+      setUnreadCount(count || 0);
+    };
+    fetchUsers();
+    fetchFollows();
+    fetchUnread();
   }, [user]);
 
   const fetchPosts = useCallback(async () => {
