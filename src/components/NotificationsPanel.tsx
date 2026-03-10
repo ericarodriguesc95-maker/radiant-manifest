@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { X, Heart, MessageCircle, Droplets, Brain, Target, AtSign } from "lucide-react";
+import { X, Heart, MessageCircle, Droplets, Brain, Target, AtSign, UserPlus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { format } from "date-fns";
@@ -7,7 +7,7 @@ import { ptBR } from "date-fns/locale";
 
 interface Notification {
   id: string;
-  type: "like" | "comment" | "mention";
+  type: "like" | "comment" | "mention" | "welcome";
   from_name: string;
   from_avatar: string | null;
   comment_text: string | null;
@@ -123,6 +123,8 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
                   <Heart className="h-2.5 w-2.5 fill-red-400 text-red-400" />
                 ) : n.type === "mention" ? (
                   <AtSign className="h-2.5 w-2.5 text-gold" />
+                ) : n.type === "welcome" ? (
+                  <UserPlus className="h-2.5 w-2.5 text-gold" />
                 ) : (
                   <MessageCircle className="h-2.5 w-2.5 text-gold" />
                 )}
@@ -131,7 +133,7 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
             <div className="flex-1 min-w-0">
               <p className="text-xs font-body">
                 <span className="font-semibold">{n.from_name}</span>{" "}
-                {n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : "comentou no seu post"}
+                {n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : "comentou no seu post"}
               </p>
               {n.comment_text && (
                 <p className="text-[11px] font-body text-muted-foreground mt-0.5 truncate">"{n.comment_text}"</p>
