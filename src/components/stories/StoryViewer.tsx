@@ -380,8 +380,7 @@ const StoryViewer = ({ group, onClose }: StoryViewerProps) => {
               <p className="text-white leading-relaxed max-w-sm" style={{ fontFamily, fontSize: `${fontSize}px`, textAlign }}>{text}</p>
             </div>
           );
-        })()
-        ) : story.media_type === "video" ? (
+        })() : story.media_type === "video" ? (
           <video src={story.media_url || ""} className="max-h-full max-w-full object-contain" autoPlay playsInline onEnded={goNext} />
         ) : (
           <div className="w-full h-full relative">
