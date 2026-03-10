@@ -39,6 +39,21 @@ const HomePage = () => {
 
   useEffect(() => { fetchUnread(); }, [fetchUnread]);
 
+  // Check for unread app updates and auto-show
+  useEffect(() => {
+    if (!user) return;
+    const checkUpdates = async () => {
+      const [{ count: totalUpdates }, { count: readCount }] = await Promise.all([
+        supabase.from("app_updates").select("*", { count: "exact", head: true }),
+        supabase.from("app_update_reads").select("*", { count: "exact", head: true }).eq("user_id", user.id),
+      ]);
+      const unread = (totalUpdates || 0) - (readCount || 0);
+      setHasUnreadUpdates(unread > 0);
+      if (unread > 0) setShowUpdates(true);
+    };
+    checkUpdates();
+  }, [user]);
+
   useEffect(() => {
     if (!user) return;
     const channel = supabase
