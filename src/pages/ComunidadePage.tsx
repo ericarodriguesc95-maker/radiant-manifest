@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText } from "lucide-react";
+import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText, Pencil, Check } from "lucide-react";
 import EmojiPicker from "@/components/EmojiPicker";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -40,6 +40,12 @@ const ComunidadePage = () => {
   const [loading, setLoading] = useState(true);
   const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set());
   const [commentTexts, setCommentTexts] = useState<Record<string, string>>({});
+
+  // Edit state
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
+  const [editPostText, setEditPostText] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editCommentText, setEditCommentText] = useState("");
 
   // Media attachment state
   const [mediaFile, setMediaFile] = useState<File | null>(null);
@@ -305,8 +311,34 @@ const ComunidadePage = () => {
     fetchPosts();
   };
 
+  const startEditPost = (post: PostWithProfile) => {
+    setEditingPostId(post.id);
+    setEditPostText(post.text);
+  };
+
+  const saveEditPost = async () => {
+    if (!editingPostId || !editPostText.trim()) return;
+    await supabase.from("community_posts").update({ text: editPostText.trim() }).eq("id", editingPostId);
+    setEditingPostId(null);
+    setEditPostText("");
+    fetchPosts();
+  };
+
   const deleteComment = async (commentId: string) => {
     await supabase.from("post_comments").delete().eq("id", commentId);
+    fetchPosts();
+  };
+
+  const startEditComment = (comment: Comment) => {
+    setEditingCommentId(comment.id);
+    setEditCommentText(comment.text);
+  };
+
+  const saveEditComment = async () => {
+    if (!editingCommentId || !editCommentText.trim()) return;
+    await supabase.from("post_comments").update({ text: editCommentText.trim() }).eq("id", editingCommentId);
+    setEditingCommentId(null);
+    setEditCommentText("");
     fetchPosts();
   };
 
@@ -544,15 +576,43 @@ const ComunidadePage = () => {
                   <p className="text-[10px] text-muted-foreground font-body">{formatTime(post.created_at)}</p>
                 </div>
                 {post.user_id === user?.id && (
-                  <button onClick={() => deletePost(post.id)} className="text-muted-foreground hover:text-destructive transition-colors p-1">
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    {editingPostId === post.id ? (
+                      <>
+                        <button onClick={saveEditPost} className="text-gold hover:text-gold/80 transition-colors p-1" title="Salvar">
+                          <Check className="h-3.5 w-3.5" />
+                        </button>
+                        <button onClick={() => setEditingPostId(null)} className="text-muted-foreground hover:text-foreground transition-colors p-1" title="Cancelar">
+                          <X className="h-3.5 w-3.5" />
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button onClick={() => startEditPost(post)} className="text-muted-foreground hover:text-gold transition-colors p-1" title="Editar">
+                          <Pencil className="h-3.5 w-3.5" />
+                        </button>
+                        <button onClick={() => deletePost(post.id)} className="text-muted-foreground hover:text-destructive transition-colors p-1" title="Excluir">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </>
+                    )}
+                  </div>
                 )}
               </div>
 
               {/* Post content */}
               <div className="px-4 pb-3">
-                <p className="text-sm font-body leading-relaxed">{post.text}</p>
+                {editingPostId === post.id ? (
+                  <textarea
+                    value={editPostText}
+                    onChange={e => setEditPostText(e.target.value)}
+                    className="w-full bg-muted/50 text-sm font-body rounded-xl px-3 py-2 outline-none resize-none border border-gold/30 focus:border-gold"
+                    rows={3}
+                    autoFocus
+                  />
+                ) : (
+                  <p className="text-sm font-body leading-relaxed">{post.text}</p>
+                )}
 
                 {/* Post media */}
                 {post.media_url && post.media_type === "image" && (
@@ -633,17 +693,40 @@ const ComunidadePage = () => {
                               <p className="text-xs font-body font-semibold">
                                 {comment.user_id === user?.id ? "Você" : comment.display_name}
                               </p>
-                              <p className="text-xs font-body text-foreground/80">{comment.text}</p>
+                              {editingCommentId === comment.id ? (
+                                <div className="flex items-center gap-1 mt-1">
+                                  <input
+                                    type="text"
+                                    value={editCommentText}
+                                    onChange={e => setEditCommentText(e.target.value)}
+                                    onKeyDown={e => { if (e.key === "Enter") saveEditComment(); }}
+                                    className="flex-1 bg-transparent text-xs font-body outline-none border-b border-gold/30 focus:border-gold"
+                                    autoFocus
+                                  />
+                                  <button onClick={saveEditComment} className="text-gold p-0.5"><Check className="h-3 w-3" /></button>
+                                  <button onClick={() => setEditingCommentId(null)} className="text-muted-foreground p-0.5"><X className="h-3 w-3" /></button>
+                                </div>
+                              ) : (
+                                <p className="text-xs font-body text-foreground/80">{comment.text}</p>
+                              )}
                             </div>
                             <div className="flex items-center gap-2 mt-0.5 px-1">
                               <span className="text-[10px] text-muted-foreground font-body">{formatTime(comment.created_at)}</span>
-                              {comment.user_id === user?.id && (
-                                <button
-                                  onClick={() => deleteComment(comment.id)}
-                                  className="text-[10px] text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
-                                >
-                                  excluir
-                                </button>
+                              {comment.user_id === user?.id && editingCommentId !== comment.id && (
+                                <>
+                                  <button
+                                    onClick={() => startEditComment(comment)}
+                                    className="text-[10px] text-muted-foreground hover:text-gold transition-colors opacity-0 group-hover:opacity-100"
+                                  >
+                                    editar
+                                  </button>
+                                  <button
+                                    onClick={() => deleteComment(comment.id)}
+                                    className="text-[10px] text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
+                                  >
+                                    excluir
+                                  </button>
+                                </>
                               )}
                             </div>
                           </div>
