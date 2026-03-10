@@ -56,6 +56,25 @@ const ComunidadePage = () => {
   const [newPost, setNewPost] = useState("");
   const [showComments, setShowComments] = useState<string | null>(null);
 
+  // Pick up pending conquista from HomePage
+  useEffect(() => {
+    const pending = sessionStorage.getItem("pending-conquista");
+    if (pending) {
+      sessionStorage.removeItem("pending-conquista");
+      const post: Post = {
+        id: Date.now().toString(),
+        author: "Você",
+        avatar: "💎",
+        text: pending,
+        likes: 0,
+        liked: false,
+        comments: [],
+        time: "agora",
+      };
+      setPosts(prev => [post, ...prev]);
+    }
+  }, []);
+
   const toggleLike = (id: string) => {
     setPosts(prev =>
       prev.map(p =>
