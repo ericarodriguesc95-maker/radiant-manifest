@@ -262,6 +262,12 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen pb-6">
+      {/* Hidden file inputs - outside overflow-hidden */}
+      <input ref={coverInputRef} type="file" accept="image/*" className="hidden"
+        onChange={e => { const f = e.target.files?.[0]; if (f) uploadCover(f); e.target.value = ""; }} />
+      <input ref={avatarInputRef} type="file" accept="image/*" className="hidden"
+        onChange={e => { const f = e.target.files?.[0]; if (f) uploadAvatar(f); e.target.value = ""; }} />
+
       {/* Cover photo */}
       <div className="relative h-44 bg-gradient-to-br from-gold/20 via-gold/10 to-background overflow-hidden">
         {profile.cover_url && (
@@ -275,7 +281,7 @@ const ProfilePage = () => {
         </button>
         {isMe && (
           <button
-            onClick={() => coverInputRef.current?.click()}
+            onClick={(e) => { e.stopPropagation(); coverInputRef.current?.click(); }}
             className="absolute bottom-3 right-3 p-2 bg-card/80 backdrop-blur-sm rounded-full text-foreground hover:bg-card transition-colors z-10"
           >
             {uploadingCover ? (
@@ -285,8 +291,6 @@ const ProfilePage = () => {
             )}
           </button>
         )}
-        <input ref={coverInputRef} type="file" accept="image/*" className="hidden"
-          onChange={e => { const f = e.target.files?.[0]; if (f) uploadCover(f); e.target.value = ""; }} />
       </div>
 
       {/* Profile info */}
