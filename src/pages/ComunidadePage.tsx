@@ -3,6 +3,7 @@ import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Pape
 import EmojiPicker from "@/components/EmojiPicker";
 import MentionInput, { renderTextWithMentions } from "@/components/MentionInput";
 import { useOnlinePresence } from "@/hooks/useOnlinePresence";
+import GifStickerPicker from "@/components/GifStickerPicker";
 import { sendNotification, requestNotificationPermission } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
