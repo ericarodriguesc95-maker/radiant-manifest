@@ -9,6 +9,7 @@ import NotificationsPanel from "@/components/NotificationsPanel";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
 import PostConquista from "@/components/PostConquista";
+import StreakMedals from "@/components/StreakMedals";
 
 const HABITS_COUNT = 6;
 
