@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { ArrowLeft, Play, Pause, SkipForward, Clock } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { ArrowLeft, Play, Pause, SkipForward, Clock, Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Meditation {
@@ -21,13 +21,13 @@ const meditations: Meditation[] = [
     durationSec: 600,
     emoji: "🌟",
     steps: [
-      "Feche os olhos e respire profundamente 3 vezes",
-      "Imagine-se em seu lugar seguro e confortável",
-      "Visualize sua vida ideal: onde você está?",
-      "Sinta as emoções dessa realidade: alegria, paz, gratidão",
-      "Veja os detalhes: cores, sons, texturas",
-      "Afirme: 'Essa é minha realidade agora'",
-      "Respire e agradeça por essa visão",
+      "Feche os olhos e respire profundamente, três vezes.",
+      "Imagine-se em seu lugar seguro e confortável.",
+      "Visualize sua vida ideal. Onde você está?",
+      "Sinta as emoções dessa realidade. Alegria, paz, gratidão.",
+      "Veja os detalhes. Cores, sons, texturas.",
+      "Afirme com convicção: Essa é minha realidade agora.",
+      "Respire fundo e agradeça por essa visão.",
     ],
   },
   {
@@ -38,13 +38,13 @@ const meditations: Meditation[] = [
     durationSec: 900,
     emoji: "🧘‍♀️",
     steps: [
-      "Deite-se confortavelmente e feche os olhos",
-      "Relaxe os músculos do rosto e maxilar",
-      "Solte os ombros e braços",
-      "Relaxe o abdômen e pernas",
-      "Imagine uma luz dourada envolvendo seu corpo",
-      "A cada respiração, a luz se torna mais brilhante",
-      "Permaneça nesse estado de paz total",
+      "Deite-se confortavelmente e feche os olhos.",
+      "Relaxe os músculos do rosto e do maxilar.",
+      "Solte os ombros e os braços completamente.",
+      "Relaxe o abdômen e as pernas.",
+      "Imagine uma luz dourada envolvendo todo o seu corpo.",
+      "A cada respiração, a luz se torna mais brilhante.",
+      "Permaneça nesse estado de paz total.",
     ],
   },
   {
@@ -55,13 +55,13 @@ const meditations: Meditation[] = [
     durationSec: 480,
     emoji: "💰",
     steps: [
-      "Sente-se com a coluna ereta e feche os olhos",
-      "Imagine uma chuva de luz dourada caindo sobre você",
-      "Cada gota representa abundância em uma área da vida",
-      "Sinta gratidão por tudo que já conquistou",
-      "Visualize seus objetivos financeiros realizados",
-      "Repita: 'Eu sou um ímã de prosperidade'",
-      "Abra os olhos com um sorriso de gratidão",
+      "Sente-se com a coluna ereta e feche os olhos.",
+      "Imagine uma chuva de luz dourada caindo sobre você.",
+      "Cada gota representa abundância em uma área da sua vida.",
+      "Sinta gratidão por tudo que já conquistou.",
+      "Visualize seus objetivos financeiros sendo realizados.",
+      "Repita com carinho: Eu sou um ímã de prosperidade.",
+      "Abra os olhos com um sorriso de gratidão.",
     ],
   },
   {
@@ -72,58 +72,145 @@ const meditations: Meditation[] = [
     durationSec: 720,
     emoji: "💕",
     steps: [
-      "Coloque a mão sobre o coração e respire",
-      "Diga: 'Eu me amo e me aceito completamente'",
-      "Lembre de 3 qualidades que você admira em si",
-      "Perdoe-se por qualquer erro do passado",
-      "Visualize-se abraçando sua versão mais jovem",
-      "Envie amor para cada parte do seu corpo",
-      "Agradeça por quem você é hoje",
+      "Coloque a mão sobre o coração e respire.",
+      "Diga com amor: Eu me amo e me aceito completamente.",
+      "Lembre de três qualidades que você admira em si mesma.",
+      "Perdoe-se por qualquer erro do passado.",
+      "Visualize-se abraçando sua versão mais jovem.",
+      "Envie amor para cada parte do seu corpo.",
+      "Agradeça por quem você é hoje.",
     ],
   },
 ];
+
+function getPortugueseVoice(): SpeechSynthesisVoice | null {
+  const voices = window.speechSynthesis.getVoices();
+  // Prefer female Portuguese voices
+  const ptFemale = voices.find(v => v.lang.startsWith("pt") && v.name.toLowerCase().includes("female"));
+  const ptBR = voices.find(v => v.lang === "pt-BR");
+  const pt = voices.find(v => v.lang.startsWith("pt"));
+  return ptFemale || ptBR || pt || null;
+}
 
 export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   const [activeMeditation, setActiveMeditation] = useState<Meditation | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [elapsed, setElapsed] = useState(0);
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const stepIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Load voices
   useEffect(() => {
-    if (isPlaying && activeMeditation) {
-      const stepDuration = Math.floor(activeMeditation.durationSec / activeMeditation.steps.length) * 1000;
+    window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+  }, []);
 
+  const speakStep = useCallback((text: string, onEnd?: () => void) => {
+    if (!voiceEnabled) {
+      onEnd?.();
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voice = getPortugueseVoice();
+    if (voice) utterance.voice = voice;
+    utterance.lang = "pt-BR";
+    utterance.rate = 0.85;
+    utterance.pitch = 1.1;
+    utterance.volume = 1;
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      onEnd?.();
+    };
+    utterance.onerror = () => {
+      setIsSpeaking(false);
+      onEnd?.();
+    };
+    utteranceRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+  }, [voiceEnabled]);
+
+  const advanceToNextStep = useCallback(() => {
+    if (!activeMeditation) return;
+    setCurrentStep(prev => {
+      const next = prev + 1;
+      if (next >= activeMeditation.steps.length) {
+        setIsPlaying(false);
+        window.speechSynthesis.cancel();
+        return prev;
+      }
+      return next;
+    });
+  }, [activeMeditation]);
+
+  // Speak current step when it changes during playback
+  useEffect(() => {
+    if (!isPlaying || !activeMeditation) return;
+
+    const stepText = activeMeditation.steps[currentStep];
+    const pauseAfterSpeech = 4000; // 4 seconds of silence between steps
+
+    speakStep(stepText, () => {
+      // After speech ends, wait a pause then advance
+      autoAdvanceRef.current = setTimeout(() => {
+        advanceToNextStep();
+      }, pauseAfterSpeech);
+    });
+
+    return () => {
+      if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
+    };
+  }, [isPlaying, currentStep, activeMeditation, speakStep, advanceToNextStep]);
+
+  // Timer
+  useEffect(() => {
+    if (isPlaying) {
       intervalRef.current = setInterval(() => {
         setElapsed(prev => prev + 1);
       }, 1000);
-
-      stepIntervalRef.current = setInterval(() => {
-        setCurrentStep(prev => {
-          if (prev >= activeMeditation.steps.length - 1) {
-            setIsPlaying(false);
-            return prev;
-          }
-          return prev + 1;
-        });
-      }, stepDuration);
     } else {
       if (intervalRef.current) clearInterval(intervalRef.current);
-      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
     }
-
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
-      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
     };
-  }, [isPlaying, activeMeditation]);
+  }, [isPlaying]);
 
   const startMeditation = (m: Meditation) => {
     setActiveMeditation(m);
     setCurrentStep(0);
     setElapsed(0);
     setIsPlaying(false);
+    window.speechSynthesis.cancel();
+  };
+
+  const togglePlay = () => {
+    if (isPlaying) {
+      setIsPlaying(false);
+      window.speechSynthesis.cancel();
+      if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
+    } else {
+      setIsPlaying(true);
+    }
+  };
+
+  const skipStep = () => {
+    window.speechSynthesis.cancel();
+    if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
+    advanceToNextStep();
+  };
+
+  const closeMeditation = () => {
+    setActiveMeditation(null);
+    setIsPlaying(false);
+    setElapsed(0);
+    window.speechSynthesis.cancel();
+    if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
   };
 
   const formatTime = (s: number) => {
@@ -138,12 +225,25 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
     return (
       <div className="min-h-screen">
         <header className="px-5 pt-12 pb-4">
-          <button onClick={() => { setActiveMeditation(null); setIsPlaying(false); setElapsed(0); }} className="flex items-center gap-1 text-muted-foreground text-sm font-body mb-2">
+          <button onClick={closeMeditation} className="flex items-center gap-1 text-muted-foreground text-sm font-body mb-2">
             <ArrowLeft className="h-4 w-4" /> Voltar
           </button>
-          <div className="flex items-center gap-2">
-            <span className="text-2xl">{activeMeditation.emoji}</span>
-            <h1 className="text-xl font-display font-bold">{activeMeditation.title}</h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">{activeMeditation.emoji}</span>
+              <h1 className="text-xl font-display font-bold">{activeMeditation.title}</h1>
+            </div>
+            <button
+              onClick={() => setVoiceEnabled(!voiceEnabled)}
+              className="p-2 rounded-full hover:bg-muted transition-colors"
+              title={voiceEnabled ? "Desativar voz" : "Ativar voz"}
+            >
+              {voiceEnabled ? (
+                <Volume2 className="h-5 w-5 text-gold" />
+              ) : (
+                <VolumeX className="h-5 w-5 text-muted-foreground" />
+              )}
+            </button>
           </div>
         </header>
 
@@ -168,6 +268,18 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
             </div>
           </div>
 
+          {/* Speaking indicator */}
+          {isSpeaking && (
+            <div className="flex items-center gap-1.5 mb-2 animate-pulse">
+              <div className="h-1 w-1 rounded-full bg-gold" />
+              <div className="h-2 w-1 rounded-full bg-gold" />
+              <div className="h-3 w-1 rounded-full bg-gold" />
+              <div className="h-2 w-1 rounded-full bg-gold" />
+              <div className="h-1 w-1 rounded-full bg-gold" />
+              <span className="text-[10px] text-gold font-body ml-1">falando...</span>
+            </div>
+          )}
+
           {/* Current step */}
           <div className="bg-card rounded-2xl border border-border p-5 w-full mb-6 min-h-[100px] flex items-center justify-center">
             <p className="text-center text-base font-display font-medium text-foreground leading-relaxed animate-fade-in" key={currentStep}>
@@ -185,13 +297,13 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
           {/* Controls */}
           <div className="flex items-center gap-6">
             <button
-              onClick={() => setCurrentStep(prev => Math.min(prev + 1, activeMeditation.steps.length - 1))}
+              onClick={skipStep}
               className="h-12 w-12 rounded-full bg-card border border-border flex items-center justify-center shadow-card"
             >
               <SkipForward className="h-5 w-5 text-muted-foreground" />
             </button>
             <button
-              onClick={() => setIsPlaying(!isPlaying)}
+              onClick={togglePlay}
               className="h-16 w-16 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold"
             >
               {isPlaying ? <Pause className="h-6 w-6 text-primary-foreground" /> : <Play className="h-6 w-6 text-primary-foreground ml-0.5" />}
