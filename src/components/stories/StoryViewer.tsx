@@ -41,7 +41,7 @@ interface CommentWithProfile {
 }
 
 const STORY_DURATION = 6000;
-const REACTION_EMOJIS = ["❤️", "🔥", "😍", "😂", "😮", "👏", "💪", "✨"];
+const REACTION_EMOJIS = ["❤️", "🔥", "😍", "😂", "😮", "👏🏻", "👏🏽", "👏🏿", "💪🏻", "💪🏽", "💪🏿", "✨", "🙌🏻", "🙌🏽", "🙌🏿", "🥰"];
 
 const StoryViewer = ({ group, onClose }: StoryViewerProps) => {
   const { user, profile } = useAuth();
