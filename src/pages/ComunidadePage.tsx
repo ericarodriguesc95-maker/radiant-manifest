@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText, Pencil, Check } from "lucide-react";
+import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText, Pencil, Check, Smile } from "lucide-react";
 import EmojiPicker from "@/components/EmojiPicker";
 import MentionInput, { renderTextWithMentions } from "@/components/MentionInput";
 import { useOnlinePresence } from "@/hooks/useOnlinePresence";
+import GifStickerPicker from "@/components/GifStickerPicker";
 import { sendNotification, requestNotificationPermission } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -70,6 +71,7 @@ const ComunidadePage = () => {
   // Audio playback state for feed
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [showStickerPicker, setShowStickerPicker] = useState(false);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const docInputRef = useRef<HTMLInputElement>(null);
@@ -259,6 +261,23 @@ const ComunidadePage = () => {
     setMediaType(null);
   };
 
+  const handleStickerGifSelect = (url: string, type: "gif" | "sticker") => {
+    setShowStickerPicker(false);
+    // For emoji stickers, send as text post with large emoji
+    if (url.startsWith("emoji:")) {
+      const emoji = url.replace("emoji:", "");
+      // Set as media so it renders large
+      setMediaFile(null);
+      setMediaPreview(url);
+      setMediaType("sticker");
+      return;
+    }
+    // For GIF/animated sticker URLs
+    setMediaFile(null);
+    setMediaPreview(url);
+    setMediaType(type);
+  };
+
   // Audio recording
   const startRecording = async () => {
     try {
@@ -337,21 +356,31 @@ const ComunidadePage = () => {
   };
 
   const createPost = async () => {
-    if ((!newPost.trim() && !mediaFile) || !user) return;
+    const hasSticker = mediaPreview && (mediaType === "gif" || mediaType === "sticker") && !mediaFile;
+    if ((!newPost.trim() && !mediaFile && !hasSticker) || !user) return;
     setUploading(true);
 
-    let media: { url: string; type: string } | null = null;
+    let mediaUrl: string | null = null;
+    let finalMediaType: string | null = null;
+
     if (mediaFile) {
-      media = await uploadMedia(mediaFile);
+      const media = await uploadMedia(mediaFile);
+      if (media) { mediaUrl = media.url; finalMediaType = media.type; }
+    } else if (hasSticker && mediaPreview) {
+      // Sticker or GIF URL (no file upload needed)
+      mediaUrl = mediaPreview;
+      finalMediaType = mediaType;
     }
 
-    const postText = newPost.trim() || (media ? `📎 ${media.type === "image" ? "Imagem" : media.type === "audio" ? "Áudio" : "Documento"}` : "");
+    const postText = newPost.trim() || (mediaUrl
+      ? (finalMediaType === "gif" ? "GIF" : finalMediaType === "sticker" ? "✨" : `📎 ${finalMediaType === "image" ? "Imagem" : finalMediaType === "audio" ? "Áudio" : "Documento"}`)
+      : "");
 
     const { data: insertedPost } = await supabase.from("community_posts").insert({
       user_id: user.id,
       text: postText,
-      media_url: media?.url || null,
-      media_type: media?.type || null,
+      media_url: mediaUrl,
+      media_type: finalMediaType,
     }).select("id").single();
 
     // Send mention notifications + notify all users about new post
@@ -517,7 +546,11 @@ const ComunidadePage = () => {
     if (!mediaPreview) return null;
     return (
       <div className="relative inline-flex items-center gap-2 bg-muted/60 rounded-xl px-3 py-2 text-xs font-body text-foreground">
-        {mediaType === "image" && mediaPreview !== "audio" && mediaPreview !== "document" ? (
+        {mediaType === "sticker" && mediaPreview.startsWith("emoji:") ? (
+          <span className="text-4xl">{mediaPreview.replace("emoji:", "")}</span>
+        ) : mediaType === "gif" || (mediaType === "sticker" && !mediaPreview.startsWith("emoji:")) ? (
+          <img src={mediaPreview} alt="preview" className="h-16 rounded-lg object-cover" />
+        ) : mediaType === "image" && mediaPreview !== "audio" && mediaPreview !== "document" ? (
           <img src={mediaPreview} alt="preview" className="h-16 w-16 rounded-lg object-cover" />
         ) : mediaType === "audio" ? (
           <div className="flex items-center gap-2">
@@ -662,13 +695,25 @@ const ComunidadePage = () => {
 
               {/* Emoji picker */}
               <EmojiPicker onSelect={(emoji) => setNewPost(prev => prev + emoji)} />
+
+              {/* Sticker/GIF picker */}
+              <button
+                onClick={() => setShowStickerPicker(prev => !prev)}
+                className={cn(
+                  "p-2 rounded-lg transition-colors",
+                  showStickerPicker ? "text-gold bg-gold/10" : "text-muted-foreground hover:text-gold hover:bg-gold/10"
+                )}
+                title="Figurinhas e GIFs"
+              >
+                <Smile className="h-4.5 w-4.5" />
+              </button>
             </div>
 
             <Button
               variant="gold"
               size="sm"
               onClick={createPost}
-              disabled={(!newPost.trim() && !mediaFile) || uploading}
+              disabled={(!newPost.trim() && !mediaFile && !mediaPreview) || uploading}
             >
               {uploading ? (
                 <span className="flex items-center gap-1.5">
@@ -680,6 +725,16 @@ const ComunidadePage = () => {
               )}
             </Button>
           </div>
+
+          {/* Sticker/GIF picker popup */}
+          {showStickerPicker && (
+            <div className="mt-2">
+              <GifStickerPicker
+                onSelect={handleStickerGifSelect}
+                onClose={() => setShowStickerPicker(false)}
+              />
+            </div>
+          )}
         </div>
 
         {/* Feed */}
@@ -744,6 +799,23 @@ const ComunidadePage = () => {
                     src={post.media_url}
                     alt="Post"
                     className="mt-3 rounded-xl w-full max-h-80 object-cover"
+                    loading="lazy"
+                  />
+                )}
+
+                {/* Sticker (emoji) */}
+                {post.media_url && post.media_type === "sticker" && post.media_url.startsWith("emoji:") && (
+                  <div className="mt-3 text-center">
+                    <span className="text-7xl">{post.media_url.replace("emoji:", "")}</span>
+                  </div>
+                )}
+
+                {/* GIF or animated sticker */}
+                {post.media_url && (post.media_type === "gif" || (post.media_type === "sticker" && !post.media_url.startsWith("emoji:"))) && (
+                  <img
+                    src={post.media_url}
+                    alt={post.media_type === "gif" ? "GIF" : "Sticker"}
+                    className="mt-3 rounded-xl max-w-[280px] max-h-60"
                     loading="lazy"
                   />
                 )}
