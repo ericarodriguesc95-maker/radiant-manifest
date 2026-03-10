@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
@@ -7,10 +7,17 @@ import MonthlyCalendar from "@/components/MonthlyCalendar";
 import HabitTracker from "@/components/HabitTracker";
 import NotificationsPanel from "@/components/NotificationsPanel";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
+import DailyStreak from "@/components/DailyStreak";
+import PostConquista from "@/components/PostConquista";
+
+const HABITS_COUNT = 6;
 
 const HomePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
+  const [completedHabits, setCompletedHabits] = useState<Set<string>>(new Set());
   const navigate = useNavigate();
+
+  const streakCount = parseInt(localStorage.getItem("glow-up-streak") || "0");
 
   return (
     <div className="min-h-screen">
@@ -42,6 +49,9 @@ const HomePage = () => {
       {showNotifications && <NotificationsPanel onClose={() => setShowNotifications(false)} />}
 
       <div className="px-5 space-y-6 pb-6">
+        {/* Daily Streak */}
+        <DailyStreak completedHabits={completedHabits} requiredHabits={["meditate", "goals"]} />
+
         {/* Guias do Dia */}
         <section className="space-y-3">
           <DailyDevotional />
@@ -79,8 +89,15 @@ const HomePage = () => {
         {/* Habit Tracker */}
         <section>
           <h2 className="text-lg font-display font-semibold mb-3">Hábitos de Hoje</h2>
-          <HabitTracker />
+          <HabitTracker onCompletedChange={setCompletedHabits} />
         </section>
+
+        {/* Post Conquista */}
+        <PostConquista
+          completedCount={completedHabits.size}
+          totalCount={HABITS_COUNT}
+          streak={streakCount}
+        />
 
         {/* Notification Settings */}
         <section>
@@ -92,4 +109,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-

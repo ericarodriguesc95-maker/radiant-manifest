@@ -52,6 +52,7 @@ const AppRoutes = () => (
       <Route path="/financas" element={<FinancasPage />} />
       <Route path="/comunidade" element={<ComunidadePage />} />
       <Route path="/vision-board" element={<VisionBoardPage />} />
+      <Route path="/jornada" element={<JornadaPage />} />
       <Route path="/reprogramacao" element={<ReprogramacaoPage />} />
       <Route path="/guias" element={<GuiasPage />} />
       <Route path="/alta-performance" element={<AltaPerformancePage />} />

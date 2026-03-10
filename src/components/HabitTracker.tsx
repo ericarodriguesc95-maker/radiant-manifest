@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -11,17 +11,25 @@ const defaultHabits = [
   { id: "gratitude", label: "Gratidão", emoji: "🙏" },
 ];
 
-export default function HabitTracker() {
+interface HabitTrackerProps {
+  onCompletedChange?: (completed: Set<string>) => void;
+}
+
+export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
   const [completed, setCompleted] = useState<Set<string>>(new Set());
 
-  const toggle = (id: string) => {
+  const toggle = useCallback((id: string) => {
     setCompleted(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
       return next;
     });
-  };
+  }, []);
+
+  useEffect(() => {
+    onCompletedChange?.(completed);
+  }, [completed, onCompletedChange]);
 
   const progress = (completed.size / defaultHabits.length) * 100;
 
