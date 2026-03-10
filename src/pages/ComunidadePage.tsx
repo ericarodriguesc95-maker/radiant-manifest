@@ -42,6 +42,10 @@ const ComunidadePage = () => {
   const [loading, setLoading] = useState(true);
   const [expandedComments, setExpandedComments] = useState<Set<string>>(new Set());
   const [commentTexts, setCommentTexts] = useState<Record<string, string>>({});
+  const [allUsers, setAllUsers] = useState<{ user_id: string; display_name: string | null; avatar_url: string | null }[]>([]);
+
+  // Online presence
+  const onlineUsers = useOnlinePresence(user?.id);
 
   // Edit state
   const [editingPostId, setEditingPostId] = useState<string | null>(null);
