@@ -21,6 +21,7 @@ import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SettingsPage from "@/pages/SettingsPage";
 import NotFound from "./pages/NotFound";
 import ProfilePage from "@/pages/ProfilePage";
+import DiarioPage from "@/pages/DiarioPage";
 
 const queryClient = new QueryClient();
 
