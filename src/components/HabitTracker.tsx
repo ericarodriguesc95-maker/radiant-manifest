@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Check, Plus, X, Pencil, GripVertical } from "lucide-react";
+import { Check, Plus, X, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -10,8 +10,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const STORAGE_KEY = "glowup-daily-habits";
+const COMPLETED_KEY_PREFIX = "glowup-completed-";
 
 const DEFAULT_HABITS = [
   { id: "water", label: "Beber 2L de água", emoji: "💧" },
@@ -34,7 +37,12 @@ interface HabitTrackerProps {
   onCompletedChange?: (completed: Set<string>) => void;
 }
 
+function getToday() {
+  return new Date().toISOString().split("T")[0];
+}
+
 export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
+  const { user } = useAuth();
   const [habits, setHabits] = useState<Habit[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -43,7 +51,15 @@ export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
       return DEFAULT_HABITS;
     }
   });
-  const [completed, setCompleted] = useState<Set<string>>(new Set());
+  const [completed, setCompleted] = useState<Set<string>>(() => {
+    try {
+      const today = getToday();
+      const saved = localStorage.getItem(`${COMPLETED_KEY_PREFIX}${today}`);
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
   const [isManaging, setIsManaging] = useState(false);
   const [newLabel, setNewLabel] = useState("");
   const [newEmoji, setNewEmoji] = useState("✨");
@@ -55,14 +71,36 @@ export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
   }, [habits]);
 
+  // Persist completed to localStorage and sync to DB
+  const syncCompletion = useCallback(async (completedSet: Set<string>) => {
+    const today = getToday();
+    localStorage.setItem(`${COMPLETED_KEY_PREFIX}${today}`, JSON.stringify([...completedSet]));
+    
+    if (!user) return;
+    const completedCount = completedSet.size;
+    const totalCount = habits.length;
+    const allCompleted = totalCount > 0 && completedCount >= totalCount;
+
+    await supabase
+      .from("daily_completions" as any)
+      .upsert({
+        user_id: user.id,
+        completion_date: today,
+        completed_count: completedCount,
+        total_count: totalCount,
+        all_completed: allCompleted,
+      } as any, { onConflict: "user_id,completion_date" } as any);
+  }, [user, habits.length]);
+
   const toggle = useCallback((id: string) => {
     setCompleted(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
+      syncCompletion(next);
       return next;
     });
-  }, []);
+  }, [syncCompletion]);
 
   useEffect(() => {
     onCompletedChange?.(completed);
@@ -109,7 +147,6 @@ export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
 
   return (
     <div className="space-y-3">
-      {/* Header with manage button */}
       <div className="flex items-center justify-between">
         <div className="flex-1">
           <div className="bg-muted rounded-full h-2 overflow-hidden">
@@ -133,42 +170,21 @@ export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
             <DialogHeader>
               <DialogTitle className="font-heading text-lg">Meus Hábitos Diários</DialogTitle>
             </DialogHeader>
-
-            {/* Add new habit */}
             <div className="space-y-3 pt-2">
               <p className="text-xs text-muted-foreground font-body">Adicionar novo hábito</p>
               <div className="flex gap-2">
                 <div className="flex flex-wrap gap-1.5 max-w-[200px]">
                   {EMOJI_OPTIONS.map(e => (
-                    <button
-                      key={e}
-                      onClick={() => setNewEmoji(e)}
-                      className={cn(
-                        "w-8 h-8 rounded-lg text-sm flex items-center justify-center transition-all",
-                        newEmoji === e ? "bg-gold/20 ring-2 ring-gold" : "bg-muted hover:bg-muted/80"
-                      )}
-                    >
-                      {e}
-                    </button>
+                    <button key={e} onClick={() => setNewEmoji(e)} className={cn("w-8 h-8 rounded-lg text-sm flex items-center justify-center transition-all", newEmoji === e ? "bg-gold/20 ring-2 ring-gold" : "bg-muted hover:bg-muted/80")}>{e}</button>
                   ))}
                 </div>
               </div>
               <div className="flex gap-2">
                 <span className="text-lg w-8 flex items-center justify-center">{newEmoji}</span>
-                <Input
-                  value={newLabel}
-                  onChange={e => setNewLabel(e.target.value)}
-                  placeholder="Ex: Ler 15 minutos"
-                  className="flex-1 text-sm"
-                  onKeyDown={e => e.key === "Enter" && addHabit()}
-                />
-                <Button size="sm" onClick={addHabit} disabled={!newLabel.trim()} className="bg-gold hover:bg-gold/90 text-primary-foreground">
-                  <Plus className="h-4 w-4" />
-                </Button>
+                <Input value={newLabel} onChange={e => setNewLabel(e.target.value)} placeholder="Ex: Ler 15 minutos" className="flex-1 text-sm" onKeyDown={e => e.key === "Enter" && addHabit()} />
+                <Button size="sm" onClick={addHabit} disabled={!newLabel.trim()} className="bg-gold hover:bg-gold/90 text-primary-foreground"><Plus className="h-4 w-4" /></Button>
               </div>
             </div>
-
-            {/* Habit list */}
             <div className="space-y-1.5 pt-3 border-t border-border mt-3">
               <p className="text-xs text-muted-foreground font-body mb-2">Seus hábitos ({habits.length})</p>
               {habits.map((habit, i) => (
@@ -177,31 +193,12 @@ export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
                     <>
                       <div className="flex flex-wrap gap-1 max-w-[160px]">
                         {EMOJI_OPTIONS.map(e => (
-                          <button
-                            key={e}
-                            onClick={() => setEditEmoji(e)}
-                            className={cn(
-                              "w-6 h-6 rounded text-xs flex items-center justify-center",
-                              editEmoji === e ? "bg-gold/20 ring-1 ring-gold" : "bg-background"
-                            )}
-                          >
-                            {e}
-                          </button>
+                          <button key={e} onClick={() => setEditEmoji(e)} className={cn("w-6 h-6 rounded text-xs flex items-center justify-center", editEmoji === e ? "bg-gold/20 ring-1 ring-gold" : "bg-background")}>{e}</button>
                         ))}
                       </div>
-                      <Input
-                        value={editLabel}
-                        onChange={e => setEditLabel(e.target.value)}
-                        className="flex-1 text-sm h-8"
-                        onKeyDown={e => e.key === "Enter" && saveEdit()}
-                        autoFocus
-                      />
-                      <Button size="sm" variant="ghost" onClick={saveEdit} className="h-7 w-7 p-0 text-emerald-500">
-                        <Check className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button size="sm" variant="ghost" onClick={() => setEditingId(null)} className="h-7 w-7 p-0 text-muted-foreground">
-                        <X className="h-3.5 w-3.5" />
-                      </Button>
+                      <Input value={editLabel} onChange={e => setEditLabel(e.target.value)} className="flex-1 text-sm h-8" onKeyDown={e => e.key === "Enter" && saveEdit()} autoFocus />
+                      <Button size="sm" variant="ghost" onClick={saveEdit} className="h-7 w-7 p-0 text-emerald-500"><Check className="h-3.5 w-3.5" /></Button>
+                      <Button size="sm" variant="ghost" onClick={() => setEditingId(null)} className="h-7 w-7 p-0 text-muted-foreground"><X className="h-3.5 w-3.5" /></Button>
                     </>
                   ) : (
                     <>
@@ -211,12 +208,8 @@ export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
                       </div>
                       <span className="text-lg">{habit.emoji}</span>
                       <span className="flex-1 text-sm font-body truncate">{habit.label}</span>
-                      <Button size="sm" variant="ghost" onClick={() => startEdit(habit)} className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground">
-                        <Pencil className="h-3 w-3" />
-                      </Button>
-                      <Button size="sm" variant="ghost" onClick={() => removeHabit(habit.id)} className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity text-destructive">
-                        <X className="h-3 w-3" />
-                      </Button>
+                      <Button size="sm" variant="ghost" onClick={() => startEdit(habit)} className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground"><Pencil className="h-3 w-3" /></Button>
+                      <Button size="sm" variant="ghost" onClick={() => removeHabit(habit.id)} className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity text-destructive"><X className="h-3 w-3" /></Button>
                     </>
                   )}
                 </div>
@@ -229,40 +222,21 @@ export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
         </Dialog>
       </div>
 
-      {/* Habit checklist */}
       <div className="space-y-2">
         {habits.map(habit => {
           const done = completed.has(habit.id);
           return (
-            <button
-              key={habit.id}
-              onClick={() => toggle(habit.id)}
-              className={cn(
-                "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200",
-                done ? "bg-gold/10 border border-gold/30" : "bg-card border border-transparent hover:bg-muted"
-              )}
-            >
+            <button key={habit.id} onClick={() => toggle(habit.id)} className={cn("w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200", done ? "bg-gold/10 border border-gold/30" : "bg-card border border-transparent hover:bg-muted")}>
               <span className="text-lg">{habit.emoji}</span>
-              <span className={cn(
-                "flex-1 text-left text-sm font-body",
-                done && "line-through text-muted-foreground"
-              )}>
-                {habit.label}
-              </span>
-              <div className={cn(
-                "h-5 w-5 rounded-full border-2 flex items-center justify-center transition-all",
-                done ? "border-gold bg-gold" : "border-muted-foreground"
-              )}>
+              <span className={cn("flex-1 text-left text-sm font-body", done && "line-through text-muted-foreground")}>{habit.label}</span>
+              <div className={cn("h-5 w-5 rounded-full border-2 flex items-center justify-center transition-all", done ? "border-gold bg-gold" : "border-muted-foreground")}>
                 {done && <Check className="h-3 w-3 text-primary-foreground" />}
               </div>
             </button>
           );
         })}
         {habits.length === 0 && (
-          <button
-            onClick={() => setIsManaging(true)}
-            className="w-full flex items-center justify-center gap-2 p-4 rounded-xl border border-dashed border-muted-foreground/30 text-muted-foreground hover:border-gold/50 hover:text-gold transition-all"
-          >
+          <button onClick={() => setIsManaging(true)} className="w-full flex items-center justify-center gap-2 p-4 rounded-xl border border-dashed border-muted-foreground/30 text-muted-foreground hover:border-gold/50 hover:text-gold transition-all">
             <Plus className="h-4 w-4" />
             <span className="text-sm font-body">Adicionar hábitos</span>
           </button>
