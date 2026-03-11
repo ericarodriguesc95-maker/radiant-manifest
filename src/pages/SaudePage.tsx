@@ -245,7 +245,7 @@ export default function SaudePage() {
   }
 
   async function saveDietEntry() {
-    if (!user || !dietForm.description.trim()) return;
+    if (!user || !dietForm.description.trim()) { toast.error("Preencha a descrição da refeição"); return; }
     const payload = {
       user_id: user.id,
       meal_type: dietForm.meal_type,
@@ -256,12 +256,14 @@ export default function SaudePage() {
       fat: dietForm.fat ? parseFloat(dietForm.fat) : null,
       entry_date: selectedDate,
     };
+    let error;
     if (editingDietId) {
-      await supabase.from("diet_entries").update(payload).eq("id", editingDietId);
+      ({ error } = await supabase.from("diet_entries").update(payload).eq("id", editingDietId));
       setEditingDietId(null);
     } else {
-      await supabase.from("diet_entries").insert(payload);
+      ({ error } = await supabase.from("diet_entries").insert(payload));
     }
+    if (error) { toast.error("Erro ao salvar refeição: " + error.message); return; }
     setDietForm({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" });
     setShowDietForm(false);
     await loadDietEntries();
