@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Target, Wallet, Users, Zap, BookOpen, User } from "lucide-react";
+import { Home, Target, Wallet, Users, Zap, BookOpen, User, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 
