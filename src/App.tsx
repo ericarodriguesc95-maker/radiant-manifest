@@ -23,6 +23,7 @@ import NotFound from "./pages/NotFound";
 import ProfilePage from "@/pages/ProfilePage";
 import DiarioPage from "@/pages/DiarioPage";
 import AdminActivityPage from "@/pages/AdminActivityPage";
+import SaudePage from "@/pages/SaudePage";
 
 const queryClient = new QueryClient();
 
