@@ -1,16 +1,27 @@
 import { useState, useEffect } from "react";
-import { Plus, CheckCircle2, Circle, ChevronDown, ChevronUp, Trash2, Pencil, X, Check } from "lucide-react";
+import { Plus, CheckCircle2, Circle, ChevronDown, ChevronUp, Trash2, Pencil, X, Check, History, TrendingUp, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface GoalTask {
   id: string;
   goal_id: string;
   text: string;
   done: boolean;
+}
+
+interface GoalUpdate {
+  id: string;
+  goal_id: string;
+  previous_progress: number;
+  new_progress: number;
+  note: string | null;
+  created_at: string;
 }
 
 interface Goal {
@@ -20,6 +31,7 @@ interface Goal {
   progress: number;
   created_at: string;
   tasks: GoalTask[];
+  updates: GoalUpdate[];
 }
 
 const categoryColors: Record<string, string> = {
@@ -46,10 +58,15 @@ const MetasPage = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newCategory, setNewCategory] = useState("pessoal");
-  const [newTaskText, setNewTaskText] = useState("");
+  const [newTaskText, setNewTaskText] = useState<Record<string, string>>({});
   const [editingGoalId, setEditingGoalId] = useState<string | null>(null);
   const [editProgress, setEditProgress] = useState<number>(0);
   const [editTitle, setEditTitle] = useState("");
+  // Progress update form
+  const [updatingGoalId, setUpdatingGoalId] = useState<string | null>(null);
+  const [updateProgress, setUpdateProgress] = useState<number>(0);
+  const [updateNote, setUpdateNote] = useState("");
+  const [showHistory, setShowHistory] = useState<string | null>(null);
 
   const fetchGoals = async () => {
     if (!user) return;
@@ -61,14 +78,15 @@ const MetasPage = () => {
 
     if (!goalsData) { setLoading(false); return; }
 
-    const { data: tasksData } = await supabase
-      .from("goal_tasks")
-      .select("*")
-      .eq("user_id", user.id);
+    const [{ data: tasksData }, { data: updatesData }] = await Promise.all([
+      supabase.from("goal_tasks").select("*").eq("user_id", user.id),
+      supabase.from("goal_updates" as any).select("*").eq("user_id", user.id).order("created_at", { ascending: false }),
+    ]);
 
     const mapped = goalsData.map((g: any) => ({
       ...g,
       tasks: (tasksData || []).filter((t: any) => t.goal_id === g.id),
+      updates: ((updatesData || []) as any[]).filter((u: any) => u.goal_id === g.id),
     }));
     setGoals(mapped);
     setLoading(false);
@@ -84,7 +102,7 @@ const MetasPage = () => {
       .select()
       .single();
     if (error) { toast.error("Erro ao criar meta"); return; }
-    setGoals(prev => [{ ...data, tasks: [] }, ...prev]);
+    setGoals(prev => [{ ...data, tasks: [], updates: [] }, ...prev]);
     setNewTitle("");
     setShowAdd(false);
     toast.success("Meta criada!");
@@ -117,41 +135,78 @@ const MetasPage = () => {
     setEditingGoalId(null);
   };
 
+  const startProgressUpdate = (goal: Goal) => {
+    setUpdatingGoalId(goal.id);
+    setUpdateProgress(goal.progress);
+    setUpdateNote("");
+  };
+
+  const saveProgressUpdate = async (goalId: string) => {
+    if (!user) return;
+    const goal = goals.find(g => g.id === goalId);
+    if (!goal) return;
+
+    const previousProgress = goal.progress;
+    const newProgress = updateProgress;
+
+    // Save update history
+    const { data: updateData, error: updateError } = await supabase
+      .from("goal_updates" as any)
+      .insert({
+        goal_id: goalId,
+        user_id: user.id,
+        previous_progress: previousProgress,
+        new_progress: newProgress,
+        note: updateNote.trim() || null,
+      } as any)
+      .select()
+      .single();
+
+    if (updateError) { toast.error("Erro ao salvar progresso"); return; }
+
+    // Update goal progress
+    await supabase.from("goals").update({ progress: newProgress, updated_at: new Date().toISOString() }).eq("id", goalId);
+
+    setGoals(prev => prev.map(g => g.id === goalId ? {
+      ...g,
+      progress: newProgress,
+      updates: [updateData as any, ...g.updates],
+    } : g));
+
+    setUpdatingGoalId(null);
+    setUpdateNote("");
+    toast.success(newProgress >= 100 ? "🎉 Meta concluída! Parabéns!" : "Progresso atualizado!");
+  };
+
   const toggleTask = async (goalId: string, taskId: string) => {
     const goal = goals.find(g => g.id === goalId);
     if (!goal) return;
     const task = goal.tasks.find(t => t.id === taskId);
     if (!task) return;
     const newDone = !task.done;
-    
-    // Optimistic update
+
     setGoals(prev => prev.map(g => {
       if (g.id !== goalId) return g;
       const newTasks = g.tasks.map(t => t.id === taskId ? { ...t, done: newDone } : t);
       const doneCount = newTasks.filter(t => t.done).length;
-      const progress = newTasks.length > 0 ? Math.round((doneCount / newTasks.length) * 100) : 0;
-      return { ...g, tasks: newTasks, progress };
+      const progress = newTasks.length > 0 ? Math.round((doneCount / newTasks.length) * 100) : g.progress;
+      return { ...g, tasks: newTasks };
     }));
 
     await supabase.from("goal_tasks").update({ done: newDone }).eq("id", taskId);
-    // Update goal progress
-    const updatedGoal = goals.find(g => g.id === goalId)!;
-    const newTasks = updatedGoal.tasks.map(t => t.id === taskId ? { ...t, done: newDone } : t);
-    const doneCount = newTasks.filter(t => t.done).length;
-    const progress = newTasks.length > 0 ? Math.round((doneCount / newTasks.length) * 100) : 0;
-    await supabase.from("goals").update({ progress }).eq("id", goalId);
   };
 
   const addTask = async (goalId: string) => {
-    if (!newTaskText.trim() || !user) return;
+    const text = newTaskText[goalId];
+    if (!text?.trim() || !user) return;
     const { data, error } = await supabase
       .from("goal_tasks")
-      .insert({ goal_id: goalId, user_id: user.id, text: newTaskText })
+      .insert({ goal_id: goalId, user_id: user.id, text: text.trim() })
       .select()
       .single();
-    if (error) { toast.error("Erro ao adicionar tarefa"); return; }
+    if (error) { toast.error("Erro ao adicionar passo"); return; }
     setGoals(prev => prev.map(g => g.id === goalId ? { ...g, tasks: [...g.tasks, data as GoalTask] } : g));
-    setNewTaskText("");
+    setNewTaskText(prev => ({ ...prev, [goalId]: "" }));
   };
 
   const deleteTask = async (goalId: string, taskId: string) => {
@@ -192,8 +247,14 @@ const MetasPage = () => {
           goals.map(goal => {
             const isExpanded = expandedGoal === goal.id;
             const isEditing = editingGoalId === goal.id;
+            const isUpdating = updatingGoalId === goal.id;
+            const isShowingHistory = showHistory === goal.id;
+            const remaining = 100 - goal.progress;
+            const doneTasksCount = goal.tasks.filter(t => t.done).length;
+
             return (
               <div key={goal.id} className="bg-card rounded-2xl border border-border shadow-card overflow-hidden">
+                {/* Header */}
                 <div className="p-4 flex items-center gap-3">
                   <div className={cn("shrink-0 px-2 py-1 rounded-md text-[10px] font-body font-semibold uppercase tracking-wider", categoryColors[goal.category])}>
                     {categoryLabels[goal.category] || goal.category}
@@ -228,64 +289,178 @@ const MetasPage = () => {
                   </div>
                 </div>
 
-                {/* Progress bar */}
+                {/* Progress bar + remaining */}
                 <div className="px-4 pb-2">
                   <div className="flex items-center justify-between mb-1">
                     {isEditing ? (
                       <div className="flex items-center gap-2 w-full">
-                        <input
-                          type="range"
-                          min={0}
-                          max={100}
-                          value={editProgress}
-                          onChange={e => setEditProgress(Number(e.target.value))}
-                          className="flex-1 accent-gold"
-                        />
+                        <input type="range" min={0} max={100} value={editProgress} onChange={e => setEditProgress(Number(e.target.value))} className="flex-1 accent-gold" />
                         <span className="text-xs font-body text-gold font-semibold w-10 text-right">{editProgress}%</span>
                       </div>
                     ) : (
-                      <span className="text-[10px] text-muted-foreground font-body">{goal.progress}%</span>
+                      <div className="flex items-center justify-between w-full">
+                        <span className="text-xs font-body font-semibold text-gold">{goal.progress}%</span>
+                        <span className="text-[10px] text-muted-foreground font-body">
+                          {goal.progress >= 100 ? "✅ Meta concluída!" : `Faltam ${remaining}%`}
+                        </span>
+                      </div>
                     )}
                   </div>
-                  <div className="bg-muted rounded-full h-1.5">
+                  <div className="bg-muted rounded-full h-2">
                     <div
-                      className="h-full bg-gradient-gold rounded-full transition-all duration-500"
-                      style={{ width: `${isEditing ? editProgress : goal.progress}%` }}
+                      className={cn(
+                        "h-full rounded-full transition-all duration-500",
+                        goal.progress >= 100 ? "bg-green-500" : "bg-gradient-gold"
+                      )}
+                      style={{ width: `${Math.min(isEditing ? editProgress : goal.progress, 100)}%` }}
                     />
                   </div>
+                  {goal.tasks.length > 0 && (
+                    <p className="text-[10px] text-muted-foreground font-body mt-1">
+                      {doneTasksCount}/{goal.tasks.length} passos concluídos
+                    </p>
+                  )}
                 </div>
 
+                {/* Expanded content */}
                 {isExpanded && (
-                  <div className="px-4 pb-4 space-y-2 animate-fade-in">
-                    {goal.tasks.map(task => (
-                      <div key={task.id} className="flex items-center gap-2 py-1.5">
-                        <button onClick={() => toggleTask(goal.id, task.id)} className="flex items-center gap-2 flex-1">
-                          {task.done ? (
-                            <CheckCircle2 className="h-4 w-4 text-gold shrink-0" />
-                          ) : (
-                            <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
-                          )}
-                          <span className={cn("text-sm font-body text-left", task.done && "line-through text-muted-foreground")}>
-                            {task.text}
-                          </span>
-                        </button>
-                        <button onClick={() => deleteTask(goal.id, task.id)} className="p-1 text-muted-foreground hover:text-destructive">
-                          <X className="h-3 w-3" />
-                        </button>
-                      </div>
-                    ))}
-                    {/* Add task */}
-                    <div className="flex gap-2 mt-2">
-                      <input
-                        value={newTaskText}
-                        onChange={e => setNewTaskText(e.target.value)}
-                        placeholder="Nova tarefa..."
-                        className="flex-1 bg-muted rounded-lg px-3 py-1.5 text-xs font-body outline-none placeholder:text-muted-foreground"
-                        onKeyDown={e => e.key === "Enter" && addTask(goal.id)}
-                      />
-                      <Button variant="gold" size="sm" className="text-xs h-7" onClick={() => addTask(goal.id)}>
-                        <Plus className="h-3 w-3" />
+                  <div className="px-4 pb-4 space-y-4 animate-fade-in border-t border-border pt-3">
+                    {/* Update progress button */}
+                    {!isUpdating ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full text-xs border-gold/30 text-gold hover:bg-gold/10"
+                        onClick={() => startProgressUpdate(goal)}
+                      >
+                        <TrendingUp className="h-3.5 w-3.5 mr-1.5" />
+                        Atualizar Progresso
                       </Button>
+                    ) : (
+                      <div className="bg-muted/50 rounded-xl p-3 space-y-3">
+                        <p className="text-xs font-body font-semibold text-foreground">Atualizar progresso</p>
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="range"
+                            min={0}
+                            max={100}
+                            value={updateProgress}
+                            onChange={e => setUpdateProgress(Number(e.target.value))}
+                            className="flex-1 accent-gold"
+                          />
+                          <span className="text-sm font-body font-bold text-gold w-12 text-right">{updateProgress}%</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-[10px] font-body text-muted-foreground">
+                          <span>Atual: {goal.progress}%</span>
+                          <span>→</span>
+                          <span className="text-gold font-semibold">Novo: {updateProgress}%</span>
+                          {updateProgress > goal.progress && (
+                            <span className="text-green-500 ml-auto">+{updateProgress - goal.progress}%</span>
+                          )}
+                        </div>
+                        <textarea
+                          value={updateNote}
+                          onChange={e => setUpdateNote(e.target.value)}
+                          placeholder="O que você fez para avançar? (opcional)"
+                          rows={2}
+                          className="w-full bg-background rounded-lg px-3 py-2 text-xs font-body outline-none resize-none placeholder:text-muted-foreground border border-border"
+                        />
+                        <div className="flex gap-2">
+                          <Button variant="gold" size="sm" className="text-xs" onClick={() => saveProgressUpdate(goal.id)}>Salvar</Button>
+                          <Button variant="ghost" size="sm" className="text-xs" onClick={() => setUpdatingGoalId(null)}>Cancelar</Button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Steps / Tasks */}
+                    <div>
+                      <p className="text-xs font-body font-semibold text-foreground mb-2 flex items-center gap-1.5">
+                        <Target className="h-3.5 w-3.5 text-gold" />
+                        Passo a passo
+                      </p>
+                      {goal.tasks.length === 0 && (
+                        <p className="text-[10px] text-muted-foreground font-body mb-2">Adicione os passos para alcançar sua meta</p>
+                      )}
+                      {goal.tasks.map(task => (
+                        <div key={task.id} className="flex items-center gap-2 py-1.5">
+                          <button onClick={() => toggleTask(goal.id, task.id)} className="flex items-center gap-2 flex-1">
+                            {task.done ? (
+                              <CheckCircle2 className="h-4 w-4 text-gold shrink-0" />
+                            ) : (
+                              <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
+                            )}
+                            <span className={cn("text-sm font-body text-left", task.done && "line-through text-muted-foreground")}>
+                              {task.text}
+                            </span>
+                          </button>
+                          <button onClick={() => deleteTask(goal.id, task.id)} className="p-1 text-muted-foreground hover:text-destructive">
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
+                      <div className="flex gap-2 mt-2">
+                        <input
+                          value={newTaskText[goal.id] || ""}
+                          onChange={e => setNewTaskText(prev => ({ ...prev, [goal.id]: e.target.value }))}
+                          placeholder="Adicionar passo..."
+                          className="flex-1 bg-muted rounded-lg px-3 py-1.5 text-xs font-body outline-none placeholder:text-muted-foreground"
+                          onKeyDown={e => e.key === "Enter" && addTask(goal.id)}
+                        />
+                        <Button variant="gold" size="sm" className="text-xs h-7" onClick={() => addTask(goal.id)}>
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* History */}
+                    <div>
+                      <button
+                        onClick={() => setShowHistory(isShowingHistory ? null : goal.id)}
+                        className="flex items-center gap-1.5 text-xs font-body font-semibold text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <History className="h-3.5 w-3.5" />
+                        Histórico de progresso
+                        {goal.updates.length > 0 && (
+                          <span className="bg-muted px-1.5 py-0.5 rounded-full text-[10px]">{goal.updates.length}</span>
+                        )}
+                        {isShowingHistory ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                      </button>
+
+                      {isShowingHistory && (
+                        <div className="mt-2 space-y-2 animate-fade-in">
+                          {goal.updates.length === 0 ? (
+                            <p className="text-[10px] text-muted-foreground font-body py-2">Nenhuma atualização registrada ainda</p>
+                          ) : (
+                            goal.updates.map(update => (
+                              <div key={update.id} className="bg-muted/50 rounded-lg p-2.5 space-y-1">
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-2">
+                                    <div className={cn(
+                                      "text-[10px] font-body font-semibold px-1.5 py-0.5 rounded",
+                                      (update as any).new_progress > (update as any).previous_progress
+                                        ? "bg-green-500/10 text-green-500"
+                                        : "bg-muted text-muted-foreground"
+                                    )}>
+                                      {(update as any).previous_progress}% → {(update as any).new_progress}%
+                                    </div>
+                                    {(update as any).new_progress > (update as any).previous_progress && (
+                                      <span className="text-[10px] text-green-500 font-body">
+                                        +{(update as any).new_progress - (update as any).previous_progress}%
+                                      </span>
+                                    )}
+                                  </div>
+                                  <span className="text-[10px] text-muted-foreground font-body">
+                                    {format(new Date(update.created_at), "dd MMM, HH:mm", { locale: ptBR })}
+                                  </span>
+                                </div>
+                                {update.note && (
+                                  <p className="text-xs font-body text-foreground/80">{update.note}</p>
+                                )}
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
