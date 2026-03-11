@@ -189,6 +189,36 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_completions: {
+        Row: {
+          all_completed: boolean
+          completed_count: number
+          completion_date: string
+          created_at: string
+          id: string
+          total_count: number
+          user_id: string
+        }
+        Insert: {
+          all_completed?: boolean
+          completed_count?: number
+          completion_date?: string
+          created_at?: string
+          id?: string
+          total_count?: number
+          user_id: string
+        }
+        Update: {
+          all_completed?: boolean
+          completed_count?: number
+          completion_date?: string
+          created_at?: string
+          id?: string
+          total_count?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       diary_notes: {
         Row: {
           color: string
@@ -738,6 +768,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_streak: { Args: { _user_id: string }; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
