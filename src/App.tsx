@@ -23,6 +23,7 @@ import NotFound from "./pages/NotFound";
 import ProfilePage from "@/pages/ProfilePage";
 import DiarioPage from "@/pages/DiarioPage";
 import AdminActivityPage from "@/pages/AdminActivityPage";
+import SaudePage from "@/pages/SaudePage";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,7 @@ const AppRoutes = () => (
       <Route path="/reprogramacao" element={<ReprogramacaoPage />} />
       <Route path="/guias" element={<GuiasPage />} />
       <Route path="/alta-performance" element={<AltaPerformancePage />} />
+      <Route path="/saude" element={<SaudePage />} />
       <Route path="/diario" element={<DiarioPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/admin/atividade" element={<AdminActivityPage />} />

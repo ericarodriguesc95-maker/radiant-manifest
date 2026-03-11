@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Target, Wallet, Users, Zap, BookOpen, User } from "lucide-react";
+import { Home, Target, Wallet, Users, Zap, BookOpen, User, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -11,7 +11,7 @@ export default function BottomNav() {
     { to: "/", icon: Home, label: "Home" },
     { to: "/diario", icon: BookOpen, label: "Diário" },
     { to: "/metas", icon: Target, label: "Metas" },
-    { to: "/alta-performance", icon: Zap, label: "Performance" },
+    { to: "/saude", icon: Heart, label: "Saúde" },
     { to: "/financas", icon: Wallet, label: "Finanças" },
     { to: "/comunidade", icon: Users, label: "Girls" },
     { to: user ? `/perfil/${user.id}` : "/comunidade", icon: User, label: "Perfil" },
