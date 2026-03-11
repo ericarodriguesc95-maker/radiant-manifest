@@ -201,10 +201,15 @@ export default function SaudePage() {
   async function saveProfile() {
     if (!user) return;
     const payload = { user_id: user.id, goal: profile.goal, current_weight: profile.current_weight, target_weight: profile.target_weight, height_cm: profile.height_cm };
+    let error;
     if (profile.id) {
-      await supabase.from("health_profiles").update(payload).eq("id", profile.id);
+      ({ error } = await supabase.from("health_profiles").update(payload).eq("id", profile.id));
     } else {
-      await supabase.from("health_profiles").insert(payload);
+      ({ error } = await supabase.from("health_profiles").insert(payload));
+    }
+    if (error) {
+      toast.error("Erro ao salvar perfil: " + error.message);
+      return;
     }
     await loadProfile();
     setEditingProfile(false);
@@ -218,11 +223,11 @@ export default function SaudePage() {
 
   async function addWeightRecord() {
     if (!user || !newWeight) return;
-    await supabase.from("weight_records").insert({ user_id: user.id, weight: parseFloat(newWeight), note: newWeightNote || null });
+    const { error } = await supabase.from("weight_records").insert({ user_id: user.id, weight: parseFloat(newWeight), note: newWeightNote || null });
+    if (error) { toast.error("Erro ao registrar peso: " + error.message); return; }
     setNewWeight("");
     setNewWeightNote("");
     await loadWeightRecords();
-    // Update current weight in profile
     await supabase.from("health_profiles").update({ current_weight: parseFloat(newWeight) }).eq("user_id", user.id);
     await loadProfile();
     toast.success("Peso registrado!");
@@ -240,7 +245,7 @@ export default function SaudePage() {
   }
 
   async function saveDietEntry() {
-    if (!user || !dietForm.description.trim()) return;
+    if (!user || !dietForm.description.trim()) { toast.error("Preencha a descrição da refeição"); return; }
     const payload = {
       user_id: user.id,
       meal_type: dietForm.meal_type,
@@ -251,12 +256,14 @@ export default function SaudePage() {
       fat: dietForm.fat ? parseFloat(dietForm.fat) : null,
       entry_date: selectedDate,
     };
+    let error;
     if (editingDietId) {
-      await supabase.from("diet_entries").update(payload).eq("id", editingDietId);
+      ({ error } = await supabase.from("diet_entries").update(payload).eq("id", editingDietId));
       setEditingDietId(null);
     } else {
-      await supabase.from("diet_entries").insert(payload);
+      ({ error } = await supabase.from("diet_entries").insert(payload));
     }
+    if (error) { toast.error("Erro ao salvar refeição: " + error.message); return; }
     setDietForm({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" });
     setShowDietForm(false);
     await loadDietEntries();
@@ -288,7 +295,7 @@ export default function SaudePage() {
   }
 
   async function saveExerciseEntry() {
-    if (!user || !exerciseForm.exercise_name.trim()) return;
+    if (!user || !exerciseForm.exercise_name.trim()) { toast.error("Preencha o nome do exercício"); return; }
     const payload = {
       user_id: user.id,
       exercise_name: exerciseForm.exercise_name.trim(),
@@ -301,12 +308,14 @@ export default function SaudePage() {
       entry_date: exerciseDate,
       notes: exerciseForm.notes || null,
     };
+    let error;
     if (editingExerciseId) {
-      await supabase.from("exercise_entries").update(payload).eq("id", editingExerciseId);
+      ({ error } = await supabase.from("exercise_entries").update(payload).eq("id", editingExerciseId));
       setEditingExerciseId(null);
     } else {
-      await supabase.from("exercise_entries").insert(payload);
+      ({ error } = await supabase.from("exercise_entries").insert(payload));
     }
+    if (error) { toast.error("Erro ao salvar exercício: " + error.message); return; }
     setExerciseForm({ exercise_name: "", category: "cardio", duration_minutes: "", sets: "", reps: "", weight_kg: "", calories_burned: "", notes: "" });
     setShowExerciseForm(false);
     await loadExerciseEntries();
@@ -370,12 +379,12 @@ export default function SaudePage() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid grid-cols-5 w-full">
-          <TabsTrigger value="perfil" className="text-xs">⚖️ Perfil</TabsTrigger>
-          <TabsTrigger value="dieta" className="text-xs">🍽️ Dieta</TabsTrigger>
-          <TabsTrigger value="treino" className="text-xs">💪 Treino</TabsTrigger>
-          <TabsTrigger value="tabela" className="text-xs">📊 Tabela</TabsTrigger>
-          <TabsTrigger value="suplem" className="text-xs">💊 Suplem.</TabsTrigger>
+        <TabsList className="grid grid-cols-5 w-full h-auto p-1">
+          <TabsTrigger value="perfil" className="text-[10px] px-1 py-1.5">⚖️ Perfil</TabsTrigger>
+          <TabsTrigger value="dieta" className="text-[10px] px-1 py-1.5">🍽️ Dieta</TabsTrigger>
+          <TabsTrigger value="treino" className="text-[10px] px-1 py-1.5">💪 Treino</TabsTrigger>
+          <TabsTrigger value="tabela" className="text-[10px] px-1 py-1.5">📊 Tabela</TabsTrigger>
+          <TabsTrigger value="suplem" className="text-[10px] px-1 py-1.5">💊 Suplem.</TabsTrigger>
         </TabsList>
 
         {/* ====== PERFIL & PESO ====== */}
