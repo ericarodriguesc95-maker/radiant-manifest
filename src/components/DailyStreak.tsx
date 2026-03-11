@@ -1,58 +1,52 @@
 import { useState, useEffect } from "react";
 import { Flame, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface DailyStreakProps {
   completedHabits: Set<string>;
   requiredHabits?: string[];
 }
 
-const STREAK_KEY = "glow-up-streak";
-const LAST_DATE_KEY = "glow-up-streak-date";
-
-function getToday() {
-  return new Date().toISOString().split("T")[0];
-}
-
-export default function DailyStreak({ completedHabits, requiredHabits = ["meditate", "goals"] }: DailyStreakProps) {
+export default function DailyStreak({ completedHabits }: DailyStreakProps) {
+  const { user } = useAuth();
   const [streak, setStreak] = useState(0);
   const [todayCompleted, setTodayCompleted] = useState(false);
 
-  useEffect(() => {
-    const saved = localStorage.getItem(STREAK_KEY);
-    const lastDate = localStorage.getItem(LAST_DATE_KEY);
-    const today = getToday();
+  const fetchStreak = async () => {
+    if (!user) return;
 
-    if (saved && lastDate) {
-      const last = new Date(lastDate);
-      const now = new Date(today);
-      const diffDays = Math.floor((now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+    // Get streak from DB function
+    const { data } = await supabase.rpc("calculate_streak" as any, { _user_id: user.id });
+    const dbStreak = typeof data === "number" ? data : 0;
+    setStreak(dbStreak);
 
-      if (diffDays <= 1) {
-        setStreak(parseInt(saved));
-        if (diffDays === 0) setTodayCompleted(true);
-      } else {
-        // Streak broken
-        localStorage.setItem(STREAK_KEY, "0");
-        setStreak(0);
-      }
-    }
-  }, []);
+    // Check if today is completed
+    const today = new Date().toISOString().split("T")[0];
+    const { data: todayData } = await supabase
+      .from("daily_completions" as any)
+      .select("all_completed")
+      .eq("user_id", user.id)
+      .eq("completion_date", today)
+      .maybeSingle();
+    setTodayCompleted((todayData as any)?.all_completed || false);
+  };
 
   useEffect(() => {
-    const allDone = requiredHabits.every(h => completedHabits.has(h));
-    const today = getToday();
-    const lastDate = localStorage.getItem(LAST_DATE_KEY);
+    fetchStreak();
+  }, [user]);
 
-    if (allDone && lastDate !== today) {
-      const currentStreak = parseInt(localStorage.getItem(STREAK_KEY) || "0");
-      const newStreak = currentStreak + 1;
-      setStreak(newStreak);
-      setTodayCompleted(true);
-      localStorage.setItem(STREAK_KEY, newStreak.toString());
-      localStorage.setItem(LAST_DATE_KEY, today);
-    }
-  }, [completedHabits, requiredHabits]);
+  // Re-fetch when habits change (completion synced)
+  useEffect(() => {
+    const timeout = setTimeout(fetchStreak, 500);
+    return () => clearTimeout(timeout);
+  }, [completedHabits, user]);
+
+  // Store streak in localStorage for other components
+  useEffect(() => {
+    localStorage.setItem("glow-up-streak", streak.toString());
+  }, [streak]);
 
   const milestones = [7, 14, 30, 60, 90];
   const nextMilestone = milestones.find(m => m > streak) || 100;
@@ -63,21 +57,16 @@ export default function DailyStreak({ completedHabits, requiredHabits = ["medita
         <div className="flex items-center gap-3">
           <div className={cn(
             "h-12 w-12 rounded-full flex items-center justify-center transition-all",
-            todayCompleted 
-              ? "bg-gradient-gold shadow-gold" 
-              : "bg-muted"
+            todayCompleted ? "bg-gradient-gold shadow-gold" : "bg-muted"
           )}>
-            <Flame className={cn(
-              "h-6 w-6",
-              todayCompleted ? "text-primary-foreground" : "text-muted-foreground"
-            )} />
+            <Flame className={cn("h-6 w-6", todayCompleted ? "text-primary-foreground" : "text-muted-foreground")} />
           </div>
           <div>
             <p className="text-2xl font-display font-bold text-foreground">
               {streak} <span className="text-sm font-body font-normal text-muted-foreground">dias</span>
             </p>
             <p className="text-xs font-body text-muted-foreground">
-              {todayCompleted ? "Streak de hoje garantido! 🔥" : "Complete meditação + metas"}
+              {todayCompleted ? "Streak de hoje garantido! 🔥" : "Complete todos os hábitos"}
             </p>
           </div>
         </div>
@@ -89,7 +78,6 @@ export default function DailyStreak({ completedHabits, requiredHabits = ["medita
         )}
       </div>
 
-      {/* Progress to next milestone */}
       <div className="mt-3 space-y-1">
         <div className="flex justify-between text-[10px] font-body text-muted-foreground">
           <span>Próximo marco: {nextMilestone} dias</span>
