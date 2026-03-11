@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { X, Type, Image, Camera, Video, Minus, Plus, AlignCenter, AlignLeft, AlignRight, SwitchCamera, Circle, StopCircle } from "lucide-react";
+import StoryEditor from "./StoryEditor";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
