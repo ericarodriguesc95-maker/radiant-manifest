@@ -223,11 +223,11 @@ export default function SaudePage() {
 
   async function addWeightRecord() {
     if (!user || !newWeight) return;
-    await supabase.from("weight_records").insert({ user_id: user.id, weight: parseFloat(newWeight), note: newWeightNote || null });
+    const { error } = await supabase.from("weight_records").insert({ user_id: user.id, weight: parseFloat(newWeight), note: newWeightNote || null });
+    if (error) { toast.error("Erro ao registrar peso: " + error.message); return; }
     setNewWeight("");
     setNewWeightNote("");
     await loadWeightRecords();
-    // Update current weight in profile
     await supabase.from("health_profiles").update({ current_weight: parseFloat(newWeight) }).eq("user_id", user.id);
     await loadProfile();
     toast.success("Peso registrado!");
