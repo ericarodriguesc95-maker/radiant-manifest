@@ -87,32 +87,32 @@ export default function AppUpdatesModal({ onClose }: AppUpdatesModalProps) {
 
     return (
       <div className="fixed inset-0 z-[100] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-        <div className="bg-card border border-border rounded-3xl max-w-md w-full overflow-hidden shadow-2xl animate-scale-in">
+      <div className="bg-card border border-border rounded-2xl max-w-sm w-full overflow-hidden shadow-2xl animate-scale-in">
           {/* Header gradient */}
-          <div className="bg-gradient-gold p-6 text-center relative">
-            <button onClick={onClose} className="absolute top-3 right-3 text-primary-foreground/70 hover:text-primary-foreground">
-              <X className="h-5 w-5" />
+          <div className="bg-gradient-gold px-4 py-3 text-center relative">
+            <button onClick={onClose} className="absolute top-2 right-2 text-primary-foreground/70 hover:text-primary-foreground">
+              <X className="h-4 w-4" />
             </button>
-            <span className="text-5xl block mb-3">{current.icon}</span>
-            <p className="text-[10px] font-body text-primary-foreground/70 uppercase tracking-widest mb-1">
-              Atualização v{current.version}
+            <span className="text-3xl block mb-1">{current.icon}</span>
+            <p className="text-[9px] font-body text-primary-foreground/70 uppercase tracking-widest">
+              v{current.version}
             </p>
-            <h2 className="text-xl font-heading font-bold text-primary-foreground">
+            <h2 className="text-base font-heading font-bold text-primary-foreground">
               {current.title}
             </h2>
           </div>
 
-          <div className="p-5 space-y-4">
-            <p className="text-sm font-body text-foreground leading-relaxed">
+          <div className="p-4 space-y-3">
+            <p className="text-xs font-body text-foreground leading-relaxed">
               {current.description}
             </p>
 
             {current.how_to_use && (
-              <div className="bg-muted/50 rounded-xl p-4 border border-border">
-                <p className="text-[10px] font-body font-semibold text-gold uppercase tracking-wider mb-2">
+              <div className="bg-muted/50 rounded-lg p-3 border border-border">
+                <p className="text-[9px] font-body font-semibold text-gold uppercase tracking-wider mb-1">
                   💡 Como usar
                 </p>
-                <p className="text-xs font-body text-muted-foreground leading-relaxed">
+                <p className="text-[11px] font-body text-muted-foreground leading-relaxed">
                   {current.how_to_use}
                 </p>
               </div>
