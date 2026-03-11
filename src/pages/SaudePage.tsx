@@ -295,7 +295,7 @@ export default function SaudePage() {
   }
 
   async function saveExerciseEntry() {
-    if (!user || !exerciseForm.exercise_name.trim()) return;
+    if (!user || !exerciseForm.exercise_name.trim()) { toast.error("Preencha o nome do exercício"); return; }
     const payload = {
       user_id: user.id,
       exercise_name: exerciseForm.exercise_name.trim(),
@@ -308,12 +308,14 @@ export default function SaudePage() {
       entry_date: exerciseDate,
       notes: exerciseForm.notes || null,
     };
+    let error;
     if (editingExerciseId) {
-      await supabase.from("exercise_entries").update(payload).eq("id", editingExerciseId);
+      ({ error } = await supabase.from("exercise_entries").update(payload).eq("id", editingExerciseId));
       setEditingExerciseId(null);
     } else {
-      await supabase.from("exercise_entries").insert(payload);
+      ({ error } = await supabase.from("exercise_entries").insert(payload));
     }
+    if (error) { toast.error("Erro ao salvar exercício: " + error.message); return; }
     setExerciseForm({ exercise_name: "", category: "cardio", duration_minutes: "", sets: "", reps: "", weight_kg: "", calories_burned: "", notes: "" });
     setShowExerciseForm(false);
     await loadExerciseEntries();
