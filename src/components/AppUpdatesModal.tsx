@@ -119,13 +119,13 @@ export default function AppUpdatesModal({ onClose }: AppUpdatesModalProps) {
             )}
 
             {/* Progress dots */}
-            <div className="flex items-center justify-center gap-1.5 pt-2">
+            <div className="flex items-center justify-center gap-1 pt-1">
               {unreadUpdates.map((_, i) => (
                 <div
                   key={i}
                   className={cn(
-                    "h-1.5 rounded-full transition-all",
-                    i === currentIndex ? "w-6 bg-gold" : "w-1.5 bg-muted-foreground/30"
+                    "h-1 rounded-full transition-all",
+                    i === currentIndex ? "w-5 bg-gold" : "w-1 bg-muted-foreground/30"
                   )}
                 />
               ))}
@@ -136,15 +136,15 @@ export default function AppUpdatesModal({ onClose }: AppUpdatesModalProps) {
                 variant="ghost"
                 size="sm"
                 onClick={async () => { await markAllAsRead(); onClose(); }}
-                className="flex-1 text-muted-foreground"
+                className="flex-1 text-muted-foreground text-xs h-8"
               >
-                Pular tudo
+                Pular
               </Button>
-              <Button variant="gold" size="sm" onClick={goNext} className="flex-1 gap-1.5">
+              <Button variant="gold" size="sm" onClick={goNext} className="flex-1 gap-1 text-xs h-8">
                 {currentIndex < unreadUpdates.length - 1 ? (
-                  <>Próximo <ChevronRight className="h-3.5 w-3.5" /></>
+                  <>Próximo <ChevronRight className="h-3 w-3" /></>
                 ) : (
-                  <>Entendi! <Sparkles className="h-3.5 w-3.5" /></>
+                  <>Entendi! <Sparkles className="h-3 w-3" /></>
                 )}
               </Button>
             </div>
