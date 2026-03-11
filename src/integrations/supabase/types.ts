@@ -344,6 +344,44 @@ export type Database = {
           },
         ]
       }
+      goal_updates: {
+        Row: {
+          created_at: string
+          goal_id: string
+          id: string
+          new_progress: number
+          note: string | null
+          previous_progress: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          goal_id: string
+          id?: string
+          new_progress?: number
+          note?: string | null
+          previous_progress?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          goal_id?: string
+          id?: string
+          new_progress?: number
+          note?: string | null
+          previous_progress?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_updates_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       goals: {
         Row: {
           category: string
