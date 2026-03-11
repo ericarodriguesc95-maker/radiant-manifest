@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { X, Type, Image, Camera, Video, Minus, Plus, AlignCenter, AlignLeft, AlignRight, SwitchCamera, Circle, StopCircle } from "lucide-react";
+import StoryEditor from "./StoryEditor";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -33,7 +34,7 @@ const StoryCreator = ({ onClose, onCreated }: StoryCreatorProps) => {
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<"image" | "video">("image");
-  const [caption, setCaption] = useState("");
+  
   const [uploading, setUploading] = useState(false);
   const [fontSize, setFontSize] = useState(24);
   const [fontIndex, setFontIndex] = useState(0);
@@ -208,20 +209,39 @@ const StoryCreator = ({ onClose, onCreated }: StoryCreatorProps) => {
           text_content: content,
           bg_color: bgColor,
         });
-      } else if (mode === "media" && mediaFile) {
-        const ext = mediaFile.name.split(".").pop() || "bin";
-        const path = `${user.id}/${Date.now()}.${ext}`;
-        const { error } = await supabase.storage.from("community-media").upload(path, mediaFile);
-        if (error) throw error;
-        const { data } = supabase.storage.from("community-media").getPublicUrl(path);
-
-        await supabase.from("stories").insert({
-          user_id: user.id,
-          media_url: data.publicUrl,
-          media_type: mediaType,
-          text_content: caption.trim() || null,
-        });
+        onCreated();
       }
+    } catch (err) {
+      console.error("Story upload error:", err);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleEditorPublish = async (canvas: HTMLCanvasElement | null) => {
+    if (!user || !mediaFile) return;
+    setUploading(true);
+    try {
+      let uploadFile = mediaFile;
+      // If canvas is provided (image with overlays), use the rendered canvas
+      if (canvas) {
+        const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, "image/jpeg", 0.92));
+        if (blob) {
+          uploadFile = new File([blob], `story_${Date.now()}.jpg`, { type: "image/jpeg" });
+        }
+      }
+      const ext = uploadFile.name.split(".").pop() || "bin";
+      const path = `${user.id}/${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from("community-media").upload(path, uploadFile);
+      if (error) throw error;
+      const { data } = supabase.storage.from("community-media").getPublicUrl(path);
+
+      await supabase.from("stories").insert({
+        user_id: user.id,
+        media_url: data.publicUrl,
+        media_type: mediaType,
+        text_content: null,
+      });
       onCreated();
     } catch (err) {
       console.error("Story upload error:", err);
@@ -466,31 +486,15 @@ const StoryCreator = ({ onClose, onCreated }: StoryCreatorProps) => {
         </div>
       )}
 
-      {/* Media mode */}
+      {/* Media mode - Editor */}
       {mode === "media" && mediaPreview && (
-        <div className="flex-1 flex flex-col items-center justify-center px-4 relative">
-          {mediaType === "video" ? (
-            <video
-              src={mediaPreview}
-              className="max-h-[70vh] max-w-full rounded-2xl object-contain"
-              controls
-              autoPlay
-              muted
-            />
-          ) : (
-            <img
-              src={mediaPreview}
-              alt=""
-              className="max-h-[70vh] max-w-full rounded-2xl object-contain"
-            />
-          )}
-          <input
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            placeholder="Adicionar legenda..."
-            className="mt-4 w-full max-w-sm bg-white/10 text-white rounded-xl px-4 py-3 font-body text-sm placeholder:text-white/40 outline-none"
-          />
-        </div>
+        <StoryEditor
+          mediaSrc={mediaPreview}
+          mediaType={mediaType}
+          onPublish={handleEditorPublish}
+          onBack={() => { setMode("choose"); setMediaFile(null); setMediaPreview(null); }}
+          uploading={uploading}
+        />
       )}
     </div>
   );
