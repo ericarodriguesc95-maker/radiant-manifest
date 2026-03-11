@@ -201,10 +201,15 @@ export default function SaudePage() {
   async function saveProfile() {
     if (!user) return;
     const payload = { user_id: user.id, goal: profile.goal, current_weight: profile.current_weight, target_weight: profile.target_weight, height_cm: profile.height_cm };
+    let error;
     if (profile.id) {
-      await supabase.from("health_profiles").update(payload).eq("id", profile.id);
+      ({ error } = await supabase.from("health_profiles").update(payload).eq("id", profile.id));
     } else {
-      await supabase.from("health_profiles").insert(payload);
+      ({ error } = await supabase.from("health_profiles").insert(payload));
+    }
+    if (error) {
+      toast.error("Erro ao salvar perfil: " + error.message);
+      return;
     }
     await loadProfile();
     setEditingProfile(false);
