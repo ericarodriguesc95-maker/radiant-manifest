@@ -208,20 +208,39 @@ const StoryCreator = ({ onClose, onCreated }: StoryCreatorProps) => {
           text_content: content,
           bg_color: bgColor,
         });
-      } else if (mode === "media" && mediaFile) {
-        const ext = mediaFile.name.split(".").pop() || "bin";
-        const path = `${user.id}/${Date.now()}.${ext}`;
-        const { error } = await supabase.storage.from("community-media").upload(path, mediaFile);
-        if (error) throw error;
-        const { data } = supabase.storage.from("community-media").getPublicUrl(path);
-
-        await supabase.from("stories").insert({
-          user_id: user.id,
-          media_url: data.publicUrl,
-          media_type: mediaType,
-          text_content: caption.trim() || null,
-        });
+        onCreated();
       }
+    } catch (err) {
+      console.error("Story upload error:", err);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleEditorPublish = async (canvas: HTMLCanvasElement | null) => {
+    if (!user || !mediaFile) return;
+    setUploading(true);
+    try {
+      let uploadFile = mediaFile;
+      // If canvas is provided (image with overlays), use the rendered canvas
+      if (canvas) {
+        const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, "image/jpeg", 0.92));
+        if (blob) {
+          uploadFile = new File([blob], `story_${Date.now()}.jpg`, { type: "image/jpeg" });
+        }
+      }
+      const ext = uploadFile.name.split(".").pop() || "bin";
+      const path = `${user.id}/${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from("community-media").upload(path, uploadFile);
+      if (error) throw error;
+      const { data } = supabase.storage.from("community-media").getPublicUrl(path);
+
+      await supabase.from("stories").insert({
+        user_id: user.id,
+        media_url: data.publicUrl,
+        media_type: mediaType,
+        text_content: null,
+      });
       onCreated();
     } catch (err) {
       console.error("Story upload error:", err);
