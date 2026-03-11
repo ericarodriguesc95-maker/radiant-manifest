@@ -34,7 +34,7 @@ const StoryCreator = ({ onClose, onCreated }: StoryCreatorProps) => {
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [mediaPreview, setMediaPreview] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<"image" | "video">("image");
-  const [caption, setCaption] = useState("");
+  
   const [uploading, setUploading] = useState(false);
   const [fontSize, setFontSize] = useState(24);
   const [fontIndex, setFontIndex] = useState(0);
