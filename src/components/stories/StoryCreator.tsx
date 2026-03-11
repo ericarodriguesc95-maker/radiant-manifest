@@ -486,31 +486,15 @@ const StoryCreator = ({ onClose, onCreated }: StoryCreatorProps) => {
         </div>
       )}
 
-      {/* Media mode */}
+      {/* Media mode - Editor */}
       {mode === "media" && mediaPreview && (
-        <div className="flex-1 flex flex-col items-center justify-center px-4 relative">
-          {mediaType === "video" ? (
-            <video
-              src={mediaPreview}
-              className="max-h-[70vh] max-w-full rounded-2xl object-contain"
-              controls
-              autoPlay
-              muted
-            />
-          ) : (
-            <img
-              src={mediaPreview}
-              alt=""
-              className="max-h-[70vh] max-w-full rounded-2xl object-contain"
-            />
-          )}
-          <input
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            placeholder="Adicionar legenda..."
-            className="mt-4 w-full max-w-sm bg-white/10 text-white rounded-xl px-4 py-3 font-body text-sm placeholder:text-white/40 outline-none"
-          />
-        </div>
+        <StoryEditor
+          mediaSrc={mediaPreview}
+          mediaType={mediaType}
+          onPublish={handleEditorPublish}
+          onBack={() => { setMode("choose"); setMediaFile(null); setMediaPreview(null); }}
+          uploading={uploading}
+        />
       )}
     </div>
   );
