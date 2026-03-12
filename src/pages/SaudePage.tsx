@@ -835,6 +835,7 @@ export default function SaudePage() {
   }), { cal: 0, prot: 0, carb: 0, fat: 0 });
 
   return (
+    <ErrorBoundary fallbackMessage="Erro na página de Saúde">
     <div className="min-h-screen pb-20 pt-6 px-4 max-w-2xl mx-auto">
       <div className="mb-6">
         <button type="button" onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3 transition-colors">
