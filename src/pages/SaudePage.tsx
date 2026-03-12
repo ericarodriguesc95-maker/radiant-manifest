@@ -1600,5 +1600,6 @@ export default function SaudePage() {
         </TabsContent>
       </Tabs>
     </div>
+    </ErrorBoundary>
   );
 }
