@@ -1032,7 +1032,7 @@ export default function SaudePage() {
                   <Button variant="outline" size="sm" className="flex-1 text-xs" onClick={() => weightFileRef.current?.click()}>
                     <Camera className="h-3 w-3 mr-1" /> {weightPhoto ? weightPhoto.name.slice(0, 15) + "…" : "Foto evolução"}
                   </Button>
-                  <Button size="sm" onClick={addWeightRecord} disabled={!newWeight}><Plus className="h-4 w-4" /></Button>
+                  <Button type="button" size="sm" onClick={addWeightRecord} disabled={!newWeight}><Plus className="h-4 w-4" /></Button>
                 </div>
               </div>
               <div className="space-y-2 max-h-60 overflow-y-auto">
