@@ -345,157 +345,354 @@ export default function SaudePage() {
   useEffect(() => { if (user) loadCheckins(); }, [user, suppDate]);
 
   // ====== DATA FUNCTIONS ======
+  const parseNumberOrNull = (value: unknown): number | null => {
+    if (value === null || value === undefined || value === "") return null;
+    const parsed = typeof value === "number" ? value : Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
+
+  const parseNumber = (value: unknown): number => parseNumberOrNull(value) ?? 0;
+
+  const formatDateLabel = (value: string) => {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return format(date, "dd/MM/yyyy", { locale: ptBR });
+  };
+
   async function loadProfile() {
-    const { data } = await supabase.from("health_profiles").select("*").eq("user_id", user!.id).maybeSingle();
-    if (data) setProfile(data as any);
+    if (!user) return;
+    const { data, error } = await supabase.from("health_profiles").select("*").eq("user_id", user.id).maybeSingle();
+    if (error) {
+      toast.error("Erro ao carregar perfil: " + error.message);
+      return;
+    }
+    if (data) {
+      setProfile({
+        id: data.id,
+        goal: data.goal,
+        current_weight: parseNumberOrNull(data.current_weight),
+        target_weight: parseNumberOrNull(data.target_weight),
+        height_cm: parseNumberOrNull(data.height_cm),
+        age: parseNumberOrNull(data.age),
+        sex: data.sex,
+        activity_level: data.activity_level,
+      });
+    }
   }
 
   async function saveProfile() {
     if (!user) return;
-    const payload = { user_id: user.id, goal: profile.goal, current_weight: profile.current_weight, target_weight: profile.target_weight, height_cm: profile.height_cm, age: profile.age, sex: profile.sex, activity_level: profile.activity_level };
+
+    const payload = {
+      user_id: user.id,
+      goal: profile.goal,
+      current_weight: parseNumberOrNull(profile.current_weight),
+      target_weight: parseNumberOrNull(profile.target_weight),
+      height_cm: parseNumberOrNull(profile.height_cm),
+      age: parseNumberOrNull(profile.age),
+      sex: profile.sex,
+      activity_level: profile.activity_level,
+    };
+
     let error;
     if (profile.id) {
       ({ error } = await supabase.from("health_profiles").update(payload).eq("id", profile.id));
     } else {
       ({ error } = await supabase.from("health_profiles").insert(payload));
     }
-    if (error) { toast.error("Erro ao salvar perfil: " + error.message); return; }
+
+    if (error) {
+      toast.error("Erro ao salvar perfil: " + error.message);
+      return;
+    }
+
     await loadProfile();
     setEditingProfile(false);
     toast.success("Perfil salvo!");
   }
 
   async function loadWeightRecords() {
-    const { data } = await supabase.from("weight_records").select("*").eq("user_id", user!.id).order("recorded_at", { ascending: false }).limit(90);
-    if (data) setWeightRecords(data as any);
+    if (!user) return;
+    const { data, error } = await supabase
+      .from("weight_records")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("recorded_at", { ascending: false })
+      .limit(90);
+
+    if (error) {
+      toast.error("Erro ao carregar registros de peso: " + error.message);
+      return;
+    }
+
+    const normalized = (data ?? []).map((row: any) => ({
+      ...row,
+      weight: parseNumber(row.weight),
+    })) as WeightRecord[];
+
+    setWeightRecords(normalized);
   }
 
   async function addWeightRecord() {
     if (!user || !newWeight) return;
+
+    const parsedWeight = Number.parseFloat(newWeight);
+    if (!Number.isFinite(parsedWeight)) {
+      toast.error("Informe um peso válido");
+      return;
+    }
+
     let photoUrl: string | null = null;
-    if (weightPhoto) { photoUrl = await uploadPhoto(user.id, weightPhoto, "weight"); }
-    const { error } = await supabase.from("weight_records").insert({ user_id: user.id, weight: parseFloat(newWeight), note: newWeightNote || null, photo_url: photoUrl });
-    if (error) { toast.error("Erro ao registrar peso: " + error.message); return; }
-    setNewWeight(""); setNewWeightNote(""); setWeightPhoto(null);
+    if (weightPhoto) {
+      photoUrl = await uploadPhoto(user.id, weightPhoto, "weight");
+    }
+
+    const { error } = await supabase.from("weight_records").insert({
+      user_id: user.id,
+      weight: parsedWeight,
+      note: newWeightNote || null,
+      photo_url: photoUrl,
+    });
+
+    if (error) {
+      toast.error("Erro ao registrar peso: " + error.message);
+      return;
+    }
+
+    setNewWeight("");
+    setNewWeightNote("");
+    setWeightPhoto(null);
     if (weightFileRef.current) weightFileRef.current.value = "";
+
     await loadWeightRecords();
-    await supabase.from("health_profiles").update({ current_weight: parseFloat(newWeight) }).eq("user_id", user.id);
+    await supabase.from("health_profiles").update({ current_weight: parsedWeight }).eq("user_id", user.id);
     await loadProfile();
     toast.success("Peso registrado!");
   }
 
   async function deleteWeightRecord(id: string) {
-    await supabase.from("weight_records").delete().eq("id", id);
+    const { error } = await supabase.from("weight_records").delete().eq("id", id);
+    if (error) {
+      toast.error("Erro ao remover peso: " + error.message);
+      return;
+    }
     await loadWeightRecords();
     toast.success("Registro removido!");
   }
 
   async function loadDietEntries() {
     if (!user) return;
-    const { data } = await supabase.from("diet_entries").select("*").eq("user_id", user.id).eq("entry_date", selectedDate).order("created_at", { ascending: true });
-    if (data) setDietEntries(data as any);
+
+    const { data, error } = await supabase
+      .from("diet_entries")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("entry_date", selectedDate)
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      toast.error("Erro ao carregar refeições: " + error.message);
+      return;
+    }
+
+    const normalized = (data ?? []).map((row: any) => ({
+      ...row,
+      calories: parseNumberOrNull(row.calories),
+      protein: parseNumberOrNull(row.protein),
+      carbs: parseNumberOrNull(row.carbs),
+      fat: parseNumberOrNull(row.fat),
+    })) as DietEntry[];
+
+    setDietEntries(normalized);
   }
 
   async function saveDietEntry() {
     if (!user) return;
-    // Build description and nutrition from selected foods or manual entry
+
     let description = dietForm.description.trim();
-    let calories = dietForm.calories ? parseInt(dietForm.calories) : null;
-    let protein = dietForm.protein ? parseFloat(dietForm.protein) : null;
-    let carbs = dietForm.carbs ? parseFloat(dietForm.carbs) : null;
-    let fat = dietForm.fat ? parseFloat(dietForm.fat) : null;
+    let calories = parseNumberOrNull(dietForm.calories);
+    let protein = parseNumberOrNull(dietForm.protein);
+    let carbs = parseNumberOrNull(dietForm.carbs);
+    let fat = parseNumberOrNull(dietForm.fat);
 
     if (selectedFoods.length > 0) {
-      const foodDescs = selectedFoods.map(f => `${f.food.food} x${f.qty}`);
+      const foodDescs = selectedFoods.map((f) => `${f.food.food} x${f.qty}`);
       description = description ? `${description}\n${foodDescs.join(", ")}` : foodDescs.join(", ");
-      calories = (calories || 0) + selectedFoods.reduce((a, f) => a + f.food.cal * f.qty, 0);
-      protein = (protein || 0) + selectedFoods.reduce((a, f) => a + f.food.prot * f.qty, 0);
-      carbs = (carbs || 0) + selectedFoods.reduce((a, f) => a + f.food.carb * f.qty, 0);
-      fat = (fat || 0) + selectedFoods.reduce((a, f) => a + f.food.fat * f.qty, 0);
+      calories = parseNumber(calories) + selectedFoods.reduce((a, f) => a + f.food.cal * f.qty, 0);
+      protein = parseNumber(protein) + selectedFoods.reduce((a, f) => a + f.food.prot * f.qty, 0);
+      carbs = parseNumber(carbs) + selectedFoods.reduce((a, f) => a + f.food.carb * f.qty, 0);
+      fat = parseNumber(fat) + selectedFoods.reduce((a, f) => a + f.food.fat * f.qty, 0);
     }
 
-    if (!description) { toast.error("Preencha a descrição ou selecione alimentos"); return; }
+    if (!description) {
+      toast.error("Preencha a descrição ou selecione alimentos");
+      return;
+    }
 
     let photoUrl: string | null = null;
-    if (dietPhoto) { photoUrl = await uploadPhoto(user.id, dietPhoto, "diet"); }
+    if (dietPhoto) {
+      photoUrl = await uploadPhoto(user.id, dietPhoto, "diet");
+    }
 
     const payload: any = {
-      user_id: user.id, meal_type: dietForm.meal_type, description,
-      calories: calories ? Math.round(calories) : null,
-      protein: protein ? Math.round(protein * 10) / 10 : null,
-      carbs: carbs ? Math.round(carbs * 10) / 10 : null,
-      fat: fat ? Math.round(fat * 10) / 10 : null,
+      user_id: user.id,
+      meal_type: dietForm.meal_type,
+      description,
+      calories: calories !== null ? Math.round(calories) : null,
+      protein: protein !== null ? Math.round(protein * 10) / 10 : null,
+      carbs: carbs !== null ? Math.round(carbs * 10) / 10 : null,
+      fat: fat !== null ? Math.round(fat * 10) / 10 : null,
       entry_date: selectedDate,
     };
+
     if (photoUrl) payload.photo_url = photoUrl;
 
+    const isEditing = Boolean(editingDietId);
     let error;
-    if (editingDietId) {
+    if (isEditing) {
       ({ error } = await supabase.from("diet_entries").update(payload).eq("id", editingDietId));
       setEditingDietId(null);
     } else {
       ({ error } = await supabase.from("diet_entries").insert(payload));
     }
-    if (error) { toast.error("Erro ao salvar refeição: " + error.message); return; }
+
+    if (error) {
+      toast.error("Erro ao salvar refeição: " + error.message);
+      return;
+    }
+
     setDietForm({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" });
-    setDietPhoto(null); setSelectedFoods([]); setFoodSearch("");
+    setDietPhoto(null);
+    setSelectedFoods([]);
+    setFoodSearch("");
     if (dietFileRef.current) dietFileRef.current.value = "";
     setShowDietForm(false);
+
     await loadDietEntries();
-    toast.success(editingDietId ? "Refeição atualizada!" : "Refeição registrada!");
+    toast.success(isEditing ? "Refeição atualizada!" : "Refeição registrada!");
   }
 
   function editDietEntry(entry: DietEntry) {
-    setDietForm({ meal_type: entry.meal_type, description: entry.description, calories: entry.calories?.toString() || "", protein: entry.protein?.toString() || "", carbs: entry.carbs?.toString() || "", fat: entry.fat?.toString() || "" });
+    setDietForm({
+      meal_type: entry.meal_type,
+      description: entry.description,
+      calories: entry.calories?.toString() || "",
+      protein: entry.protein?.toString() || "",
+      carbs: entry.carbs?.toString() || "",
+      fat: entry.fat?.toString() || "",
+    });
     setEditingDietId(entry.id);
     setSelectedFoods([]);
     setShowDietForm(true);
   }
 
   async function deleteDietEntry(id: string) {
-    await supabase.from("diet_entries").delete().eq("id", id);
+    const { error } = await supabase.from("diet_entries").delete().eq("id", id);
+    if (error) {
+      toast.error("Erro ao remover refeição: " + error.message);
+      return;
+    }
     await loadDietEntries();
     toast.success("Refeição removida!");
   }
 
   async function loadExerciseEntries() {
     if (!user) return;
-    const { data } = await supabase.from("exercise_entries").select("*").eq("user_id", user.id).eq("entry_date", exerciseDate).order("created_at", { ascending: true });
-    if (data) setExerciseEntries(data as any);
+
+    const { data, error } = await supabase
+      .from("exercise_entries")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("entry_date", exerciseDate)
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      toast.error("Erro ao carregar exercícios: " + error.message);
+      return;
+    }
+
+    const normalized = (data ?? []).map((row: any) => ({
+      ...row,
+      duration_minutes: parseNumberOrNull(row.duration_minutes),
+      sets: parseNumberOrNull(row.sets),
+      reps: parseNumberOrNull(row.reps),
+      weight_kg: parseNumberOrNull(row.weight_kg),
+      calories_burned: parseNumberOrNull(row.calories_burned),
+    })) as ExerciseEntry[];
+
+    setExerciseEntries(normalized);
   }
 
   async function saveExerciseEntry() {
-    if (!user || !exerciseForm.exercise_name.trim()) { toast.error("Preencha o nome do exercício"); return; }
+    if (!user || !exerciseForm.exercise_name.trim()) {
+      toast.error("Preencha o nome do exercício");
+      return;
+    }
+
     const payload = {
-      user_id: user.id, exercise_name: exerciseForm.exercise_name.trim(), category: exerciseForm.category,
-      duration_minutes: exerciseForm.duration_minutes ? parseInt(exerciseForm.duration_minutes) : null,
-      sets: exerciseForm.sets ? parseInt(exerciseForm.sets) : null, reps: exerciseForm.reps ? parseInt(exerciseForm.reps) : null,
-      weight_kg: exerciseForm.weight_kg ? parseFloat(exerciseForm.weight_kg) : null,
-      calories_burned: exerciseForm.calories_burned ? parseInt(exerciseForm.calories_burned) : null,
-      entry_date: exerciseDate, notes: exerciseForm.notes || null,
+      user_id: user.id,
+      exercise_name: exerciseForm.exercise_name.trim(),
+      category: exerciseForm.category,
+      duration_minutes: parseNumberOrNull(exerciseForm.duration_minutes),
+      sets: parseNumberOrNull(exerciseForm.sets),
+      reps: parseNumberOrNull(exerciseForm.reps),
+      weight_kg: parseNumberOrNull(exerciseForm.weight_kg),
+      calories_burned: parseNumberOrNull(exerciseForm.calories_burned),
+      entry_date: exerciseDate,
+      notes: exerciseForm.notes || null,
     };
+
+    const isEditing = Boolean(editingExerciseId);
     let error;
-    if (editingExerciseId) {
+    if (isEditing) {
       ({ error } = await supabase.from("exercise_entries").update(payload).eq("id", editingExerciseId));
       setEditingExerciseId(null);
     } else {
       ({ error } = await supabase.from("exercise_entries").insert(payload));
     }
-    if (error) { toast.error("Erro ao salvar exercício: " + error.message); return; }
-    setExerciseForm({ exercise_name: "", category: "cardio", duration_minutes: "", sets: "", reps: "", weight_kg: "", calories_burned: "", notes: "" });
+
+    if (error) {
+      toast.error("Erro ao salvar exercício: " + error.message);
+      return;
+    }
+
+    setExerciseForm({
+      exercise_name: "",
+      category: "cardio",
+      duration_minutes: "",
+      sets: "",
+      reps: "",
+      weight_kg: "",
+      calories_burned: "",
+      notes: "",
+    });
     setShowExerciseForm(false);
+
     await loadExerciseEntries();
-    toast.success(editingExerciseId ? "Exercício atualizado!" : "Exercício registrado!");
+    toast.success(isEditing ? "Exercício atualizado!" : "Exercício registrado!");
   }
 
   function editExerciseEntry(entry: ExerciseEntry) {
-    setExerciseForm({ exercise_name: entry.exercise_name, category: entry.category, duration_minutes: entry.duration_minutes?.toString() || "", sets: entry.sets?.toString() || "", reps: entry.reps?.toString() || "", weight_kg: entry.weight_kg?.toString() || "", calories_burned: entry.calories_burned?.toString() || "", notes: entry.notes || "" });
+    setExerciseForm({
+      exercise_name: entry.exercise_name,
+      category: entry.category,
+      duration_minutes: entry.duration_minutes?.toString() || "",
+      sets: entry.sets?.toString() || "",
+      reps: entry.reps?.toString() || "",
+      weight_kg: entry.weight_kg?.toString() || "",
+      calories_burned: entry.calories_burned?.toString() || "",
+      notes: entry.notes || "",
+    });
     setEditingExerciseId(entry.id);
     setShowExerciseForm(true);
   }
 
   async function deleteExerciseEntry(id: string) {
-    await supabase.from("exercise_entries").delete().eq("id", id);
+    const { error } = await supabase.from("exercise_entries").delete().eq("id", id);
+    if (error) {
+      toast.error("Erro ao remover exercício: " + error.message);
+      return;
+    }
     await loadExerciseEntries();
     toast.success("Exercício removido!");
   }
@@ -503,22 +700,43 @@ export default function SaudePage() {
   // Supplements
   async function loadUserSupplements() {
     if (!user) return;
-    const { data } = await supabase.from("user_supplements").select("*").eq("user_id", user.id).order("created_at", { ascending: true });
+    const { data, error } = await supabase.from("user_supplements").select("*").eq("user_id", user.id).order("created_at", { ascending: true });
+    if (error) {
+      toast.error("Erro ao carregar suplementos: " + error.message);
+      return;
+    }
     if (data) setUserSupplements(data as any);
   }
 
   async function loadCheckins() {
     if (!user) return;
-    const { data } = await supabase.from("supplement_checkins").select("*").eq("user_id", user.id).eq("checkin_date", suppDate);
+    const { data, error } = await supabase.from("supplement_checkins").select("*").eq("user_id", user.id).eq("checkin_date", suppDate);
+    if (error) {
+      toast.error("Erro ao carregar check-ins: " + error.message);
+      return;
+    }
     if (data) setCheckins(data as any);
   }
 
   async function addUserSupplement() {
-    if (!user || !suppForm.name.trim()) { toast.error("Preencha o nome do suplemento"); return; }
+    if (!user || !suppForm.name.trim()) {
+      toast.error("Preencha o nome do suplemento");
+      return;
+    }
+
     const { error } = await supabase.from("user_supplements").insert({
-      user_id: user.id, name: suppForm.name.trim(), dose: suppForm.dose, category: suppForm.category, notes: suppForm.notes || null,
+      user_id: user.id,
+      name: suppForm.name.trim(),
+      dose: suppForm.dose,
+      category: suppForm.category,
+      notes: suppForm.notes || null,
     });
-    if (error) { toast.error("Erro ao adicionar: " + error.message); return; }
+
+    if (error) {
+      toast.error("Erro ao adicionar: " + error.message);
+      return;
+    }
+
     setSuppForm({ name: "", dose: "", category: "suplemento", notes: "" });
     setShowAddSupplement(false);
     await loadUserSupplements();
@@ -526,36 +744,57 @@ export default function SaudePage() {
   }
 
   async function deleteUserSupplement(id: string) {
-    await supabase.from("user_supplements").delete().eq("id", id);
+    const { error } = await supabase.from("user_supplements").delete().eq("id", id);
+    if (error) {
+      toast.error("Erro ao remover suplemento: " + error.message);
+      return;
+    }
     await loadUserSupplements();
     toast.success("Suplemento removido!");
   }
 
   async function toggleCheckin(supplementId: string) {
     if (!user) return;
-    const existing = checkins.find(c => c.supplement_id === supplementId);
+
+    const existing = checkins.find((c) => c.supplement_id === supplementId);
+
     if (existing) {
-      await supabase.from("supplement_checkins").delete().eq("id", existing.id);
+      const { error } = await supabase.from("supplement_checkins").delete().eq("id", existing.id);
+      if (error) {
+        toast.error("Erro ao atualizar check-in: " + error.message);
+        return;
+      }
     } else {
-      await supabase.from("supplement_checkins").insert({
-        user_id: user.id, supplement_id: supplementId, checkin_date: suppDate, taken: true,
+      const { error } = await supabase.from("supplement_checkins").insert({
+        user_id: user.id,
+        supplement_id: supplementId,
+        checkin_date: suppDate,
+        taken: true,
       });
+      if (error) {
+        toast.error("Erro ao atualizar check-in: " + error.message);
+        return;
+      }
     }
+
     await loadCheckins();
   }
 
   function addFoodToList(food: typeof foodDatabase[0]) {
-    setSelectedFoods(prev => {
-      const existing = prev.find(f => f.food.food === food.food);
-      if (existing) return prev.map(f => f.food.food === food.food ? { ...f, qty: f.qty + 1 } : f);
+    setSelectedFoods((prev) => {
+      const existing = prev.find((f) => f.food.food === food.food);
+      if (existing) return prev.map((f) => (f.food.food === food.food ? { ...f, qty: f.qty + 1 } : f));
       return [...prev, { food, qty: 1 }];
     });
     setFoodSearch("");
   }
 
   function updateFoodQty(foodName: string, qty: number) {
-    if (qty <= 0) { setSelectedFoods(prev => prev.filter(f => f.food.food !== foodName)); return; }
-    setSelectedFoods(prev => prev.map(f => f.food.food === foodName ? { ...f, qty } : f));
+    if (qty <= 0) {
+      setSelectedFoods((prev) => prev.filter((f) => f.food.food !== foodName));
+      return;
+    }
+    setSelectedFoods((prev) => prev.map((f) => (f.food.food === foodName ? { ...f, qty } : f)));
   }
 
   // Calculations
