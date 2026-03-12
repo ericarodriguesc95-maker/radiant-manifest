@@ -83,15 +83,6 @@ interface SupplementCheckin {
 }
 
 // ============ CONSTANTS ============
-const mealTypes = [
-  { value: "café_da_manhã", label: "☀️ Café da Manhã" },
-  { value: "lanche_manhã", label: "🍎 Lanche da Manhã" },
-  { value: "almoço", label: "🍽️ Almoço" },
-  { value: "lanche_tarde", label: "🥤 Lanche da Tarde" },
-  { value: "jantar", label: "🌙 Jantar" },
-  { value: "ceia", label: "🍵 Ceia" },
-];
-
 const exerciseCategories = [
   { value: "cardio", label: "🏃‍♀️ Cardio" },
   { value: "musculação", label: "💪 Musculação" },
