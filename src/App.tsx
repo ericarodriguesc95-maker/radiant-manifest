@@ -52,20 +52,20 @@ const AppRoutes = () => (
 
     {/* Protected routes */}
     <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/metas" element={<MetasPage />} />
-      <Route path="/financas" element={<FinancasPage />} />
-      <Route path="/comunidade" element={<ComunidadePage />} />
-      <Route path="/vision-board" element={<VisionBoardPage />} />
-      <Route path="/jornada" element={<JornadaPage />} />
-      <Route path="/reprogramacao" element={<ReprogramacaoPage />} />
-      <Route path="/guias" element={<GuiasPage />} />
-      <Route path="/alta-performance" element={<AltaPerformancePage />} />
-      <Route path="/saude" element={<SaudePage />} />
-      <Route path="/diario" element={<DiarioPage />} />
-      <Route path="/settings" element={<SettingsPage />} />
-      <Route path="/admin/atividade" element={<AdminActivityPage />} />
-      <Route path="/perfil/:userId" element={<ProfilePage />} />
+      <Route path="/" element={<ErrorBoundary><HomePage /></ErrorBoundary>} />
+      <Route path="/metas" element={<ErrorBoundary><MetasPage /></ErrorBoundary>} />
+      <Route path="/financas" element={<ErrorBoundary><FinancasPage /></ErrorBoundary>} />
+      <Route path="/comunidade" element={<ErrorBoundary><ComunidadePage /></ErrorBoundary>} />
+      <Route path="/vision-board" element={<ErrorBoundary><VisionBoardPage /></ErrorBoundary>} />
+      <Route path="/jornada" element={<ErrorBoundary><JornadaPage /></ErrorBoundary>} />
+      <Route path="/reprogramacao" element={<ErrorBoundary><ReprogramacaoPage /></ErrorBoundary>} />
+      <Route path="/guias" element={<ErrorBoundary><GuiasPage /></ErrorBoundary>} />
+      <Route path="/alta-performance" element={<ErrorBoundary><AltaPerformancePage /></ErrorBoundary>} />
+      <Route path="/saude" element={<ErrorBoundary><SaudePage /></ErrorBoundary>} />
+      <Route path="/diario" element={<ErrorBoundary><DiarioPage /></ErrorBoundary>} />
+      <Route path="/settings" element={<ErrorBoundary><SettingsPage /></ErrorBoundary>} />
+      <Route path="/admin/atividade" element={<ErrorBoundary><AdminActivityPage /></ErrorBoundary>} />
+      <Route path="/perfil/:userId" element={<ErrorBoundary><ProfilePage /></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>
