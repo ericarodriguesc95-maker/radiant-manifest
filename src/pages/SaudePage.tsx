@@ -1149,7 +1149,12 @@ export default function SaudePage() {
                     {filteredFoods.length > 0 && (
                       <div className="absolute z-10 w-full mt-1 bg-card border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto">
                         {filteredFoods.map((f) => (
-                          <button key={f.food} className="w-full text-left px-3 py-2 hover:bg-muted/50 text-xs flex justify-between items-center border-b border-border/50 last:border-0" onClick={() => addFoodToList(f)}>
+                          <button
+                            type="button"
+                            key={f.food}
+                            className="w-full text-left px-3 py-2 hover:bg-muted/50 text-xs flex justify-between items-center border-b border-border/50 last:border-0"
+                            onClick={() => addFoodToList(f)}
+                          >
                             <div>
                               <span className="font-semibold text-foreground">{f.food}</span>
                               <span className="text-muted-foreground ml-1">({f.portion})</span>
