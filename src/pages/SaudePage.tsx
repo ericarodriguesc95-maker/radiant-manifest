@@ -1433,7 +1433,7 @@ export default function SaudePage() {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button size="sm" onClick={addUserSupplement} className="flex-1">
+                    <Button type="button" size="sm" onClick={addUserSupplement} className="flex-1">
                       <Check className="h-4 w-4 mr-1" /> Salvar
                     </Button>
                     <Button variant="ghost" size="sm" onClick={() => setShowAddSupplement(false)}><X className="h-4 w-4" /></Button>
