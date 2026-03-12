@@ -856,9 +856,8 @@ export default function SaudePage() {
           <TabsTrigger value="medic" className="text-[10px] px-1 py-1.5">💉 Medic.</TabsTrigger>
         </TabsList>
 
-        {/* ====== PERFIL & PESO ====== */}
         <TabsContent value="perfil" className="space-y-4">
-          <Card>
+         <ErrorBoundary fallbackMessage="Erro ao carregar Perfil">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
