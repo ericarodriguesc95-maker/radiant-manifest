@@ -252,15 +252,19 @@ function getDayOfYear(date: Date): number {
 }
 
 function getDevotionalForDate(religion: Religion, date: Date): Devotional {
-  const list = devotionalsByReligion[religion];
+  const list = devotionalsByReligion[religion] || devotionalsByReligion["universal"];
+  if (!list || list.length === 0) {
+    return { verse: "Que este dia seja cheio de luz e propósito.", source: "Reflexão do dia", reflection: "Cada dia é uma oportunidade de crescer.", study: "A prática diária de reflexão fortalece a mente e o espírito.", practice: "Dedique 5 minutos ao silêncio e gratidão." };
+  }
   const dayIndex = getDayOfYear(date) % list.length;
   return list[dayIndex];
 }
 
 export default function DailyDevotional() {
   const [religion, setReligion] = useState<Religion | null>(() => {
-    const saved = localStorage.getItem("user-religion");
-    return saved as Religion | null;
+    const saved = localStorage.getItem("user-religion") as Religion | null;
+    if (saved && religionLabels[saved]) return saved;
+    return null;
   });
 
   const [viewDate, setViewDate] = useState(new Date());
