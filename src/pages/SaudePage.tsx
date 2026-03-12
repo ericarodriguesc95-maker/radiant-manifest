@@ -836,7 +836,7 @@ export default function SaudePage() {
   return (
     <div className="min-h-screen pb-20 pt-6 px-4 max-w-2xl mx-auto">
       <div className="mb-6">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3 transition-colors">
+        <button type="button" onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3 transition-colors">
           <ArrowLeft className="h-4 w-4" /> Voltar
         </button>
         <div className="flex items-center gap-2 mb-2">
