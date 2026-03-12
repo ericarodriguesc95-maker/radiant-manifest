@@ -926,7 +926,7 @@ export default function SaudePage() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button onClick={saveProfile} className="w-full" size="sm">
+                  <Button type="button" onClick={saveProfile} className="w-full" size="sm">
                     <Check className="h-4 w-4 mr-1" /> Salvar Perfil
                   </Button>
                 </div>
