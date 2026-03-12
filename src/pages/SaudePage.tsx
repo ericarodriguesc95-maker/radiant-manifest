@@ -1257,11 +1257,10 @@ export default function SaudePage() {
 
               <div className="space-y-2">
                 {dietEntries.map((entry) => {
-                  const mealLabel = mealTypes.find((m) => m.value === entry.meal_type)?.label || entry.meal_type;
                   return (
                     <div key={entry.id} className="p-3 rounded-lg bg-muted/30 space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-primary">{mealLabel}</span>
+                        <span className="text-xs font-semibold text-primary">{entry.meal_type}</span>
                         <div className="flex gap-1">
                           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => editDietEntry(entry)}><Edit2 className="h-3 w-3" /></Button>
                           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => deleteDietEntry(entry.id)}><Trash2 className="h-3 w-3 text-destructive" /></Button>
