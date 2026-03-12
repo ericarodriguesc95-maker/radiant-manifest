@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { ArrowLeft, Heart, Scale, Utensils, Dumbbell, Pill, Apple, Plus, Trash2, Edit2, Check, X, TrendingDown, TrendingUp, ChevronDown, ChevronUp } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { ArrowLeft, Heart, Scale, Utensils, Dumbbell, Pill, Apple, Plus, Trash2, Edit2, Check, X, TrendingDown, TrendingUp, Camera, Calculator } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,12 +9,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Slider } from "@/components/ui/slider";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 
 interface HealthProfile {
   id?: string;
@@ -22,6 +22,9 @@ interface HealthProfile {
   current_weight: number | null;
   target_weight: number | null;
   height_cm: number | null;
+  age: number | null;
+  sex: string;
+  activity_level: string;
 }
 
 interface WeightRecord {
@@ -29,6 +32,7 @@ interface WeightRecord {
   weight: number;
   recorded_at: string;
   note: string | null;
+  photo_url: string | null;
   created_at: string;
 }
 
@@ -41,6 +45,7 @@ interface DietEntry {
   carbs: number | null;
   fat: number | null;
   entry_date: string;
+  photo_url: string | null;
 }
 
 interface ExerciseEntry {
@@ -75,50 +80,10 @@ const exerciseCategories = [
 ];
 
 const dietPlans = [
-  {
-    name: "Low Carb",
-    desc: "Redução de carboidratos, foco em proteínas e gorduras boas",
-    meals: {
-      "Café": "Ovos mexidos + abacate + café sem açúcar",
-      "Almoço": "Frango grelhado + salada + azeite",
-      "Jantar": "Salmão + legumes assados",
-      "Lanches": "Castanhas, queijo, iogurte natural"
-    },
-    macros: { prot: "30%", carb: "20%", fat: "50%" }
-  },
-  {
-    name: "Mediterrânea",
-    desc: "Equilíbrio com azeite, grãos, peixes e vegetais",
-    meals: {
-      "Café": "Pão integral + azeite + frutas",
-      "Almoço": "Peixe + arroz integral + salada",
-      "Jantar": "Sopa de legumes + grão-de-bico",
-      "Lanches": "Frutas, nozes, hummus"
-    },
-    macros: { prot: "25%", carb: "45%", fat: "30%" }
-  },
-  {
-    name: "Hiperproteica",
-    desc: "Ideal para ganho de massa muscular",
-    meals: {
-      "Café": "Shake de whey + aveia + banana",
-      "Almoço": "Peito de frango 200g + arroz + feijão + salada",
-      "Jantar": "Carne magra + batata-doce + brócolis",
-      "Lanches": "Whey, ovos, queijo cottage"
-    },
-    macros: { prot: "40%", carb: "35%", fat: "25%" }
-  },
-  {
-    name: "Vegana Equilibrada",
-    desc: "Proteínas vegetais combinadas para nutrição completa",
-    meals: {
-      "Café": "Tofu mexido + pão integral + suco verde",
-      "Almoço": "Arroz + lentilha + legumes salteados",
-      "Jantar": "Grão-de-bico assado + quinoa + verduras",
-      "Lanches": "Pasta de amendoim, frutas, granola"
-    },
-    macros: { prot: "25%", carb: "50%", fat: "25%" }
-  },
+  { name: "Low Carb", desc: "Redução de carboidratos, foco em proteínas e gorduras boas", meals: { "Café": "Ovos mexidos + abacate + café sem açúcar", "Almoço": "Frango grelhado + salada + azeite", "Jantar": "Salmão + legumes assados", "Lanches": "Castanhas, queijo, iogurte natural" }, macros: { prot: "30%", carb: "20%", fat: "50%" } },
+  { name: "Mediterrânea", desc: "Equilíbrio com azeite, grãos, peixes e vegetais", meals: { "Café": "Pão integral + azeite + frutas", "Almoço": "Peixe + arroz integral + salada", "Jantar": "Sopa de legumes + grão-de-bico", "Lanches": "Frutas, nozes, hummus" }, macros: { prot: "25%", carb: "45%", fat: "30%" } },
+  { name: "Hiperproteica", desc: "Ideal para ganho de massa muscular", meals: { "Café": "Shake de whey + aveia + banana", "Almoço": "Peito de frango 200g + arroz + feijão + salada", "Jantar": "Carne magra + batata-doce + brócolis", "Lanches": "Whey, ovos, queijo cottage" }, macros: { prot: "40%", carb: "35%", fat: "25%" } },
+  { name: "Vegana Equilibrada", desc: "Proteínas vegetais combinadas para nutrição completa", meals: { "Café": "Tofu mexido + pão integral + suco verde", "Almoço": "Arroz + lentilha + legumes salteados", "Jantar": "Grão-de-bico assado + quinoa + verduras", "Lanches": "Pasta de amendoim, frutas, granola" }, macros: { prot: "25%", carb: "50%", fat: "25%" } },
 ];
 
 const nutritionTable = [
@@ -150,48 +115,64 @@ const supplements = [
   { name: "Probióticos", dose: "10-50 bilhões UFC/dia", benefit: "Intestino, imunidade, absorção de nutrientes", tip: "Escolha multi-cepas. Refrigerados são geralmente melhores." },
 ];
 
+const activityMultipliers: Record<string, { label: string; factor: number }> = {
+  sedentario: { label: "Sedentária", factor: 1.2 },
+  leve: { label: "Levemente ativa", factor: 1.375 },
+  moderado: { label: "Moderadamente ativa", factor: 1.55 },
+  ativo: { label: "Muito ativa", factor: 1.725 },
+  muito_ativo: { label: "Extremamente ativa", factor: 1.9 },
+};
+
+function calculateTMB(weight: number, height: number, age: number, sex: string): number {
+  // Mifflin-St Jeor
+  if (sex === "masculino") {
+    return 10 * weight + 6.25 * height - 5 * age + 5;
+  }
+  return 10 * weight + 6.25 * height - 5 * age - 161;
+}
+
+async function uploadPhoto(userId: string, file: File, folder: string): Promise<string | null> {
+  const ext = file.name.split(".").pop();
+  const path = `${userId}/${folder}/${Date.now()}.${ext}`;
+  const { error } = await supabase.storage.from("health-media").upload(path, file);
+  if (error) { toast.error("Erro ao enviar foto"); return null; }
+  const { data } = supabase.storage.from("health-media").getPublicUrl(path);
+  return data.publicUrl;
+}
+
 export default function SaudePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("perfil");
 
-  // Health profile
-  const [profile, setProfile] = useState<HealthProfile>({ goal: "emagrecer", current_weight: null, target_weight: null, height_cm: null });
+  const [profile, setProfile] = useState<HealthProfile>({ goal: "emagrecer", current_weight: null, target_weight: null, height_cm: null, age: null, sex: "feminino", activity_level: "moderado" });
   const [editingProfile, setEditingProfile] = useState(false);
 
-  // Weight records
   const [weightRecords, setWeightRecords] = useState<WeightRecord[]>([]);
   const [newWeight, setNewWeight] = useState("");
   const [newWeightNote, setNewWeightNote] = useState("");
+  const [weightPhoto, setWeightPhoto] = useState<File | null>(null);
+  const weightFileRef = useRef<HTMLInputElement>(null);
 
-  // Diet
   const [dietEntries, setDietEntries] = useState<DietEntry[]>([]);
   const [showDietForm, setShowDietForm] = useState(false);
   const [dietForm, setDietForm] = useState({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" });
   const [editingDietId, setEditingDietId] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy-MM-dd"));
+  const [dietPhoto, setDietPhoto] = useState<File | null>(null);
+  const dietFileRef = useRef<HTMLInputElement>(null);
 
-  // Exercise
   const [exerciseEntries, setExerciseEntries] = useState<ExerciseEntry[]>([]);
   const [showExerciseForm, setShowExerciseForm] = useState(false);
   const [exerciseForm, setExerciseForm] = useState({ exercise_name: "", category: "cardio", duration_minutes: "", sets: "", reps: "", weight_kg: "", calories_burned: "", notes: "" });
   const [editingExerciseId, setEditingExerciseId] = useState<string | null>(null);
   const [exerciseDate, setExerciseDate] = useState(format(new Date(), "yyyy-MM-dd"));
 
-  useEffect(() => {
-    if (user) {
-      loadProfile();
-      loadWeightRecords();
-    }
-  }, [user]);
+  const [expandedWeightPhoto, setExpandedWeightPhoto] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (user) loadDietEntries();
-  }, [user, selectedDate]);
-
-  useEffect(() => {
-    if (user) loadExerciseEntries();
-  }, [user, exerciseDate]);
+  useEffect(() => { if (user) { loadProfile(); loadWeightRecords(); } }, [user]);
+  useEffect(() => { if (user) loadDietEntries(); }, [user, selectedDate]);
+  useEffect(() => { if (user) loadExerciseEntries(); }, [user, exerciseDate]);
 
   async function loadProfile() {
     const { data } = await supabase.from("health_profiles").select("*").eq("user_id", user!.id).maybeSingle();
@@ -200,33 +181,32 @@ export default function SaudePage() {
 
   async function saveProfile() {
     if (!user) return;
-    const payload = { user_id: user.id, goal: profile.goal, current_weight: profile.current_weight, target_weight: profile.target_weight, height_cm: profile.height_cm };
+    const payload = { user_id: user.id, goal: profile.goal, current_weight: profile.current_weight, target_weight: profile.target_weight, height_cm: profile.height_cm, age: profile.age, sex: profile.sex, activity_level: profile.activity_level };
     let error;
     if (profile.id) {
       ({ error } = await supabase.from("health_profiles").update(payload).eq("id", profile.id));
     } else {
       ({ error } = await supabase.from("health_profiles").insert(payload));
     }
-    if (error) {
-      toast.error("Erro ao salvar perfil: " + error.message);
-      return;
-    }
+    if (error) { toast.error("Erro ao salvar perfil: " + error.message); return; }
     await loadProfile();
     setEditingProfile(false);
     toast.success("Perfil salvo!");
   }
 
   async function loadWeightRecords() {
-    const { data } = await supabase.from("weight_records").select("*").eq("user_id", user!.id).order("recorded_at", { ascending: false }).limit(30);
+    const { data } = await supabase.from("weight_records").select("*").eq("user_id", user!.id).order("recorded_at", { ascending: false }).limit(90);
     if (data) setWeightRecords(data as any);
   }
 
   async function addWeightRecord() {
     if (!user || !newWeight) return;
-    const { error } = await supabase.from("weight_records").insert({ user_id: user.id, weight: parseFloat(newWeight), note: newWeightNote || null });
+    let photoUrl: string | null = null;
+    if (weightPhoto) { photoUrl = await uploadPhoto(user.id, weightPhoto, "weight"); }
+    const { error } = await supabase.from("weight_records").insert({ user_id: user.id, weight: parseFloat(newWeight), note: newWeightNote || null, photo_url: photoUrl });
     if (error) { toast.error("Erro ao registrar peso: " + error.message); return; }
-    setNewWeight("");
-    setNewWeightNote("");
+    setNewWeight(""); setNewWeightNote(""); setWeightPhoto(null);
+    if (weightFileRef.current) weightFileRef.current.value = "";
     await loadWeightRecords();
     await supabase.from("health_profiles").update({ current_weight: parseFloat(newWeight) }).eq("user_id", user.id);
     await loadProfile();
@@ -246,16 +226,14 @@ export default function SaudePage() {
 
   async function saveDietEntry() {
     if (!user || !dietForm.description.trim()) { toast.error("Preencha a descrição da refeição"); return; }
-    const payload = {
-      user_id: user.id,
-      meal_type: dietForm.meal_type,
-      description: dietForm.description.trim(),
-      calories: dietForm.calories ? parseInt(dietForm.calories) : null,
-      protein: dietForm.protein ? parseFloat(dietForm.protein) : null,
-      carbs: dietForm.carbs ? parseFloat(dietForm.carbs) : null,
-      fat: dietForm.fat ? parseFloat(dietForm.fat) : null,
-      entry_date: selectedDate,
+    let photoUrl: string | null = null;
+    if (dietPhoto) { photoUrl = await uploadPhoto(user.id, dietPhoto, "diet"); }
+    const payload: any = {
+      user_id: user.id, meal_type: dietForm.meal_type, description: dietForm.description.trim(),
+      calories: dietForm.calories ? parseInt(dietForm.calories) : null, protein: dietForm.protein ? parseFloat(dietForm.protein) : null,
+      carbs: dietForm.carbs ? parseFloat(dietForm.carbs) : null, fat: dietForm.fat ? parseFloat(dietForm.fat) : null, entry_date: selectedDate,
     };
+    if (photoUrl) payload.photo_url = photoUrl;
     let error;
     if (editingDietId) {
       ({ error } = await supabase.from("diet_entries").update(payload).eq("id", editingDietId));
@@ -265,20 +243,15 @@ export default function SaudePage() {
     }
     if (error) { toast.error("Erro ao salvar refeição: " + error.message); return; }
     setDietForm({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" });
+    setDietPhoto(null);
+    if (dietFileRef.current) dietFileRef.current.value = "";
     setShowDietForm(false);
     await loadDietEntries();
     toast.success(editingDietId ? "Refeição atualizada!" : "Refeição registrada!");
   }
 
   function editDietEntry(entry: DietEntry) {
-    setDietForm({
-      meal_type: entry.meal_type,
-      description: entry.description,
-      calories: entry.calories?.toString() || "",
-      protein: entry.protein?.toString() || "",
-      carbs: entry.carbs?.toString() || "",
-      fat: entry.fat?.toString() || "",
-    });
+    setDietForm({ meal_type: entry.meal_type, description: entry.description, calories: entry.calories?.toString() || "", protein: entry.protein?.toString() || "", carbs: entry.carbs?.toString() || "", fat: entry.fat?.toString() || "" });
     setEditingDietId(entry.id);
     setShowDietForm(true);
   }
@@ -297,16 +270,12 @@ export default function SaudePage() {
   async function saveExerciseEntry() {
     if (!user || !exerciseForm.exercise_name.trim()) { toast.error("Preencha o nome do exercício"); return; }
     const payload = {
-      user_id: user.id,
-      exercise_name: exerciseForm.exercise_name.trim(),
-      category: exerciseForm.category,
+      user_id: user.id, exercise_name: exerciseForm.exercise_name.trim(), category: exerciseForm.category,
       duration_minutes: exerciseForm.duration_minutes ? parseInt(exerciseForm.duration_minutes) : null,
-      sets: exerciseForm.sets ? parseInt(exerciseForm.sets) : null,
-      reps: exerciseForm.reps ? parseInt(exerciseForm.reps) : null,
+      sets: exerciseForm.sets ? parseInt(exerciseForm.sets) : null, reps: exerciseForm.reps ? parseInt(exerciseForm.reps) : null,
       weight_kg: exerciseForm.weight_kg ? parseFloat(exerciseForm.weight_kg) : null,
       calories_burned: exerciseForm.calories_burned ? parseInt(exerciseForm.calories_burned) : null,
-      entry_date: exerciseDate,
-      notes: exerciseForm.notes || null,
+      entry_date: exerciseDate, notes: exerciseForm.notes || null,
     };
     let error;
     if (editingExerciseId) {
@@ -323,16 +292,7 @@ export default function SaudePage() {
   }
 
   function editExerciseEntry(entry: ExerciseEntry) {
-    setExerciseForm({
-      exercise_name: entry.exercise_name,
-      category: entry.category,
-      duration_minutes: entry.duration_minutes?.toString() || "",
-      sets: entry.sets?.toString() || "",
-      reps: entry.reps?.toString() || "",
-      weight_kg: entry.weight_kg?.toString() || "",
-      calories_burned: entry.calories_burned?.toString() || "",
-      notes: entry.notes || "",
-    });
+    setExerciseForm({ exercise_name: entry.exercise_name, category: entry.category, duration_minutes: entry.duration_minutes?.toString() || "", sets: entry.sets?.toString() || "", reps: entry.reps?.toString() || "", weight_kg: entry.weight_kg?.toString() || "", calories_burned: entry.calories_burned?.toString() || "", notes: entry.notes || "" });
     setEditingExerciseId(entry.id);
     setShowExerciseForm(true);
   }
@@ -354,22 +314,34 @@ export default function SaudePage() {
   })();
 
   const dailyTotals = dietEntries.reduce((acc, e) => ({
-    calories: acc.calories + (e.calories || 0),
-    protein: acc.protein + (e.protein || 0),
-    carbs: acc.carbs + (e.carbs || 0),
-    fat: acc.fat + (e.fat || 0),
+    calories: acc.calories + (e.calories || 0), protein: acc.protein + (e.protein || 0), carbs: acc.carbs + (e.carbs || 0), fat: acc.fat + (e.fat || 0),
   }), { calories: 0, protein: 0, carbs: 0, fat: 0 });
 
-  const bmi = profile.current_weight && profile.height_cm
-    ? (profile.current_weight / Math.pow(profile.height_cm / 100, 2)).toFixed(1)
+  const bmi = profile.current_weight && profile.height_cm ? (profile.current_weight / Math.pow(profile.height_cm / 100, 2)).toFixed(1) : null;
+
+  const tmb = profile.current_weight && profile.height_cm && profile.age
+    ? calculateTMB(profile.current_weight, profile.height_cm, profile.age, profile.sex)
     : null;
+
+  const dailyCalories = tmb ? Math.round(tmb * (activityMultipliers[profile.activity_level]?.factor || 1.55)) : null;
+
+  const goalCalories = dailyCalories ? (
+    profile.goal === "emagrecer" ? Math.round(dailyCalories - 500) :
+    profile.goal === "ganhar_massa" ? Math.round(dailyCalories + 300) :
+    dailyCalories
+  ) : null;
+
+  // Chart data
+  const chartData = [...weightRecords].reverse().map((r) => ({
+    date: format(new Date(r.recorded_at), "dd/MM"),
+    peso: Number(r.weight),
+  }));
 
   return (
     <div className="min-h-screen pb-20 pt-6 px-4 max-w-2xl mx-auto">
       <div className="mb-6">
         <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3 transition-colors">
-          <ArrowLeft className="h-4 w-4" />
-          Voltar
+          <ArrowLeft className="h-4 w-4" /> Voltar
         </button>
         <div className="flex items-center gap-2 mb-2">
           <Heart className="h-5 w-5 text-primary" />
@@ -416,6 +388,22 @@ export default function SaudePage() {
                       </SelectContent>
                     </Select>
                   </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-xs text-muted-foreground mb-1 block">Sexo</label>
+                      <Select value={profile.sex} onValueChange={(v) => setProfile({ ...profile, sex: v })}>
+                        <SelectTrigger className="text-xs"><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="feminino">Feminino</SelectItem>
+                          <SelectItem value="masculino">Masculino</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-muted-foreground mb-1 block">Idade</label>
+                      <Input type="number" value={profile.age || ""} onChange={(e) => setProfile({ ...profile, age: e.target.value ? parseInt(e.target.value) : null })} placeholder="Idade" />
+                    </div>
+                  </div>
                   <div className="grid grid-cols-3 gap-2">
                     <div>
                       <label className="text-xs text-muted-foreground mb-1 block">Peso atual (kg)</label>
@@ -430,21 +418,29 @@ export default function SaudePage() {
                       <Input type="number" value={profile.height_cm || ""} onChange={(e) => setProfile({ ...profile, height_cm: e.target.value ? parseFloat(e.target.value) : null })} />
                     </div>
                   </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 block">Nível de Atividade</label>
+                    <Select value={profile.activity_level} onValueChange={(v) => setProfile({ ...profile, activity_level: v })}>
+                      <SelectTrigger className="text-xs"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {Object.entries(activityMultipliers).map(([k, v]) => (
+                          <SelectItem key={k} value={k}>{v.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                   <Button onClick={saveProfile} className="w-full" size="sm">
                     <Check className="h-4 w-4 mr-1" /> Salvar Perfil
                   </Button>
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <div className="flex items-center gap-3 flex-wrap">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
                       {profile.goal === "emagrecer" ? "🔥 Emagrecer" : profile.goal === "ganhar_massa" ? "💪 Ganhar Massa" : profile.goal === "manter" ? "⚖️ Manter" : "❤️ Saúde"}
                     </span>
-                    {bmi && (
-                      <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-xs">
-                        IMC: {bmi}
-                      </span>
-                    )}
+                    {bmi && <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-xs">IMC: {bmi}</span>}
+                    {profile.age && <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-xs">{profile.age} anos</span>}
                   </div>
                   <div className="grid grid-cols-3 gap-3 text-center">
                     <div className="p-2 rounded-lg bg-muted/50">
@@ -475,13 +471,68 @@ export default function SaudePage() {
                       )}
                     </div>
                   )}
-                  {!profile.id && (
-                    <p className="text-xs text-muted-foreground italic">Clique no ícone de edição para configurar seu perfil</p>
-                  )}
+                  {!profile.id && <p className="text-xs text-muted-foreground italic">Clique no ícone de edição para configurar seu perfil</p>}
                 </div>
               )}
             </CardContent>
           </Card>
+
+          {/* TMB Calculator */}
+          {tmb && dailyCalories && goalCalories && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Calculator className="h-4 w-4 text-primary" /> Calculadora TMB & Calorias
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="p-3 rounded-lg bg-muted/50">
+                    <p className="text-lg font-bold text-foreground">{Math.round(tmb)}</p>
+                    <p className="text-[10px] text-muted-foreground">TMB (kcal)</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-muted/50">
+                    <p className="text-lg font-bold text-foreground">{dailyCalories}</p>
+                    <p className="text-[10px] text-muted-foreground">Gasto Diário</p>
+                  </div>
+                  <div className="p-3 rounded-lg bg-primary/10">
+                    <p className="text-lg font-bold text-primary">{goalCalories}</p>
+                    <p className="text-[10px] text-muted-foreground">Meta kcal/dia</p>
+                  </div>
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-2 text-center">
+                  {profile.goal === "emagrecer" ? "🔥 Déficit de 500 kcal para perda saudável (~0.5 kg/semana)" : profile.goal === "ganhar_massa" ? "💪 Superávit de 300 kcal para ganho de massa" : "⚖️ Manutenção do peso atual"}
+                </p>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Weight Chart */}
+          {chartData.length >= 2 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  📈 Evolução do Peso
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-48 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="date" tick={{ fontSize: 10 }} className="text-muted-foreground" />
+                      <YAxis domain={["dataMin - 1", "dataMax + 1"]} tick={{ fontSize: 10 }} className="text-muted-foreground" />
+                      <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid hsl(var(--border))", background: "hsl(var(--card))" }} />
+                      {profile.target_weight && (
+                        <ReferenceLine y={profile.target_weight} stroke="hsl(var(--primary))" strokeDasharray="5 5" label={{ value: "Meta", fontSize: 10, fill: "hsl(var(--primary))" }} />
+                      )}
+                      <Line type="monotone" dataKey="peso" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3, fill: "hsl(var(--primary))" }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Weight Log */}
           <Card>
@@ -491,26 +542,45 @@ export default function SaudePage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="flex gap-2">
-                <Input type="number" step="0.1" placeholder="Peso (kg)" value={newWeight} onChange={(e) => setNewWeight(e.target.value)} className="flex-1" />
-                <Input placeholder="Nota (opcional)" value={newWeightNote} onChange={(e) => setNewWeightNote(e.target.value)} className="flex-1" />
-                <Button size="sm" onClick={addWeightRecord} disabled={!newWeight}>
-                  <Plus className="h-4 w-4" />
-                </Button>
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  <Input type="number" step="0.1" placeholder="Peso (kg)" value={newWeight} onChange={(e) => setNewWeight(e.target.value)} className="flex-1" />
+                  <Input placeholder="Nota (opcional)" value={newWeightNote} onChange={(e) => setNewWeightNote(e.target.value)} className="flex-1" />
+                </div>
+                <div className="flex gap-2">
+                  <input ref={weightFileRef} type="file" accept="image/*" className="hidden" onChange={(e) => setWeightPhoto(e.target.files?.[0] || null)} />
+                  <Button variant="outline" size="sm" className="flex-1 text-xs" onClick={() => weightFileRef.current?.click()}>
+                    <Camera className="h-3 w-3 mr-1" /> {weightPhoto ? weightPhoto.name.slice(0, 15) + "…" : "Foto evolução"}
+                  </Button>
+                  <Button size="sm" onClick={addWeightRecord} disabled={!newWeight}>
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
               <div className="space-y-2 max-h-60 overflow-y-auto">
                 {weightRecords.map((r) => (
-                  <div key={r.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/30 text-sm">
-                    <div>
-                      <span className="font-semibold text-foreground">{Number(r.weight).toFixed(1)} kg</span>
-                      <span className="text-muted-foreground text-xs ml-2">
-                        {format(new Date(r.recorded_at), "dd/MM/yyyy", { locale: ptBR })}
-                      </span>
-                      {r.note && <span className="text-xs text-muted-foreground ml-2">— {r.note}</span>}
+                  <div key={r.id} className="p-2 rounded-lg bg-muted/30 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="font-semibold text-foreground text-sm">{Number(r.weight).toFixed(1)} kg</span>
+                        <span className="text-muted-foreground text-xs ml-2">{format(new Date(r.recorded_at), "dd/MM/yyyy", { locale: ptBR })}</span>
+                        {r.note && <span className="text-xs text-muted-foreground ml-2">— {r.note}</span>}
+                      </div>
+                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => deleteWeightRecord(r.id)}>
+                        <Trash2 className="h-3 w-3 text-destructive" />
+                      </Button>
                     </div>
-                    <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => deleteWeightRecord(r.id)}>
-                      <Trash2 className="h-3 w-3 text-destructive" />
-                    </Button>
+                    {r.photo_url && (
+                      <img
+                        src={r.photo_url}
+                        alt="Evolução"
+                        className="w-full max-h-32 object-cover rounded-lg cursor-pointer"
+                        onClick={() => setExpandedWeightPhoto(expandedWeightPhoto === r.id ? null : r.id)}
+                      />
+                    )}
+                    {expandedWeightPhoto === r.id && r.photo_url && (
+                      <img src={r.photo_url} alt="Evolução ampliada" className="w-full rounded-lg" />
+                    )}
                   </div>
                 ))}
                 {weightRecords.length === 0 && <p className="text-xs text-muted-foreground text-center py-4">Nenhum registro ainda</p>}
@@ -521,12 +591,9 @@ export default function SaudePage() {
 
         {/* ====== DIETA ====== */}
         <TabsContent value="dieta" className="space-y-4">
-          {/* Diet Plans */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Apple className="h-4 w-4 text-primary" /> Opções de Dieta
-              </CardTitle>
+              <CardTitle className="text-base flex items-center gap-2"><Apple className="h-4 w-4 text-primary" /> Opções de Dieta</CardTitle>
               <CardDescription>Escolha um plano base e adapte ao seu perfil</CardDescription>
             </CardHeader>
             <CardContent>
@@ -538,17 +605,12 @@ export default function SaudePage() {
                       <p className="text-xs text-muted-foreground">{plan.desc}</p>
                       <div className="flex gap-2">
                         {Object.entries(plan.macros).map(([k, v]) => (
-                          <span key={k} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase">
-                            {k}: {v}
-                          </span>
+                          <span key={k} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase">{k}: {v}</span>
                         ))}
                       </div>
                       <div className="space-y-1 mt-2">
                         {Object.entries(plan.meals).map(([meal, desc]) => (
-                          <div key={meal} className="text-xs">
-                            <span className="font-semibold text-foreground">{meal}:</span>{" "}
-                            <span className="text-muted-foreground">{desc}</span>
-                          </div>
+                          <div key={meal} className="text-xs"><span className="font-semibold text-foreground">{meal}:</span> <span className="text-muted-foreground">{desc}</span></div>
                         ))}
                       </div>
                     </AccordionContent>
@@ -562,14 +624,11 @@ export default function SaudePage() {
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Utensils className="h-4 w-4 text-primary" /> Registro Diário
-                </CardTitle>
+                <CardTitle className="text-base flex items-center gap-2"><Utensils className="h-4 w-4 text-primary" /> Registro Diário</CardTitle>
                 <Input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} className="w-36 text-xs" />
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
-              {/* Daily totals */}
               {dietEntries.length > 0 && (
                 <div className="grid grid-cols-4 gap-2 text-center">
                   <div className="p-2 rounded-lg bg-primary/10">
@@ -591,8 +650,18 @@ export default function SaudePage() {
                 </div>
               )}
 
+              {goalCalories && dietEntries.length > 0 && (
+                <div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-muted-foreground">Calorias consumidas / meta</span>
+                    <span className="font-semibold text-primary">{dailyTotals.calories} / {goalCalories} kcal</span>
+                  </div>
+                  <Progress value={Math.min(100, (dailyTotals.calories / goalCalories) * 100)} className="h-2" />
+                </div>
+              )}
+
               {!showDietForm && (
-                <Button variant="outline" className="w-full" size="sm" onClick={() => { setShowDietForm(true); setEditingDietId(null); setDietForm({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" }); }}>
+                <Button variant="outline" className="w-full" size="sm" onClick={() => { setShowDietForm(true); setEditingDietId(null); setDietForm({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" }); setDietPhoto(null); }}>
                   <Plus className="h-4 w-4 mr-1" /> Adicionar Refeição
                 </Button>
               )}
@@ -611,6 +680,12 @@ export default function SaudePage() {
                     <Input type="number" placeholder="Prot (g)" value={dietForm.protein} onChange={(e) => setDietForm({ ...dietForm, protein: e.target.value })} className="text-xs" />
                     <Input type="number" placeholder="Carb (g)" value={dietForm.carbs} onChange={(e) => setDietForm({ ...dietForm, carbs: e.target.value })} className="text-xs" />
                     <Input type="number" placeholder="Gord (g)" value={dietForm.fat} onChange={(e) => setDietForm({ ...dietForm, fat: e.target.value })} className="text-xs" />
+                  </div>
+                  <div>
+                    <input ref={dietFileRef} type="file" accept="image/*" className="hidden" onChange={(e) => setDietPhoto(e.target.files?.[0] || null)} />
+                    <Button variant="outline" size="sm" className="w-full text-xs" onClick={() => dietFileRef.current?.click()}>
+                      <Camera className="h-3 w-3 mr-1" /> {dietPhoto ? dietPhoto.name.slice(0, 20) + "…" : "📸 Foto da refeição"}
+                    </Button>
                   </div>
                   <div className="flex gap-2">
                     <Button size="sm" onClick={saveDietEntry} className="flex-1">
@@ -631,15 +706,14 @@ export default function SaudePage() {
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-semibold text-primary">{mealLabel}</span>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => editDietEntry(entry)}>
-                            <Edit2 className="h-3 w-3" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => deleteDietEntry(entry.id)}>
-                            <Trash2 className="h-3 w-3 text-destructive" />
-                          </Button>
+                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => editDietEntry(entry)}><Edit2 className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => deleteDietEntry(entry.id)}><Trash2 className="h-3 w-3 text-destructive" /></Button>
                         </div>
                       </div>
                       <p className="text-sm text-foreground">{entry.description}</p>
+                      {entry.photo_url && (
+                        <img src={entry.photo_url} alt="Refeição" className="w-full max-h-40 object-cover rounded-lg" />
+                      )}
                       {(entry.calories || entry.protein || entry.carbs || entry.fat) && (
                         <div className="flex gap-3 text-[10px] text-muted-foreground">
                           {entry.calories && <span>{entry.calories} kcal</span>}
@@ -662,9 +736,7 @@ export default function SaudePage() {
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Dumbbell className="h-4 w-4 text-primary" /> Meus Exercícios
-                </CardTitle>
+                <CardTitle className="text-base flex items-center gap-2"><Dumbbell className="h-4 w-4 text-primary" /> Meus Exercícios</CardTitle>
                 <Input type="date" value={exerciseDate} onChange={(e) => setExerciseDate(e.target.value)} className="w-36 text-xs" />
               </div>
             </CardHeader>
@@ -716,12 +788,8 @@ export default function SaudePage() {
                           <span className="text-[10px] text-primary ml-2">{catLabel}</span>
                         </div>
                         <div className="flex gap-1">
-                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => editExerciseEntry(entry)}>
-                            <Edit2 className="h-3 w-3" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => deleteExerciseEntry(entry.id)}>
-                            <Trash2 className="h-3 w-3 text-destructive" />
-                          </Button>
+                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => editExerciseEntry(entry)}><Edit2 className="h-3 w-3" /></Button>
+                          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => deleteExerciseEntry(entry.id)}><Trash2 className="h-3 w-3 text-destructive" /></Button>
                         </div>
                       </div>
                       <div className="flex gap-3 text-[10px] text-muted-foreground flex-wrap">
@@ -744,9 +812,7 @@ export default function SaudePage() {
         <TabsContent value="tabela" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                📊 Tabela Nutricional
-              </CardTitle>
+              <CardTitle className="text-base flex items-center gap-2">📊 Tabela Nutricional</CardTitle>
               <CardDescription>Valores nutricionais dos alimentos mais comuns</CardDescription>
             </CardHeader>
             <CardContent>
@@ -782,9 +848,7 @@ export default function SaudePage() {
         <TabsContent value="suplem" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Pill className="h-4 w-4 text-primary" /> Suplementação & Vitaminas
-              </CardTitle>
+              <CardTitle className="text-base flex items-center gap-2"><Pill className="h-4 w-4 text-primary" /> Suplementação & Vitaminas</CardTitle>
               <CardDescription>Dicas baseadas em evidências científicas</CardDescription>
             </CardHeader>
             <CardContent>
