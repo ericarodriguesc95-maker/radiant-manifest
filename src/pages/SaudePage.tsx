@@ -1419,7 +1419,12 @@ export default function SaudePage() {
                     <p className="text-[10px] text-muted-foreground mb-1">Adicionar rápido:</p>
                     <div className="flex flex-wrap gap-1">
                       {supplementSuggestions.slice(0, 6).map((s) => (
-                        <button key={s.name} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] hover:bg-primary/20 transition-colors" onClick={() => setSuppForm({ ...suppForm, name: s.name, dose: s.dose })}>
+                        <button
+                          type="button"
+                          key={s.name}
+                          className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] hover:bg-primary/20 transition-colors"
+                          onClick={() => setSuppForm({ ...suppForm, name: s.name, dose: s.dose })}
+                        >
                           {s.name}
                         </button>
                       ))}
