@@ -1145,19 +1145,38 @@ export default function SaudePage() {
               )}
 
               {!showDietForm && (
-                <Button variant="outline" className="w-full" size="sm" onClick={() => { setShowDietForm(true); setEditingDietId(null); setDietForm({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" }); setDietPhoto(null); setSelectedFoods([]); }}>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  size="sm"
+                  onClick={() => {
+                    setShowDietForm(true);
+                    setEditingDietId(null);
+                    setDietForm(createDefaultDietForm());
+                    setDietPhoto(null);
+                    setSelectedFoods([]);
+                  }}
+                >
                   <Plus className="h-4 w-4 mr-1" /> Adicionar Refeição
                 </Button>
               )}
 
               {showDietForm && (
                 <div className="space-y-2 p-3 rounded-lg border border-border">
-                  <Select value={dietForm.meal_type} onValueChange={(v) => setDietForm({ ...dietForm, meal_type: v })}>
-                    <SelectTrigger className="text-xs"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {mealTypes.map((m) => <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      type="time"
+                      value={dietForm.meal_time}
+                      onChange={(e) => setDietForm({ ...dietForm, meal_time: e.target.value })}
+                      className="text-xs"
+                    />
+                    <Input
+                      placeholder="Tipo da refeição (ex: almoço, café, lanche)"
+                      value={dietForm.meal_label}
+                      onChange={(e) => setDietForm({ ...dietForm, meal_label: e.target.value })}
+                      className="text-xs"
+                    />
+                  </div>
 
                   {/* Food search */}
                   <div className="relative">
