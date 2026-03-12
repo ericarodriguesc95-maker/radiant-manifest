@@ -259,6 +259,7 @@ export type Database = {
           fat: number | null
           id: string
           meal_type: string
+          photo_url: string | null
           protein: number | null
           user_id: string
         }
@@ -271,6 +272,7 @@ export type Database = {
           fat?: number | null
           id?: string
           meal_type?: string
+          photo_url?: string | null
           protein?: number | null
           user_id: string
         }
@@ -283,6 +285,7 @@ export type Database = {
           fat?: number | null
           id?: string
           meal_type?: string
+          photo_url?: string | null
           protein?: number | null
           user_id?: string
         }
@@ -498,31 +501,40 @@ export type Database = {
       }
       health_profiles: {
         Row: {
+          activity_level: string
+          age: number | null
           created_at: string
           current_weight: number | null
           goal: string
           height_cm: number | null
           id: string
+          sex: string
           target_weight: number | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          activity_level?: string
+          age?: number | null
           created_at?: string
           current_weight?: number | null
           goal?: string
           height_cm?: number | null
           id?: string
+          sex?: string
           target_weight?: number | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          activity_level?: string
+          age?: number | null
           created_at?: string
           current_weight?: number | null
           goal?: string
           height_cm?: number | null
           id?: string
+          sex?: string
           target_weight?: number | null
           updated_at?: string
           user_id?: string
@@ -923,6 +935,7 @@ export type Database = {
           created_at: string
           id: string
           note: string | null
+          photo_url: string | null
           recorded_at: string
           user_id: string
           weight: number
@@ -931,6 +944,7 @@ export type Database = {
           created_at?: string
           id?: string
           note?: string | null
+          photo_url?: string | null
           recorded_at?: string
           user_id: string
           weight: number
@@ -939,6 +953,7 @@ export type Database = {
           created_at?: string
           id?: string
           note?: string | null
+          photo_url?: string | null
           recorded_at?: string
           user_id?: string
           weight?: number
