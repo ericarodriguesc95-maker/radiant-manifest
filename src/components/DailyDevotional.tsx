@@ -262,8 +262,9 @@ function getDevotionalForDate(religion: Religion, date: Date): Devotional {
 
 export default function DailyDevotional() {
   const [religion, setReligion] = useState<Religion | null>(() => {
-    const saved = localStorage.getItem("user-religion");
-    return saved as Religion | null;
+    const saved = localStorage.getItem("user-religion") as Religion | null;
+    if (saved && religionLabels[saved]) return saved;
+    return null;
   });
 
   const [viewDate, setViewDate] = useState(new Date());
