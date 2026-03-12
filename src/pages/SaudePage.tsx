@@ -306,9 +306,19 @@ export default function SaudePage() {
   const [expandedWeightPhoto, setExpandedWeightPhoto] = useState<string | null>(null);
 
   // Diet
+  const createDefaultDietForm = () => ({
+    meal_label: "",
+    meal_time: format(new Date(), "HH:mm"),
+    description: "",
+    calories: "",
+    protein: "",
+    carbs: "",
+    fat: "",
+  });
+
   const [dietEntries, setDietEntries] = useState<DietEntry[]>([]);
   const [showDietForm, setShowDietForm] = useState(false);
-  const [dietForm, setDietForm] = useState({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" });
+  const [dietForm, setDietForm] = useState(createDefaultDietForm);
   const [editingDietId, setEditingDietId] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [dietPhoto, setDietPhoto] = useState<File | null>(null);
