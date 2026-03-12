@@ -1040,7 +1040,7 @@ export default function SaudePage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="font-semibold text-foreground text-sm">{Number(r.weight).toFixed(1)} kg</span>
-                        <span className="text-muted-foreground text-xs ml-2">{format(new Date(r.recorded_at), "dd/MM/yyyy", { locale: ptBR })}</span>
+                        <span className="text-muted-foreground text-xs ml-2">{formatDateLabel(r.recorded_at)}</span>
                         {r.note && <span className="text-xs text-muted-foreground ml-2">— {r.note}</span>}
                       </div>
                       <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => deleteWeightRecord(r.id)}><Trash2 className="h-3 w-3 text-destructive" /></Button>
