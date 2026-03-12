@@ -1248,7 +1248,19 @@ export default function SaudePage() {
                     <Button type="button" size="sm" onClick={saveDietEntry} className="flex-1">
                       <Check className="h-4 w-4 mr-1" /> {editingDietId ? "Atualizar" : "Salvar"}
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => { setShowDietForm(false); setEditingDietId(null); setSelectedFoods([]); }}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setShowDietForm(false);
+                        setEditingDietId(null);
+                        setDietForm(createDefaultDietForm());
+                        setDietPhoto(null);
+                        setSelectedFoods([]);
+                        setFoodSearch("");
+                        if (dietFileRef.current) dietFileRef.current.value = "";
+                      }}
+                    >
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
