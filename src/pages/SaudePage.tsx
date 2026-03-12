@@ -83,15 +83,6 @@ interface SupplementCheckin {
 }
 
 // ============ CONSTANTS ============
-const mealTypes = [
-  { value: "café_da_manhã", label: "☀️ Café da Manhã" },
-  { value: "lanche_manhã", label: "🍎 Lanche da Manhã" },
-  { value: "almoço", label: "🍽️ Almoço" },
-  { value: "lanche_tarde", label: "🥤 Lanche da Tarde" },
-  { value: "jantar", label: "🌙 Jantar" },
-  { value: "ceia", label: "🍵 Ceia" },
-];
-
 const exerciseCategories = [
   { value: "cardio", label: "🏃‍♀️ Cardio" },
   { value: "musculação", label: "💪 Musculação" },
@@ -315,9 +306,19 @@ export default function SaudePage() {
   const [expandedWeightPhoto, setExpandedWeightPhoto] = useState<string | null>(null);
 
   // Diet
+  const createDefaultDietForm = () => ({
+    meal_label: "",
+    meal_time: format(new Date(), "HH:mm"),
+    description: "",
+    calories: "",
+    protein: "",
+    carbs: "",
+    fat: "",
+  });
+
   const [dietEntries, setDietEntries] = useState<DietEntry[]>([]);
   const [showDietForm, setShowDietForm] = useState(false);
-  const [dietForm, setDietForm] = useState({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" });
+  const [dietForm, setDietForm] = useState(createDefaultDietForm);
   const [editingDietId, setEditingDietId] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [dietPhoto, setDietPhoto] = useState<File | null>(null);
@@ -510,6 +511,19 @@ export default function SaudePage() {
   async function saveDietEntry() {
     if (!user) return;
 
+    const mealLabel = dietForm.meal_label.trim();
+    const mealTime = dietForm.meal_time.trim();
+
+    if (!mealLabel) {
+      toast.error("Informe o tipo da refeição (ex: café, almoço, janta)");
+      return;
+    }
+
+    if (mealTime && !/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(mealTime)) {
+      toast.error("Informe o horário no formato HH:mm");
+      return;
+    }
+
     let description = dietForm.description.trim();
     let calories = parseNumberOrNull(dietForm.calories);
     let protein = parseNumberOrNull(dietForm.protein);
@@ -537,7 +551,7 @@ export default function SaudePage() {
 
     const payload: any = {
       user_id: user.id,
-      meal_type: dietForm.meal_type,
+      meal_type: mealTime ? `${mealTime} - ${mealLabel}` : mealLabel,
       description,
       calories: calories !== null ? Math.round(calories) : null,
       protein: protein !== null ? Math.round(protein * 10) / 10 : null,
@@ -562,7 +576,7 @@ export default function SaudePage() {
       return;
     }
 
-    setDietForm({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" });
+    setDietForm(createDefaultDietForm());
     setDietPhoto(null);
     setSelectedFoods([]);
     setFoodSearch("");
@@ -574,8 +588,12 @@ export default function SaudePage() {
   }
 
   function editDietEntry(entry: DietEntry) {
+    const mealParts = entry.meal_type.split(" - ");
+    const hasTimePrefix = /^\d{2}:\d{2}$/.test(mealParts[0]);
+
     setDietForm({
-      meal_type: entry.meal_type,
+      meal_time: hasTimePrefix ? mealParts[0] : "",
+      meal_label: hasTimePrefix ? mealParts.slice(1).join(" - ") : entry.meal_type,
       description: entry.description,
       calories: entry.calories?.toString() || "",
       protein: entry.protein?.toString() || "",
@@ -1127,19 +1145,38 @@ export default function SaudePage() {
               )}
 
               {!showDietForm && (
-                <Button variant="outline" className="w-full" size="sm" onClick={() => { setShowDietForm(true); setEditingDietId(null); setDietForm({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" }); setDietPhoto(null); setSelectedFoods([]); }}>
+                <Button
+                  variant="outline"
+                  className="w-full"
+                  size="sm"
+                  onClick={() => {
+                    setShowDietForm(true);
+                    setEditingDietId(null);
+                    setDietForm(createDefaultDietForm());
+                    setDietPhoto(null);
+                    setSelectedFoods([]);
+                  }}
+                >
                   <Plus className="h-4 w-4 mr-1" /> Adicionar Refeição
                 </Button>
               )}
 
               {showDietForm && (
                 <div className="space-y-2 p-3 rounded-lg border border-border">
-                  <Select value={dietForm.meal_type} onValueChange={(v) => setDietForm({ ...dietForm, meal_type: v })}>
-                    <SelectTrigger className="text-xs"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {mealTypes.map((m) => <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      type="time"
+                      value={dietForm.meal_time}
+                      onChange={(e) => setDietForm({ ...dietForm, meal_time: e.target.value })}
+                      className="text-xs"
+                    />
+                    <Input
+                      placeholder="Tipo da refeição (ex: almoço, café, lanche)"
+                      value={dietForm.meal_label}
+                      onChange={(e) => setDietForm({ ...dietForm, meal_label: e.target.value })}
+                      className="text-xs"
+                    />
+                  </div>
 
                   {/* Food search */}
                   <div className="relative">
@@ -1211,7 +1248,19 @@ export default function SaudePage() {
                     <Button type="button" size="sm" onClick={saveDietEntry} className="flex-1">
                       <Check className="h-4 w-4 mr-1" /> {editingDietId ? "Atualizar" : "Salvar"}
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => { setShowDietForm(false); setEditingDietId(null); setSelectedFoods([]); }}>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        setShowDietForm(false);
+                        setEditingDietId(null);
+                        setDietForm(createDefaultDietForm());
+                        setDietPhoto(null);
+                        setSelectedFoods([]);
+                        setFoodSearch("");
+                        if (dietFileRef.current) dietFileRef.current.value = "";
+                      }}
+                    >
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
@@ -1220,11 +1269,10 @@ export default function SaudePage() {
 
               <div className="space-y-2">
                 {dietEntries.map((entry) => {
-                  const mealLabel = mealTypes.find((m) => m.value === entry.meal_type)?.label || entry.meal_type;
                   return (
                     <div key={entry.id} className="p-3 rounded-lg bg-muted/30 space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-semibold text-primary">{mealLabel}</span>
+                        <span className="text-xs font-semibold text-primary">{entry.meal_type}</span>
                         <div className="flex gap-1">
                           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => editDietEntry(entry)}><Edit2 className="h-3 w-3" /></Button>
                           <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => deleteDietEntry(entry.id)}><Trash2 className="h-3 w-3 text-destructive" /></Button>
