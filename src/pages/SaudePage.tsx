@@ -807,9 +807,15 @@ export default function SaudePage() {
     return Math.min(100, Math.max(0, Math.round(((diff - currentDiff) / diff) * 100)));
   })();
 
-  const dailyTotals = dietEntries.reduce((acc, e) => ({
-    calories: acc.calories + (e.calories || 0), protein: acc.protein + (e.protein || 0), carbs: acc.carbs + (e.carbs || 0), fat: acc.fat + (e.fat || 0),
-  }), { calories: 0, protein: 0, carbs: 0, fat: 0 });
+  const dailyTotals = dietEntries.reduce(
+    (acc, e) => ({
+      calories: acc.calories + parseNumber(e.calories),
+      protein: acc.protein + parseNumber(e.protein),
+      carbs: acc.carbs + parseNumber(e.carbs),
+      fat: acc.fat + parseNumber(e.fat),
+    }),
+    { calories: 0, protein: 0, carbs: 0, fat: 0 }
+  );
 
   const bmi = profile.current_weight && profile.height_cm ? (profile.current_weight / Math.pow(profile.height_cm / 100, 2)).toFixed(1) : null;
   const tmb = profile.current_weight && profile.height_cm && profile.age ? calculateTMB(profile.current_weight, profile.height_cm, profile.age, profile.sex) : null;
@@ -817,8 +823,8 @@ export default function SaudePage() {
   const goalCalories = dailyCalories ? (profile.goal === "emagrecer" ? Math.round(dailyCalories - 500) : profile.goal === "ganhar_massa" ? Math.round(dailyCalories + 300) : dailyCalories) : null;
 
   const chartData = [...weightRecords].reverse().map((r) => ({
-    date: format(new Date(r.recorded_at), "dd/MM"),
-    peso: Number(r.weight),
+    date: formatDateLabel(r.recorded_at),
+    peso: parseNumber(r.weight),
   }));
 
   const filteredFoods = foodSearch.length >= 2 ? foodDatabase.filter(f => f.food.toLowerCase().includes(foodSearch.toLowerCase())).slice(0, 8) : [];
