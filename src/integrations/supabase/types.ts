@@ -891,6 +891,41 @@ export type Database = {
           },
         ]
       }
+      supplement_checkins: {
+        Row: {
+          checkin_date: string
+          created_at: string
+          id: string
+          supplement_id: string
+          taken: boolean
+          user_id: string
+        }
+        Insert: {
+          checkin_date?: string
+          created_at?: string
+          id?: string
+          supplement_id: string
+          taken?: boolean
+          user_id: string
+        }
+        Update: {
+          checkin_date?: string
+          created_at?: string
+          id?: string
+          supplement_id?: string
+          taken?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplement_checkins_supplement_id_fkey"
+            columns: ["supplement_id"]
+            isOneToOne: false
+            referencedRelation: "user_supplements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_follows: {
         Row: {
           created_at: string
@@ -926,6 +961,39 @@ export type Database = {
         Update: {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_supplements: {
+        Row: {
+          category: string
+          created_at: string
+          dose: string
+          id: string
+          is_active: boolean
+          name: string
+          notes: string | null
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          dose?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          notes?: string | null
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          dose?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          notes?: string | null
           user_id?: string
         }
         Relationships: []
