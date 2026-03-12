@@ -857,7 +857,7 @@ export default function SaudePage() {
         </TabsList>
 
         <TabsContent value="perfil" className="space-y-4">
-         <ErrorBoundary fallbackMessage="Erro ao carregar Perfil">
+          <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
