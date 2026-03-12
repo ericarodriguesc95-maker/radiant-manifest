@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // ============ TYPES ============
 interface HealthProfile {
@@ -834,6 +835,7 @@ export default function SaudePage() {
   }), { cal: 0, prot: 0, carb: 0, fat: 0 });
 
   return (
+    <ErrorBoundary fallbackMessage="Erro na página de Saúde">
     <div className="min-h-screen pb-20 pt-6 px-4 max-w-2xl mx-auto">
       <div className="mb-6">
         <button type="button" onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3 transition-colors">
@@ -855,7 +857,6 @@ export default function SaudePage() {
           <TabsTrigger value="medic" className="text-[10px] px-1 py-1.5">💉 Medic.</TabsTrigger>
         </TabsList>
 
-        {/* ====== PERFIL & PESO ====== */}
         <TabsContent value="perfil" className="space-y-4">
           <Card>
             <CardHeader>
@@ -925,7 +926,7 @@ export default function SaudePage() {
                       </SelectContent>
                     </Select>
                   </div>
-                  <Button onClick={saveProfile} className="w-full" size="sm">
+                  <Button type="button" onClick={saveProfile} className="w-full" size="sm">
                     <Check className="h-4 w-4 mr-1" /> Salvar Perfil
                   </Button>
                 </div>
@@ -1031,7 +1032,7 @@ export default function SaudePage() {
                   <Button variant="outline" size="sm" className="flex-1 text-xs" onClick={() => weightFileRef.current?.click()}>
                     <Camera className="h-3 w-3 mr-1" /> {weightPhoto ? weightPhoto.name.slice(0, 15) + "…" : "Foto evolução"}
                   </Button>
-                  <Button size="sm" onClick={addWeightRecord} disabled={!newWeight}><Plus className="h-4 w-4" /></Button>
+                  <Button type="button" size="sm" onClick={addWeightRecord} disabled={!newWeight}><Plus className="h-4 w-4" /></Button>
                 </div>
               </div>
               <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -1207,7 +1208,7 @@ export default function SaudePage() {
                     </Button>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" onClick={saveDietEntry} className="flex-1">
+                    <Button type="button" size="sm" onClick={saveDietEntry} className="flex-1">
                       <Check className="h-4 w-4 mr-1" /> {editingDietId ? "Atualizar" : "Salvar"}
                     </Button>
                     <Button variant="ghost" size="sm" onClick={() => { setShowDietForm(false); setEditingDietId(null); setSelectedFoods([]); }}>
@@ -1317,7 +1318,7 @@ export default function SaudePage() {
                   </div>
                   <Textarea placeholder="Observações (opcional)" value={exerciseForm.notes} onChange={(e) => setExerciseForm({ ...exerciseForm, notes: e.target.value })} className="text-sm min-h-[40px]" />
                   <div className="flex gap-2">
-                    <Button size="sm" onClick={saveExerciseEntry} className="flex-1">
+                    <Button type="button" size="sm" onClick={saveExerciseEntry} className="flex-1">
                       <Check className="h-4 w-4 mr-1" /> {editingExerciseId ? "Atualizar" : "Salvar"}
                     </Button>
                     <Button variant="ghost" size="sm" onClick={() => { setShowExerciseForm(false); setEditingExerciseId(null); }}><X className="h-4 w-4" /></Button>
@@ -1432,7 +1433,7 @@ export default function SaudePage() {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button size="sm" onClick={addUserSupplement} className="flex-1">
+                    <Button type="button" size="sm" onClick={addUserSupplement} className="flex-1">
                       <Check className="h-4 w-4 mr-1" /> Salvar
                     </Button>
                     <Button variant="ghost" size="sm" onClick={() => setShowAddSupplement(false)}><X className="h-4 w-4" /></Button>
@@ -1599,5 +1600,6 @@ export default function SaudePage() {
         </TabsContent>
       </Tabs>
     </div>
+    </ErrorBoundary>
   );
 }
