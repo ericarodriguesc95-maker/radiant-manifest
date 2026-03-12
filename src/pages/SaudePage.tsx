@@ -511,6 +511,19 @@ export default function SaudePage() {
   async function saveDietEntry() {
     if (!user) return;
 
+    const mealLabel = dietForm.meal_label.trim();
+    const mealTime = dietForm.meal_time.trim();
+
+    if (!mealLabel) {
+      toast.error("Informe o tipo da refeição (ex: café, almoço, janta)");
+      return;
+    }
+
+    if (mealTime && !/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(mealTime)) {
+      toast.error("Informe o horário no formato HH:mm");
+      return;
+    }
+
     let description = dietForm.description.trim();
     let calories = parseNumberOrNull(dietForm.calories);
     let protein = parseNumberOrNull(dietForm.protein);
@@ -538,7 +551,7 @@ export default function SaudePage() {
 
     const payload: any = {
       user_id: user.id,
-      meal_type: dietForm.meal_type,
+      meal_type: mealTime ? `${mealTime} - ${mealLabel}` : mealLabel,
       description,
       calories: calories !== null ? Math.round(calories) : null,
       protein: protein !== null ? Math.round(protein * 10) / 10 : null,
@@ -563,7 +576,7 @@ export default function SaudePage() {
       return;
     }
 
-    setDietForm({ meal_type: "almoço", description: "", calories: "", protein: "", carbs: "", fat: "" });
+    setDietForm(createDefaultDietForm());
     setDietPhoto(null);
     setSelectedFoods([]);
     setFoodSearch("");
@@ -575,8 +588,12 @@ export default function SaudePage() {
   }
 
   function editDietEntry(entry: DietEntry) {
+    const mealParts = entry.meal_type.split(" - ");
+    const hasTimePrefix = /^\d{2}:\d{2}$/.test(mealParts[0]);
+
     setDietForm({
-      meal_type: entry.meal_type,
+      meal_time: hasTimePrefix ? mealParts[0] : "",
+      meal_label: hasTimePrefix ? mealParts.slice(1).join(" - ") : entry.meal_type,
       description: entry.description,
       calories: entry.calories?.toString() || "",
       protein: entry.protein?.toString() || "",
