@@ -1318,7 +1318,7 @@ export default function SaudePage() {
                   </div>
                   <Textarea placeholder="Observações (opcional)" value={exerciseForm.notes} onChange={(e) => setExerciseForm({ ...exerciseForm, notes: e.target.value })} className="text-sm min-h-[40px]" />
                   <div className="flex gap-2">
-                    <Button size="sm" onClick={saveExerciseEntry} className="flex-1">
+                    <Button type="button" size="sm" onClick={saveExerciseEntry} className="flex-1">
                       <Check className="h-4 w-4 mr-1" /> {editingExerciseId ? "Atualizar" : "Salvar"}
                     </Button>
                     <Button variant="ghost" size="sm" onClick={() => { setShowExerciseForm(false); setEditingExerciseId(null); }}><X className="h-4 w-4" /></Button>
