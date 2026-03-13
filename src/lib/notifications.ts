@@ -82,14 +82,14 @@ function getRandomItem<T>(arr: T[]): T {
 export async function sendNotification(title: string, body: string, tag: string) {
   if (!("Notification" in window) || Notification.permission !== "granted") return;
 
-  const options: NotificationOptions = {
+  const options: NotificationOptions & { vibrate?: number[]; requireInteraction?: boolean } = {
     body,
     icon: "/favicon.ico",
     badge: "/favicon.ico",
     tag,
     silent: false,
-    vibrate: [200, 100, 200], // vibrate pattern for mobile
-    requireInteraction: true, // keep notification visible until user interacts
+    vibrate: [200, 100, 200],
+    requireInteraction: true,
   };
 
   // Try Service Worker first (works better on mobile, even when app is in background)
