@@ -311,16 +311,15 @@ export default function DailyDevotional() {
           <BookMarked className="h-4 w-4 text-primary" />
           <p className="text-[10px] font-body tracking-[0.2em] uppercase text-primary">Palavra do Dia</p>
         </div>
-        <Select value={religion} onValueChange={(v) => setReligion(v as Religion)}>
-          <SelectTrigger className="h-7 w-auto max-w-[140px] gap-1 border-none bg-muted/50 px-2 text-[10px] font-body text-muted-foreground">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="max-h-60">
-            {(Object.entries(religionLabels) as [Religion, string][]).map(([key, label]) => (
-              <SelectItem key={key} value={key} className="text-xs">{label}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <select
+          value={religion}
+          onChange={(e) => setReligion(e.target.value as Religion)}
+          className="h-7 max-w-[160px] rounded-md border-none bg-muted/50 px-2 text-[10px] font-body text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+        >
+          {(Object.entries(religionLabels) as [Religion, string][]).map(([key, label]) => (
+            <option key={key} value={key}>{label}</option>
+          ))}
+        </select>
       </div>
 
       {/* Date navigation */}
