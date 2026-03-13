@@ -45,7 +45,7 @@ export default function NotificationSettingsCard() {
     });
   };
 
-  const handleToggle = (key: "versiculo" | "afirmacao" | "metas") => {
+  const handleToggle = (key: "versiculo" | "afirmacao" | "metas" | "social") => {
     const updated = { ...settings, [key]: !settings[key] };
     setSettings(updated);
     saveNotificationSettings(updated);
