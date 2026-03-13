@@ -157,6 +157,20 @@ export default function SettingsPage() {
               <Textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Conte um pouco sobre você..." rows={3} />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="phone" className="flex items-center gap-1.5">
+                <Phone className="h-3.5 w-3.5 text-green-500" /> WhatsApp
+              </Label>
+              <Input
+                id="phone"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="Ex: 5511999999999 (com DDI e DDD)"
+                type="tel"
+              />
+              <p className="text-[10px] text-muted-foreground">Número com DDI (55) + DDD + número. Ex: 5511999887766</p>
+            </div>
+
             <Button onClick={handleSaveProfile} disabled={saving} className="w-full gap-2">
               <Save className="h-4 w-4" />
               {saving ? "Salvando..." : "Salvar perfil"}
