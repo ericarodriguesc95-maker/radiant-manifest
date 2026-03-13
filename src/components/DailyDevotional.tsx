@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { BookMarked, ChevronLeft, ChevronRight, History } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { Button } from "@/components/ui/button";
 import { format, subDays, addDays, isToday } from "date-fns";
 import { ptBR } from "date-fns/locale";
