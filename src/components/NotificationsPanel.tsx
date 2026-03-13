@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { X, Heart, MessageCircle, Droplets, Brain, Target, AtSign, UserPlus, FileText } from "lucide-react";
+import { X, Heart, MessageCircle, Droplets, Brain, Target, AtSign, UserPlus, FileText, Phone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { format } from "date-fns";
