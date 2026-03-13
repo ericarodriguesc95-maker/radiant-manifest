@@ -148,6 +148,18 @@ export default function NotificationSettingsCard() {
             <Switch checked={settings.metas} onCheckedChange={() => handleToggle("metas")} />
           </div>
 
+          {/* Toggle: Social */}
+          <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+            <div className="flex items-center gap-2">
+              <MessageCircle className="h-4 w-4 text-primary" />
+              <div>
+                <p className="text-sm font-medium text-foreground">Interações Sociais</p>
+                <p className="text-xs text-muted-foreground">Curtidas, comentários, seguidores</p>
+              </div>
+            </div>
+            <Switch checked={settings.social} onCheckedChange={() => handleToggle("social")} />
+          </div>
+
           {/* Test button */}
           <Button
             variant="outline"
