@@ -23,19 +23,26 @@ export interface NotificationSettings {
   versiculo: boolean;
   afirmacao: boolean;
   metas: boolean;
+  social: boolean;
   horario: string; // HH:MM
 }
 
 export function getNotificationSettings(): NotificationSettings {
   try {
     const stored = localStorage.getItem(NOTIFICATION_SETTINGS_KEY);
-    if (stored) return JSON.parse(stored);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      // Ensure social field exists for existing users
+      if (parsed.social === undefined) parsed.social = true;
+      return parsed;
+    }
   } catch {}
   return {
     enabled: false,
     versiculo: true,
     afirmacao: true,
     metas: true,
+    social: true,
     horario: "08:00",
   };
 }
@@ -68,19 +75,36 @@ function getRandomItem<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-export function sendNotification(title: string, body: string, tag: string) {
+/**
+ * Send notification via Service Worker (better for mobile - vibrates, shows in tray)
+ * Falls back to basic Notification API if SW not available
+ */
+export async function sendNotification(title: string, body: string, tag: string) {
   if (!("Notification" in window) || Notification.permission !== "granted") return;
 
-  const options: NotificationOptions & { renotify?: boolean } = {
+  const options: NotificationOptions = {
     body,
     icon: "/favicon.ico",
     badge: "/favicon.ico",
     tag,
     silent: false,
+    vibrate: [200, 100, 200], // vibrate pattern for mobile
+    requireInteraction: true, // keep notification visible until user interacts
   };
 
-  const notification = new Notification(title, options);
+  // Try Service Worker first (works better on mobile, even when app is in background)
+  try {
+    const registration = await navigator.serviceWorker?.ready;
+    if (registration) {
+      await registration.showNotification(title, options);
+      return;
+    }
+  } catch {
+    // Fallback below
+  }
 
+  // Fallback to basic Notification API
+  const notification = new Notification(title, options);
   notification.onclick = () => {
     window.focus();
     notification.close();
@@ -103,6 +127,50 @@ export function sendGoalsNotification() {
     "Hora de revisar suas metas! Abra o app e verifique seu progresso.",
     "goals-reminder"
   );
+}
+
+/** Send social notification (like, comment, follow, etc.) */
+export function sendSocialNotification(fromName: string, type: string, commentText?: string) {
+  const settings = getNotificationSettings();
+  if (!settings.enabled || !settings.social) return;
+
+  let title = "Glow Up 🦋";
+  let body = "";
+
+  switch (type) {
+    case "like":
+      title = "❤️ Nova curtida";
+      body = `${fromName} curtiu seu post!`;
+      break;
+    case "comment":
+      title = "💬 Novo comentário";
+      body = commentText
+        ? `${fromName}: "${commentText}"`
+        : `${fromName} comentou no seu post`;
+      break;
+    case "mention":
+      title = "📣 Você foi mencionada";
+      body = commentText
+        ? `${fromName}: "${commentText}"`
+        : `${fromName} mencionou você`;
+      break;
+    case "follow":
+      title = "👤 Nova seguidora";
+      body = `${fromName} começou a te seguir!`;
+      break;
+    case "welcome":
+      title = "🦋 Nova integrante";
+      body = `${fromName} entrou para o Glow Up!`;
+      break;
+    case "new_post":
+      title = "📝 Nova publicação";
+      body = `${fromName} publicou na comunidade`;
+      break;
+    default:
+      body = `${fromName} interagiu com você`;
+  }
+
+  sendNotification(title, body, `social-${type}-${Date.now()}`);
 }
 
 let notificationIntervalId: ReturnType<typeof setInterval> | null = null;
@@ -152,4 +220,5 @@ export function sendTestNotifications(settings: NotificationSettings) {
   if (settings.versiculo) sendVerseNotification();
   if (settings.afirmacao) setTimeout(() => sendAffirmationNotification(), 1500);
   if (settings.metas) setTimeout(() => sendGoalsNotification(), 3000);
+  if (settings.social) setTimeout(() => sendSocialNotification("Teste", "like"), 4500);
 }
