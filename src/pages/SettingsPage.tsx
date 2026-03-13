@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, User, Moon, Sun, Bell, LogOut, Camera, Save } from "lucide-react";
+import { ArrowLeft, User, Moon, Sun, Bell, LogOut, Camera, Save, Phone } from "lucide-react";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 
 export default function SettingsPage() {
