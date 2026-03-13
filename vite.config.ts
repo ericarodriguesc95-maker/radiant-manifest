@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => ({
       includeAssets: ["favicon.ico"],
       workbox: {
         navigateFallbackDenylist: [/^\/~oauth/],
+        importScripts: ["sw-custom.js"],
       },
       manifest: {
         name: "Glow Up - Desenvolvimento Pessoal",

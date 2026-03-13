@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Bell, BellOff, Clock, BookMarked, Sparkles, Target, Send } from "lucide-react";
+import { Bell, BellOff, Clock, BookMarked, Sparkles, Target, Send, MessageCircle } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,7 @@ export default function NotificationSettingsCard() {
     });
   };
 
-  const handleToggle = (key: "versiculo" | "afirmacao" | "metas") => {
+  const handleToggle = (key: "versiculo" | "afirmacao" | "metas" | "social") => {
     const updated = { ...settings, [key]: !settings[key] };
     setSettings(updated);
     saveNotificationSettings(updated);
@@ -146,6 +146,18 @@ export default function NotificationSettingsCard() {
               </div>
             </div>
             <Switch checked={settings.metas} onCheckedChange={() => handleToggle("metas")} />
+          </div>
+
+          {/* Toggle: Social */}
+          <div className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+            <div className="flex items-center gap-2">
+              <MessageCircle className="h-4 w-4 text-primary" />
+              <div>
+                <p className="text-sm font-medium text-foreground">Interações Sociais</p>
+                <p className="text-xs text-muted-foreground">Curtidas, comentários, seguidores</p>
+              </div>
+            </div>
+            <Switch checked={settings.social} onCheckedChange={() => handleToggle("social")} />
           </div>
 
           {/* Test button */}

@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import BottomNav from "./BottomNav";
 import GuidedTour from "./GuidedTour";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
+import { usePushNotificationListener } from "@/hooks/usePushNotificationListener";
 
 export default function AppLayout() {
   const [showTour, setShowTour] = useState(false);
@@ -10,6 +11,9 @@ export default function AppLayout() {
 
   // Activity tracking - auto-logs page views
   useActivityTracker();
+
+  // Listen for social notifications and send push to device
+  usePushNotificationListener();
 
   useEffect(() => {
     const completed = localStorage.getItem("glow-tour-completed");
