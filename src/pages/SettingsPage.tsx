@@ -31,7 +31,13 @@ export default function SettingsPage() {
       setBio(profile.bio || "");
       setAvatarUrl(profile.avatar_url || "");
     }
-  }, [profile]);
+    // Fetch phone number separately since it's not in AuthContext profile
+    if (user) {
+      supabase.from("profiles").select("phone_number").eq("user_id", user.id).single().then(({ data }) => {
+        if (data?.phone_number) setPhoneNumber(data.phone_number);
+      });
+    }
+  }, [profile, user]);
 
   const handleSaveProfile = async () => {
     if (!user) return;
