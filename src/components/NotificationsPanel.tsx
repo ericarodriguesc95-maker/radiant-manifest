@@ -24,6 +24,15 @@ const staticReminders = [
 export default function NotificationsPanel({ onClose }: { onClose: () => void }) {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [userPhone, setUserPhone] = useState<string | null>(null);
+
+  // Fetch user phone number
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("phone_number").eq("user_id", user.id).single().then(({ data }) => {
+      if (data?.phone_number) setUserPhone(data.phone_number);
+    });
+  }, [user]);
 
   const fetchNotifications = useCallback(async () => {
     if (!user) return;
