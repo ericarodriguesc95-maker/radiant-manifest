@@ -42,9 +42,10 @@ export default function SettingsPage() {
   const handleSaveProfile = async () => {
     if (!user) return;
     setSaving(true);
+    const cleanPhone = phoneNumber.replace(/\D/g, "");
     const { error } = await supabase
       .from("profiles")
-      .update({ display_name: displayName, bio })
+      .update({ display_name: displayName, bio, phone_number: cleanPhone || null } as any)
       .eq("user_id", user.id);
     setSaving(false);
     if (error) {
