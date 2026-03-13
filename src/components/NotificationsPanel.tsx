@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { X, Heart, MessageCircle, Droplets, Brain, Target, AtSign, UserPlus, FileText } from "lucide-react";
+import { X, Heart, MessageCircle, Droplets, Brain, Target, AtSign, UserPlus, FileText, Phone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { format } from "date-fns";
@@ -24,6 +24,15 @@ const staticReminders = [
 export default function NotificationsPanel({ onClose }: { onClose: () => void }) {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [userPhone, setUserPhone] = useState<string | null>(null);
+
+  // Fetch user phone number
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("profiles").select("phone_number").eq("user_id", user.id).single().then(({ data }) => {
+      if (data?.phone_number) setUserPhone(data.phone_number);
+    });
+  }, [user]);
 
   const fetchNotifications = useCallback(async () => {
     if (!user) return;
@@ -97,13 +106,32 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
   const getInitials = (name: string) =>
     name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
 
+  const getNotificationText = (n: Notification) => {
+    const action = n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : n.type === "follow" ? "começou a te seguir 👤" : "comentou no seu post";
+    return `${n.from_name} ${action}${n.comment_text ? ` "${n.comment_text}"` : ""}`;
+  };
+
+  const sendAllViaWhatsApp = () => {
+    if (!userPhone || notifications.length === 0) return;
+    const lines = notifications.slice(0, 10).map(n => `• ${getNotificationText(n)}`);
+    const message = `📱 *Glow Up - Notificações*\n\n${lines.join("\n")}\n\nAbra o app para ver mais!`;
+    window.open(`https://wa.me/${userPhone}?text=${encodeURIComponent(message)}`, "_blank");
+  };
+
   return (
     <div className="mx-5 mb-4 bg-card rounded-2xl shadow-card border border-border overflow-hidden animate-fade-in max-h-[70vh] overflow-y-auto">
       <div className="flex items-center justify-between p-4 border-b border-border sticky top-0 bg-card z-10">
         <h3 className="text-sm font-display font-semibold">Notificações</h3>
-        <button onClick={onClose} className="p-1">
-          <X className="h-4 w-4 text-muted-foreground" />
-        </button>
+        <div className="flex items-center gap-2">
+          {userPhone && notifications.length > 0 && (
+            <button onClick={sendAllViaWhatsApp} className="p-1.5 rounded-full bg-green-500/10 hover:bg-green-500/20 transition-colors" title="Enviar por WhatsApp">
+              <Phone className="h-3.5 w-3.5 text-green-500" />
+            </button>
+          )}
+          <button onClick={onClose} className="p-1">
+            <X className="h-4 w-4 text-muted-foreground" />
+          </button>
+        </div>
       </div>
 
       <div className="divide-y divide-border">

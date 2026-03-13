@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, User, Moon, Sun, Bell, LogOut, Camera, Save } from "lucide-react";
+import { ArrowLeft, User, Moon, Sun, Bell, LogOut, Camera, Save, Phone } from "lucide-react";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 
 export default function SettingsPage() {
@@ -20,6 +20,7 @@ export default function SettingsPage() {
   const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [saving, setSaving] = useState(false);
   const [darkMode, setDarkMode] = useState(() => document.documentElement.classList.contains("dark"));
   const [uploading, setUploading] = useState(false);
@@ -30,14 +31,21 @@ export default function SettingsPage() {
       setBio(profile.bio || "");
       setAvatarUrl(profile.avatar_url || "");
     }
-  }, [profile]);
+    // Fetch phone number separately since it's not in AuthContext profile
+    if (user) {
+      supabase.from("profiles").select("phone_number").eq("user_id", user.id).single().then(({ data }) => {
+        if (data?.phone_number) setPhoneNumber(data.phone_number);
+      });
+    }
+  }, [profile, user]);
 
   const handleSaveProfile = async () => {
     if (!user) return;
     setSaving(true);
+    const cleanPhone = phoneNumber.replace(/\D/g, "");
     const { error } = await supabase
       .from("profiles")
-      .update({ display_name: displayName, bio })
+      .update({ display_name: displayName, bio, phone_number: cleanPhone || null } as any)
       .eq("user_id", user.id);
     setSaving(false);
     if (error) {
@@ -147,6 +155,20 @@ export default function SettingsPage() {
             <div className="space-y-2">
               <Label htmlFor="bio">Bio</Label>
               <Textarea id="bio" value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Conte um pouco sobre você..." rows={3} />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone" className="flex items-center gap-1.5">
+                <Phone className="h-3.5 w-3.5 text-green-500" /> WhatsApp
+              </Label>
+              <Input
+                id="phone"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                placeholder="Ex: 5511999999999 (com DDI e DDD)"
+                type="tel"
+              />
+              <p className="text-[10px] text-muted-foreground">Número com DDI (55) + DDD + número. Ex: 5511999887766</p>
             </div>
 
             <Button onClick={handleSaveProfile} disabled={saving} className="w-full gap-2">
