@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Bell, BellOff, Clock, BookMarked, Sparkles, Target, Send } from "lucide-react";
+import { Bell, BellOff, Clock, BookMarked, Sparkles, Target, Send, MessageCircle } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
