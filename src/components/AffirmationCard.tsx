@@ -29,7 +29,11 @@ const affirmations = [
 ];
 
 export default function AffirmationCard() {
-  const [index] = useState(() => Math.floor(Math.random() * affirmations.length));
+  const [index] = useState(() => {
+    const today = new Date();
+    const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
+    return dayOfYear % affirmations.length;
+  });
   const affirmation = affirmations[index];
 
   return (
