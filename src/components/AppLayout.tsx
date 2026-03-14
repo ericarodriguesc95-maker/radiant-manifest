@@ -4,6 +4,7 @@ import BottomNav from "./BottomNav";
 import GuidedTour from "./GuidedTour";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
 import { usePushNotificationListener } from "@/hooks/usePushNotificationListener";
+import { initNotifications } from "@/lib/notifications";
 
 export default function AppLayout() {
   const [showTour, setShowTour] = useState(false);
@@ -12,8 +13,13 @@ export default function AppLayout() {
   // Activity tracking - auto-logs page views
   useActivityTracker();
 
-  // Listen for social notifications and send push to device
+  // Listen for social notifications + app updates and send push to device
   usePushNotificationListener();
+
+  // Initialize push notifications (request permission + schedule daily alerts)
+  useEffect(() => {
+    initNotifications();
+  }, []);
 
   useEffect(() => {
     const completed = localStorage.getItem("glow-tour-completed");
