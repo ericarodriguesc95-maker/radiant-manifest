@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { sendSocialNotification } from "@/lib/notifications";
+import { sendSocialNotification, sendAppUpdateNotification } from "@/lib/notifications";
 
 /**
- * Global hook that listens for new notifications in realtime
+ * Global hook that listens for:
+ * 1. New social notifications (likes, comments, follows, etc.)
+ * 2. New app updates
  * and triggers push notifications on the user's device.
  */
 export function usePushNotificationListener() {
@@ -13,7 +15,8 @@ export function usePushNotificationListener() {
   useEffect(() => {
     if (!user) return;
 
-    const channel = supabase
+    // Listen for social notifications
+    const socialChannel = supabase
       .channel("push-notifications")
       .on(
         "postgres_changes",
@@ -27,7 +30,6 @@ export function usePushNotificationListener() {
           const notification = payload.new as any;
           if (!notification) return;
 
-          // Fetch the sender's name
           const { data: profile } = await supabase
             .from("profiles")
             .select("display_name")
@@ -45,8 +47,27 @@ export function usePushNotificationListener() {
       )
       .subscribe();
 
+    // Listen for new app updates
+    const updatesChannel = supabase
+      .channel("push-app-updates")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "app_updates",
+        },
+        (payload) => {
+          const update = payload.new as any;
+          if (!update) return;
+          sendAppUpdateNotification(update.title, update.description);
+        }
+      )
+      .subscribe();
+
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(socialChannel);
+      supabase.removeChannel(updatesChannel);
     };
   }, [user]);
 }
