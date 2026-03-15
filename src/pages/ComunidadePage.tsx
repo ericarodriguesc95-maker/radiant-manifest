@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText, Pencil, Check, Smile, Bell, UserPlus, UserMinus, Settings } from "lucide-react";
+import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText, Pencil, Check, Smile, Bell, UserPlus, UserMinus, Settings, Mail, Hash, Eye } from "lucide-react";
 import EmojiPicker from "@/components/EmojiPicker";
 import StoryBar from "@/components/stories/StoryBar";
 import MentionInput, { renderTextWithMentions } from "@/components/MentionInput";
 import { useOnlinePresence } from "@/hooks/useOnlinePresence";
 import GifStickerPicker from "@/components/GifStickerPicker";
 import NotificationsPanel from "@/components/NotificationsPanel";
+import DirectMessages from "@/components/community/DirectMessages";
+import ChatRooms from "@/components/community/ChatRooms";
 
 import { sendNotification, requestNotificationPermission } from "@/lib/notifications";
 import { Button } from "@/components/ui/button";
@@ -39,6 +41,7 @@ interface PostWithProfile {
   comments_count: number;
   media_url: string | null;
   media_type: string | null;
+  views_count: number;
 }
 
 const ComunidadePage = () => {
@@ -56,6 +59,8 @@ const ComunidadePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [viewingProfileUserId, setViewingProfileUserId] = useState<string | null>(null);
+  const [showDMs, setShowDMs] = useState(false);
+  const [showChatRooms, setShowChatRooms] = useState(false);
 
   // Online presence
   const onlineUsers = useOnlinePresence(user?.id);
@@ -144,6 +149,26 @@ const ComunidadePage = () => {
     const likedPostIds = new Set((myLikes || []).map((l: any) => l.post_id));
     const profileMap = new Map((profiles || []).map((p: any) => [p.user_id, p]));
 
+    // Fetch view counts
+    const viewCountMap = new Map<string, number>();
+    if (postIds.length > 0) {
+      for (const pid of postIds) {
+        const { count } = await supabase
+          .from("post_views")
+          .select("*", { count: "exact", head: true })
+          .eq("post_id", pid);
+        viewCountMap.set(pid, count || 0);
+      }
+    }
+
+    // Track views for all visible posts
+    for (const pid of postIds) {
+      await supabase.from("post_views").upsert(
+        { post_id: pid, viewer_id: user.id },
+        { onConflict: "post_id,viewer_id" }
+      ).select();
+    }
+
     const commentsByPost = new Map<string, Comment[]>();
     (commentsData || []).forEach((c: any) => {
       const prof = profileMap.get(c.user_id);
@@ -175,6 +200,7 @@ const ComunidadePage = () => {
         comments_count: comments.length,
         media_url: post.media_url || null,
         media_type: post.media_type || null,
+        views_count: viewCountMap.get(post.id) || 0,
       };
     });
 
@@ -638,6 +664,36 @@ const ComunidadePage = () => {
     );
   };
 
+  // Render text with clickable URLs and mentions
+  const renderTextWithLinks = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+    const elements = parts.map((part, i) => {
+      if (urlRegex.test(part)) {
+        return <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-primary underline break-all">{part}</a>;
+      }
+      return <span key={i}>{renderTextWithMentions(part)}</span>;
+    });
+    return <>{elements}</>;
+  };
+
+  // DMs / Chat Rooms overlay
+  if (showDMs) {
+    return (
+      <div className="min-h-screen bg-background">
+        <DirectMessages onClose={() => setShowDMs(false)} />
+      </div>
+    );
+  }
+
+  if (showChatRooms) {
+    return (
+      <div className="min-h-screen bg-background">
+        <ChatRooms onClose={() => setShowChatRooms(false)} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       <header className="px-5 pt-12 pb-4 flex items-center justify-between">
@@ -645,14 +701,28 @@ const ComunidadePage = () => {
           <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Nossa</p>
           <h1 className="text-2xl font-display font-bold">Comunidade <span className="text-gold">✦</span></h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShowDMs(true)}
+            className="p-2 rounded-full hover:bg-muted transition-colors"
+            title="Mensagens diretas"
+          >
+            <Mail className="h-5 w-5 text-foreground" />
+          </button>
+          <button
+            onClick={() => setShowChatRooms(true)}
+            className="p-2 rounded-full hover:bg-muted transition-colors"
+            title="Salas de chat"
+          >
+            <Hash className="h-5 w-5 text-foreground" />
+          </button>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
             className="relative p-2 rounded-full hover:bg-muted transition-colors"
           >
             <Bell className="h-5 w-5 text-foreground" />
             {unreadCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-gold text-[9px] font-bold text-primary-foreground flex items-center justify-center">
+              <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-primary text-[9px] font-bold text-primary-foreground flex items-center justify-center">
                 {unreadCount > 9 ? "9+" : unreadCount}
               </span>
             )}
@@ -904,7 +974,7 @@ const ComunidadePage = () => {
                     autoFocus
                   />
                 ) : (
-                  <p className="text-sm font-body leading-relaxed">{renderTextWithMentions(post.text)}</p>
+                  <p className="text-sm font-body leading-relaxed">{renderTextWithLinks(post.text)}</p>
                 )}
 
                 {/* Post media */}
@@ -998,6 +1068,10 @@ const ComunidadePage = () => {
                 >
                   <Smile className="h-4 w-4" />
                 </button>
+                <span className="flex items-center gap-1 text-xs font-body text-muted-foreground ml-auto">
+                  <Eye className="h-3.5 w-3.5" />
+                  {post.views_count}
+                </span>
               </div>
 
               {/* Post sticker reaction picker */}
