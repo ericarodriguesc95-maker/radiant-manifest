@@ -671,14 +671,28 @@ const ComunidadePage = () => {
           <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Nossa</p>
           <h1 className="text-2xl font-display font-bold">Comunidade <span className="text-gold">✦</span></h1>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
+          <button
+            onClick={() => setShowDMs(true)}
+            className="p-2 rounded-full hover:bg-muted transition-colors"
+            title="Mensagens diretas"
+          >
+            <Mail className="h-5 w-5 text-foreground" />
+          </button>
+          <button
+            onClick={() => setShowChatRooms(true)}
+            className="p-2 rounded-full hover:bg-muted transition-colors"
+            title="Salas de chat"
+          >
+            <Hash className="h-5 w-5 text-foreground" />
+          </button>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
             className="relative p-2 rounded-full hover:bg-muted transition-colors"
           >
             <Bell className="h-5 w-5 text-foreground" />
             {unreadCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-gold text-[9px] font-bold text-primary-foreground flex items-center justify-center">
+              <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-primary text-[9px] font-bold text-primary-foreground flex items-center justify-center">
                 {unreadCount > 9 ? "9+" : unreadCount}
               </span>
             )}
