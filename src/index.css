@@ -6,71 +6,71 @@
 
 @layer base {
   :root {
-    --background: 40 10% 97%;
+    --background: 30 10% 98%;
     --foreground: 0 0% 8%;
 
-    --card: 40 10% 95%;
+    --card: 30 10% 96%;
     --card-foreground: 0 0% 8%;
 
-    --popover: 40 10% 97%;
+    --popover: 30 10% 98%;
     --popover-foreground: 0 0% 8%;
 
-    --primary: 43 56% 52%;
+    --primary: 30 100% 50%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 10%;
-    --secondary-foreground: 40 10% 97%;
+    --secondary-foreground: 30 10% 97%;
 
-    --muted: 40 8% 90%;
+    --muted: 30 8% 90%;
     --muted-foreground: 0 0% 40%;
 
-    --accent: 43 56% 52%;
+    --accent: 30 100% 50%;
     --accent-foreground: 0 0% 8%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 40 10% 88%;
-    --input: 40 10% 88%;
-    --ring: 43 56% 52%;
+    --border: 30 10% 88%;
+    --input: 30 10% 88%;
+    --ring: 30 100% 50%;
 
     --radius: 0.75rem;
 
-    --gold: 43 56% 52%;
-    --gold-light: 43 40% 70%;
-    --gold-dark: 43 60% 40%;
-    --offwhite: 40 10% 97%;
+    --brand: 30 100% 50%;
+    --brand-light: 30 80% 65%;
+    --brand-dark: 30 100% 40%;
+    --offwhite: 30 10% 98%;
     --charcoal: 0 0% 15%;
 
     --font-display: 'Playfair Display', serif;
     --font-body: 'Raleway', sans-serif;
 
-    --gradient-gold: linear-gradient(135deg, hsl(43 56% 52%), hsl(43 40% 70%));
+    --gradient-brand: linear-gradient(135deg, hsl(30 100% 50%), hsl(30 80% 65%));
     --gradient-dark: linear-gradient(180deg, hsl(0 0% 8%), hsl(0 0% 15%));
-    --shadow-gold: 0 4px 20px -4px hsl(43 56% 52% / 0.3);
+    --shadow-brand: 0 4px 20px -4px hsl(30 100% 50% / 0.3);
     --shadow-card: 0 2px 12px -2px hsl(0 0% 0% / 0.08);
   }
 
   .dark {
     --background: 0 0% 6%;
-    --foreground: 40 10% 95%;
+    --foreground: 30 10% 95%;
     --card: 0 0% 10%;
-    --card-foreground: 40 10% 95%;
+    --card-foreground: 30 10% 95%;
     --popover: 0 0% 10%;
-    --popover-foreground: 40 10% 95%;
-    --primary: 43 56% 52%;
+    --popover-foreground: 30 10% 95%;
+    --primary: 30 100% 50%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 15%;
-    --secondary-foreground: 40 10% 95%;
+    --secondary-foreground: 30 10% 95%;
     --muted: 0 0% 15%;
-    --muted-foreground: 40 8% 60%;
-    --accent: 43 56% 52%;
-    --accent-foreground: 40 10% 95%;
+    --muted-foreground: 30 8% 60%;
+    --accent: 30 100% 50%;
+    --accent-foreground: 30 10% 95%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 0 0% 18%;
     --input: 0 0% 18%;
-    --ring: 43 56% 52%;
+    --ring: 30 100% 50%;
   }
 }
 
@@ -95,26 +95,32 @@
   .font-body {
     font-family: var(--font-body);
   }
+  .bg-gradient-brand {
+    background: var(--gradient-brand);
+  }
   .bg-gradient-gold {
-    background: var(--gradient-gold);
+    background: var(--gradient-brand);
   }
   .bg-gradient-dark {
     background: var(--gradient-dark);
   }
+  .shadow-brand {
+    box-shadow: var(--shadow-brand);
+  }
   .shadow-gold {
-    box-shadow: var(--shadow-gold);
+    box-shadow: var(--shadow-brand);
   }
   .shadow-card {
     box-shadow: var(--shadow-card);
   }
   .text-gold {
-    color: hsl(var(--gold));
+    color: hsl(var(--brand));
   }
   .bg-gold {
-    background-color: hsl(var(--gold));
+    background-color: hsl(var(--brand));
   }
   .border-gold {
-    border-color: hsl(var(--gold));
+    border-color: hsl(var(--brand));
   }
 }
 
@@ -125,4 +131,22 @@
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Star spin animation */
+@keyframes star-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+.animate-star-spin {
+  animation: star-spin 1.2s ease-in-out infinite;
+}
+
+@keyframes star-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+.animate-star-pulse {
+  animation: star-pulse 0.6s ease-in-out;
 }
