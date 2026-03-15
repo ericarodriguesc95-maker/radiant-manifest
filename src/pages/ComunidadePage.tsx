@@ -1068,6 +1068,10 @@ const ComunidadePage = () => {
                 >
                   <Smile className="h-4 w-4" />
                 </button>
+                <span className="flex items-center gap-1 text-xs font-body text-muted-foreground ml-auto">
+                  <Eye className="h-3.5 w-3.5" />
+                  {post.views_count}
+                </span>
               </div>
 
               {/* Post sticker reaction picker */}
