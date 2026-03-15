@@ -59,6 +59,8 @@ const ComunidadePage = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [viewingProfileUserId, setViewingProfileUserId] = useState<string | null>(null);
+  const [showDMs, setShowDMs] = useState(false);
+  const [showChatRooms, setShowChatRooms] = useState(false);
 
   // Online presence
   const onlineUsers = useOnlinePresence(user?.id);
