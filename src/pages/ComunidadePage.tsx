@@ -41,6 +41,7 @@ interface PostWithProfile {
   comments_count: number;
   media_url: string | null;
   media_type: string | null;
+  views_count: number;
 }
 
 const ComunidadePage = () => {
