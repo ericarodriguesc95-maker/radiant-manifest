@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import FourPointStar from "@/components/FourPointStar";
 import AppLayout from "@/components/AppLayout";
 import HomePage from "@/pages/HomePage";
 import MetasPage from "@/pages/MetasPage";
