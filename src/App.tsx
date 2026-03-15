@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import FourPointStar from "@/components/FourPointStar";
 import AppLayout from "@/components/AppLayout";
 import HomePage from "@/pages/HomePage";
 import MetasPage from "@/pages/MetasPage";
@@ -30,14 +31,14 @@ const queryClient = new QueryClient();
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><FourPointStar size={40} animate="spin" className="text-primary" fill="hsl(30 100% 50%)" /></div>;
   if (!user) return <Navigate to="/login" replace />;
   return <>{children}</>;
 }
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  if (loading) return <div className="min-h-screen flex items-center justify-center"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><FourPointStar size={40} animate="spin" className="text-primary" fill="hsl(30 100% 50%)" /></div>;
   if (user) return <Navigate to="/" replace />;
   return <>{children}</>;
 }

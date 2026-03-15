@@ -17,25 +17,36 @@ export default defineConfig(({ mode }) => ({
     mode === "development" && componentTagger(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico"],
+      includeAssets: ["favicon.ico", "apple-touch-icon.png", "icon-192.png", "icon-512.png"],
       workbox: {
         navigateFallbackDenylist: [/^\/~oauth/],
         importScripts: ["sw-custom.js"],
       },
       manifest: {
-        name: "Glow Up - Desenvolvimento Pessoal",
+        name: "Performance Glow Up",
         short_name: "Glow Up",
         description: "Seu app de desenvolvimento pessoal e glow up",
-        theme_color: "#D4AF37",
-        background_color: "#f7f5f2",
+        theme_color: "#FF9100",
+        background_color: "#FFF8F0",
         display: "standalone",
         orientation: "portrait",
         start_url: "/",
         icons: [
           {
-            src: "/favicon.ico",
-            sizes: "64x64",
-            type: "image/x-icon",
+            src: "/icon-192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "/icon-512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+          {
+            src: "/icon-512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
           },
         ],
       },
