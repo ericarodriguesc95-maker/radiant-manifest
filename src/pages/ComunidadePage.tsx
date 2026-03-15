@@ -944,7 +944,7 @@ const ComunidadePage = () => {
                     autoFocus
                   />
                 ) : (
-                  <p className="text-sm font-body leading-relaxed">{renderTextWithMentions(post.text)}</p>
+                  <p className="text-sm font-body leading-relaxed">{renderTextWithLinks(post.text)}</p>
                 )}
 
                 {/* Post media */}
