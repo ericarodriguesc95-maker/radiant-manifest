@@ -149,6 +149,26 @@ const ComunidadePage = () => {
     const likedPostIds = new Set((myLikes || []).map((l: any) => l.post_id));
     const profileMap = new Map((profiles || []).map((p: any) => [p.user_id, p]));
 
+    // Fetch view counts
+    const viewCountMap = new Map<string, number>();
+    if (postIds.length > 0) {
+      for (const pid of postIds) {
+        const { count } = await supabase
+          .from("post_views")
+          .select("*", { count: "exact", head: true })
+          .eq("post_id", pid);
+        viewCountMap.set(pid, count || 0);
+      }
+    }
+
+    // Track views for all visible posts
+    for (const pid of postIds) {
+      await supabase.from("post_views").upsert(
+        { post_id: pid, viewer_id: user.id },
+        { onConflict: "post_id,viewer_id" }
+      ).select();
+    }
+
     const commentsByPost = new Map<string, Comment[]>();
     (commentsData || []).forEach((c: any) => {
       const prof = profileMap.get(c.user_id);
@@ -180,6 +200,7 @@ const ComunidadePage = () => {
         comments_count: comments.length,
         media_url: post.media_url || null,
         media_type: post.media_type || null,
+        views_count: viewCountMap.get(post.id) || 0,
       };
     });
 
