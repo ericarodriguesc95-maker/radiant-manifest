@@ -664,6 +664,36 @@ const ComunidadePage = () => {
     );
   };
 
+  // Render text with clickable URLs and mentions
+  const renderTextWithLinks = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+    const elements = parts.map((part, i) => {
+      if (urlRegex.test(part)) {
+        return <a key={i} href={part} target="_blank" rel="noopener noreferrer" className="text-primary underline break-all">{part}</a>;
+      }
+      return <span key={i}>{renderTextWithMentions(part)}</span>;
+    });
+    return <>{elements}</>;
+  };
+
+  // DMs / Chat Rooms overlay
+  if (showDMs) {
+    return (
+      <div className="min-h-screen bg-background">
+        <DirectMessages onClose={() => setShowDMs(false)} />
+      </div>
+    );
+  }
+
+  if (showChatRooms) {
+    return (
+      <div className="min-h-screen bg-background">
+        <ChatRooms onClose={() => setShowChatRooms(false)} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       <header className="px-5 pt-12 pb-4 flex items-center justify-between">
