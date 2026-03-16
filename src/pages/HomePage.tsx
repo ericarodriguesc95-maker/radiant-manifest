@@ -159,7 +159,7 @@ const HomePage = () => {
             <button
               key={label}
               onClick={() => navigate(to)}
-              className={`${color} rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-card active:scale-[0.98]`}
+              className="bg-foreground text-background rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-card active:scale-[0.98]"
             >
               <Icon className="h-5 w-5 text-gold" />
               <span className="text-xs font-body font-semibold tracking-wide">{label}</span>

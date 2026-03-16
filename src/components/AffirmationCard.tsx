@@ -194,25 +194,25 @@ export default function AffirmationCard() {
           <button
             onClick={goForward}
             disabled={isToday(selectedDate)}
-            className="p-1 rounded-full hover:bg-muted transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="p-1 rounded-full hover:bg-background/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             aria-label="Próximo dia"
           >
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <ChevronRight className="h-4 w-4 text-background/60" />
           </button>
         </div>
       </div>
 
-      <p className="text-base font-display font-medium text-secondary-foreground leading-relaxed italic">"{affirmation.text}"</p>
+      <p className="text-base font-display font-medium text-background leading-relaxed italic">"{affirmation.text}"</p>
 
-      <div className="border-t border-border pt-3 space-y-3">
+      <div className="border-t border-background/20 pt-3 space-y-3">
         <div>
-          <p className="text-[10px] font-body tracking-[0.2em] uppercase text-muted-foreground mb-1">Para que é direcionada</p>
-          <p className="text-sm font-body text-muted-foreground leading-relaxed">{affirmation.focus}</p>
+          <p className="text-[10px] font-body tracking-[0.2em] uppercase text-background/50 mb-1">Para que é direcionada</p>
+          <p className="text-sm font-body text-background/70 leading-relaxed">{affirmation.focus}</p>
         </div>
 
         <div>
-          <p className="text-[10px] font-body tracking-[0.2em] uppercase text-muted-foreground mb-1">Exercício prático do dia</p>
-          <p className="text-sm font-body text-muted-foreground leading-relaxed">{affirmation.exercise}</p>
+          <p className="text-[10px] font-body tracking-[0.2em] uppercase text-background/50 mb-1">Exercício prático do dia</p>
+          <p className="text-sm font-body text-background/70 leading-relaxed">{affirmation.exercise}</p>
         </div>
       </div>
     </section>
