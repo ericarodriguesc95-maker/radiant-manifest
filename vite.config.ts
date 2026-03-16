@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => ({
         name: "Performance Glow Up",
         short_name: "Glow Up",
         description: "Seu app de desenvolvimento pessoal e glow up",
-        theme_color: "#D4AF37",
+        theme_color: "#1A1A1A",
         background_color: "#FFFFFF",
         display: "standalone",
         orientation: "portrait",
