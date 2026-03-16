@@ -187,10 +187,10 @@ export default function AffirmationCard() {
           <p className="text-[10px] font-body tracking-[0.2em] uppercase text-gold">Guia da Afirmação Diária</p>
         </div>
         <div className="flex items-center gap-1">
-          <button onClick={goBack} className="p-1 rounded-full hover:bg-muted transition-colors" aria-label="Dia anterior">
-            <ChevronLeft className="h-4 w-4 text-muted-foreground" />
+          <button onClick={goBack} className="p-1 rounded-full hover:bg-background/10 transition-colors" aria-label="Dia anterior">
+            <ChevronLeft className="h-4 w-4 text-background/60" />
           </button>
-          <span className="text-xs font-body text-muted-foreground min-w-[80px] text-center">{dateLabel}</span>
+          <span className="text-xs font-body text-background/60 min-w-[80px] text-center">{dateLabel}</span>
           <button
             onClick={goForward}
             disabled={isToday(selectedDate)}
