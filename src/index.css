@@ -106,7 +106,7 @@
     background: var(--gradient-brand);
   }
   .bg-gradient-gold {
-    background: var(--gradient-brand);
+    background: var(--gradient-gold);
   }
   .bg-gradient-dark {
     background: var(--gradient-dark);
@@ -115,19 +115,19 @@
     box-shadow: var(--shadow-brand);
   }
   .shadow-gold {
-    box-shadow: var(--shadow-brand);
+    box-shadow: 0 4px 20px -4px hsl(var(--gold) / 0.3);
   }
   .shadow-card {
     box-shadow: var(--shadow-card);
   }
   .text-gold {
-    color: hsl(var(--brand));
+    color: hsl(var(--gold));
   }
   .bg-gold {
-    background-color: hsl(var(--brand));
+    background-color: hsl(var(--gold));
   }
   .border-gold {
-    border-color: hsl(var(--brand));
+    border-color: hsl(var(--gold));
   }
 }
 
