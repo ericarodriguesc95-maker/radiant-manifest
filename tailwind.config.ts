@@ -29,9 +29,9 @@ export default {
           dark: "hsl(var(--brand-dark))",
         },
         gold: {
-          DEFAULT: "hsl(var(--brand))",
-          light: "hsl(var(--brand-light))",
-          dark: "hsl(var(--brand-dark))",
+          DEFAULT: "hsl(var(--gold))",
+          light: "hsl(var(--gold-light))",
+          dark: "hsl(var(--gold-dark))",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
