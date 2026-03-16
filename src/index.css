@@ -6,48 +6,52 @@
 
 @layer base {
   :root {
-    --background: 30 10% 98%;
+    --background: 0 0% 100%;
     --foreground: 0 0% 8%;
 
-    --card: 30 10% 96%;
+    --card: 40 20% 97%;
     --card-foreground: 0 0% 8%;
 
-    --popover: 30 10% 98%;
+    --popover: 0 0% 100%;
     --popover-foreground: 0 0% 8%;
 
     --primary: 30 100% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 30 10% 97%;
+    --secondary: 43 72% 52%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 30 8% 90%;
+    --muted: 40 10% 92%;
     --muted-foreground: 0 0% 40%;
 
-    --accent: 30 100% 50%;
-    --accent-foreground: 0 0% 8%;
+    --accent: 43 72% 52%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 30 10% 88%;
-    --input: 30 10% 88%;
-    --ring: 30 100% 50%;
+    --border: 40 10% 88%;
+    --input: 40 10% 88%;
+    --ring: 43 72% 52%;
 
     --radius: 0.75rem;
 
     --brand: 30 100% 50%;
     --brand-light: 30 80% 65%;
     --brand-dark: 30 100% 40%;
-    --offwhite: 30 10% 98%;
+    --gold: 43 72% 52%;
+    --gold-light: 43 60% 65%;
+    --gold-dark: 43 72% 40%;
+    --offwhite: 0 0% 100%;
     --charcoal: 0 0% 15%;
 
     --font-display: 'Playfair Display', serif;
     --font-body: 'Raleway', sans-serif;
 
-    --gradient-brand: linear-gradient(135deg, hsl(30 100% 50%), hsl(30 80% 65%));
+    --gradient-brand: linear-gradient(135deg, hsl(30 100% 50%), hsl(43 72% 52%));
+    --gradient-gold: linear-gradient(135deg, hsl(43 72% 52%), hsl(43 60% 65%));
     --gradient-dark: linear-gradient(180deg, hsl(0 0% 8%), hsl(0 0% 15%));
-    --shadow-brand: 0 4px 20px -4px hsl(30 100% 50% / 0.3);
+    --shadow-brand: 0 4px 20px -4px hsl(43 72% 52% / 0.3);
     --shadow-card: 0 2px 12px -2px hsl(0 0% 0% / 0.08);
   }
 
