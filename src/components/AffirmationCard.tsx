@@ -180,11 +180,11 @@ export default function AffirmationCard() {
     : format(selectedDate, "dd 'de' MMMM", { locale: ptBR });
 
   return (
-    <section className="rounded-2xl border border-border bg-secondary p-5 space-y-4 shadow-sm">
+    <section className="rounded-2xl border border-border bg-foreground p-5 space-y-4 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-primary" />
-          <p className="text-[10px] font-body tracking-[0.2em] uppercase text-primary">Guia da Afirmação Diária</p>
+          <Sparkles className="h-4 w-4 text-gold" />
+          <p className="text-[10px] font-body tracking-[0.2em] uppercase text-gold">Guia da Afirmação Diária</p>
         </div>
         <div className="flex items-center gap-1">
           <button onClick={goBack} className="p-1 rounded-full hover:bg-muted transition-colors" aria-label="Dia anterior">
