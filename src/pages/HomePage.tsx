@@ -151,11 +151,11 @@ const HomePage = () => {
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-3">
           {[
-            { icon: Brain, label: "Reprogramação Mental", color: "bg-secondary text-secondary-foreground", to: "/reprogramacao" },
-            { icon: Zap, label: "Alta Performance", color: "bg-secondary text-secondary-foreground", to: "/alta-performance" },
-            { icon: BookOpen, label: "Diário", color: "bg-secondary text-secondary-foreground", to: "/diario" },
-            { icon: Droplets, label: "Saúde & Fitness", color: "bg-secondary text-secondary-foreground", to: "/guias" },
-          ].map(({ icon: Icon, label, color, to }) => (
+            { icon: Brain, label: "Reprogramação Mental", to: "/reprogramacao" },
+            { icon: Zap, label: "Alta Performance", to: "/alta-performance" },
+            { icon: BookOpen, label: "Diário", to: "/diario" },
+            { icon: Droplets, label: "Saúde & Fitness", to: "/guias" },
+          ].map(({ icon: Icon, label, to }) => (
             <button
               key={label}
               onClick={() => navigate(to)}
