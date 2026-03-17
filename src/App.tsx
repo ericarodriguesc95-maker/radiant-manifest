@@ -67,6 +67,7 @@ const AppRoutes = () => (
       <Route path="/diario" element={<ErrorBoundary><DiarioPage /></ErrorBoundary>} />
       <Route path="/settings" element={<ErrorBoundary><SettingsPage /></ErrorBoundary>} />
       <Route path="/admin/atividade" element={<ErrorBoundary><AdminActivityPage /></ErrorBoundary>} />
+      <Route path="/admin/conteudo" element={<ErrorBoundary><AdminContentPage /></ErrorBoundary>} />
       <Route path="/perfil/:userId" element={<ErrorBoundary><ProfilePage /></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
