@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Zap, BookOpen, Headphones, GraduationCap, Palette, ExternalLink, ArrowLeft, Settings } from "lucide-react";
+import AiAssistantChat from "@/components/AiAssistantChat";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -325,6 +326,8 @@ export default function AltaPerformancePage() {
           </CardContent>
         </Card>
       </div>
+
+      <AiAssistantChat />
     </div>
   );
 }
