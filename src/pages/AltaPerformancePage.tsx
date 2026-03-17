@@ -326,6 +326,8 @@ export default function AltaPerformancePage() {
           </CardContent>
         </Card>
       </div>
+
+      <AiAssistantChat />
     </div>
   );
 }
