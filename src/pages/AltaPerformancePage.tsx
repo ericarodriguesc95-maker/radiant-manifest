@@ -1,26 +1,112 @@
-import { Zap, BookOpen, Headphones, GraduationCap, Palette, ExternalLink, ArrowLeft } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Zap, BookOpen, Headphones, GraduationCap, Palette, ExternalLink, ArrowLeft, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+
+interface AdminContent {
+  id: string;
+  title: string;
+  description: string | null;
+  url: string | null;
+  category: string;
+  icon: string;
+}
+
+const CATEGORY_LABELS: Record<string, string> = {
+  "inteligencia-emocional": "Inteligência Emocional",
+  "psicologia": "Psicologia Humana",
+  "oratoria": "Oratória",
+  "comunicacao": "Comunicação Persuasiva",
+  "gestao-crise": "Gestão de Crise",
+  "podcasts": "Podcasts",
+  "cursos": "Cursos & Plataformas",
+  "youtube": "Canais YouTube",
+  "blogs": "Blogs & Fontes",
+  "geral": "Geral",
+};
 
 export default function AltaPerformancePage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [adminContent, setAdminContent] = useState<AdminContent[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    supabase.from("admin_content" as any).select("*").eq("is_active", true).order("category").order("sort_order")
+      .then(({ data }) => { if (data) setAdminContent(data as unknown as AdminContent[]); });
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("user_roles" as any).select("role").eq("user_id", user.id).eq("role", "admin")
+      .then(({ data }) => setIsAdmin((data as any[])?.length > 0));
+  }, [user]);
+
+  const groupedAdmin = Object.entries(
+    adminContent.reduce((acc, item) => {
+      if (!acc[item.category]) acc[item.category] = [];
+      acc[item.category].push(item);
+      return acc;
+    }, {} as Record<string, AdminContent[]>)
+  );
 
   return (
     <div className="min-h-screen pb-20 pt-6 px-4 max-w-2xl mx-auto">
       <div className="mb-6">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-3 transition-colors">
-          <ArrowLeft className="h-4 w-4" />
-          Voltar
-        </button>
+        <div className="flex items-center justify-between mb-3">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="h-4 w-4" />
+            Voltar
+          </button>
+          {isAdmin && (
+            <button onClick={() => navigate("/admin/conteudo")} className="flex items-center gap-1 text-xs text-gold hover:text-gold/80 transition-colors">
+              <Settings className="h-3.5 w-3.5" />
+              Gerenciar
+            </button>
+          )}
+        </div>
         <div className="flex items-center gap-2 mb-2">
-          <Zap className="h-5 w-5 text-primary" />
+          <Zap className="h-5 w-5 text-gold" />
           <h1 className="text-2xl font-display font-semibold text-foreground">Alta Performance</h1>
         </div>
         <p className="text-sm text-muted-foreground font-body">Guia completo para desenvolvimento pessoal e profissional</p>
       </div>
 
       <div className="space-y-6">
+        {/* Admin-added content */}
+        {groupedAdmin.map(([category, items]) => (
+          <Card key={category}>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <span>{items[0]?.icon}</span>
+                <CardTitle>{CATEGORY_LABELS[category] || category}</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {items.map(item => (
+                <div key={item.id}>
+                  {item.url ? (
+                    <a href={item.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
+                      <div className="space-y-1">
+                        <p className="text-sm font-semibold text-foreground">{item.title}</p>
+                        {item.description && <p className="text-xs text-muted-foreground">{item.description}</p>}
+                      </div>
+                      <ExternalLink className="h-4 w-4 text-gold flex-shrink-0" />
+                    </a>
+                  ) : (
+                    <div className="p-3 rounded-lg bg-muted/50">
+                      <p className="text-sm font-semibold text-foreground">{item.title}</p>
+                      {item.description && <p className="text-xs text-muted-foreground mt-1">{item.description}</p>}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        ))}
         {/* Study Techniques */}
         <Card>
           <CardHeader>

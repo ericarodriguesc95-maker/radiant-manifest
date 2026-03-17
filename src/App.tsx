@@ -25,6 +25,7 @@ import NotFound from "./pages/NotFound";
 import ProfilePage from "@/pages/ProfilePage";
 import DiarioPage from "@/pages/DiarioPage";
 import AdminActivityPage from "@/pages/AdminActivityPage";
+import AdminContentPage from "@/pages/AdminContentPage";
 import SaudePage from "@/pages/SaudePage";
 
 const queryClient = new QueryClient();
@@ -66,6 +67,7 @@ const AppRoutes = () => (
       <Route path="/diario" element={<ErrorBoundary><DiarioPage /></ErrorBoundary>} />
       <Route path="/settings" element={<ErrorBoundary><SettingsPage /></ErrorBoundary>} />
       <Route path="/admin/atividade" element={<ErrorBoundary><AdminActivityPage /></ErrorBoundary>} />
+      <Route path="/admin/conteudo" element={<ErrorBoundary><AdminContentPage /></ErrorBoundary>} />
       <Route path="/perfil/:userId" element={<ErrorBoundary><ProfilePage /></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
