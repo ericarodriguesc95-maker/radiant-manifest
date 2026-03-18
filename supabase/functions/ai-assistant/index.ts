@@ -22,19 +22,13 @@ serve(async (req) => {
 
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
-      return new Response(JSON.stringify({ error: "Não autorizado" }), {
+      return new Response(JSON.stringify({ error: "Faça login para usar a assistente." }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const { messages, action } = await req.json();
-
-    // If action is "create_event", create a calendar event
-    if (action === "create_event") {
-      const { title, event_date, start_time, end_time, description, reminder_minutes } = await req.json().catch(() => ({}));
-      // This is handled via tool calling below
-    }
+    const { messages } = await req.json();
 
     // Fetch user's upcoming events for context
     const today = new Date().toISOString().split("T")[0];
@@ -52,6 +46,8 @@ serve(async (req) => {
         ).join("\n")}`
       : "\n\nA usuária não tem eventos agendados próximos.";
 
+    const now = new Date();
+    const todayStr = now.toISOString().split("T")[0];
     const systemPrompt = `Você é a assistente de Alta Performance do app "Performance Glow Up". Seu papel é ajudar a usuária com:
 
 1. **Agendamentos**: Ajude a criar eventos na agenda (compromissos, sessões de estudo, treinos, etc.)
@@ -61,7 +57,8 @@ serve(async (req) => {
 
 Quando a usuária pedir para agendar algo, use a ferramenta create_calendar_event com os dados extraídos.
 Se ela não especificar a data, pergunte. Se não especificar horário, sugira um horário adequado.
-Hoje é ${new Date().toLocaleDateString("pt-BR")}.
+Hoje é ${now.toLocaleDateString("pt-BR")} (${todayStr}). Use formato YYYY-MM-DD para datas e HH:MM para horários.
+"Amanhã" significa a data de amanhã calculada a partir de hoje.
 ${eventsContext}
 
 Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no feminino.`;
@@ -71,7 +68,7 @@ Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no femin
         type: "function",
         function: {
           name: "create_calendar_event",
-          description: "Cria um evento na agenda da usuária",
+          description: "Cria um evento na agenda da usuária. Use quando ela pedir para agendar algo, criar lembrete ou marcar compromisso.",
           parameters: {
             type: "object",
             properties: {
@@ -102,6 +99,7 @@ Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no femin
           ...messages,
         ],
         tools,
+        tool_choice: "auto",
         stream: false,
       }),
     });
@@ -109,14 +107,12 @@ Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no femin
     if (!aiResponse.ok) {
       if (aiResponse.status === 429) {
         return new Response(JSON.stringify({ error: "Muitas solicitações. Tente novamente em alguns segundos." }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (aiResponse.status === 402) {
-        return new Response(JSON.stringify({ error: "Créditos insuficientes." }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        return new Response(JSON.stringify({ error: "Créditos de IA insuficientes." }), {
+          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       const errText = await aiResponse.text();
@@ -130,11 +126,12 @@ Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no femin
     // Handle tool calls
     if (choice?.message?.tool_calls?.length > 0) {
       const toolResults = [];
+      let eventCreated = false;
 
       for (const toolCall of choice.message.tool_calls) {
         if (toolCall.function.name === "create_calendar_event") {
           const args = JSON.parse(toolCall.function.arguments);
-          const { data: newEvent, error: insertError } = await supabase
+          const { error: insertError } = await supabase
             .from("calendar_events")
             .insert({
               user_id: user.id,
@@ -143,22 +140,24 @@ Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no femin
               start_time: args.start_time || null,
               end_time: args.end_time || null,
               description: args.description || null,
-              reminder_minutes: args.reminder_minutes || 30,
-            })
-            .select()
-            .single();
+              reminder_minutes: args.reminder_minutes ?? 30,
+            });
+
+          const resultMsg = insertError
+            ? `Erro ao criar evento: ${insertError.message}`
+            : `Evento "${args.title}" criado com sucesso para ${args.event_date}${args.start_time ? ` às ${args.start_time}` : ""}!`;
+
+          if (!insertError) eventCreated = true;
 
           toolResults.push({
             tool_call_id: toolCall.id,
             role: "tool",
-            content: insertError
-              ? `Erro ao criar evento: ${insertError.message}`
-              : `Evento "${args.title}" criado com sucesso para ${args.event_date}${args.start_time ? ` às ${args.start_time}` : ""}!`,
+            content: resultMsg,
           });
         }
       }
 
-      // Second call to get final response after tool execution
+      // Second call to get natural language response after tool execution
       const followUp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -180,30 +179,23 @@ Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no femin
       if (!followUp.ok) {
         const t = await followUp.text();
         console.error("Follow-up error:", t);
-        // Return the tool result directly
         return new Response(JSON.stringify({
           reply: toolResults.map(r => r.content).join("\n"),
-          event_created: true,
-        }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+          event_created: eventCreated,
+        }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
       const followUpData = await followUp.json();
       return new Response(JSON.stringify({
         reply: followUpData.choices?.[0]?.message?.content || toolResults.map(r => r.content).join("\n"),
-        event_created: true,
-      }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+        event_created: eventCreated,
+      }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     return new Response(JSON.stringify({
       reply: choice?.message?.content || "Desculpe, não consegui processar sua mensagem.",
       event_created: false,
-    }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
     console.error("ai-assistant error:", e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Erro desconhecido" }), {

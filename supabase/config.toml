@@ -1,1 +1,7 @@
 project_id = "killbxwghyadhjtycwyn"
+
+[functions.ai-assistant]
+verify_jwt = false
+
+[functions.search-gifs]
+verify_jwt = false
