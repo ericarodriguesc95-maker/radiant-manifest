@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Sparkles, Calendar } from "lucide-react";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { X, Send, Sparkles, Calendar, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -10,32 +10,53 @@ interface Message {
   content: string;
 }
 
+const STORAGE_KEY = "ai-assistant-messages";
+
+function loadMessages(): Message[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return [];
+}
+
+function saveMessages(msgs: Message[]) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs));
+  } catch {}
+}
+
 export default function AiAssistantChat() {
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(loadMessages);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
+  // Persist messages to localStorage
+  useEffect(() => {
+    saveMessages(messages);
+  }, [messages]);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, loading]);
 
   useEffect(() => {
     if (open && inputRef.current) {
-      inputRef.current.focus();
+      setTimeout(() => inputRef.current?.focus(), 100);
     }
   }, [open]);
 
-  const sendMessage = async () => {
-    const text = input.trim();
-    if (!text || loading) return;
+  const sendMessage = useCallback(async (text?: string) => {
+    const msg = (text || input).trim();
+    if (!msg || loading) return;
 
-    const userMsg: Message = { role: "user", content: text };
+    const userMsg: Message = { role: "user", content: msg };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setInput("");
@@ -46,7 +67,13 @@ export default function AiAssistantChat() {
         body: { messages: newMessages },
       });
 
-      if (error) throw error;
+      if (error) {
+        // Check for specific HTTP error status in the error
+        const errMsg = error.message || "Erro ao enviar mensagem";
+        toast({ title: errMsg, variant: "destructive" });
+        setLoading(false);
+        return;
+      }
 
       if (data?.error) {
         toast({ title: data.error, variant: "destructive" });
@@ -54,17 +81,24 @@ export default function AiAssistantChat() {
         return;
       }
 
-      setMessages(prev => [...prev, { role: "assistant", content: data.reply }]);
+      const assistantMsg: Message = { role: "assistant", content: data.reply };
+      setMessages(prev => [...prev, assistantMsg]);
 
       if (data.event_created) {
         toast({ title: "📅 Evento criado na sua agenda!" });
       }
     } catch (err: any) {
       console.error("AI chat error:", err);
-      toast({ title: "Erro ao enviar mensagem", variant: "destructive" });
+      toast({ title: "Erro de conexão. Tente novamente.", variant: "destructive" });
     } finally {
       setLoading(false);
     }
+  }, [input, loading, messages, toast]);
+
+  const clearHistory = () => {
+    setMessages([]);
+    localStorage.removeItem(STORAGE_KEY);
+    toast({ title: "Histórico limpo ✨" });
   };
 
   const suggestions = [
@@ -79,7 +113,8 @@ export default function AiAssistantChat() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-24 right-4 z-50 h-14 w-14 rounded-full bg-gold text-foreground shadow-lg flex items-center justify-center hover:bg-gold/90 transition-all active:scale-95"
+          className="fixed bottom-24 right-4 z-50 h-14 w-14 rounded-full bg-gold text-primary-foreground shadow-gold flex items-center justify-center hover:opacity-90 transition-all active:scale-95"
+          aria-label="Abrir assistente IA"
         >
           <Sparkles className="h-6 w-6" />
         </button>
@@ -87,9 +122,9 @@ export default function AiAssistantChat() {
 
       {/* Chat panel */}
       {open && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-background/95 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-50 flex flex-col bg-background animate-fade-in">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-card">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-card shrink-0">
             <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-full bg-gold/20 flex items-center justify-center">
                 <Sparkles className="h-4 w-4 text-gold" />
@@ -99,9 +134,20 @@ export default function AiAssistantChat() {
                 <p className="text-[10px] text-muted-foreground">Agendamentos & Produtividade</p>
               </div>
             </div>
-            <button onClick={() => setOpen(false)} className="p-2 rounded-full hover:bg-muted transition-colors">
-              <X className="h-5 w-5 text-foreground" />
-            </button>
+            <div className="flex items-center gap-1">
+              {messages.length > 0 && (
+                <button
+                  onClick={clearHistory}
+                  className="p-2 rounded-full hover:bg-destructive/10 transition-colors"
+                  aria-label="Limpar histórico"
+                >
+                  <Trash2 className="h-4 w-4 text-muted-foreground" />
+                </button>
+              )}
+              <button onClick={() => setOpen(false)} className="p-2 rounded-full hover:bg-muted transition-colors">
+                <X className="h-5 w-5 text-foreground" />
+              </button>
+            </div>
           </div>
 
           {/* Messages */}
@@ -119,7 +165,7 @@ export default function AiAssistantChat() {
                   {suggestions.map(s => (
                     <button
                       key={s}
-                      onClick={() => { setInput(s); }}
+                      onClick={() => sendMessage(s)}
                       className="w-full text-left text-xs p-2.5 rounded-lg border border-border bg-card hover:bg-muted transition-colors text-muted-foreground"
                     >
                       💡 {s}
@@ -133,7 +179,7 @@ export default function AiAssistantChat() {
               <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm ${
                   msg.role === "user"
-                    ? "bg-gold text-foreground rounded-br-sm"
+                    ? "bg-gold text-primary-foreground rounded-br-sm"
                     : "bg-card border border-border rounded-bl-sm"
                 }`}>
                   {msg.role === "assistant" ? (
@@ -161,22 +207,27 @@ export default function AiAssistantChat() {
           </div>
 
           {/* Input */}
-          <div className="px-4 py-3 border-t border-border bg-card">
-            <div className="flex items-center gap-2">
+          <div className="px-4 py-3 border-t border-border bg-card shrink-0">
+            <div className="flex items-center gap-2 max-w-2xl mx-auto">
               <input
                 ref={inputRef}
                 value={input}
                 onChange={e => setInput(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && !e.shiftKey && sendMessage()}
+                onKeyDown={e => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                  }
+                }}
                 placeholder="Peça algo à sua assistente..."
                 disabled={loading}
                 className="flex-1 bg-muted/50 border border-border rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-1 focus:ring-gold placeholder:text-muted-foreground/50 disabled:opacity-50"
               />
               <Button
-                onClick={sendMessage}
+                onClick={() => sendMessage()}
                 disabled={!input.trim() || loading}
                 size="icon"
-                className="h-10 w-10 rounded-xl bg-gold text-foreground hover:bg-gold/90 shrink-0"
+                className="h-10 w-10 rounded-xl bg-gold text-primary-foreground hover:bg-gold/90 shrink-0"
               >
                 <Send className="h-4 w-4" />
               </Button>
