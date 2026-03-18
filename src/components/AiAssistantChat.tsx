@@ -56,6 +56,8 @@ export default function AiAssistantChat() {
     const msg = (text || input).trim();
     if (!msg || loading) return;
 
+    console.log("[AiAssistant] Enviando mensagem:", msg);
+
     const userMsg: Message = { role: "user", content: msg };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
@@ -63,32 +65,50 @@ export default function AiAssistantChat() {
     setLoading(true);
 
     try {
+      console.log("[AiAssistant] Chamando edge function...");
       const { data, error } = await supabase.functions.invoke("ai-assistant", {
         body: { messages: newMessages },
       });
 
+      console.log("[AiAssistant] Resposta recebida:", { data, error });
+
       if (error) {
-        // Check for specific HTTP error status in the error
-        const errMsg = error.message || "Erro ao enviar mensagem";
+        console.error("[AiAssistant] Erro da função:", error);
+        // supabase.functions.invoke wraps non-2xx as FunctionsHttpError
+        // Try to parse JSON body from the error
+        let errMsg = "Erro ao enviar mensagem";
+        try {
+          if (error.context && typeof error.context.json === 'function') {
+            const body = await error.context.json();
+            errMsg = body?.error || errMsg;
+          } else {
+            errMsg = error.message || errMsg;
+          }
+        } catch {
+          errMsg = error.message || errMsg;
+        }
         toast({ title: errMsg, variant: "destructive" });
         setLoading(false);
         return;
       }
 
       if (data?.error) {
+        console.warn("[AiAssistant] Erro no payload:", data.error);
         toast({ title: data.error, variant: "destructive" });
         setLoading(false);
         return;
       }
 
-      const assistantMsg: Message = { role: "assistant", content: data.reply };
+      const reply = data?.reply || "Desculpe, não consegui processar sua mensagem.";
+      console.log("[AiAssistant] Reply:", reply.substring(0, 100));
+      const assistantMsg: Message = { role: "assistant", content: reply };
       setMessages(prev => [...prev, assistantMsg]);
 
-      if (data.event_created) {
+      if (data?.event_created) {
         toast({ title: "📅 Evento criado na sua agenda!" });
       }
     } catch (err: any) {
-      console.error("AI chat error:", err);
+      console.error("[AiAssistant] Erro de conexão:", err);
       toast({ title: "Erro de conexão. Tente novamente.", variant: "destructive" });
     } finally {
       setLoading(false);
