@@ -60,12 +60,10 @@ export default function AiAssistantChat() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  // Persist messages to localStorage
   useEffect(() => {
     saveMessages(messages);
   }, [messages]);
 
-  // Auto-scroll to bottom on new messages or loading state
   useEffect(() => {
     if (scrollRef.current) {
       requestAnimationFrame(() => {
@@ -76,7 +74,6 @@ export default function AiAssistantChat() {
     }
   }, [messages, loading]);
 
-  // Focus input when chat opens
   useEffect(() => {
     if (open && inputRef.current) {
       setTimeout(() => inputRef.current?.focus(), 150);
@@ -116,7 +113,6 @@ export default function AiAssistantChat() {
           errMsg = error.message || errMsg;
         }
         toast({ title: errMsg, variant: "destructive" });
-        // Remove the user message on error so they can retry
         setMessages(messages);
         return;
       }
@@ -128,11 +124,8 @@ export default function AiAssistantChat() {
       }
 
       const reply = data?.reply || "Desculpe, não consegui processar. Pode tentar de novo? 💛";
-      console.log("[AiAssistant] Reply:", reply.substring(0, 120));
-      
       setMessages(prev => [...prev, { role: "assistant", content: reply }]);
 
-      // Save created events to localStorage for persistence
       if (data?.event_created && data?.created_events?.length > 0) {
         const scheduledEvents: ScheduledEvent[] = data.created_events.map((e: any) => ({
           ...e,
@@ -176,9 +169,9 @@ export default function AiAssistantChat() {
         </button>
       )}
 
-      {/* Chat panel */}
+      {/* Chat panel - z-[60] to be above BottomNav z-50 */}
       {open && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-background animate-fade-in">
+        <div className="fixed inset-0 z-[60] flex flex-col bg-background">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-card shrink-0">
             <div className="flex items-center gap-2">
@@ -206,7 +199,7 @@ export default function AiAssistantChat() {
             </div>
           </div>
 
-          {/* Messages */}
+          {/* Messages area */}
           <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
             {messages.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
@@ -266,8 +259,8 @@ export default function AiAssistantChat() {
             )}
           </div>
 
-          {/* Input */}
-          <div className="px-4 py-3 border-t border-border bg-card shrink-0">
+          {/* Input - always visible at the bottom */}
+          <div className="px-4 py-3 border-t border-border bg-card shrink-0 pb-safe">
             <div className="flex items-center gap-2 max-w-2xl mx-auto">
               <input
                 ref={inputRef}
@@ -279,9 +272,9 @@ export default function AiAssistantChat() {
                     sendMessage();
                   }
                 }}
-                placeholder="Peça algo à sua assistente..."
+                placeholder="Digite sua mensagem..."
                 disabled={loading}
-                className="flex-1 bg-muted/50 border border-border rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-1 focus:ring-gold placeholder:text-muted-foreground/50 disabled:opacity-50"
+                className="flex-1 bg-muted/50 border border-border rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-gold/50 placeholder:text-muted-foreground/50 disabled:opacity-50 text-foreground"
               />
               <Button
                 onClick={() => sendMessage()}
