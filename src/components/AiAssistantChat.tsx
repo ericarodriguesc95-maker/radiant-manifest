@@ -10,11 +10,21 @@ interface Message {
   content: string;
 }
 
-const STORAGE_KEY = "ai-assistant-messages";
+interface ScheduledEvent {
+  title: string;
+  event_date: string;
+  start_time?: string;
+  end_time?: string;
+  description?: string;
+  created_at: string;
+}
+
+const MESSAGES_KEY = "ai-assistant-messages";
+const SCHEDULES_KEY = "ai-assistant-schedules";
 
 function loadMessages(): Message[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(MESSAGES_KEY);
     if (raw) return JSON.parse(raw);
   } catch {}
   return [];
@@ -22,8 +32,23 @@ function loadMessages(): Message[] {
 
 function saveMessages(msgs: Message[]) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(msgs));
+    localStorage.setItem(MESSAGES_KEY, JSON.stringify(msgs));
   } catch {}
+}
+
+function saveSchedule(events: ScheduledEvent[]) {
+  try {
+    const existing = loadSchedules();
+    localStorage.setItem(SCHEDULES_KEY, JSON.stringify([...existing, ...events]));
+  } catch {}
+}
+
+function loadSchedules(): ScheduledEvent[] {
+  try {
+    const raw = localStorage.getItem(SCHEDULES_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return [];
 }
 
 export default function AiAssistantChat() {
@@ -40,15 +65,21 @@ export default function AiAssistantChat() {
     saveMessages(messages);
   }, [messages]);
 
+  // Auto-scroll to bottom on new messages or loading state
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      requestAnimationFrame(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+      });
     }
   }, [messages, loading]);
 
+  // Focus input when chat opens
   useEffect(() => {
     if (open && inputRef.current) {
-      setTimeout(() => inputRef.current?.focus(), 100);
+      setTimeout(() => inputRef.current?.focus(), 150);
     }
   }, [open]);
 
@@ -56,7 +87,7 @@ export default function AiAssistantChat() {
     const msg = (text || input).trim();
     if (!msg || loading) return;
 
-    console.log("[AiAssistant] Enviando mensagem:", msg);
+    console.log("[AiAssistant] Enviando:", msg);
 
     const userMsg: Message = { role: "user", content: msg };
     const newMessages = [...messages, userMsg];
@@ -65,20 +96,17 @@ export default function AiAssistantChat() {
     setLoading(true);
 
     try {
-      console.log("[AiAssistant] Chamando edge function...");
       const { data, error } = await supabase.functions.invoke("ai-assistant", {
         body: { messages: newMessages },
       });
 
-      console.log("[AiAssistant] Resposta recebida:", { data, error });
+      console.log("[AiAssistant] Resposta:", { data, error });
 
       if (error) {
-        console.error("[AiAssistant] Erro da função:", error);
-        // supabase.functions.invoke wraps non-2xx as FunctionsHttpError
-        // Try to parse JSON body from the error
+        console.error("[AiAssistant] Erro:", error);
         let errMsg = "Erro ao enviar mensagem";
         try {
-          if (error.context && typeof error.context.json === 'function') {
+          if (error.context && typeof error.context.json === "function") {
             const body = await error.context.json();
             errMsg = body?.error || errMsg;
           } else {
@@ -88,28 +116,35 @@ export default function AiAssistantChat() {
           errMsg = error.message || errMsg;
         }
         toast({ title: errMsg, variant: "destructive" });
-        setLoading(false);
+        // Remove the user message on error so they can retry
+        setMessages(messages);
         return;
       }
 
       if (data?.error) {
-        console.warn("[AiAssistant] Erro no payload:", data.error);
         toast({ title: data.error, variant: "destructive" });
-        setLoading(false);
+        setMessages(messages);
         return;
       }
 
-      const reply = data?.reply || "Desculpe, não consegui processar sua mensagem.";
-      console.log("[AiAssistant] Reply:", reply.substring(0, 100));
-      const assistantMsg: Message = { role: "assistant", content: reply };
-      setMessages(prev => [...prev, assistantMsg]);
+      const reply = data?.reply || "Desculpe, não consegui processar. Pode tentar de novo? 💛";
+      console.log("[AiAssistant] Reply:", reply.substring(0, 120));
+      
+      setMessages(prev => [...prev, { role: "assistant", content: reply }]);
 
-      if (data?.event_created) {
+      // Save created events to localStorage for persistence
+      if (data?.event_created && data?.created_events?.length > 0) {
+        const scheduledEvents: ScheduledEvent[] = data.created_events.map((e: any) => ({
+          ...e,
+          created_at: new Date().toISOString(),
+        }));
+        saveSchedule(scheduledEvents);
         toast({ title: "📅 Evento criado na sua agenda!" });
       }
     } catch (err: any) {
       console.error("[AiAssistant] Erro de conexão:", err);
       toast({ title: "Erro de conexão. Tente novamente.", variant: "destructive" });
+      setMessages(messages);
     } finally {
       setLoading(false);
     }
@@ -117,7 +152,7 @@ export default function AiAssistantChat() {
 
   const clearHistory = () => {
     setMessages([]);
-    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(MESSAGES_KEY);
     toast({ title: "Histórico limpo ✨" });
   };
 
@@ -125,6 +160,7 @@ export default function AiAssistantChat() {
     "Agendar sessão de estudo amanhã às 9h",
     "Criar lembrete para meditação diária",
     "Dicas de produtividade para hoje",
+    "Como organizar minha rotina da semana?",
   ];
 
   return (
@@ -150,8 +186,8 @@ export default function AiAssistantChat() {
                 <Sparkles className="h-4 w-4 text-gold" />
               </div>
               <div>
-                <p className="text-sm font-display font-semibold text-foreground">Assistente IA</p>
-                <p className="text-[10px] text-muted-foreground">Agendamentos & Produtividade</p>
+                <p className="text-sm font-display font-semibold text-foreground">Assistente Glow Up ✨</p>
+                <p className="text-[10px] text-muted-foreground">Sua parceira de alta performance</p>
               </div>
             </div>
             <div className="flex items-center gap-1">
@@ -178,8 +214,12 @@ export default function AiAssistantChat() {
                   <Calendar className="h-8 w-8 text-gold" />
                 </div>
                 <div>
-                  <p className="text-sm font-display font-semibold text-foreground">Olá! Sou sua assistente ✨</p>
-                  <p className="text-xs text-muted-foreground mt-1">Posso ajudar com agendamentos, lembretes e dicas de produtividade</p>
+                  <p className="text-sm font-display font-semibold text-foreground">
+                    Olá! Sou sua Assistente Glow Up ✨
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Vamos juntas organizar sua rotina e conquistar seus objetivos!
+                  </p>
                 </div>
                 <div className="space-y-2 w-full max-w-xs">
                   {suggestions.map(s => (
