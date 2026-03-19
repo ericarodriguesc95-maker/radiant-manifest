@@ -31,12 +31,19 @@ serve(async (req) => {
     const { messages } = await req.json();
 
     // Fetch user's upcoming events for context
-    const today = new Date().toISOString().split("T")[0];
+    const now = new Date();
+    const todayStr = now.toISOString().split("T")[0];
+    
+    // Calculate tomorrow
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split("T")[0];
+
     const { data: events } = await supabase
       .from("calendar_events")
       .select("title, event_date, start_time, end_time, is_completed")
       .eq("user_id", user.id)
-      .gte("event_date", today)
+      .gte("event_date", todayStr)
       .order("event_date")
       .limit(20);
 
@@ -46,22 +53,39 @@ serve(async (req) => {
         ).join("\n")}`
       : "\n\nA usuária não tem eventos agendados próximos.";
 
-    const now = new Date();
-    const todayStr = now.toISOString().split("T")[0];
-    const systemPrompt = `Você é a assistente de Alta Performance do app "Performance Glow Up". Seu papel é ajudar a usuária com:
+    // Fetch user profile for personalization
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("user_id", user.id)
+      .maybeSingle();
 
-1. **Agendamentos**: Ajude a criar eventos na agenda (compromissos, sessões de estudo, treinos, etc.)
-2. **Lembretes**: Sugira lembretes para hábitos, metas e tarefas importantes
-3. **Produtividade**: Dê dicas sobre gestão de tempo, técnicas de estudo e organização
-4. **Motivação**: Ofereça frases motivacionais e incentive o progresso
+    const userName = profile?.display_name || "querida";
 
-Quando a usuária pedir para agendar algo, use a ferramenta create_calendar_event com os dados extraídos.
-Se ela não especificar a data, pergunte. Se não especificar horário, sugira um horário adequado.
-Hoje é ${now.toLocaleDateString("pt-BR")} (${todayStr}). Use formato YYYY-MM-DD para datas e HH:MM para horários.
-"Amanhã" significa a data de amanhã calculada a partir de hoje.
+    const systemPrompt = `Você é a **Assistente Glow Up** ✨ — a melhor amiga de produtividade da ${userName}. Sua personalidade é:
+
+🌟 **Empática e acolhedora**: Sempre valide os sentimentos e conquistas da usuária. Use frases como "Vamos juntas conquistar esse objetivo!" e "Organizei sua agenda para você brilhar hoje!"
+🎯 **Proativa**: Sugira melhorias na rotina, antecipe necessidades e ofereça dicas práticas.
+💪 **Motivadora**: Celebre cada pequeno progresso. Frases como "Que orgulho de você!" e "Mais um passo rumo à sua melhor versão!"
+🧠 **Inteligente**: Dê respostas claras, organizadas e diretas. Use bullet points e emojis com elegância.
+
+**Suas capacidades:**
+1. **Agendamentos**: Crie eventos na agenda (compromissos, sessões de estudo, treinos, meditações, etc.). Use a ferramenta create_calendar_event.
+2. **Lembretes**: Sugira e crie lembretes para hábitos, metas e tarefas importantes.
+3. **Produtividade**: Dê dicas sobre gestão de tempo, técnicas de estudo (Pomodoro, etc.) e organização.
+4. **Motivação**: Ofereça frases motivacionais personalizadas e incentive o progresso.
+5. **Bem-estar**: Ajude com dicas de saúde mental, skincare, exercícios e autocuidado.
+
+**Regras de data e hora:**
+- Hoje é **${now.toLocaleDateString("pt-BR", { weekday: "long", day: "2-digit", month: "long", year: "numeric" })}** (${todayStr}).
+- "Amanhã" = **${tomorrowStr}** (${tomorrow.toLocaleDateString("pt-BR", { weekday: "long" })}).
+- Use formato YYYY-MM-DD para datas e HH:MM para horários nas ferramentas.
+- Se a usuária não especificar horário, sugira um adequado e pergunte se está bom.
+- "Depois de amanhã" = calcule somando 2 dias a hoje.
+
 ${eventsContext}
 
-Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no feminino.`;
+**Tom de voz**: Fale como uma amiga próxima e profissional de CS (Customer Success). Trate a usuária no feminino. Seja concisa mas calorosa. Termine mensagens importantes com uma frase motivacional.`;
 
     const tools = [
       {
@@ -86,6 +110,8 @@ Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no femin
       },
     ];
 
+    console.log("[ai-assistant] Calling AI gateway with", messages.length, "messages");
+
     const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -105,32 +131,37 @@ Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no femin
     });
 
     if (!aiResponse.ok) {
-      if (aiResponse.status === 429) {
+      const status = aiResponse.status;
+      if (status === 429) {
         return new Response(JSON.stringify({ error: "Muitas solicitações. Tente novamente em alguns segundos." }), {
           status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      if (aiResponse.status === 402) {
+      if (status === 402) {
         return new Response(JSON.stringify({ error: "Créditos de IA insuficientes." }), {
           status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       const errText = await aiResponse.text();
-      console.error("AI gateway error:", aiResponse.status, errText);
+      console.error("AI gateway error:", status, errText);
       throw new Error("Erro ao processar sua mensagem");
     }
 
     const aiData = await aiResponse.json();
+    console.log("[ai-assistant] AI response received, choices:", aiData.choices?.length);
     const choice = aiData.choices?.[0];
 
     // Handle tool calls
     if (choice?.message?.tool_calls?.length > 0) {
       const toolResults = [];
       let eventCreated = false;
+      const createdEvents = [];
 
       for (const toolCall of choice.message.tool_calls) {
         if (toolCall.function.name === "create_calendar_event") {
           const args = JSON.parse(toolCall.function.arguments);
+          console.log("[ai-assistant] Creating event:", args);
+          
           const { error: insertError } = await supabase
             .from("calendar_events")
             .insert({
@@ -147,7 +178,10 @@ Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no femin
             ? `Erro ao criar evento: ${insertError.message}`
             : `Evento "${args.title}" criado com sucesso para ${args.event_date}${args.start_time ? ` às ${args.start_time}` : ""}!`;
 
-          if (!insertError) eventCreated = true;
+          if (!insertError) {
+            eventCreated = true;
+            createdEvents.push(args);
+          }
 
           toolResults.push({
             tool_call_id: toolCall.id,
@@ -182,6 +216,7 @@ Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no femin
         return new Response(JSON.stringify({
           reply: toolResults.map(r => r.content).join("\n"),
           event_created: eventCreated,
+          created_events: createdEvents,
         }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
@@ -189,11 +224,12 @@ Seja concisa, acolhedora e use emojis com moderação. Trate a usuária no femin
       return new Response(JSON.stringify({
         reply: followUpData.choices?.[0]?.message?.content || toolResults.map(r => r.content).join("\n"),
         event_created: eventCreated,
+        created_events: createdEvents,
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     return new Response(JSON.stringify({
-      reply: choice?.message?.content || "Desculpe, não consegui processar sua mensagem.",
+      reply: choice?.message?.content || "Desculpe, não consegui processar sua mensagem. Pode tentar de novo? 💛",
       event_created: false,
     }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
