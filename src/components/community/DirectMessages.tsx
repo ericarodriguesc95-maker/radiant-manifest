@@ -21,7 +21,10 @@ interface Message {
   sender_id: string;
   text: string;
   created_at: string;
+  read: boolean;
 }
+
+type SendingState = "idle" | "sending" | "sent";
 
 export default function DirectMessages({ onClose }: { onClose: () => void }) {
   const { user, profile } = useAuth();
