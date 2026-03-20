@@ -21,7 +21,10 @@ interface Message {
   sender_id: string;
   text: string;
   created_at: string;
+  read: boolean;
 }
+
+type SendingState = "idle" | "sending" | "sent";
 
 export default function DirectMessages({ onClose }: { onClose: () => void }) {
   const { user, profile } = useAuth();
@@ -34,6 +37,7 @@ export default function DirectMessages({ onClose }: { onClose: () => void }) {
   const [showNewChat, setShowNewChat] = useState(false);
   const [selectedOther, setSelectedOther] = useState<{ user_id: string; display_name: string | null; avatar_url: string | null } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [sendingState, setSendingState] = useState<SendingState>("idle");
 
   const fetchConversations = useCallback(async () => {
     if (!user) return;
@@ -101,7 +105,7 @@ export default function DirectMessages({ onClose }: { onClose: () => void }) {
   const fetchMessages = useCallback(async (convId: string) => {
     const { data } = await supabase
       .from("direct_messages")
-      .select("id, sender_id, text, created_at")
+      .select("id, sender_id, text, created_at, read")
       .eq("conversation_id", convId)
       .order("created_at", { ascending: true });
     if (data) setMessages(data);
@@ -156,12 +160,15 @@ export default function DirectMessages({ onClose }: { onClose: () => void }) {
 
   const sendMessage = async () => {
     if (!newMsg.trim() || !selectedConv || !user) return;
+    setSendingState("sending");
     await supabase.from("direct_messages").insert({
       conversation_id: selectedConv,
       sender_id: user.id,
       text: newMsg.trim(),
     });
     setNewMsg("");
+    setSendingState("sent");
+    setTimeout(() => setSendingState("idle"), 1500);
     await supabase.from("conversations").update({ updated_at: new Date().toISOString() }).eq("id", selectedConv);
   };
 
@@ -198,21 +205,37 @@ export default function DirectMessages({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-2">
-          {messages.map(msg => (
-            <div key={msg.id} className={cn("flex", msg.sender_id === user?.id ? "justify-end" : "justify-start")}>
-              <div className={cn(
-                "max-w-[75%] rounded-2xl px-3 py-2 text-sm font-body",
-                msg.sender_id === user?.id
-                  ? "bg-primary text-primary-foreground rounded-br-md"
-                  : "bg-muted text-foreground rounded-bl-md"
-              )}>
-                <p>{msg.text}</p>
-                <p className={cn("text-[10px] mt-0.5", msg.sender_id === user?.id ? "text-primary-foreground/60" : "text-muted-foreground")}>
-                  {formatTime(msg.created_at)}
-                </p>
+          {messages.map((msg, i) => {
+            const isMe = msg.sender_id === user?.id;
+            const isLast = i === messages.length - 1;
+            return (
+              <div key={msg.id} className={cn("flex", isMe ? "justify-end" : "justify-start")}>
+                <div className={cn(
+                  "max-w-[75%] rounded-2xl px-3 py-2 text-sm font-body",
+                  isMe
+                    ? "bg-gold text-white rounded-br-md"
+                    : "bg-muted text-foreground rounded-bl-md"
+                )}>
+                  <p>{msg.text}</p>
+                  <div className={cn("flex items-center gap-1 mt-0.5", isMe ? "justify-end" : "")}>
+                    <span className={cn("text-[10px]", isMe ? "text-white/60" : "text-muted-foreground")}>
+                      {formatTime(msg.created_at)}
+                    </span>
+                    {isMe && (
+                      <span className="text-[10px] text-white/60">
+                        {msg.read ? "✓✓" : "✓"}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
+            );
+          })}
+          {sendingState === "sending" && (
+            <div className="flex justify-end">
+              <span className="text-[10px] text-muted-foreground font-body italic">Enviando...</span>
             </div>
-          ))}
+          )}
           <div ref={messagesEndRef} />
         </div>
 

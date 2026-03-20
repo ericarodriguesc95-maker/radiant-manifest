@@ -27,6 +27,7 @@ import DiarioPage from "@/pages/DiarioPage";
 import AdminActivityPage from "@/pages/AdminActivityPage";
 import AdminContentPage from "@/pages/AdminContentPage";
 import SaudePage from "@/pages/SaudePage";
+import DesafiosPage from "@/pages/DesafiosPage";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,7 @@ const AppRoutes = () => (
       <Route path="/guias" element={<ErrorBoundary><GuiasPage /></ErrorBoundary>} />
       <Route path="/alta-performance" element={<ErrorBoundary><AltaPerformancePage /></ErrorBoundary>} />
       <Route path="/saude" element={<ErrorBoundary><SaudePage /></ErrorBoundary>} />
+      <Route path="/desafios" element={<ErrorBoundary><DesafiosPage /></ErrorBoundary>} />
       <Route path="/diario" element={<ErrorBoundary><DiarioPage /></ErrorBoundary>} />
       <Route path="/settings" element={<ErrorBoundary><SettingsPage /></ErrorBoundary>} />
       <Route path="/admin/atividade" element={<ErrorBoundary><AdminActivityPage /></ErrorBoundary>} />

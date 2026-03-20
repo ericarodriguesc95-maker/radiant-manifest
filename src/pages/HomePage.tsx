@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield } from "lucide-react";
+import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
@@ -166,6 +166,19 @@ const HomePage = () => {
             </button>
           ))}
         </div>
+
+        {/* Desafios CTA */}
+        <button
+          onClick={() => navigate("/desafios")}
+          className="w-full bg-gradient-to-r from-[hsl(43,72%,52%)] to-[hsl(43,60%,65%)] text-white rounded-2xl p-4 flex items-center gap-3 transition-all hover:shadow-brand active:scale-[0.98]"
+        >
+          <Trophy className="h-6 w-6" />
+          <div className="flex-1 text-left">
+            <p className="text-sm font-display font-bold">Desafios Progressivos</p>
+            <p className="text-xs opacity-80 font-body">Jornadas de 7 a 90 dias</p>
+          </div>
+          <ChevronRight className="h-5 w-5 opacity-60" />
+        </button>
 
         {/* Monthly Calendar */}
         <section>

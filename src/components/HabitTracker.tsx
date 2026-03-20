@@ -226,11 +226,23 @@ export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
         {habits.map(habit => {
           const done = completed.has(habit.id);
           return (
-            <button key={habit.id} onClick={() => toggle(habit.id)} className={cn("w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200", done ? "bg-gold/10 border border-gold/30" : "bg-card border border-transparent hover:bg-muted")}>
-              <span className="text-lg">{habit.emoji}</span>
-              <span className={cn("flex-1 text-left text-sm font-body", done && "line-through text-muted-foreground")}>{habit.label}</span>
-              <div className={cn("h-5 w-5 rounded-full border-2 flex items-center justify-center transition-all", done ? "border-gold bg-gold" : "border-muted-foreground")}>
-                {done && <Check className="h-3 w-3 text-primary-foreground" />}
+            <button key={habit.id} onClick={() => toggle(habit.id)} className={cn(
+              "w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-300 relative overflow-hidden",
+              done ? "bg-gold/10 border border-gold/30" : "bg-card border border-transparent hover:bg-muted"
+            )}>
+              {/* Star glow effect on completion */}
+              {done && (
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-gold/10 rounded-full blur-xl animate-star-pulse" />
+                </div>
+              )}
+              <span className="text-lg relative z-10">{habit.emoji}</span>
+              <span className={cn("flex-1 text-left text-sm font-body relative z-10", done && "line-through text-muted-foreground")}>{habit.label}</span>
+              <div className={cn(
+                "h-6 w-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 relative z-10",
+                done ? "border-gold bg-gold shadow-[0_0_12px_hsl(43,72%,52%,0.5)]" : "border-muted-foreground"
+              )}>
+                {done && <Check className="h-3.5 w-3.5 text-white" />}
               </div>
             </button>
           );

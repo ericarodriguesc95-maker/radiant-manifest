@@ -42,6 +42,7 @@ interface PostWithProfile {
   media_url: string | null;
   media_type: string | null;
   views_count: number;
+  viewers?: { user_id: string; display_name: string | null; avatar_url: string | null }[];
 }
 
 const ComunidadePage = () => {
@@ -61,6 +62,7 @@ const ComunidadePage = () => {
   const [viewingProfileUserId, setViewingProfileUserId] = useState<string | null>(null);
   const [showDMs, setShowDMs] = useState(false);
   const [showChatRooms, setShowChatRooms] = useState(false);
+  const [viewingPostViewers, setViewingPostViewers] = useState<string | null>(null);
 
   // Online presence
   const onlineUsers = useOnlinePresence(user?.id);
@@ -149,15 +151,25 @@ const ComunidadePage = () => {
     const likedPostIds = new Set((myLikes || []).map((l: any) => l.post_id));
     const profileMap = new Map((profiles || []).map((p: any) => [p.user_id, p]));
 
-    // Fetch view counts
+    // Fetch view counts + viewer profiles
     const viewCountMap = new Map<string, number>();
+    const viewersMap = new Map<string, { user_id: string; display_name: string | null; avatar_url: string | null }[]>();
     if (postIds.length > 0) {
       for (const pid of postIds) {
-        const { count } = await supabase
+        const { data: viewData, count } = await supabase
           .from("post_views")
-          .select("*", { count: "exact", head: true })
-          .eq("post_id", pid);
+          .select("viewer_id", { count: "exact" })
+          .eq("post_id", pid)
+          .limit(50);
         viewCountMap.set(pid, count || 0);
+        if (viewData && viewData.length > 0) {
+          const viewerIds = viewData.map((v: any) => v.viewer_id);
+          const { data: viewerProfiles } = await supabase
+            .from("profiles")
+            .select("user_id, display_name, avatar_url")
+            .in("user_id", viewerIds);
+          viewersMap.set(pid, viewerProfiles || []);
+        }
       }
     }
 
@@ -201,6 +213,7 @@ const ComunidadePage = () => {
         media_url: post.media_url || null,
         media_type: post.media_type || null,
         views_count: viewCountMap.get(post.id) || 0,
+        viewers: viewersMap.get(post.id) || [],
       };
     });
 
@@ -1068,11 +1081,39 @@ const ComunidadePage = () => {
                 >
                   <Smile className="h-4 w-4" />
                 </button>
-                <span className="flex items-center gap-1 text-xs font-body text-muted-foreground ml-auto">
+                <button
+                  onClick={() => setViewingPostViewers(viewingPostViewers === post.id ? null : post.id)}
+                  className="flex items-center gap-1 text-xs font-body text-muted-foreground ml-auto hover:text-foreground transition-colors"
+                >
                   <Eye className="h-3.5 w-3.5" />
                   {post.views_count}
-                </span>
+                </button>
               </div>
+
+              {/* Viewers list popup */}
+              {viewingPostViewers === post.id && post.viewers && post.viewers.length > 0 && (
+                <div className="px-4 py-3 border-t border-border animate-fade-in">
+                  <p className="text-[10px] text-muted-foreground font-body mb-2 uppercase tracking-wider">Visto por</p>
+                  <div className="flex flex-wrap gap-2">
+                    {post.viewers.map(v => (
+                      <button
+                        key={v.user_id}
+                        onClick={() => navigate(`/perfil/${v.user_id}`)}
+                        className="flex items-center gap-1.5 bg-muted/50 rounded-full px-2 py-1 hover:bg-muted transition-colors"
+                      >
+                        {v.avatar_url ? (
+                          <img src={v.avatar_url} className="h-5 w-5 rounded-full object-cover" alt="" />
+                        ) : (
+                          <div className="h-5 w-5 rounded-full bg-gold/20 flex items-center justify-center text-[8px] font-bold text-gold">
+                            {v.display_name?.charAt(0)?.toUpperCase() || "?"}
+                          </div>
+                        )}
+                        <span className="text-[10px] font-body">{v.user_id === user?.id ? "Você" : v.display_name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Post sticker reaction picker */}
               {postStickerPickerId === post.id && (
