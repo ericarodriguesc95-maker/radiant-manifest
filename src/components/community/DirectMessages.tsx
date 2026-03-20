@@ -160,12 +160,15 @@ export default function DirectMessages({ onClose }: { onClose: () => void }) {
 
   const sendMessage = async () => {
     if (!newMsg.trim() || !selectedConv || !user) return;
+    setSendingState("sending");
     await supabase.from("direct_messages").insert({
       conversation_id: selectedConv,
       sender_id: user.id,
       text: newMsg.trim(),
     });
     setNewMsg("");
+    setSendingState("sent");
+    setTimeout(() => setSendingState("idle"), 1500);
     await supabase.from("conversations").update({ updated_at: new Date().toISOString() }).eq("id", selectedConv);
   };
 
