@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield } from "lucide-react";
+import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
