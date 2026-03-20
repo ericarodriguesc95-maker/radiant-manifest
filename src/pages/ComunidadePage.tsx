@@ -151,15 +151,25 @@ const ComunidadePage = () => {
     const likedPostIds = new Set((myLikes || []).map((l: any) => l.post_id));
     const profileMap = new Map((profiles || []).map((p: any) => [p.user_id, p]));
 
-    // Fetch view counts
+    // Fetch view counts + viewer profiles
     const viewCountMap = new Map<string, number>();
+    const viewersMap = new Map<string, { user_id: string; display_name: string | null; avatar_url: string | null }[]>();
     if (postIds.length > 0) {
       for (const pid of postIds) {
-        const { count } = await supabase
+        const { data: viewData, count } = await supabase
           .from("post_views")
-          .select("*", { count: "exact", head: true })
-          .eq("post_id", pid);
+          .select("viewer_id", { count: "exact" })
+          .eq("post_id", pid)
+          .limit(50);
         viewCountMap.set(pid, count || 0);
+        if (viewData && viewData.length > 0) {
+          const viewerIds = viewData.map((v: any) => v.viewer_id);
+          const { data: viewerProfiles } = await supabase
+            .from("profiles")
+            .select("user_id, display_name, avatar_url")
+            .in("user_id", viewerIds);
+          viewersMap.set(pid, viewerProfiles || []);
+        }
       }
     }
 
