@@ -205,21 +205,37 @@ export default function DirectMessages({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-2">
-          {messages.map(msg => (
-            <div key={msg.id} className={cn("flex", msg.sender_id === user?.id ? "justify-end" : "justify-start")}>
-              <div className={cn(
-                "max-w-[75%] rounded-2xl px-3 py-2 text-sm font-body",
-                msg.sender_id === user?.id
-                  ? "bg-primary text-primary-foreground rounded-br-md"
-                  : "bg-muted text-foreground rounded-bl-md"
-              )}>
-                <p>{msg.text}</p>
-                <p className={cn("text-[10px] mt-0.5", msg.sender_id === user?.id ? "text-primary-foreground/60" : "text-muted-foreground")}>
-                  {formatTime(msg.created_at)}
-                </p>
+          {messages.map((msg, i) => {
+            const isMe = msg.sender_id === user?.id;
+            const isLast = i === messages.length - 1;
+            return (
+              <div key={msg.id} className={cn("flex", isMe ? "justify-end" : "justify-start")}>
+                <div className={cn(
+                  "max-w-[75%] rounded-2xl px-3 py-2 text-sm font-body",
+                  isMe
+                    ? "bg-gold text-white rounded-br-md"
+                    : "bg-muted text-foreground rounded-bl-md"
+                )}>
+                  <p>{msg.text}</p>
+                  <div className={cn("flex items-center gap-1 mt-0.5", isMe ? "justify-end" : "")}>
+                    <span className={cn("text-[10px]", isMe ? "text-white/60" : "text-muted-foreground")}>
+                      {formatTime(msg.created_at)}
+                    </span>
+                    {isMe && (
+                      <span className="text-[10px] text-white/60">
+                        {msg.read ? "✓✓" : "✓"}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
+            );
+          })}
+          {sendingState === "sending" && (
+            <div className="flex justify-end">
+              <span className="text-[10px] text-muted-foreground font-body italic">Enviando...</span>
             </div>
-          ))}
+          )}
           <div ref={messagesEndRef} />
         </div>
 
