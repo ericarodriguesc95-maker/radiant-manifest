@@ -62,6 +62,7 @@ const ComunidadePage = () => {
   const [viewingProfileUserId, setViewingProfileUserId] = useState<string | null>(null);
   const [showDMs, setShowDMs] = useState(false);
   const [showChatRooms, setShowChatRooms] = useState(false);
+  const [viewingPostViewers, setViewingPostViewers] = useState<string | null>(null);
 
   // Online presence
   const onlineUsers = useOnlinePresence(user?.id);
