@@ -27,6 +27,7 @@ import DiarioPage from "@/pages/DiarioPage";
 import AdminActivityPage from "@/pages/AdminActivityPage";
 import AdminContentPage from "@/pages/AdminContentPage";
 import SaudePage from "@/pages/SaudePage";
+import DesafiosPage from "@/pages/DesafiosPage";
 
 const queryClient = new QueryClient();
 
