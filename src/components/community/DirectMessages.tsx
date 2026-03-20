@@ -37,6 +37,7 @@ export default function DirectMessages({ onClose }: { onClose: () => void }) {
   const [showNewChat, setShowNewChat] = useState(false);
   const [selectedOther, setSelectedOther] = useState<{ user_id: string; display_name: string | null; avatar_url: string | null } | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [sendingState, setSendingState] = useState<SendingState>("idle");
 
   const fetchConversations = useCallback(async () => {
     if (!user) return;
