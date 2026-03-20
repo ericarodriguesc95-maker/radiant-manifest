@@ -213,6 +213,7 @@ const ComunidadePage = () => {
         media_url: post.media_url || null,
         media_type: post.media_type || null,
         views_count: viewCountMap.get(post.id) || 0,
+        viewers: viewersMap.get(post.id) || [],
       };
     });
 
