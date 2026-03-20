@@ -129,7 +129,7 @@ export default function ChatRooms({ onClose }: { onClose: () => void }) {
                     <p className="text-[10px] font-semibold text-primary mb-0.5">{msg.display_name}</p>
                   )}
                   <p className="text-sm font-body">{msg.text}</p>
-                  <p className={cn("text-[10px] mt-0.5", isMe ? "text-primary-foreground/60" : "text-muted-foreground")}>
+                  <p className={cn("text-[10px] mt-0.5", isMe ? "text-white/60" : "text-muted-foreground")}>
                     {formatTime(msg.created_at)}
                   </p>
                 </div>
