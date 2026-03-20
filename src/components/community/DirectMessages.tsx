@@ -105,7 +105,7 @@ export default function DirectMessages({ onClose }: { onClose: () => void }) {
   const fetchMessages = useCallback(async (convId: string) => {
     const { data } = await supabase
       .from("direct_messages")
-      .select("id, sender_id, text, created_at")
+      .select("id, sender_id, text, created_at, read")
       .eq("conversation_id", convId)
       .order("created_at", { ascending: true });
     if (data) setMessages(data);
