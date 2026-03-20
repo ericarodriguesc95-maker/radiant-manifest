@@ -1081,11 +1081,39 @@ const ComunidadePage = () => {
                 >
                   <Smile className="h-4 w-4" />
                 </button>
-                <span className="flex items-center gap-1 text-xs font-body text-muted-foreground ml-auto">
+                <button
+                  onClick={() => setViewingPostViewers(viewingPostViewers === post.id ? null : post.id)}
+                  className="flex items-center gap-1 text-xs font-body text-muted-foreground ml-auto hover:text-foreground transition-colors"
+                >
                   <Eye className="h-3.5 w-3.5" />
                   {post.views_count}
-                </span>
+                </button>
               </div>
+
+              {/* Viewers list popup */}
+              {viewingPostViewers === post.id && post.viewers && post.viewers.length > 0 && (
+                <div className="px-4 py-3 border-t border-border animate-fade-in">
+                  <p className="text-[10px] text-muted-foreground font-body mb-2 uppercase tracking-wider">Visto por</p>
+                  <div className="flex flex-wrap gap-2">
+                    {post.viewers.map(v => (
+                      <button
+                        key={v.user_id}
+                        onClick={() => navigate(`/perfil/${v.user_id}`)}
+                        className="flex items-center gap-1.5 bg-muted/50 rounded-full px-2 py-1 hover:bg-muted transition-colors"
+                      >
+                        {v.avatar_url ? (
+                          <img src={v.avatar_url} className="h-5 w-5 rounded-full object-cover" alt="" />
+                        ) : (
+                          <div className="h-5 w-5 rounded-full bg-gold/20 flex items-center justify-center text-[8px] font-bold text-gold">
+                            {v.display_name?.charAt(0)?.toUpperCase() || "?"}
+                          </div>
+                        )}
+                        <span className="text-[10px] font-body">{v.user_id === user?.id ? "Você" : v.display_name}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Post sticker reaction picker */}
               {postStickerPickerId === post.id && (
