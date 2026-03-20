@@ -122,7 +122,7 @@ export default function ChatRooms({ onClose }: { onClose: () => void }) {
                 <div className={cn(
                   "max-w-[75%] rounded-2xl px-3 py-2",
                   isMe
-                    ? "bg-primary text-primary-foreground rounded-br-md"
+                    ? "bg-gold text-white rounded-br-md"
                     : "bg-muted text-foreground rounded-bl-md"
                 )}>
                   {!isMe && showAvatar && (
