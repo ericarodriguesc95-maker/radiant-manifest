@@ -971,7 +971,7 @@ export default function DesafiosPage() {
 
         <div className="flex items-center gap-2 mb-4 text-sm font-body text-muted-foreground">
           <Flame className="h-4 w-4 text-orange-400" />
-          <span>{getParticipantCount(selectedChallenge.id)} meninas participando</span>
+          <span>{participantCounts[selectedChallenge.id] || 0} meninas participando</span>
         </div>
 
         {/* Day grid */}
