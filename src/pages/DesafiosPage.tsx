@@ -610,25 +610,53 @@ const CHALLENGES: Challenge[] = [
 
 // ─── Persistence Helpers ─────────────────────────────────────────────────────
 
-function getParticipantCount(challengeId: string): number {
-  const stored = localStorage.getItem(`challenge-participants-${challengeId}`);
-  if (stored) return parseInt(stored);
-  const base: Record<string, number> = { "7-mente": 127, "15-corpo": 89, "21-alma": 214, "30-evolucao": 156, "45-diamante": 67, "60-platina": 43, "90-elite": 31 };
-  const initial = base[challengeId] || 50;
-  localStorage.setItem(`challenge-participants-${challengeId}`, String(initial));
-  return initial;
+// DB-backed participant counts
+async function fetchParticipantCount(challengeId: string): Promise<number> {
+  const { count, error } = await supabase
+    .from("challenge_participants")
+    .select("*", { count: "exact", head: true })
+    .eq("challenge_id", challengeId);
+  if (error || count === null) return 0;
+  return count;
 }
 
-function joinChallenge(challengeId: string) {
-  const key = `challenge-joined-${challengeId}`;
-  if (localStorage.getItem(key)) return;
-  localStorage.setItem(key, new Date().toISOString());
-  const count = getParticipantCount(challengeId);
-  localStorage.setItem(`challenge-participants-${challengeId}`, String(count + 1));
+async function fetchAllParticipantCounts(challengeIds: string[]): Promise<Record<string, number>> {
+  const { data, error } = await supabase
+    .from("challenge_participants")
+    .select("challenge_id");
+  if (error || !data) return {};
+  const counts: Record<string, number> = {};
+  challengeIds.forEach(id => { counts[id] = 0; });
+  data.forEach(row => {
+    const id = row.challenge_id;
+    counts[id] = (counts[id] || 0) + 1;
+  });
+  return counts;
 }
 
-function isJoined(challengeId: string): boolean {
-  return !!localStorage.getItem(`challenge-joined-${challengeId}`);
+async function joinChallengeDB(challengeId: string, userId: string): Promise<boolean> {
+  const { error } = await supabase
+    .from("challenge_participants")
+    .insert({ challenge_id: challengeId, user_id: userId });
+  return !error;
+}
+
+async function isJoinedDB(challengeId: string, userId: string): Promise<boolean> {
+  const { data } = await supabase
+    .from("challenge_participants")
+    .select("id")
+    .eq("challenge_id", challengeId)
+    .eq("user_id", userId)
+    .maybeSingle();
+  return !!data;
+}
+
+async function fetchJoinedChallenges(userId: string): Promise<Set<string>> {
+  const { data } = await supabase
+    .from("challenge_participants")
+    .select("challenge_id")
+    .eq("user_id", userId);
+  return new Set((data || []).map(r => r.challenge_id));
 }
 
 function getChallengeProgress(challengeId: string): Set<number> {
