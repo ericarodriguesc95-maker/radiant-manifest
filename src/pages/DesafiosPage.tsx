@@ -809,8 +809,19 @@ export default function DesafiosPage() {
   const [showNPS, setShowNPS] = useState(false);
   const [justCompletedDay, setJustCompletedDay] = useState<number | null>(null);
   const [selectedTask, setSelectedTask] = useState<TaskDetail | null>(null);
-  const [, forceUpdate] = useState(0);
+  const [participantCounts, setParticipantCounts] = useState<Record<string, number>>({});
+  const [joinedSet, setJoinedSet] = useState<Set<string>>(new Set());
+  const [joining, setJoining] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Load participant counts and joined status from DB
+  useEffect(() => {
+    const ids = CHALLENGES.map(c => c.id);
+    fetchAllParticipantCounts(ids).then(setParticipantCounts);
+    if (user) {
+      fetchJoinedChallenges(user.id).then(setJoinedSet);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (selectedChallenge) {
@@ -823,10 +834,16 @@ export default function DesafiosPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [forumMessages]);
 
-  const handleJoin = (challenge: Challenge) => {
-    joinChallenge(challenge.id);
-    forceUpdate(n => n + 1);
-    setSelectedChallenge(challenge);
+  const handleJoin = async (challenge: Challenge) => {
+    if (!user || joining) return;
+    setJoining(true);
+    const ok = await joinChallengeDB(challenge.id, user.id);
+    if (ok) {
+      setJoinedSet(prev => new Set(prev).add(challenge.id));
+      setParticipantCounts(prev => ({ ...prev, [challenge.id]: (prev[challenge.id] || 0) + 1 }));
+      setSelectedChallenge(challenge);
+    }
+    setJoining(false);
   };
 
   const toggleDay = (day: number) => {
