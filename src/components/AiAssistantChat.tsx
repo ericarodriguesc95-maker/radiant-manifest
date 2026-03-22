@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { X, Send, Sparkles, Calendar, Trash2 } from "lucide-react";
+import { X, Send, Sparkles, Calendar, Trash2, Mic, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
+import { cn } from "@/lib/utils";
 
 interface Message {
   role: "user" | "assistant";
@@ -21,6 +22,7 @@ interface ScheduledEvent {
 
 const MESSAGES_KEY = "ai-assistant-messages";
 const SCHEDULES_KEY = "ai-assistant-schedules";
+const TTS_ENABLED_KEY = "ai-assistant-tts-enabled";
 
 function loadMessages(): Message[] {
   try {
@@ -51,18 +53,101 @@ function loadSchedules(): ScheduledEvent[] {
   return [];
 }
 
+// ─── Voice Waveform Visualizer ──────────────────────────────────────────────
+
+function VoiceWaveform({ active }: { active: boolean }) {
+  if (!active) return null;
+  return (
+    <div className="flex items-center gap-[3px] h-6">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div
+          key={i}
+          className="w-[3px] rounded-full bg-gold animate-waveform"
+          style={{
+            animationDelay: `${i * 120}ms`,
+            height: "100%",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ─── TTS Helper ─────────────────────────────────────────────────────────────
+
+function speakText(text: string) {
+  if (!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+
+  // Clean markdown for speech
+  const clean = text
+    .replace(/[#*_~`>\-\[\]()!]/g, "")
+    .replace(/\n+/g, ". ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!clean) return;
+
+  // Split into chunks of ~200 chars at sentence boundaries for reliability
+  const chunks = clean.match(/[^.!?]+[.!?]+/g) || [clean];
+  const merged: string[] = [];
+  let current = "";
+
+  for (const chunk of chunks) {
+    if ((current + chunk).length > 200) {
+      if (current) merged.push(current.trim());
+      current = chunk;
+    } else {
+      current += chunk;
+    }
+  }
+  if (current) merged.push(current.trim());
+
+  const voices = window.speechSynthesis.getVoices();
+  const ptVoice = voices.find(v => v.lang.startsWith("pt") && v.name.toLowerCase().includes("female"))
+    || voices.find(v => v.lang.startsWith("pt-BR"))
+    || voices.find(v => v.lang.startsWith("pt"))
+    || null;
+
+  merged.forEach((chunk, i) => {
+    const utterance = new SpeechSynthesisUtterance(chunk);
+    utterance.lang = "pt-BR";
+    utterance.rate = 1.0;
+    utterance.pitch = 1.1;
+    if (ptVoice) utterance.voice = ptVoice;
+    window.speechSynthesis.speak(utterance);
+  });
+}
+
+function stopSpeaking() {
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+// ─── Main Component ─────────────────────────────────────────────────────────
+
 export default function AiAssistantChat() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>(loadMessages);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [ttsEnabled, setTtsEnabled] = useState(() => {
+    try { return localStorage.getItem(TTS_ENABLED_KEY) !== "false"; } catch { return true; }
+  });
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const recognitionRef = useRef<any>(null);
   const { toast } = useToast();
 
   useEffect(() => {
     saveMessages(messages);
   }, [messages]);
+
+  useEffect(() => {
+    localStorage.setItem(TTS_ENABLED_KEY, String(ttsEnabled));
+  }, [ttsEnabled]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -80,27 +165,101 @@ export default function AiAssistantChat() {
     }
   }, [open]);
 
+  // Preload voices
+  useEffect(() => {
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      stopSpeaking();
+      if (recognitionRef.current) {
+        try { recognitionRef.current.stop(); } catch {}
+      }
+    };
+  }, []);
+
+  const startListening = useCallback(() => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      toast({ title: "Seu navegador não suporta reconhecimento de voz 😕", variant: "destructive" });
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "pt-BR";
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+    recognitionRef.current = recognition;
+
+    let finalTranscript = "";
+
+    recognition.onstart = () => setIsListening(true);
+
+    recognition.onresult = (event: any) => {
+      let interim = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interim = transcript;
+        }
+      }
+      setInput(finalTranscript || interim);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.warn("[Voice] Error:", event.error);
+      if (event.error !== "no-speech") {
+        toast({ title: "Erro na captura de áudio", variant: "destructive" });
+      }
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      if (finalTranscript.trim()) {
+        // Auto-send after voice capture
+        setTimeout(() => {
+          const sendBtn = document.querySelector("[data-voice-send]") as HTMLButtonElement;
+          sendBtn?.click();
+        }, 300);
+      }
+    };
+
+    recognition.start();
+  }, [toast]);
+
+  const stopListening = useCallback(() => {
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch {}
+    }
+    setIsListening(false);
+  }, []);
+
   const sendMessage = useCallback(async (text?: string) => {
     const msg = (text || input).trim();
     if (!msg || loading) return;
-
-    console.log("[AiAssistant] Enviando:", msg);
 
     const userMsg: Message = { role: "user", content: msg };
     const newMessages = [...messages, userMsg];
     setMessages(newMessages);
     setInput("");
     setLoading(true);
+    stopSpeaking();
 
     try {
       const { data, error } = await supabase.functions.invoke("ai-assistant", {
         body: { messages: newMessages },
       });
 
-      console.log("[AiAssistant] Resposta:", { data, error });
-
       if (error) {
-        console.error("[AiAssistant] Erro:", error);
         let errMsg = "Erro ao enviar mensagem";
         try {
           if (error.context && typeof error.context.json === "function") {
@@ -126,6 +285,11 @@ export default function AiAssistantChat() {
       const reply = data?.reply || "Desculpe, não consegui processar. Pode tentar de novo? 💛";
       setMessages(prev => [...prev, { role: "assistant", content: reply }]);
 
+      // TTS for AI response
+      if (ttsEnabled) {
+        setTimeout(() => speakText(reply), 400);
+      }
+
       if (data?.event_created && data?.created_events?.length > 0) {
         const scheduledEvents: ScheduledEvent[] = data.created_events.map((e: any) => ({
           ...e,
@@ -141,11 +305,12 @@ export default function AiAssistantChat() {
     } finally {
       setLoading(false);
     }
-  }, [input, loading, messages, toast]);
+  }, [input, loading, messages, toast, ttsEnabled]);
 
   const clearHistory = () => {
     setMessages([]);
     localStorage.removeItem(MESSAGES_KEY);
+    stopSpeaking();
     toast({ title: "Histórico limpo ✨" });
   };
 
@@ -158,6 +323,18 @@ export default function AiAssistantChat() {
 
   return (
     <>
+      {/* Waveform animation keyframes */}
+      <style>{`
+        @keyframes waveform {
+          0%, 100% { transform: scaleY(0.3); }
+          50% { transform: scaleY(1); }
+        }
+        .animate-waveform {
+          animation: waveform 0.8s ease-in-out infinite;
+          transform-origin: center;
+        }
+      `}</style>
+
       {/* FAB */}
       {!open && (
         <button
@@ -169,7 +346,7 @@ export default function AiAssistantChat() {
         </button>
       )}
 
-      {/* Chat panel - z-[60] to be above BottomNav z-50 */}
+      {/* Chat panel */}
       {open && (
         <div className="fixed inset-0 z-[60] flex flex-col bg-background">
           {/* Header */}
@@ -184,6 +361,18 @@ export default function AiAssistantChat() {
               </div>
             </div>
             <div className="flex items-center gap-1">
+              {/* TTS toggle */}
+              <button
+                onClick={() => { setTtsEnabled(v => !v); stopSpeaking(); }}
+                className={cn(
+                  "p-2 rounded-full transition-colors",
+                  ttsEnabled ? "text-gold hover:bg-gold/10" : "text-muted-foreground hover:bg-muted"
+                )}
+                aria-label={ttsEnabled ? "Desativar voz" : "Ativar voz"}
+                title={ttsEnabled ? "Voz ativada" : "Voz desativada"}
+              >
+                {ttsEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+              </button>
               {messages.length > 0 && (
                 <button
                   onClick={clearHistory}
@@ -193,7 +382,7 @@ export default function AiAssistantChat() {
                   <Trash2 className="h-4 w-4 text-muted-foreground" />
                 </button>
               )}
-              <button onClick={() => setOpen(false)} className="p-2 rounded-full hover:bg-muted transition-colors">
+              <button onClick={() => { setOpen(false); stopSpeaking(); }} className="p-2 rounded-full hover:bg-muted transition-colors">
                 <X className="h-5 w-5 text-foreground" />
               </button>
             </div>
@@ -211,7 +400,7 @@ export default function AiAssistantChat() {
                     Olá! Sou sua Assistente Glow Up ✨
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Vamos juntas organizar sua rotina e conquistar seus objetivos!
+                    Fale ou digite! Estou aqui para organizar sua rotina 🎤
                   </p>
                 </div>
                 <div className="space-y-2 w-full max-w-xs">
@@ -259,9 +448,24 @@ export default function AiAssistantChat() {
             )}
           </div>
 
-          {/* Input - always visible at the bottom */}
+          {/* Input area */}
           <div className="px-4 py-3 border-t border-border bg-card shrink-0 pb-safe">
             <div className="flex items-center gap-2 max-w-2xl mx-auto">
+              {/* Mic button */}
+              <button
+                onClick={isListening ? stopListening : startListening}
+                disabled={loading}
+                className={cn(
+                  "h-10 w-10 rounded-xl flex items-center justify-center shrink-0 transition-all",
+                  isListening
+                    ? "bg-destructive text-destructive-foreground animate-pulse shadow-lg shadow-destructive/30"
+                    : "bg-gold/15 text-gold hover:bg-gold/25"
+                )}
+                aria-label={isListening ? "Parar gravação" : "Gravar áudio"}
+              >
+                {isListening ? <VoiceWaveform active /> : <Mic className="h-4 w-4" />}
+              </button>
+
               <input
                 ref={inputRef}
                 value={input}
@@ -272,11 +476,16 @@ export default function AiAssistantChat() {
                     sendMessage();
                   }
                 }}
-                placeholder="Digite sua mensagem..."
+                placeholder={isListening ? "🎤 Ouvindo..." : "Digite ou fale sua mensagem..."}
                 disabled={loading}
-                className="flex-1 bg-muted/50 border border-border rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-gold/50 placeholder:text-muted-foreground/50 disabled:opacity-50 text-foreground"
+                className={cn(
+                  "flex-1 bg-muted/50 border rounded-xl px-3.5 py-2.5 text-sm outline-none focus:ring-2 focus:ring-gold/50 placeholder:text-muted-foreground/50 disabled:opacity-50 text-foreground transition-colors",
+                  isListening ? "border-gold/50 bg-gold/5" : "border-border"
+                )}
               />
+
               <Button
+                data-voice-send
                 onClick={() => sendMessage()}
                 disabled={!input.trim() || loading}
                 size="icon"
@@ -285,6 +494,12 @@ export default function AiAssistantChat() {
                 <Send className="h-4 w-4" />
               </Button>
             </div>
+
+            {isListening && (
+              <p className="text-center text-[10px] text-gold mt-2 animate-pulse font-body">
+                🎤 Fale agora... a mensagem será enviada automaticamente
+              </p>
+            )}
           </div>
         </div>
       )}
