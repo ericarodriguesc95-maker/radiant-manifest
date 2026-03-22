@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft, Send, Trophy, Flame, Users, Star, Crown, Diamond, Award, Sparkles, Share2, X, Brain, Heart, Dumbbell, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import FourPointStar from "@/components/FourPointStar";
@@ -609,25 +610,53 @@ const CHALLENGES: Challenge[] = [
 
 // ─── Persistence Helpers ─────────────────────────────────────────────────────
 
-function getParticipantCount(challengeId: string): number {
-  const stored = localStorage.getItem(`challenge-participants-${challengeId}`);
-  if (stored) return parseInt(stored);
-  const base: Record<string, number> = { "7-mente": 127, "15-corpo": 89, "21-alma": 214, "30-evolucao": 156, "45-diamante": 67, "60-platina": 43, "90-elite": 31 };
-  const initial = base[challengeId] || 50;
-  localStorage.setItem(`challenge-participants-${challengeId}`, String(initial));
-  return initial;
+// DB-backed participant counts
+async function fetchParticipantCount(challengeId: string): Promise<number> {
+  const { count, error } = await supabase
+    .from("challenge_participants")
+    .select("*", { count: "exact", head: true })
+    .eq("challenge_id", challengeId);
+  if (error || count === null) return 0;
+  return count;
 }
 
-function joinChallenge(challengeId: string) {
-  const key = `challenge-joined-${challengeId}`;
-  if (localStorage.getItem(key)) return;
-  localStorage.setItem(key, new Date().toISOString());
-  const count = getParticipantCount(challengeId);
-  localStorage.setItem(`challenge-participants-${challengeId}`, String(count + 1));
+async function fetchAllParticipantCounts(challengeIds: string[]): Promise<Record<string, number>> {
+  const { data, error } = await supabase
+    .from("challenge_participants")
+    .select("challenge_id");
+  if (error || !data) return {};
+  const counts: Record<string, number> = {};
+  challengeIds.forEach(id => { counts[id] = 0; });
+  data.forEach(row => {
+    const id = row.challenge_id;
+    counts[id] = (counts[id] || 0) + 1;
+  });
+  return counts;
 }
 
-function isJoined(challengeId: string): boolean {
-  return !!localStorage.getItem(`challenge-joined-${challengeId}`);
+async function joinChallengeDB(challengeId: string, userId: string): Promise<boolean> {
+  const { error } = await supabase
+    .from("challenge_participants")
+    .insert({ challenge_id: challengeId, user_id: userId });
+  return !error;
+}
+
+async function isJoinedDB(challengeId: string, userId: string): Promise<boolean> {
+  const { data } = await supabase
+    .from("challenge_participants")
+    .select("id")
+    .eq("challenge_id", challengeId)
+    .eq("user_id", userId)
+    .maybeSingle();
+  return !!data;
+}
+
+async function fetchJoinedChallenges(userId: string): Promise<Set<string>> {
+  const { data } = await supabase
+    .from("challenge_participants")
+    .select("challenge_id")
+    .eq("user_id", userId);
+  return new Set((data || []).map(r => r.challenge_id));
 }
 
 function getChallengeProgress(challengeId: string): Set<number> {
@@ -780,8 +809,19 @@ export default function DesafiosPage() {
   const [showNPS, setShowNPS] = useState(false);
   const [justCompletedDay, setJustCompletedDay] = useState<number | null>(null);
   const [selectedTask, setSelectedTask] = useState<TaskDetail | null>(null);
-  const [, forceUpdate] = useState(0);
+  const [participantCounts, setParticipantCounts] = useState<Record<string, number>>({});
+  const [joinedSet, setJoinedSet] = useState<Set<string>>(new Set());
+  const [joining, setJoining] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Load participant counts and joined status from DB
+  useEffect(() => {
+    const ids = CHALLENGES.map(c => c.id);
+    fetchAllParticipantCounts(ids).then(setParticipantCounts);
+    if (user) {
+      fetchJoinedChallenges(user.id).then(setJoinedSet);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (selectedChallenge) {
@@ -794,10 +834,16 @@ export default function DesafiosPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [forumMessages]);
 
-  const handleJoin = (challenge: Challenge) => {
-    joinChallenge(challenge.id);
-    forceUpdate(n => n + 1);
-    setSelectedChallenge(challenge);
+  const handleJoin = async (challenge: Challenge) => {
+    if (!user || joining) return;
+    setJoining(true);
+    const ok = await joinChallengeDB(challenge.id, user.id);
+    if (ok) {
+      setJoinedSet(prev => new Set(prev).add(challenge.id));
+      setParticipantCounts(prev => ({ ...prev, [challenge.id]: (prev[challenge.id] || 0) + 1 }));
+      setSelectedChallenge(challenge);
+    }
+    setJoining(false);
   };
 
   const toggleDay = (day: number) => {
@@ -844,7 +890,7 @@ export default function DesafiosPage() {
           <div>
             <p className="text-sm font-semibold font-body">Mural: {selectedChallenge.title}</p>
             <p className="text-[10px] text-muted-foreground font-body">
-              🔥 {getParticipantCount(selectedChallenge.id)} participando
+              🔥 {participantCounts[selectedChallenge.id] || 0} participando
             </p>
           </div>
         </div>
@@ -925,7 +971,7 @@ export default function DesafiosPage() {
 
         <div className="flex items-center gap-2 mb-4 text-sm font-body text-muted-foreground">
           <Flame className="h-4 w-4 text-orange-400" />
-          <span>{getParticipantCount(selectedChallenge.id)} meninas participando</span>
+          <span>{participantCounts[selectedChallenge.id] || 0} meninas participando</span>
         </div>
 
         {/* Day grid */}
@@ -1004,8 +1050,8 @@ export default function DesafiosPage() {
 
       <div className="space-y-4">
         {CHALLENGES.map((challenge, idx) => {
-          const joined = isJoined(challenge.id);
-          const participants = getParticipantCount(challenge.id);
+          const joined = joinedSet.has(challenge.id);
+          const participants = participantCounts[challenge.id] || 0;
           return (
             <div
               key={challenge.id}
