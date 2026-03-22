@@ -890,7 +890,7 @@ export default function DesafiosPage() {
           <div>
             <p className="text-sm font-semibold font-body">Mural: {selectedChallenge.title}</p>
             <p className="text-[10px] text-muted-foreground font-body">
-              🔥 {getParticipantCount(selectedChallenge.id)} participando
+              🔥 {participantCounts[selectedChallenge.id] || 0} participando
             </p>
           </div>
         </div>
