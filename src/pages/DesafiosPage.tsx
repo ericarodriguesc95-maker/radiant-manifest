@@ -1050,8 +1050,8 @@ export default function DesafiosPage() {
 
       <div className="space-y-4">
         {CHALLENGES.map((challenge, idx) => {
-          const joined = isJoined(challenge.id);
-          const participants = getParticipantCount(challenge.id);
+          const joined = joinedSet.has(challenge.id);
+          const participants = participantCounts[challenge.id] || 0;
           return (
             <div
               key={challenge.id}
