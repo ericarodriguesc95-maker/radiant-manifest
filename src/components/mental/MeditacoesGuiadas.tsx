@@ -83,8 +83,10 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   const gainRef = useRef<GainNode | null>(null);
 
   useEffect(() => {
-    window.speechSynthesis.getVoices();
-    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    ensureVoicesLoaded().then(() => {
+      setVoicesReady(true);
+      setNoMaleVoice(!hasMaleVoice());
+    });
   }, []);
 
   // Background sound with Web Audio API for Hz tones
