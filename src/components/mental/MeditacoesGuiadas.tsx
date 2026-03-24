@@ -157,20 +157,14 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   }, [isPlaying, bgSound]);
 
   const speakStep = useCallback((text: string, onEnd?: () => void) => {
-    if (!voiceEnabled) { onEnd?.(); return; }
+    if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voice = getVoices(voiceGender);
-    if (voice) utterance.voice = voice;
-    utterance.lang = "pt-BR";
-    utterance.rate = 0.82;
-    utterance.pitch = voiceGender === "female" ? 1.15 : 0.9;
-    utterance.volume = 1;
+    const utterance = createBrazilianUtterance(text, voiceGender, { rate: 0.82 });
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => { setIsSpeaking(false); onEnd?.(); };
     utterance.onerror = () => { setIsSpeaking(false); onEnd?.(); };
     window.speechSynthesis.speak(utterance);
-  }, [voiceEnabled, voiceGender]);
+  }, [voiceEnabled, voiceGender, voicesReady]);
 
   const advanceToNextStep = useCallback(() => {
     if (!activeMeditation) return;
