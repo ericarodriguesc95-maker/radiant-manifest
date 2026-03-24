@@ -156,15 +156,31 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
     };
   }, [isPlaying, bgSound]);
 
+  const cancelSpeechRef = useRef<(() => void) | null>(null);
+
+  // Audio ducking: lower background music volume when speaking
+  const setDucking = useCallback((duck: boolean) => {
+    if (gainRef.current) {
+      const target = duck ? 0.015 : (bgSound === "forest" ? 0.15 : bgSound === "rain" || bgSound === "ocean" ? 0.12 : 0.08);
+      gainRef.current.gain.setTargetAtTime(target, gainRef.current.context.currentTime, 0.3);
+    }
+  }, [bgSound]);
+
   const speakStep = useCallback((text: string, onEnd?: () => void) => {
     if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
     window.speechSynthesis.cancel();
-    const utterance = createBrazilianUtterance(text, voiceGender, { rate: 0.82 });
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => { setIsSpeaking(false); onEnd?.(); };
-    utterance.onerror = () => { setIsSpeaking(false); onEnd?.(); };
-    window.speechSynthesis.speak(utterance);
-  }, [voiceEnabled, voiceGender, voicesReady]);
+    if (cancelSpeechRef.current) cancelSpeechRef.current();
+    
+    setDucking(true);
+    cancelSpeechRef.current = speakWithPauses(text, voiceGender, {
+      onSpeaking: (s) => setIsSpeaking(s),
+      onEnd: () => {
+        setIsSpeaking(false);
+        setDucking(false);
+        onEnd?.();
+      },
+    });
+  }, [voiceEnabled, voiceGender, voicesReady, setDucking]);
 
   const advanceToNextStep = useCallback(() => {
     if (!activeMeditation) return;
