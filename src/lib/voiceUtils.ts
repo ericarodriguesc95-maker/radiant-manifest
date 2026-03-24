@@ -83,7 +83,7 @@ export function getBrazilianVoice(gender: "female" | "male"): SpeechSynthesisVoi
     const match = ptBRVoices.find(v => v.name.toLowerCase().includes(pref));
     if (match) {
       // Make sure it's not the opposite gender
-      const isOpposite = oppositeHints.some(h => v.name.toLowerCase().includes(h));
+      const isOpposite = oppositeHints.some(h => match.name.toLowerCase().includes(h));
       // Skip "Google Português do Brasil" for male if we can find a real male voice
       if (pref === "google português do brasil" && gender === "male") continue;
       if (!isOpposite) return match;
