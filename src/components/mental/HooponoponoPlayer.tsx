@@ -36,6 +36,8 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
   const [showMeaning, setShowMeaning] = useState(true);
   const [bgMusicOn, setBgMusicOn] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [voicesReady, setVoicesReady] = useState(false);
+  const [noMaleVoice, setNoMaleVoice] = useState(false);
   const [totalSessions, setTotalSessions] = useState(() => {
     try { return parseInt(localStorage.getItem("hooponopono-sessions") || "0"); } catch { return 0; }
   });
@@ -45,8 +47,10 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   useEffect(() => {
-    window.speechSynthesis.getVoices();
-    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    ensureVoicesLoaded().then(() => {
+      setVoicesReady(true);
+      setNoMaleVoice(!hasMaleVoice());
+    });
   }, []);
 
   // Background ambient tone (gentle 396Hz — frequency of liberation)
