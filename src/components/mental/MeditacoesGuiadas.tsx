@@ -70,6 +70,8 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   const [voiceGender, setVoiceGender] = useState<"female" | "male">("female");
   const [filterCat, setFilterCat] = useState("all");
   const [showSoundInfo, setShowSoundInfo] = useState(false);
+  const [voicesReady, setVoicesReady] = useState(false);
+  const [noMaleVoice, setNoMaleVoice] = useState(false);
   const [completedIds, setCompletedIds] = useState<string[]>(() => {
     try { return JSON.parse(localStorage.getItem("meditation-completed") || "[]"); } catch { return []; }
   });
