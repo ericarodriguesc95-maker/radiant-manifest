@@ -82,22 +82,14 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
   }, [isPlaying, bgMusicOn]);
 
   const speakMantra = useCallback((text: string, onEnd?: () => void) => {
-    if (!voiceEnabled) { onEnd?.(); return; }
+    if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis.getVoices();
-    const ptVoices = voices.filter(v => v.lang.startsWith("pt"));
-    const voice = ptVoices[0] || voices[0];
-    if (voice) utterance.voice = voice;
-    utterance.lang = "pt-BR";
-    utterance.rate = 0.7;
-    utterance.pitch = voiceGender === "female" ? 1.2 : 0.85;
-    utterance.volume = 1;
+    const utterance = createBrazilianUtterance(text, voiceGender, { rate: 0.7 });
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => { setIsSpeaking(false); onEnd?.(); };
     utterance.onerror = () => { setIsSpeaking(false); onEnd?.(); };
     window.speechSynthesis.speak(utterance);
-  }, [voiceEnabled, voiceGender]);
+  }, [voiceEnabled, voiceGender, voicesReady]);
 
   const advanceMantra = useCallback(() => {
     setCurrentMantra(prev => {
