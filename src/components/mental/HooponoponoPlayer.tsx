@@ -62,7 +62,6 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
       osc.type = "sine";
       osc.frequency.value = 396; // Liberation frequency
       gain.gain.value = 0.04;
-      // Add subtle modulation
       const lfo = ctx.createOscillator();
       const lfoGain = ctx.createGain();
       lfo.frequency.value = 0.1;
@@ -74,6 +73,8 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
       gain.connect(ctx.destination);
       osc.start();
       audioCtxRef.current = ctx;
+      // Store gain node for ducking
+      (ctx as any).__gainNode = gain;
 
       return () => { try { ctx.close(); } catch {} audioCtxRef.current = null; };
     } else {
