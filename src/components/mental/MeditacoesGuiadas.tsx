@@ -111,7 +111,6 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
       oscillatorRef.current = osc;
       gainRef.current = gain;
     }
-    // Nature sounds use white/pink noise approximation
     if (bgSound === "rain" || bgSound === "ocean" || bgSound === "forest") {
       const ctx = new AudioContext();
       const bufferSize = 2 * ctx.sampleRate;
@@ -119,7 +118,6 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
       const data = buffer.getChannelData(0);
 
       if (bgSound === "rain") {
-        // Pink noise for rain
         let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
         for (let i = 0; i < bufferSize; i++) {
           const white = Math.random() * 2 - 1;
@@ -130,7 +128,6 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
           b6 = white * 0.115926;
         }
       } else {
-        // Brown noise for ocean/forest
         let lastOut = 0;
         for (let i = 0; i < bufferSize; i++) {
           const white = Math.random() * 2 - 1;
@@ -148,6 +145,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
       gain.connect(ctx.destination);
       source.start();
       audioCtxRef.current = ctx;
+      gainRef.current = gain;
     }
 
     return () => {
