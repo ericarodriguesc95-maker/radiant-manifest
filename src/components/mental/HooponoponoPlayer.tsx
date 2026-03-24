@@ -2,7 +2,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { ArrowLeft, Play, Pause, RotateCcw, Heart, Volume2, VolumeX, User, Info, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ensureVoicesLoaded, createBrazilianUtterance, hasMaleVoice } from "@/lib/voiceUtils";
-import { cn } from "@/lib/utils";
 
 const mantras = [
   {
