@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ArrowLeft, Play, Pause, SkipForward, Clock, Volume2, VolumeX, Music, TreePine, User } from "lucide-react";
+import { ArrowLeft, Play, Pause, SkipForward, Clock, Volume2, VolumeX, Music, TreePine, User, AlertCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ensureVoicesLoaded, createBrazilianUtterance, hasMaleVoice } from "@/lib/voiceUtils";
 import { cn } from "@/lib/utils";
 
 interface Meditation {
