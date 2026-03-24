@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ArrowLeft, Play, Pause, RotateCcw, Heart, Volume2, VolumeX, User, Info } from "lucide-react";
+import { ArrowLeft, Play, Pause, RotateCcw, Heart, Volume2, VolumeX, User, Info, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ensureVoicesLoaded, createBrazilianUtterance, hasMaleVoice } from "@/lib/voiceUtils";
 
 const mantras = [
   {
@@ -35,6 +36,8 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
   const [showMeaning, setShowMeaning] = useState(true);
   const [bgMusicOn, setBgMusicOn] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [voicesReady, setVoicesReady] = useState(false);
+  const [noMaleVoice, setNoMaleVoice] = useState(false);
   const [totalSessions, setTotalSessions] = useState(() => {
     try { return parseInt(localStorage.getItem("hooponopono-sessions") || "0"); } catch { return 0; }
   });
@@ -44,8 +47,10 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
   const audioCtxRef = useRef<AudioContext | null>(null);
 
   useEffect(() => {
-    window.speechSynthesis.getVoices();
-    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    ensureVoicesLoaded().then(() => {
+      setVoicesReady(true);
+      setNoMaleVoice(!hasMaleVoice());
+    });
   }, []);
 
   // Background ambient tone (gentle 396Hz — frequency of liberation)
@@ -77,22 +82,14 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
   }, [isPlaying, bgMusicOn]);
 
   const speakMantra = useCallback((text: string, onEnd?: () => void) => {
-    if (!voiceEnabled) { onEnd?.(); return; }
+    if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis.getVoices();
-    const ptVoices = voices.filter(v => v.lang.startsWith("pt"));
-    const voice = ptVoices[0] || voices[0];
-    if (voice) utterance.voice = voice;
-    utterance.lang = "pt-BR";
-    utterance.rate = 0.7;
-    utterance.pitch = voiceGender === "female" ? 1.2 : 0.85;
-    utterance.volume = 1;
+    const utterance = createBrazilianUtterance(text, voiceGender, { rate: 0.7 });
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => { setIsSpeaking(false); onEnd?.(); };
     utterance.onerror = () => { setIsSpeaking(false); onEnd?.(); };
     window.speechSynthesis.speak(utterance);
-  }, [voiceEnabled, voiceGender]);
+  }, [voiceEnabled, voiceGender, voicesReady]);
 
   const advanceMantra = useCallback(() => {
     setCurrentMantra(prev => {
@@ -199,11 +196,14 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
         <div className="w-full space-y-2 mb-4">
           <div className="flex items-center gap-2 flex-wrap">
             <User className="h-3.5 w-3.5 text-muted-foreground" />
-            {(["female", "male"] as const).map(g => (
+             {(["female", "male"] as const).map(g => (
               <button key={g} onClick={() => setVoiceGender(g)} className={cn("text-[10px] font-body px-3 py-1 rounded-full border transition-all", voiceGender === g ? "bg-gold/20 border-gold text-gold" : "border-border text-muted-foreground")}>
                 {g === "female" ? "👩 Feminina" : "👨 Masculina"}
               </button>
             ))}
+            {voiceGender === "male" && noMaleVoice && (
+              <p className="text-[9px] text-amber-400 flex items-center gap-1 mt-1"><AlertCircle className="w-3 h-3" /> Voz masculina nativa não disponível — usando tom ajustado</p>
+            )}
             <button onClick={() => setVoiceEnabled(!voiceEnabled)} className="p-1.5 rounded-full hover:bg-muted transition-colors">
               {voiceEnabled ? <Volume2 className="h-4 w-4 text-gold" /> : <VolumeX className="h-4 w-4 text-muted-foreground" />}
             </button>

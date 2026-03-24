@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
+import { ensureVoicesLoaded, createBrazilianUtterance } from "@/lib/voiceUtils";
 
 interface Message {
   role: "user" | "assistant";
@@ -103,18 +104,8 @@ function speakText(text: string) {
   }
   if (current) merged.push(current.trim());
 
-  const voices = window.speechSynthesis.getVoices();
-  const ptVoice = voices.find(v => v.lang.startsWith("pt") && v.name.toLowerCase().includes("female"))
-    || voices.find(v => v.lang.startsWith("pt-BR"))
-    || voices.find(v => v.lang.startsWith("pt"))
-    || null;
-
-  merged.forEach((chunk, i) => {
-    const utterance = new SpeechSynthesisUtterance(chunk);
-    utterance.lang = "pt-BR";
-    utterance.rate = 1.0;
-    utterance.pitch = 1.1;
-    if (ptVoice) utterance.voice = ptVoice;
+  merged.forEach((chunk) => {
+    const utterance = createBrazilianUtterance(chunk, "female", { rate: 1.0 });
     window.speechSynthesis.speak(utterance);
   });
 }
@@ -167,10 +158,7 @@ export default function AiAssistantChat() {
 
   // Preload voices
   useEffect(() => {
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-    }
+    ensureVoicesLoaded();
   }, []);
 
   // Cleanup on unmount

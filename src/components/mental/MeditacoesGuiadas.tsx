@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { ArrowLeft, Play, Pause, SkipForward, Clock, Volume2, VolumeX, Music, TreePine, User } from "lucide-react";
+import { ArrowLeft, Play, Pause, SkipForward, Clock, Volume2, VolumeX, Music, TreePine, User, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ensureVoicesLoaded, createBrazilianUtterance, hasMaleVoice } from "@/lib/voiceUtils";
 
 interface Meditation {
   id: string;
@@ -56,15 +57,7 @@ const bgSounds = [
   { id: "forest", label: "Floresta", icon: "🌳", desc: "Sons de pássaros e vento reduzem cortisol em até 16% (estudo japonês Shinrin-yoku)." },
 ];
 
-function getVoices(gender: "female" | "male") {
-  const voices = window.speechSynthesis.getVoices();
-  const genderHint = gender === "female" ? ["female", "feminina", "mulher"] : ["male", "masculin", "homem"];
-  const ptVoices = voices.filter(v => v.lang.startsWith("pt"));
-  const genderMatch = ptVoices.find(v => genderHint.some(h => v.name.toLowerCase().includes(h)));
-  if (genderMatch) return genderMatch;
-  // Fallback: for female try higher pitch voices, for male lower
-  return ptVoices[0] || voices[0] || null;
-}
+// Voice loading handled by voiceUtils
 
 export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   const [activeMeditation, setActiveMeditation] = useState<Meditation | null>(null);
@@ -77,6 +70,8 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   const [voiceGender, setVoiceGender] = useState<"female" | "male">("female");
   const [filterCat, setFilterCat] = useState("all");
   const [showSoundInfo, setShowSoundInfo] = useState(false);
+  const [voicesReady, setVoicesReady] = useState(false);
+  const [noMaleVoice, setNoMaleVoice] = useState(false);
   const [completedIds, setCompletedIds] = useState<string[]>(() => {
     try { return JSON.parse(localStorage.getItem("meditation-completed") || "[]"); } catch { return []; }
   });
@@ -88,8 +83,10 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   const gainRef = useRef<GainNode | null>(null);
 
   useEffect(() => {
-    window.speechSynthesis.getVoices();
-    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    ensureVoicesLoaded().then(() => {
+      setVoicesReady(true);
+      setNoMaleVoice(!hasMaleVoice());
+    });
   }, []);
 
   // Background sound with Web Audio API for Hz tones
@@ -160,20 +157,14 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   }, [isPlaying, bgSound]);
 
   const speakStep = useCallback((text: string, onEnd?: () => void) => {
-    if (!voiceEnabled) { onEnd?.(); return; }
+    if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voice = getVoices(voiceGender);
-    if (voice) utterance.voice = voice;
-    utterance.lang = "pt-BR";
-    utterance.rate = 0.82;
-    utterance.pitch = voiceGender === "female" ? 1.15 : 0.9;
-    utterance.volume = 1;
+    const utterance = createBrazilianUtterance(text, voiceGender, { rate: 0.82 });
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => { setIsSpeaking(false); onEnd?.(); };
     utterance.onerror = () => { setIsSpeaking(false); onEnd?.(); };
     window.speechSynthesis.speak(utterance);
-  }, [voiceEnabled, voiceGender]);
+  }, [voiceEnabled, voiceGender, voicesReady]);
 
   const advanceToNextStep = useCallback(() => {
     if (!activeMeditation) return;
@@ -299,11 +290,14 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
             )}
             <div className="flex items-center gap-2">
               <User className="h-3.5 w-3.5 text-muted-foreground" />
-              {(["female", "male"] as const).map(g => (
-                <button key={g} onClick={() => setVoiceGender(g)} className={cn("text-[10px] font-body px-3 py-1 rounded-full border transition-all", voiceGender === g ? "bg-gold/20 border-gold text-gold" : "border-border text-muted-foreground")}>
+               {(["female", "male"] as const).map(g => (
+                <button key={g} onClick={() => { setVoiceGender(g); if (g === "male" && noMaleVoice) { /* still switch, pitch handles it */ } }} className={cn("text-[10px] font-body px-3 py-1 rounded-full border transition-all", voiceGender === g ? "bg-gold/20 border-gold text-gold" : "border-border text-muted-foreground")}>
                   {g === "female" ? "👩 Feminina" : "👨 Masculina"}
                 </button>
               ))}
+              {voiceGender === "male" && noMaleVoice && (
+                <p className="text-[9px] text-amber-400 flex items-center gap-1 mt-1"><AlertCircle className="w-3 h-3" /> Voz masculina nativa não disponível — usando tom ajustado</p>
+              )}
               <button onClick={() => setVoiceEnabled(!voiceEnabled)} className="ml-auto p-1.5 rounded-full hover:bg-muted transition-colors">
                 {voiceEnabled ? <Volume2 className="h-4 w-4 text-gold" /> : <VolumeX className="h-4 w-4 text-muted-foreground" />}
               </button>
