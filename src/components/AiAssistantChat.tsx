@@ -158,10 +158,7 @@ export default function AiAssistantChat() {
 
   // Preload voices
   useEffect(() => {
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-    }
+    ensureVoicesLoaded();
   }, []);
 
   // Cleanup on unmount
