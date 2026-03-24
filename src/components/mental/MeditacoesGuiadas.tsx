@@ -306,9 +306,9 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
             )}
             <div className="flex items-center gap-2">
               <User className="h-3.5 w-3.5 text-muted-foreground" />
-               {(["female", "male"] as const).map(g => (
+              {(["female", "male"] as const).map(g => (
                 <button key={g} onClick={() => { setVoiceGender(g); if (g === "male" && noMaleVoice) { /* still switch, pitch handles it */ } }} className={cn("text-[10px] font-body px-3 py-1 rounded-full border transition-all", voiceGender === g ? "bg-gold/20 border-gold text-gold" : "border-border text-muted-foreground")}>
-                  {g === "female" ? "👩 Feminina" : "👨 Masculina"}
+                  {g === "female" ? "👩 Voz Suave (Feminina)" : "👨 Voz Serena (Masculina)"}
                 </button>
               ))}
               {voiceGender === "male" && noMaleVoice && (
