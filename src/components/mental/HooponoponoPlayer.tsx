@@ -196,11 +196,14 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
         <div className="w-full space-y-2 mb-4">
           <div className="flex items-center gap-2 flex-wrap">
             <User className="h-3.5 w-3.5 text-muted-foreground" />
-            {(["female", "male"] as const).map(g => (
+             {(["female", "male"] as const).map(g => (
               <button key={g} onClick={() => setVoiceGender(g)} className={cn("text-[10px] font-body px-3 py-1 rounded-full border transition-all", voiceGender === g ? "bg-gold/20 border-gold text-gold" : "border-border text-muted-foreground")}>
                 {g === "female" ? "👩 Feminina" : "👨 Masculina"}
               </button>
             ))}
+            {voiceGender === "male" && noMaleVoice && (
+              <p className="text-[9px] text-amber-400 flex items-center gap-1 mt-1"><AlertCircle className="w-3 h-3" /> Voz masculina nativa não disponível — usando tom ajustado</p>
+            )}
             <button onClick={() => setVoiceEnabled(!voiceEnabled)} className="p-1.5 rounded-full hover:bg-muted transition-colors">
               {voiceEnabled ? <Volume2 className="h-4 w-4 text-gold" /> : <VolumeX className="h-4 w-4 text-muted-foreground" />}
             </button>
