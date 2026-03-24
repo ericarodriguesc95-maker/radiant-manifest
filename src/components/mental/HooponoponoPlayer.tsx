@@ -81,15 +81,35 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
     }
   }, [isPlaying, bgMusicOn]);
 
+  const cancelSpeechRef = useRef<(() => void) | null>(null);
+
+  // Audio ducking: lower background 396Hz when speaking
+  const setDucking = useCallback((duck: boolean) => {
+    if (audioCtxRef.current) {
+      const nodes = (audioCtxRef.current as any).__gainNode as GainNode | undefined;
+      if (nodes) {
+        const target = duck ? 0.01 : 0.04;
+        nodes.gain.setTargetAtTime(target, nodes.context.currentTime, 0.3);
+      }
+    }
+  }, []);
+
   const speakMantra = useCallback((text: string, onEnd?: () => void) => {
     if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
     window.speechSynthesis.cancel();
-    const utterance = createBrazilianUtterance(text, voiceGender, { rate: 0.7 });
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => { setIsSpeaking(false); onEnd?.(); };
-    utterance.onerror = () => { setIsSpeaking(false); onEnd?.(); };
-    window.speechSynthesis.speak(utterance);
-  }, [voiceEnabled, voiceGender, voicesReady]);
+    if (cancelSpeechRef.current) cancelSpeechRef.current();
+
+    setDucking(true);
+    cancelSpeechRef.current = speakWithPauses(text, voiceGender, {
+      rate: 0.75,
+      onSpeaking: (s) => setIsSpeaking(s),
+      onEnd: () => {
+        setIsSpeaking(false);
+        setDucking(false);
+        onEnd?.();
+      },
+    });
+  }, [voiceEnabled, voiceGender, voicesReady, setDucking]);
 
   const advanceMantra = useCallback(() => {
     setCurrentMantra(prev => {
