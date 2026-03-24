@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ArrowLeft, Play, Pause, RotateCcw, Heart, Volume2, VolumeX, User, Info, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ensureVoicesLoaded, createBrazilianUtterance, hasMaleVoice } from "@/lib/voiceUtils";
+import { ensureVoicesLoaded, speakWithPauses, hasMaleVoice } from "@/lib/voiceUtils";
 
 const mantras = [
   {
@@ -62,7 +62,6 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
       osc.type = "sine";
       osc.frequency.value = 396; // Liberation frequency
       gain.gain.value = 0.04;
-      // Add subtle modulation
       const lfo = ctx.createOscillator();
       const lfoGain = ctx.createGain();
       lfo.frequency.value = 0.1;
@@ -74,6 +73,8 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
       gain.connect(ctx.destination);
       osc.start();
       audioCtxRef.current = ctx;
+      // Store gain node for ducking
+      (ctx as any).__gainNode = gain;
 
       return () => { try { ctx.close(); } catch {} audioCtxRef.current = null; };
     } else {
@@ -81,15 +82,35 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
     }
   }, [isPlaying, bgMusicOn]);
 
+  const cancelSpeechRef = useRef<(() => void) | null>(null);
+
+  // Audio ducking: lower background 396Hz when speaking
+  const setDucking = useCallback((duck: boolean) => {
+    if (audioCtxRef.current) {
+      const nodes = (audioCtxRef.current as any).__gainNode as GainNode | undefined;
+      if (nodes) {
+        const target = duck ? 0.01 : 0.04;
+        nodes.gain.setTargetAtTime(target, nodes.context.currentTime, 0.3);
+      }
+    }
+  }, []);
+
   const speakMantra = useCallback((text: string, onEnd?: () => void) => {
     if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
     window.speechSynthesis.cancel();
-    const utterance = createBrazilianUtterance(text, voiceGender, { rate: 0.7 });
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => { setIsSpeaking(false); onEnd?.(); };
-    utterance.onerror = () => { setIsSpeaking(false); onEnd?.(); };
-    window.speechSynthesis.speak(utterance);
-  }, [voiceEnabled, voiceGender, voicesReady]);
+    if (cancelSpeechRef.current) cancelSpeechRef.current();
+
+    setDucking(true);
+    cancelSpeechRef.current = speakWithPauses(text, voiceGender, {
+      rate: 0.75,
+      onSpeaking: (s) => setIsSpeaking(s),
+      onEnd: () => {
+        setIsSpeaking(false);
+        setDucking(false);
+        onEnd?.();
+      },
+    });
+  }, [voiceEnabled, voiceGender, voicesReady, setDucking]);
 
   const advanceMantra = useCallback(() => {
     setCurrentMantra(prev => {
@@ -198,8 +219,8 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
             <User className="h-3.5 w-3.5 text-muted-foreground" />
              {(["female", "male"] as const).map(g => (
               <button key={g} onClick={() => setVoiceGender(g)} className={cn("text-[10px] font-body px-3 py-1 rounded-full border transition-all", voiceGender === g ? "bg-gold/20 border-gold text-gold" : "border-border text-muted-foreground")}>
-                {g === "female" ? "👩 Feminina" : "👨 Masculina"}
-              </button>
+                 {g === "female" ? "👩 Voz Suave (Feminina)" : "👨 Voz Serena (Masculina)"}
+               </button>
             ))}
             {voiceGender === "male" && noMaleVoice && (
               <p className="text-[9px] text-amber-400 flex items-center gap-1 mt-1"><AlertCircle className="w-3 h-3" /> Voz masculina nativa não disponível — usando tom ajustado</p>

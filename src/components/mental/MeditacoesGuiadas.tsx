@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ArrowLeft, Play, Pause, SkipForward, Clock, Volume2, VolumeX, Music, TreePine, User, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ensureVoicesLoaded, createBrazilianUtterance, hasMaleVoice } from "@/lib/voiceUtils";
+import { ensureVoicesLoaded, speakWithPauses, hasMaleVoice, getVoiceDisplayName } from "@/lib/voiceUtils";
 
 interface Meditation {
   id: string;
@@ -111,7 +111,6 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
       oscillatorRef.current = osc;
       gainRef.current = gain;
     }
-    // Nature sounds use white/pink noise approximation
     if (bgSound === "rain" || bgSound === "ocean" || bgSound === "forest") {
       const ctx = new AudioContext();
       const bufferSize = 2 * ctx.sampleRate;
@@ -119,7 +118,6 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
       const data = buffer.getChannelData(0);
 
       if (bgSound === "rain") {
-        // Pink noise for rain
         let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
         for (let i = 0; i < bufferSize; i++) {
           const white = Math.random() * 2 - 1;
@@ -130,7 +128,6 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
           b6 = white * 0.115926;
         }
       } else {
-        // Brown noise for ocean/forest
         let lastOut = 0;
         for (let i = 0; i < bufferSize; i++) {
           const white = Math.random() * 2 - 1;
@@ -148,6 +145,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
       gain.connect(ctx.destination);
       source.start();
       audioCtxRef.current = ctx;
+      gainRef.current = gain;
     }
 
     return () => {
@@ -156,15 +154,31 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
     };
   }, [isPlaying, bgSound]);
 
+  const cancelSpeechRef = useRef<(() => void) | null>(null);
+
+  // Audio ducking: lower background music volume when speaking
+  const setDucking = useCallback((duck: boolean) => {
+    if (gainRef.current) {
+      const target = duck ? 0.015 : (bgSound === "forest" ? 0.15 : bgSound === "rain" || bgSound === "ocean" ? 0.12 : 0.08);
+      gainRef.current.gain.setTargetAtTime(target, gainRef.current.context.currentTime, 0.3);
+    }
+  }, [bgSound]);
+
   const speakStep = useCallback((text: string, onEnd?: () => void) => {
     if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
     window.speechSynthesis.cancel();
-    const utterance = createBrazilianUtterance(text, voiceGender, { rate: 0.82 });
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => { setIsSpeaking(false); onEnd?.(); };
-    utterance.onerror = () => { setIsSpeaking(false); onEnd?.(); };
-    window.speechSynthesis.speak(utterance);
-  }, [voiceEnabled, voiceGender, voicesReady]);
+    if (cancelSpeechRef.current) cancelSpeechRef.current();
+    
+    setDucking(true);
+    cancelSpeechRef.current = speakWithPauses(text, voiceGender, {
+      onSpeaking: (s) => setIsSpeaking(s),
+      onEnd: () => {
+        setIsSpeaking(false);
+        setDucking(false);
+        onEnd?.();
+      },
+    });
+  }, [voiceEnabled, voiceGender, voicesReady, setDucking]);
 
   const advanceToNextStep = useCallback(() => {
     if (!activeMeditation) return;
@@ -290,9 +304,9 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
             )}
             <div className="flex items-center gap-2">
               <User className="h-3.5 w-3.5 text-muted-foreground" />
-               {(["female", "male"] as const).map(g => (
+              {(["female", "male"] as const).map(g => (
                 <button key={g} onClick={() => { setVoiceGender(g); if (g === "male" && noMaleVoice) { /* still switch, pitch handles it */ } }} className={cn("text-[10px] font-body px-3 py-1 rounded-full border transition-all", voiceGender === g ? "bg-gold/20 border-gold text-gold" : "border-border text-muted-foreground")}>
-                  {g === "female" ? "👩 Feminina" : "👨 Masculina"}
+                  {g === "female" ? "👩 Voz Suave (Feminina)" : "👨 Voz Serena (Masculina)"}
                 </button>
               ))}
               {voiceGender === "male" && noMaleVoice && (
