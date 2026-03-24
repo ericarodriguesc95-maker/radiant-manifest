@@ -57,15 +57,7 @@ const bgSounds = [
   { id: "forest", label: "Floresta", icon: "🌳", desc: "Sons de pássaros e vento reduzem cortisol em até 16% (estudo japonês Shinrin-yoku)." },
 ];
 
-function getVoices(gender: "female" | "male") {
-  const voices = window.speechSynthesis.getVoices();
-  const genderHint = gender === "female" ? ["female", "feminina", "mulher"] : ["male", "masculin", "homem"];
-  const ptVoices = voices.filter(v => v.lang.startsWith("pt"));
-  const genderMatch = ptVoices.find(v => genderHint.some(h => v.name.toLowerCase().includes(h)));
-  if (genderMatch) return genderMatch;
-  // Fallback: for female try higher pitch voices, for male lower
-  return ptVoices[0] || voices[0] || null;
-}
+// Voice loading handled by voiceUtils
 
 export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   const [activeMeditation, setActiveMeditation] = useState<Meditation | null>(null);
