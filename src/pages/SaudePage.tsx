@@ -1,5 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { ArrowLeft, Heart, Scale, Utensils, Dumbbell, Pill, Apple, Plus, Trash2, Edit2, Check, X, TrendingDown, TrendingUp, Camera, Calculator, Search, Syringe, ShieldCheck } from "lucide-react";
+
+const WorkoutOfTheDay = lazy(() => import("@/components/health/WorkoutOfTheDay"));
+const ActivityTracker = lazy(() => import("@/components/health/ActivityTracker"));
+const ShareGlowUp = lazy(() => import("@/components/health/ShareGlowUp"));
+const SmartWatchConnect = lazy(() => import("@/components/health/SmartWatchConnect"));
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -1333,6 +1338,12 @@ export default function SaudePage() {
 
         {/* ====== TREINO ====== */}
         <TabsContent value="treino" className="space-y-4">
+          <Suspense fallback={<div className="text-center py-8 text-xs text-muted-foreground">Carregando...</div>}>
+            <WorkoutOfTheDay />
+            <ActivityTracker />
+            <ShareGlowUp />
+            <SmartWatchConnect />
+          </Suspense>
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
