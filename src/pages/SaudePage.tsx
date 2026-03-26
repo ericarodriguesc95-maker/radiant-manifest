@@ -5,6 +5,8 @@ const WorkoutOfTheDay = lazy(() => import("@/components/health/WorkoutOfTheDay")
 const ActivityTracker = lazy(() => import("@/components/health/ActivityTracker"));
 const ShareGlowUp = lazy(() => import("@/components/health/ShareGlowUp"));
 const SmartWatchConnect = lazy(() => import("@/components/health/SmartWatchConnect"));
+const InjectableMedsEnhanced = lazy(() => import("@/components/health/InjectableMedsEnhanced"));
+const WeeklyDashboard = lazy(() => import("@/components/health/WeeklyDashboard"));
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -777,6 +779,23 @@ export default function SaudePage() {
     toast.success("Suplemento removido!");
   }
 
+  const supplementFeedbacks: Record<string, string> = {
+    "Vitamina D3": "☀️ Imunidade reforçada! Vitamina D protege seus ossos e humor.",
+    "Ômega 3": "🧠 Cérebro protegido! Ômega 3 é anti-inflamatório e cardioprotector.",
+    "Magnésio": "😴 Relaxamento ativado! Magnésio ajuda no sono e reduz cãibras.",
+    "Vitamina B12": "⚡ Energia renovada! B12 fortalece o sistema nervoso.",
+    "Vitamina C": "🛡️ Escudo antioxidante ativo! Colágeno e imunidade em alta.",
+    "Zinco": "💪 Imunidade + pele + cabelo protegidos!",
+    "Colágeno": "✨ Pele radiante! Colágeno renova tecidos e articulações.",
+    "Creatina": "🏋️ Força muscular potencializada! Performance em alta.",
+    "Probióticos": "🦠 Flora intestinal equilibrada! Digestão e imunidade melhoradas.",
+    "Ferro": "❤️ Energia e oxigenação das células reforçadas!",
+    "Cálcio": "🦴 Ossos e dentes fortalecidos!",
+    "Ácido fólico": "🧬 Formação celular otimizada!",
+    "Biotina": "💅 Cabelo, unhas e pele recebendo reforço!",
+    "Melatonina": "🌙 Sono regulado! Prepare-se para descansar melhor.",
+  };
+
   async function toggleCheckin(supplementId: string) {
     if (!user) return;
 
@@ -798,6 +817,19 @@ export default function SaudePage() {
       if (error) {
         toast.error("Erro ao atualizar check-in: " + error.message);
         return;
+      }
+
+      // Positive feedback based on supplement name
+      const supp = userSupplements.find(s => s.id === supplementId);
+      if (supp) {
+        const feedback = Object.entries(supplementFeedbacks).find(([key]) => 
+          supp.name.toLowerCase().includes(key.toLowerCase())
+        );
+        if (feedback) {
+          toast.success(feedback[1], { duration: 4000 });
+        } else {
+          toast.success(`✅ ${supp.name} tomado! Continue assim! 💪`);
+        }
       }
     }
 
