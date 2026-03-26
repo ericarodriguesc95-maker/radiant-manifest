@@ -5,6 +5,8 @@ const WorkoutOfTheDay = lazy(() => import("@/components/health/WorkoutOfTheDay")
 const ActivityTracker = lazy(() => import("@/components/health/ActivityTracker"));
 const ShareGlowUp = lazy(() => import("@/components/health/ShareGlowUp"));
 const SmartWatchConnect = lazy(() => import("@/components/health/SmartWatchConnect"));
+const InjectableMedsEnhanced = lazy(() => import("@/components/health/InjectableMedsEnhanced"));
+const WeeklyDashboard = lazy(() => import("@/components/health/WeeklyDashboard"));
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -208,68 +210,7 @@ const supplementSuggestions = [
   { name: "Melatonina", dose: "0.5-3 mg/dia", benefit: "Regulação do sono", tip: "30min antes de dormir, em ambiente escuro." },
 ];
 
-const contraceptiveOptions = [
-  { name: "Pílula combinada", desc: "Contém estrogênio e progesterona", pros: "Regular ciclo, reduz cólica, acne", cons: "Deve tomar todo dia no mesmo horário", tips: "Se esquecer, tome assim que lembrar. Se >12h, use preservativo por 7 dias." },
-  { name: "Pílula só de progesterona", desc: "Sem estrogênio, para quem amamenta ou tem contraindicação", pros: "Segura durante amamentação", cons: "Horário mais rigoroso (máx 3h de atraso)", tips: "Ideal para quem tem enxaqueca com aura ou >35 anos fumante." },
-  { name: "DIU Hormonal (Mirena/Kyleena)", desc: "Dispositivo intrauterino com levonorgestrel", pros: "Dura 5 anos, reduz sangramento, baixa manutenção", cons: "Inserção pode ser dolorida, custo inicial alto", tips: "Ideal para quem esquece pílulas. Pode parar menstruação." },
-  { name: "DIU de Cobre", desc: "Sem hormônios, ação mecânica e química", pros: "Dura 10 anos, sem hormônios, sem efeitos hormonais", cons: "Pode aumentar cólica e sangramento", tips: "Boa opção para quem quer evitar hormônios." },
-  { name: "Implante subdérmico (Implanon)", desc: "Bastão no braço que libera progesterona", pros: "Dura 3 anos, muito eficaz (99.9%)", cons: "Pode causar sangramento irregular", tips: "Inserção rápida no consultório." },
-  { name: "Injetável mensal", desc: "Combinação estrogênio + progesterona", pros: "Uma vez por mês, sem esquecimentos diários", cons: "Pode causar retenção de líquido", tips: "Aplicar sempre na mesma data. Margem de 3 dias." },
-  { name: "Injetável trimestral", desc: "Só progesterona (Depo-Provera)", pros: "1 aplicação a cada 3 meses", cons: "Pode demorar para voltar a fertilidade", tips: "Ideal para quem não quer menstruar." },
-  { name: "Adesivo anticoncepcional", desc: "Adesivo semanal com hormônios", pros: "Troca semanal, praticidade", cons: "Pode descolar, visível", tips: "Colocar em pele limpa e seca. Trocar a cada 7 dias." },
-  { name: "Anel vaginal (NuvaRing)", desc: "Anel flexível com hormônios", pros: "1x por mês, dose hormonal baixa e estável", cons: "Pode causar desconforto inicial", tips: "Inserir no 1º dia da menstruação. Retirar após 21 dias." },
-];
 
-const tirzepatideInfo = {
-  name: "Tirzepatida (Mounjaro)",
-  description: "Agonista duplo GIP/GLP-1 para controle de peso e diabetes tipo 2",
-  doses: [
-    { dose: "2.5 mg", phase: "Início", duration: "Semanas 1-4", note: "Dose de adaptação" },
-    { dose: "5 mg", phase: "Escalonamento", duration: "Semanas 5-8", note: "Primeira dose terapêutica" },
-    { dose: "7.5 mg", phase: "Escalonamento", duration: "Semanas 9-12", note: "Ajuste conforme tolerância" },
-    { dose: "10 mg", phase: "Manutenção", duration: "Semanas 13-16", note: "Dose eficaz para maioria" },
-    { dose: "12.5 mg", phase: "Manutenção", duration: "Semanas 17-20", note: "Se necessário mais resultado" },
-    { dose: "15 mg", phase: "Dose máxima", duration: "Semana 21+", note: "Dose máxima aprovada" },
-  ],
-  applicationGuide: [
-    "🧼 Lavar as mãos com água e sabão",
-    "📍 Escolher local: abdômen, coxa ou parte posterior do braço",
-    "🔄 Alternar o local a cada aplicação (mínimo 5cm de distância)",
-    "💉 Limpar a pele com álcool 70%",
-    "📐 Segurar a caneta em ângulo de 90° em relação à pele",
-    "⏱️ Pressionar e manter por 10 segundos até o clique",
-    "🚫 NÃO massagear o local após a aplicação",
-    "📅 Aplicar sempre no mesmo dia da semana",
-    "🌡️ Armazenar na geladeira (2-8°C). Não congelar.",
-  ],
-  feedingAfter: [
-    "🕐 Esperar 30-60 minutos antes de comer",
-    "🥗 Iniciar com proteína leve (frango, peixe, ovo)",
-    "💧 Hidratar-se bem (2-3L de água/dia)",
-    "🚫 Evitar alimentos gordurosos e frituras nas primeiras 24h",
-    "🍽️ Comer porções menores e mais frequentes",
-    "⚠️ Evitar álcool por 48h após a aplicação",
-    "🥣 Prefira alimentos leves se sentir náusea",
-    "🍌 Inclua fibras e frutas para evitar constipação",
-  ],
-  sideEffects: ["Náusea (mais comum, melhora com o tempo)", "Diarreia ou constipação", "Dor no local da aplicação", "Perda de apetite (efeito esperado)", "Fadiga nas primeiras semanas", "Refluxo gastroesofágico"],
-  contraindications: ["Histórico de câncer medular de tireoide", "Neoplasia endócrina múltipla tipo 2", "Pancreatite ativa", "Gestação e amamentação", "Alergia aos componentes"],
-};
-
-const otherInjections = [
-  {
-    name: "Semaglutida (Ozempic/Wegovy)",
-    description: "Agonista GLP-1 para diabetes tipo 2 e obesidade",
-    doses: ["0.25mg (sem 1-4)", "0.5mg (sem 5-8)", "1mg (sem 9-12)", "1.7mg (sem 13-16)", "2.4mg (sem 17+)"],
-    tips: "Aplicação semanal subcutânea. Mesmo dia da semana. Pode causar náusea inicial.",
-  },
-  {
-    name: "Liraglutida (Saxenda)",
-    description: "Agonista GLP-1 para controle de peso",
-    doses: ["0.6mg/dia (sem 1)", "1.2mg/dia (sem 2)", "1.8mg/dia (sem 3)", "2.4mg/dia (sem 4)", "3.0mg/dia (sem 5+)"],
-    tips: "Aplicação diária subcutânea. Pode ser abdômen, coxa ou braço. Escalonamento mais gradual.",
-  },
-];
 
 const activityMultipliers: Record<string, { label: string; factor: number }> = {
   sedentario: { label: "Sedentária", factor: 1.2 },
@@ -777,6 +718,23 @@ export default function SaudePage() {
     toast.success("Suplemento removido!");
   }
 
+  const supplementFeedbacks: Record<string, string> = {
+    "Vitamina D3": "☀️ Imunidade reforçada! Vitamina D protege seus ossos e humor.",
+    "Ômega 3": "🧠 Cérebro protegido! Ômega 3 é anti-inflamatório e cardioprotector.",
+    "Magnésio": "😴 Relaxamento ativado! Magnésio ajuda no sono e reduz cãibras.",
+    "Vitamina B12": "⚡ Energia renovada! B12 fortalece o sistema nervoso.",
+    "Vitamina C": "🛡️ Escudo antioxidante ativo! Colágeno e imunidade em alta.",
+    "Zinco": "💪 Imunidade + pele + cabelo protegidos!",
+    "Colágeno": "✨ Pele radiante! Colágeno renova tecidos e articulações.",
+    "Creatina": "🏋️ Força muscular potencializada! Performance em alta.",
+    "Probióticos": "🦠 Flora intestinal equilibrada! Digestão e imunidade melhoradas.",
+    "Ferro": "❤️ Energia e oxigenação das células reforçadas!",
+    "Cálcio": "🦴 Ossos e dentes fortalecidos!",
+    "Ácido fólico": "🧬 Formação celular otimizada!",
+    "Biotina": "💅 Cabelo, unhas e pele recebendo reforço!",
+    "Melatonina": "🌙 Sono regulado! Prepare-se para descansar melhor.",
+  };
+
   async function toggleCheckin(supplementId: string) {
     if (!user) return;
 
@@ -798,6 +756,19 @@ export default function SaudePage() {
       if (error) {
         toast.error("Erro ao atualizar check-in: " + error.message);
         return;
+      }
+
+      // Positive feedback based on supplement name
+      const supp = userSupplements.find(s => s.id === supplementId);
+      if (supp) {
+        const feedback = Object.entries(supplementFeedbacks).find(([key]) => 
+          supp.name.toLowerCase().includes(key.toLowerCase())
+        );
+        if (feedback) {
+          toast.success(feedback[1], { duration: 4000 });
+        } else {
+          toast.success(`✅ ${supp.name} tomado! Continue assim! 💪`);
+        }
       }
     }
 
@@ -841,7 +812,10 @@ export default function SaudePage() {
     { calories: 0, protein: 0, carbs: 0, fat: 0 }
   );
 
-  const bmi = profile.current_weight && profile.height_cm ? (profile.current_weight / Math.pow(profile.height_cm / 100, 2)).toFixed(1) : null;
+  const bmiValue = profile.current_weight && profile.height_cm ? profile.current_weight / Math.pow(profile.height_cm / 100, 2) : null;
+  const bmi = bmiValue ? bmiValue.toFixed(1) : null;
+  const bmiLabel = bmiValue ? (bmiValue < 18.5 ? "Abaixo do peso" : bmiValue < 25 ? "Peso normal" : bmiValue < 30 ? "Sobrepeso" : "Obesidade") : null;
+  const bmiColor = bmiValue ? (bmiValue < 18.5 ? "text-amber-500" : bmiValue < 25 ? "text-green-500" : bmiValue < 30 ? "text-amber-500" : "text-destructive") : "";
   const tmb = profile.current_weight && profile.height_cm && profile.age ? calculateTMB(profile.current_weight, profile.height_cm, profile.age, profile.sex) : null;
   const dailyCalories = tmb ? Math.round(tmb * (activityMultipliers[profile.activity_level]?.factor || 1.55)) : null;
   const goalCalories = dailyCalories ? (profile.goal === "emagrecer" ? Math.round(dailyCalories - 500) : profile.goal === "ganhar_massa" ? Math.round(dailyCalories + 300) : dailyCalories) : null;
@@ -959,7 +933,11 @@ export default function SaudePage() {
                     <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
                       {profile.goal === "emagrecer" ? "🔥 Emagrecer" : profile.goal === "ganhar_massa" ? "💪 Ganhar Massa" : profile.goal === "manter" ? "⚖️ Manter" : "❤️ Saúde"}
                     </span>
-                    {bmi && <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-xs">IMC: {bmi}</span>}
+                    {bmi && (
+                      <span className={`px-3 py-1 rounded-full bg-muted text-xs font-semibold ${bmiColor}`}>
+                        IMC: {bmi} — {bmiLabel}
+                      </span>
+                    )}
                     {profile.age && <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-xs">{profile.age} anos</span>}
                   </div>
                   <div className="grid grid-cols-3 gap-3 text-center">
@@ -1339,6 +1317,7 @@ export default function SaudePage() {
         {/* ====== TREINO ====== */}
         <TabsContent value="treino" className="space-y-4">
           <Suspense fallback={<div className="text-center py-8 text-xs text-muted-foreground">Carregando...</div>}>
+            <WeeklyDashboard />
             <WorkoutOfTheDay />
             <ActivityTracker />
             <ShareGlowUp />
@@ -1529,133 +1508,18 @@ export default function SaudePage() {
           </Card>
         </TabsContent>
 
-        {/* ====== MEDICAÇÕES (Contraceptivos + Tirzepatida) ====== */}
+        {/* ====== MEDICAÇÕES ====== */}
         <TabsContent value="medic" className="space-y-4">
-          {/* Contraceptives */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Contraceptivos</CardTitle>
-              <CardDescription>Opções, orientações e dicas sobre métodos contraceptivos</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-[10px] text-destructive mb-3 font-semibold">⚠️ Consulte seu ginecologista para escolher o método mais adequado para você.</p>
-              <Accordion type="single" collapsible className="w-full">
-                {contraceptiveOptions.map((c, i) => (
-                  <AccordionItem key={i} value={`contra-${i}`}>
-                    <AccordionTrigger className="text-sm font-semibold text-foreground">{c.name}</AccordionTrigger>
-                    <AccordionContent className="space-y-2">
-                      <p className="text-xs text-muted-foreground">{c.desc}</p>
-                      <div className="space-y-1">
-                        <p className="text-xs text-foreground">✅ <strong>Vantagens:</strong> {c.pros}</p>
-                        <p className="text-xs text-foreground">⚠️ <strong>Desvantagens:</strong> {c.cons}</p>
-                        <p className="text-xs text-primary italic">💡 {c.tips}</p>
-                      </div>
-                      <Button variant="outline" size="sm" className="text-xs" onClick={() => { setSuppForm({ name: c.name, dose: "Conforme prescrição", category: "contraceptivo", notes: "" }); setShowAddSupplement(true); setActiveTab("suplem"); }}>
-                        <Plus className="h-3 w-3 mr-1" /> Registrar nos meus suplementos
-                      </Button>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </CardContent>
-          </Card>
-
-          {/* Tirzepatide */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2"><Syringe className="h-4 w-4 text-primary" /> {tirzepatideInfo.name}</CardTitle>
-              <CardDescription>{tirzepatideInfo.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-[10px] text-destructive font-semibold">⚠️ USO EXCLUSIVO COM PRESCRIÇÃO MÉDICA. Nunca use sem orientação profissional.</p>
-
-              {/* Doses */}
-              <div>
-                <p className="text-xs font-semibold text-foreground mb-2">📋 Escalonamento de Doses:</p>
-                <div className="space-y-1">
-                  {tirzepatideInfo.doses.map((d, i) => (
-                    <div key={i} className="flex items-center gap-2 p-2 rounded bg-muted/30 text-xs">
-                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold min-w-[50px] text-center">{d.dose}</span>
-                      <div className="flex-1">
-                        <span className="font-semibold text-foreground">{d.phase}</span>
-                        <span className="text-muted-foreground ml-1">• {d.duration}</span>
-                        <p className="text-muted-foreground text-[10px]">{d.note}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Application guide */}
-              <div>
-                <p className="text-xs font-semibold text-foreground mb-2">💉 Como Aplicar:</p>
-                <div className="space-y-1">
-                  {tirzepatideInfo.applicationGuide.map((step, i) => (
-                    <p key={i} className="text-xs text-foreground pl-2">{step}</p>
-                  ))}
-                </div>
-              </div>
-
-              {/* Feeding after */}
-              <div>
-                <p className="text-xs font-semibold text-foreground mb-2">🍽️ Alimentação Após a Aplicação:</p>
-                <div className="space-y-1">
-                  {tirzepatideInfo.feedingAfter.map((tip, i) => (
-                    <p key={i} className="text-xs text-foreground pl-2">{tip}</p>
-                  ))}
-                </div>
-              </div>
-
-              {/* Side effects */}
-              <div>
-                <p className="text-xs font-semibold text-foreground mb-2">⚠️ Efeitos Colaterais Possíveis:</p>
-                <div className="flex flex-wrap gap-1">
-                  {tirzepatideInfo.sideEffects.map((e, i) => (
-                    <span key={i} className="px-2 py-0.5 rounded-full bg-destructive/10 text-destructive text-[10px]">{e}</span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Contraindications */}
-              <div>
-                <p className="text-xs font-semibold text-foreground mb-2">🚫 Contraindicações:</p>
-                <div className="space-y-1">
-                  {tirzepatideInfo.contraindications.map((c, i) => (
-                    <p key={i} className="text-xs text-destructive pl-2">• {c}</p>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Other injections */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2"><Syringe className="h-4 w-4 text-primary" /> Outras Medicações Injetáveis</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Accordion type="single" collapsible className="w-full">
-                {otherInjections.map((med, i) => (
-                  <AccordionItem key={i} value={`med-${i}`}>
-                    <AccordionTrigger className="text-sm font-semibold text-foreground">{med.name}</AccordionTrigger>
-                    <AccordionContent className="space-y-2">
-                      <p className="text-xs text-muted-foreground">{med.description}</p>
-                      <div>
-                        <p className="text-xs font-semibold text-foreground mb-1">Doses:</p>
-                        {med.doses.map((d, j) => (
-                          <p key={j} className="text-xs text-foreground pl-2">• {d}</p>
-                        ))}
-                      </div>
-                      <p className="text-xs text-primary italic">💡 {med.tips}</p>
-                      <Button variant="outline" size="sm" className="text-xs" onClick={() => { setSuppForm({ name: med.name, dose: "Conforme prescrição", category: "medicamento", notes: "" }); setShowAddSupplement(true); setActiveTab("suplem"); }}>
-                        <Plus className="h-3 w-3 mr-1" /> Registrar nos meus suplementos
-                      </Button>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </CardContent>
-          </Card>
+          <Suspense fallback={<div className="text-center py-8 text-xs text-muted-foreground">Carregando...</div>}>
+            <InjectableMedsEnhanced
+              weightRecords={weightRecords.map(r => ({ weight: r.weight, recorded_at: r.recorded_at }))}
+              onRegisterSupplement={(name, dose, category) => {
+                setSuppForm({ name, dose, category, notes: "" });
+                setShowAddSupplement(true);
+                setActiveTab("suplem");
+              }}
+            />
+          </Suspense>
         </TabsContent>
       </Tabs>
     </div>
