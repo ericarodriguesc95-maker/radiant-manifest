@@ -1378,6 +1378,7 @@ export default function SaudePage() {
         {/* ====== TREINO ====== */}
         <TabsContent value="treino" className="space-y-4">
           <Suspense fallback={<div className="text-center py-8 text-xs text-muted-foreground">Carregando...</div>}>
+            <WeeklyDashboard />
             <WorkoutOfTheDay />
             <ActivityTracker />
             <ShareGlowUp />
@@ -1568,133 +1569,18 @@ export default function SaudePage() {
           </Card>
         </TabsContent>
 
-        {/* ====== MEDICAÇÕES (Contraceptivos + Tirzepatida) ====== */}
+        {/* ====== MEDICAÇÕES ====== */}
         <TabsContent value="medic" className="space-y-4">
-          {/* Contraceptives */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Contraceptivos</CardTitle>
-              <CardDescription>Opções, orientações e dicas sobre métodos contraceptivos</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-[10px] text-destructive mb-3 font-semibold">⚠️ Consulte seu ginecologista para escolher o método mais adequado para você.</p>
-              <Accordion type="single" collapsible className="w-full">
-                {contraceptiveOptions.map((c, i) => (
-                  <AccordionItem key={i} value={`contra-${i}`}>
-                    <AccordionTrigger className="text-sm font-semibold text-foreground">{c.name}</AccordionTrigger>
-                    <AccordionContent className="space-y-2">
-                      <p className="text-xs text-muted-foreground">{c.desc}</p>
-                      <div className="space-y-1">
-                        <p className="text-xs text-foreground">✅ <strong>Vantagens:</strong> {c.pros}</p>
-                        <p className="text-xs text-foreground">⚠️ <strong>Desvantagens:</strong> {c.cons}</p>
-                        <p className="text-xs text-primary italic">💡 {c.tips}</p>
-                      </div>
-                      <Button variant="outline" size="sm" className="text-xs" onClick={() => { setSuppForm({ name: c.name, dose: "Conforme prescrição", category: "contraceptivo", notes: "" }); setShowAddSupplement(true); setActiveTab("suplem"); }}>
-                        <Plus className="h-3 w-3 mr-1" /> Registrar nos meus suplementos
-                      </Button>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </CardContent>
-          </Card>
-
-          {/* Tirzepatide */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2"><Syringe className="h-4 w-4 text-primary" /> {tirzepatideInfo.name}</CardTitle>
-              <CardDescription>{tirzepatideInfo.description}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-[10px] text-destructive font-semibold">⚠️ USO EXCLUSIVO COM PRESCRIÇÃO MÉDICA. Nunca use sem orientação profissional.</p>
-
-              {/* Doses */}
-              <div>
-                <p className="text-xs font-semibold text-foreground mb-2">📋 Escalonamento de Doses:</p>
-                <div className="space-y-1">
-                  {tirzepatideInfo.doses.map((d, i) => (
-                    <div key={i} className="flex items-center gap-2 p-2 rounded bg-muted/30 text-xs">
-                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-bold min-w-[50px] text-center">{d.dose}</span>
-                      <div className="flex-1">
-                        <span className="font-semibold text-foreground">{d.phase}</span>
-                        <span className="text-muted-foreground ml-1">• {d.duration}</span>
-                        <p className="text-muted-foreground text-[10px]">{d.note}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Application guide */}
-              <div>
-                <p className="text-xs font-semibold text-foreground mb-2">💉 Como Aplicar:</p>
-                <div className="space-y-1">
-                  {tirzepatideInfo.applicationGuide.map((step, i) => (
-                    <p key={i} className="text-xs text-foreground pl-2">{step}</p>
-                  ))}
-                </div>
-              </div>
-
-              {/* Feeding after */}
-              <div>
-                <p className="text-xs font-semibold text-foreground mb-2">🍽️ Alimentação Após a Aplicação:</p>
-                <div className="space-y-1">
-                  {tirzepatideInfo.feedingAfter.map((tip, i) => (
-                    <p key={i} className="text-xs text-foreground pl-2">{tip}</p>
-                  ))}
-                </div>
-              </div>
-
-              {/* Side effects */}
-              <div>
-                <p className="text-xs font-semibold text-foreground mb-2">⚠️ Efeitos Colaterais Possíveis:</p>
-                <div className="flex flex-wrap gap-1">
-                  {tirzepatideInfo.sideEffects.map((e, i) => (
-                    <span key={i} className="px-2 py-0.5 rounded-full bg-destructive/10 text-destructive text-[10px]">{e}</span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Contraindications */}
-              <div>
-                <p className="text-xs font-semibold text-foreground mb-2">🚫 Contraindicações:</p>
-                <div className="space-y-1">
-                  {tirzepatideInfo.contraindications.map((c, i) => (
-                    <p key={i} className="text-xs text-destructive pl-2">• {c}</p>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Other injections */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2"><Syringe className="h-4 w-4 text-primary" /> Outras Medicações Injetáveis</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Accordion type="single" collapsible className="w-full">
-                {otherInjections.map((med, i) => (
-                  <AccordionItem key={i} value={`med-${i}`}>
-                    <AccordionTrigger className="text-sm font-semibold text-foreground">{med.name}</AccordionTrigger>
-                    <AccordionContent className="space-y-2">
-                      <p className="text-xs text-muted-foreground">{med.description}</p>
-                      <div>
-                        <p className="text-xs font-semibold text-foreground mb-1">Doses:</p>
-                        {med.doses.map((d, j) => (
-                          <p key={j} className="text-xs text-foreground pl-2">• {d}</p>
-                        ))}
-                      </div>
-                      <p className="text-xs text-primary italic">💡 {med.tips}</p>
-                      <Button variant="outline" size="sm" className="text-xs" onClick={() => { setSuppForm({ name: med.name, dose: "Conforme prescrição", category: "medicamento", notes: "" }); setShowAddSupplement(true); setActiveTab("suplem"); }}>
-                        <Plus className="h-3 w-3 mr-1" /> Registrar nos meus suplementos
-                      </Button>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </CardContent>
-          </Card>
+          <Suspense fallback={<div className="text-center py-8 text-xs text-muted-foreground">Carregando...</div>}>
+            <InjectableMedsEnhanced
+              weightRecords={weightRecords.map(r => ({ weight: r.weight, recorded_at: r.recorded_at }))}
+              onRegisterSupplement={(name, dose, category) => {
+                setSuppForm({ name, dose, category, notes: "" });
+                setShowAddSupplement(true);
+                setActiveTab("suplem");
+              }}
+            />
+          </Suspense>
         </TabsContent>
       </Tabs>
     </div>
