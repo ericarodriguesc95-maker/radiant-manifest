@@ -210,68 +210,7 @@ const supplementSuggestions = [
   { name: "Melatonina", dose: "0.5-3 mg/dia", benefit: "Regulação do sono", tip: "30min antes de dormir, em ambiente escuro." },
 ];
 
-const contraceptiveOptions = [
-  { name: "Pílula combinada", desc: "Contém estrogênio e progesterona", pros: "Regular ciclo, reduz cólica, acne", cons: "Deve tomar todo dia no mesmo horário", tips: "Se esquecer, tome assim que lembrar. Se >12h, use preservativo por 7 dias." },
-  { name: "Pílula só de progesterona", desc: "Sem estrogênio, para quem amamenta ou tem contraindicação", pros: "Segura durante amamentação", cons: "Horário mais rigoroso (máx 3h de atraso)", tips: "Ideal para quem tem enxaqueca com aura ou >35 anos fumante." },
-  { name: "DIU Hormonal (Mirena/Kyleena)", desc: "Dispositivo intrauterino com levonorgestrel", pros: "Dura 5 anos, reduz sangramento, baixa manutenção", cons: "Inserção pode ser dolorida, custo inicial alto", tips: "Ideal para quem esquece pílulas. Pode parar menstruação." },
-  { name: "DIU de Cobre", desc: "Sem hormônios, ação mecânica e química", pros: "Dura 10 anos, sem hormônios, sem efeitos hormonais", cons: "Pode aumentar cólica e sangramento", tips: "Boa opção para quem quer evitar hormônios." },
-  { name: "Implante subdérmico (Implanon)", desc: "Bastão no braço que libera progesterona", pros: "Dura 3 anos, muito eficaz (99.9%)", cons: "Pode causar sangramento irregular", tips: "Inserção rápida no consultório." },
-  { name: "Injetável mensal", desc: "Combinação estrogênio + progesterona", pros: "Uma vez por mês, sem esquecimentos diários", cons: "Pode causar retenção de líquido", tips: "Aplicar sempre na mesma data. Margem de 3 dias." },
-  { name: "Injetável trimestral", desc: "Só progesterona (Depo-Provera)", pros: "1 aplicação a cada 3 meses", cons: "Pode demorar para voltar a fertilidade", tips: "Ideal para quem não quer menstruar." },
-  { name: "Adesivo anticoncepcional", desc: "Adesivo semanal com hormônios", pros: "Troca semanal, praticidade", cons: "Pode descolar, visível", tips: "Colocar em pele limpa e seca. Trocar a cada 7 dias." },
-  { name: "Anel vaginal (NuvaRing)", desc: "Anel flexível com hormônios", pros: "1x por mês, dose hormonal baixa e estável", cons: "Pode causar desconforto inicial", tips: "Inserir no 1º dia da menstruação. Retirar após 21 dias." },
-];
 
-const tirzepatideInfo = {
-  name: "Tirzepatida (Mounjaro)",
-  description: "Agonista duplo GIP/GLP-1 para controle de peso e diabetes tipo 2",
-  doses: [
-    { dose: "2.5 mg", phase: "Início", duration: "Semanas 1-4", note: "Dose de adaptação" },
-    { dose: "5 mg", phase: "Escalonamento", duration: "Semanas 5-8", note: "Primeira dose terapêutica" },
-    { dose: "7.5 mg", phase: "Escalonamento", duration: "Semanas 9-12", note: "Ajuste conforme tolerância" },
-    { dose: "10 mg", phase: "Manutenção", duration: "Semanas 13-16", note: "Dose eficaz para maioria" },
-    { dose: "12.5 mg", phase: "Manutenção", duration: "Semanas 17-20", note: "Se necessário mais resultado" },
-    { dose: "15 mg", phase: "Dose máxima", duration: "Semana 21+", note: "Dose máxima aprovada" },
-  ],
-  applicationGuide: [
-    "🧼 Lavar as mãos com água e sabão",
-    "📍 Escolher local: abdômen, coxa ou parte posterior do braço",
-    "🔄 Alternar o local a cada aplicação (mínimo 5cm de distância)",
-    "💉 Limpar a pele com álcool 70%",
-    "📐 Segurar a caneta em ângulo de 90° em relação à pele",
-    "⏱️ Pressionar e manter por 10 segundos até o clique",
-    "🚫 NÃO massagear o local após a aplicação",
-    "📅 Aplicar sempre no mesmo dia da semana",
-    "🌡️ Armazenar na geladeira (2-8°C). Não congelar.",
-  ],
-  feedingAfter: [
-    "🕐 Esperar 30-60 minutos antes de comer",
-    "🥗 Iniciar com proteína leve (frango, peixe, ovo)",
-    "💧 Hidratar-se bem (2-3L de água/dia)",
-    "🚫 Evitar alimentos gordurosos e frituras nas primeiras 24h",
-    "🍽️ Comer porções menores e mais frequentes",
-    "⚠️ Evitar álcool por 48h após a aplicação",
-    "🥣 Prefira alimentos leves se sentir náusea",
-    "🍌 Inclua fibras e frutas para evitar constipação",
-  ],
-  sideEffects: ["Náusea (mais comum, melhora com o tempo)", "Diarreia ou constipação", "Dor no local da aplicação", "Perda de apetite (efeito esperado)", "Fadiga nas primeiras semanas", "Refluxo gastroesofágico"],
-  contraindications: ["Histórico de câncer medular de tireoide", "Neoplasia endócrina múltipla tipo 2", "Pancreatite ativa", "Gestação e amamentação", "Alergia aos componentes"],
-};
-
-const otherInjections = [
-  {
-    name: "Semaglutida (Ozempic/Wegovy)",
-    description: "Agonista GLP-1 para diabetes tipo 2 e obesidade",
-    doses: ["0.25mg (sem 1-4)", "0.5mg (sem 5-8)", "1mg (sem 9-12)", "1.7mg (sem 13-16)", "2.4mg (sem 17+)"],
-    tips: "Aplicação semanal subcutânea. Mesmo dia da semana. Pode causar náusea inicial.",
-  },
-  {
-    name: "Liraglutida (Saxenda)",
-    description: "Agonista GLP-1 para controle de peso",
-    doses: ["0.6mg/dia (sem 1)", "1.2mg/dia (sem 2)", "1.8mg/dia (sem 3)", "2.4mg/dia (sem 4)", "3.0mg/dia (sem 5+)"],
-    tips: "Aplicação diária subcutânea. Pode ser abdômen, coxa ou braço. Escalonamento mais gradual.",
-  },
-];
 
 const activityMultipliers: Record<string, { label: string; factor: number }> = {
   sedentario: { label: "Sedentária", factor: 1.2 },
