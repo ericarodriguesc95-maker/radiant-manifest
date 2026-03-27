@@ -901,13 +901,16 @@ const ComunidadePage = () => {
         </div>
 
         {/* Feed */}
+        <div className="space-y-3 px-4 mt-3">
         {loading ? (
-          <p className="text-center text-sm text-muted-foreground py-8">Carregando posts...</p>
+          <div className="flex items-center justify-center py-12">
+            <div className="h-6 w-6 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+          </div>
         ) : posts.length === 0 ? (
           <p className="text-center text-sm text-muted-foreground py-8">Nenhum post ainda. Seja a primeira! ✨</p>
         ) : (
           posts.map(post => (
-            <div key={post.id} className="bg-card rounded-2xl border border-border overflow-hidden animate-fade-in">
+            <div key={post.id} className="bg-card rounded-2xl border border-border/50 overflow-hidden">
               {/* Post header */}
               <div className="flex items-center gap-3 p-4 pb-2">
                 <Avatar url={post.avatar_url} name={post.display_name} userId={post.user_id} clickable />
