@@ -688,54 +688,60 @@ const ComunidadePage = () => {
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="px-5 pt-12 pb-4 flex items-center justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Nossa</p>
-          <h1 className="text-2xl font-display font-bold">Comunidade <span className="text-gold">✦</span></h1>
-        </div>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => setShowDMs(true)}
-            className="p-2 rounded-full hover:bg-muted transition-colors"
-            title="Mensagens diretas"
-          >
-            <Mail className="h-5 w-5 text-foreground" />
-          </button>
-          <button
-            onClick={() => setShowChatRooms(true)}
-            className="p-2 rounded-full hover:bg-muted transition-colors"
-            title="Salas de chat"
-          >
-            <Hash className="h-5 w-5 text-foreground" />
-          </button>
-          <button
-            onClick={() => setShowNotifications(!showNotifications)}
-            className="relative p-2 rounded-full hover:bg-muted transition-colors"
-          >
-            <Bell className="h-5 w-5 text-foreground" />
-            {unreadCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-primary text-[9px] font-bold text-primary-foreground flex items-center justify-center">
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => navigate("/settings")}
-            className="p-2 rounded-full hover:bg-muted transition-colors"
-          >
-            <Settings className="h-5 w-5 text-foreground" />
-          </button>
+    <div className="min-h-screen bg-background">
+      {/* Instagram-style header */}
+      <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border/30">
+        <div className="px-4 py-3 flex items-center justify-between">
+          <h1 className="text-xl font-display font-bold tracking-tight">
+            Girls <span className="text-gold">✦</span>
+          </h1>
+          <div className="flex items-center gap-0.5">
+            <button
+              onClick={() => setShowDMs(true)}
+              className="p-2.5 rounded-full hover:bg-muted/50 transition-colors relative"
+              title="Mensagens diretas"
+            >
+              <Mail className="h-5 w-5 text-foreground" />
+            </button>
+            <button
+              onClick={() => setShowChatRooms(true)}
+              className="p-2.5 rounded-full hover:bg-muted/50 transition-colors"
+              title="Salas de chat"
+            >
+              <Hash className="h-5 w-5 text-foreground" />
+            </button>
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="relative p-2.5 rounded-full hover:bg-muted/50 transition-colors"
+            >
+              <Bell className="h-5 w-5 text-foreground" />
+              {unreadCount > 0 && (
+                <span className="absolute top-1 right-1 h-4 min-w-4 rounded-full bg-destructive text-[9px] font-bold text-destructive-foreground flex items-center justify-center px-1">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => navigate("/settings")}
+              className="p-2.5 rounded-full hover:bg-muted/50 transition-colors"
+            >
+              <Settings className="h-5 w-5 text-foreground" />
+            </button>
+          </div>
         </div>
       </header>
 
       {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); setUnreadCount(0); }} />}
 
-      <div className="px-5 space-y-4 pb-6">
-        {/* Stories */}
-        <StoryBar />
+      <div className="px-0 space-y-0 pb-6">
+        {/* Stories - full width like Instagram */}
+        <div className="px-4 py-3 border-b border-border/30">
+          <StoryBar />
+        </div>
 
-        <Leaderboard />
+        <div className="px-4 pt-3">
+          <Leaderboard />
+        </div>
 
         {/* Create post */}
         <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
