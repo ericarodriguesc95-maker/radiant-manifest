@@ -119,78 +119,65 @@ const ComunidadePage = () => {
   const fetchPosts = useCallback(async () => {
     if (!user) return;
 
-    const { data: postsData } = await supabase
-      .from("community_posts")
-      .select("*")
-      .order("created_at", { ascending: false });
+    // Parallel fetch: posts, my likes
+    const [postsRes, myLikesRes] = await Promise.all([
+      supabase.from("community_posts").select("*").order("created_at", { ascending: false }).limit(50),
+      supabase.from("post_likes").select("post_id").eq("user_id", user.id),
+    ]);
 
+    const postsData = postsRes.data;
     if (!postsData) return;
 
     const postUserIds = [...new Set(postsData.map((p: any) => p.user_id))];
     const postIds = postsData.map((p: any) => p.id);
+    const safePostIds = postIds.length > 0 ? postIds : ["00000000-0000-0000-0000-000000000000"];
 
-    const { data: commentsData } = await supabase
-      .from("post_comments")
-      .select("*")
-      .in("post_id", postIds.length > 0 ? postIds : ["00000000-0000-0000-0000-000000000000"])
-      .order("created_at", { ascending: true });
+    // Parallel fetch: comments, profiles, view counts
+    const [commentsRes, viewsRes] = await Promise.all([
+      supabase.from("post_comments").select("*").in("post_id", safePostIds).order("created_at", { ascending: true }),
+      supabase.from("post_views").select("post_id, viewer_id").in("post_id", safePostIds),
+    ]);
 
-    const commentUserIds = (commentsData || []).map((c: any) => c.user_id);
+    const commentsData = commentsRes.data || [];
+    const commentUserIds = commentsData.map((c: any) => c.user_id);
     const allUserIds = [...new Set([...postUserIds, ...commentUserIds])];
+    const safeUserIds = allUserIds.length > 0 ? allUserIds : ["00000000-0000-0000-0000-000000000000"];
 
     const { data: profiles } = await supabase
       .from("profiles")
       .select("user_id, display_name, avatar_url")
-      .in("user_id", allUserIds.length > 0 ? allUserIds : ["00000000-0000-0000-0000-000000000000"]);
+      .in("user_id", safeUserIds);
 
-    const { data: myLikes } = await supabase
-      .from("post_likes")
-      .select("post_id")
-      .eq("user_id", user.id);
-
-    const likedPostIds = new Set((myLikes || []).map((l: any) => l.post_id));
+    const likedPostIds = new Set((myLikesRes.data || []).map((l: any) => l.post_id));
     const profileMap = new Map((profiles || []).map((p: any) => [p.user_id, p]));
 
-    // Fetch view counts + viewer profiles
+    // Build view counts from single query
     const viewCountMap = new Map<string, number>();
     const viewersMap = new Map<string, { user_id: string; display_name: string | null; avatar_url: string | null }[]>();
-    if (postIds.length > 0) {
-      for (const pid of postIds) {
-        const { data: viewData, count } = await supabase
-          .from("post_views")
-          .select("viewer_id", { count: "exact" })
-          .eq("post_id", pid)
-          .limit(50);
-        viewCountMap.set(pid, count || 0);
-        if (viewData && viewData.length > 0) {
-          const viewerIds = viewData.map((v: any) => v.viewer_id);
-          const { data: viewerProfiles } = await supabase
-            .from("profiles")
-            .select("user_id, display_name, avatar_url")
-            .in("user_id", viewerIds);
-          viewersMap.set(pid, viewerProfiles || []);
-        }
-      }
+    const viewsData = viewsRes.data || [];
+    for (const v of viewsData) {
+      viewCountMap.set(v.post_id, (viewCountMap.get(v.post_id) || 0) + 1);
+      if (!viewersMap.has(v.post_id)) viewersMap.set(v.post_id, []);
+      const prof = profileMap.get(v.viewer_id);
+      if (prof) viewersMap.get(v.post_id)!.push(prof);
     }
 
-    // Track views for all visible posts
-    for (const pid of postIds) {
-      await supabase.from("post_views").upsert(
-        { post_id: pid, viewer_id: user.id },
-        { onConflict: "post_id,viewer_id" }
-      ).select();
+    // Track views in background (non-blocking)
+    if (postIds.length > 0) {
+      Promise.all(postIds.map(pid =>
+        supabase.from("post_views").upsert(
+          { post_id: pid, viewer_id: user.id },
+          { onConflict: "post_id,viewer_id" }
+        )
+      ));
     }
 
     const commentsByPost = new Map<string, Comment[]>();
-    (commentsData || []).forEach((c: any) => {
+    commentsData.forEach((c: any) => {
       const prof = profileMap.get(c.user_id);
       const comment: Comment = {
-        id: c.id,
-        user_id: c.user_id,
-        text: c.text,
-        created_at: c.created_at,
-        display_name: prof?.display_name || "Usuária",
-        avatar_url: prof?.avatar_url || null,
+        id: c.id, user_id: c.user_id, text: c.text, created_at: c.created_at,
+        display_name: prof?.display_name || "Usuária", avatar_url: prof?.avatar_url || null,
       };
       if (!commentsByPost.has(c.post_id)) commentsByPost.set(c.post_id, []);
       commentsByPost.get(c.post_id)!.push(comment);
@@ -200,20 +187,13 @@ const ComunidadePage = () => {
       const prof = profileMap.get(post.user_id);
       const comments = commentsByPost.get(post.id) || [];
       return {
-        id: post.id,
-        user_id: post.user_id,
-        text: post.text,
-        likes_count: post.likes_count,
-        created_at: post.created_at,
-        display_name: prof?.display_name || "Usuária",
-        avatar_url: prof?.avatar_url || null,
-        liked_by_me: likedPostIds.has(post.id),
-        comments,
-        comments_count: comments.length,
-        media_url: post.media_url || null,
-        media_type: post.media_type || null,
+        id: post.id, user_id: post.user_id, text: post.text, likes_count: post.likes_count,
+        created_at: post.created_at, display_name: prof?.display_name || "Usuária",
+        avatar_url: prof?.avatar_url || null, liked_by_me: likedPostIds.has(post.id),
+        comments, comments_count: comments.length,
+        media_url: post.media_url || null, media_type: post.media_type || null,
         views_count: viewCountMap.get(post.id) || 0,
-        viewers: viewersMap.get(post.id) || [],
+        viewers: (viewersMap.get(post.id) || []).slice(0, 50),
       };
     });
 
@@ -708,57 +688,63 @@ const ComunidadePage = () => {
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="px-5 pt-12 pb-4 flex items-center justify-between">
-        <div>
-          <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Nossa</p>
-          <h1 className="text-2xl font-display font-bold">Comunidade <span className="text-gold">✦</span></h1>
-        </div>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => setShowDMs(true)}
-            className="p-2 rounded-full hover:bg-muted transition-colors"
-            title="Mensagens diretas"
-          >
-            <Mail className="h-5 w-5 text-foreground" />
-          </button>
-          <button
-            onClick={() => setShowChatRooms(true)}
-            className="p-2 rounded-full hover:bg-muted transition-colors"
-            title="Salas de chat"
-          >
-            <Hash className="h-5 w-5 text-foreground" />
-          </button>
-          <button
-            onClick={() => setShowNotifications(!showNotifications)}
-            className="relative p-2 rounded-full hover:bg-muted transition-colors"
-          >
-            <Bell className="h-5 w-5 text-foreground" />
-            {unreadCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-primary text-[9px] font-bold text-primary-foreground flex items-center justify-center">
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => navigate("/settings")}
-            className="p-2 rounded-full hover:bg-muted transition-colors"
-          >
-            <Settings className="h-5 w-5 text-foreground" />
-          </button>
+    <div className="min-h-screen bg-background">
+      {/* Instagram-style header */}
+      <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border/30">
+        <div className="px-4 py-3 flex items-center justify-between">
+          <h1 className="text-xl font-display font-bold tracking-tight">
+            Girls <span className="text-gold">✦</span>
+          </h1>
+          <div className="flex items-center gap-0.5">
+            <button
+              onClick={() => setShowDMs(true)}
+              className="p-2.5 rounded-full hover:bg-muted/50 transition-colors relative"
+              title="Mensagens diretas"
+            >
+              <Mail className="h-5 w-5 text-foreground" />
+            </button>
+            <button
+              onClick={() => setShowChatRooms(true)}
+              className="p-2.5 rounded-full hover:bg-muted/50 transition-colors"
+              title="Salas de chat"
+            >
+              <Hash className="h-5 w-5 text-foreground" />
+            </button>
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="relative p-2.5 rounded-full hover:bg-muted/50 transition-colors"
+            >
+              <Bell className="h-5 w-5 text-foreground" />
+              {unreadCount > 0 && (
+                <span className="absolute top-1 right-1 h-4 min-w-4 rounded-full bg-destructive text-[9px] font-bold text-destructive-foreground flex items-center justify-center px-1">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => navigate("/settings")}
+              className="p-2.5 rounded-full hover:bg-muted/50 transition-colors"
+            >
+              <Settings className="h-5 w-5 text-foreground" />
+            </button>
+          </div>
         </div>
       </header>
 
       {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); setUnreadCount(0); }} />}
 
-      <div className="px-5 space-y-4 pb-6">
-        {/* Stories */}
-        <StoryBar />
+      <div className="px-0 space-y-0 pb-6">
+        {/* Stories - full width like Instagram */}
+        <div className="px-4 py-3 border-b border-border/30">
+          <StoryBar />
+        </div>
 
-        <Leaderboard />
+        <div className="px-4 pt-3">
+          <Leaderboard />
+        </div>
 
         {/* Create post */}
-        <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
+        <div className="mx-4 mt-3 bg-card rounded-2xl border border-border/50 p-4 space-y-3">
           <div className="flex items-start gap-3">
             <Avatar url={profile?.avatar_url || null} name={profile?.display_name || null} size="h-8 w-8" userId={user?.id} />
             <MentionInput
@@ -915,13 +901,16 @@ const ComunidadePage = () => {
         </div>
 
         {/* Feed */}
+        <div className="space-y-3 px-4 mt-3">
         {loading ? (
-          <p className="text-center text-sm text-muted-foreground py-8">Carregando posts...</p>
+          <div className="flex items-center justify-center py-12">
+            <div className="h-6 w-6 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+          </div>
         ) : posts.length === 0 ? (
           <p className="text-center text-sm text-muted-foreground py-8">Nenhum post ainda. Seja a primeira! ✨</p>
         ) : (
           posts.map(post => (
-            <div key={post.id} className="bg-card rounded-2xl border border-border overflow-hidden animate-fade-in">
+            <div key={post.id} className="bg-card rounded-2xl border border-border/50 overflow-hidden">
               {/* Post header */}
               <div className="flex items-center gap-3 p-4 pb-2">
                 <Avatar url={post.avatar_url} name={post.display_name} userId={post.user_id} clickable />
@@ -1228,8 +1217,8 @@ const ComunidadePage = () => {
             </div>
           ))
         )}
+        </div>
       </div>
-
     </div>
   );
 };
