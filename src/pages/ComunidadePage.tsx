@@ -744,7 +744,7 @@ const ComunidadePage = () => {
         </div>
 
         {/* Create post */}
-        <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
+        <div className="mx-4 mt-3 bg-card rounded-2xl border border-border/50 p-4 space-y-3">
           <div className="flex items-start gap-3">
             <Avatar url={profile?.avatar_url || null} name={profile?.display_name || null} size="h-8 w-8" userId={user?.id} />
             <MentionInput
