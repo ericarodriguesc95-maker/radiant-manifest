@@ -119,78 +119,65 @@ const ComunidadePage = () => {
   const fetchPosts = useCallback(async () => {
     if (!user) return;
 
-    const { data: postsData } = await supabase
-      .from("community_posts")
-      .select("*")
-      .order("created_at", { ascending: false });
+    // Parallel fetch: posts, my likes
+    const [postsRes, myLikesRes] = await Promise.all([
+      supabase.from("community_posts").select("*").order("created_at", { ascending: false }).limit(50),
+      supabase.from("post_likes").select("post_id").eq("user_id", user.id),
+    ]);
 
+    const postsData = postsRes.data;
     if (!postsData) return;
 
     const postUserIds = [...new Set(postsData.map((p: any) => p.user_id))];
     const postIds = postsData.map((p: any) => p.id);
+    const safePostIds = postIds.length > 0 ? postIds : ["00000000-0000-0000-0000-000000000000"];
 
-    const { data: commentsData } = await supabase
-      .from("post_comments")
-      .select("*")
-      .in("post_id", postIds.length > 0 ? postIds : ["00000000-0000-0000-0000-000000000000"])
-      .order("created_at", { ascending: true });
+    // Parallel fetch: comments, profiles, view counts
+    const [commentsRes, viewsRes] = await Promise.all([
+      supabase.from("post_comments").select("*").in("post_id", safePostIds).order("created_at", { ascending: true }),
+      supabase.from("post_views").select("post_id, viewer_id").in("post_id", safePostIds),
+    ]);
 
-    const commentUserIds = (commentsData || []).map((c: any) => c.user_id);
+    const commentsData = commentsRes.data || [];
+    const commentUserIds = commentsData.map((c: any) => c.user_id);
     const allUserIds = [...new Set([...postUserIds, ...commentUserIds])];
+    const safeUserIds = allUserIds.length > 0 ? allUserIds : ["00000000-0000-0000-0000-000000000000"];
 
     const { data: profiles } = await supabase
       .from("profiles")
       .select("user_id, display_name, avatar_url")
-      .in("user_id", allUserIds.length > 0 ? allUserIds : ["00000000-0000-0000-0000-000000000000"]);
+      .in("user_id", safeUserIds);
 
-    const { data: myLikes } = await supabase
-      .from("post_likes")
-      .select("post_id")
-      .eq("user_id", user.id);
-
-    const likedPostIds = new Set((myLikes || []).map((l: any) => l.post_id));
+    const likedPostIds = new Set((myLikesRes.data || []).map((l: any) => l.post_id));
     const profileMap = new Map((profiles || []).map((p: any) => [p.user_id, p]));
 
-    // Fetch view counts + viewer profiles
+    // Build view counts from single query
     const viewCountMap = new Map<string, number>();
     const viewersMap = new Map<string, { user_id: string; display_name: string | null; avatar_url: string | null }[]>();
-    if (postIds.length > 0) {
-      for (const pid of postIds) {
-        const { data: viewData, count } = await supabase
-          .from("post_views")
-          .select("viewer_id", { count: "exact" })
-          .eq("post_id", pid)
-          .limit(50);
-        viewCountMap.set(pid, count || 0);
-        if (viewData && viewData.length > 0) {
-          const viewerIds = viewData.map((v: any) => v.viewer_id);
-          const { data: viewerProfiles } = await supabase
-            .from("profiles")
-            .select("user_id, display_name, avatar_url")
-            .in("user_id", viewerIds);
-          viewersMap.set(pid, viewerProfiles || []);
-        }
-      }
+    const viewsData = viewsRes.data || [];
+    for (const v of viewsData) {
+      viewCountMap.set(v.post_id, (viewCountMap.get(v.post_id) || 0) + 1);
+      if (!viewersMap.has(v.post_id)) viewersMap.set(v.post_id, []);
+      const prof = profileMap.get(v.viewer_id);
+      if (prof) viewersMap.get(v.post_id)!.push(prof);
     }
 
-    // Track views for all visible posts
-    for (const pid of postIds) {
-      await supabase.from("post_views").upsert(
-        { post_id: pid, viewer_id: user.id },
-        { onConflict: "post_id,viewer_id" }
-      ).select();
+    // Track views in background (non-blocking)
+    if (postIds.length > 0) {
+      Promise.all(postIds.map(pid =>
+        supabase.from("post_views").upsert(
+          { post_id: pid, viewer_id: user.id },
+          { onConflict: "post_id,viewer_id" }
+        )
+      ));
     }
 
     const commentsByPost = new Map<string, Comment[]>();
-    (commentsData || []).forEach((c: any) => {
+    commentsData.forEach((c: any) => {
       const prof = profileMap.get(c.user_id);
       const comment: Comment = {
-        id: c.id,
-        user_id: c.user_id,
-        text: c.text,
-        created_at: c.created_at,
-        display_name: prof?.display_name || "Usuária",
-        avatar_url: prof?.avatar_url || null,
+        id: c.id, user_id: c.user_id, text: c.text, created_at: c.created_at,
+        display_name: prof?.display_name || "Usuária", avatar_url: prof?.avatar_url || null,
       };
       if (!commentsByPost.has(c.post_id)) commentsByPost.set(c.post_id, []);
       commentsByPost.get(c.post_id)!.push(comment);
@@ -200,20 +187,13 @@ const ComunidadePage = () => {
       const prof = profileMap.get(post.user_id);
       const comments = commentsByPost.get(post.id) || [];
       return {
-        id: post.id,
-        user_id: post.user_id,
-        text: post.text,
-        likes_count: post.likes_count,
-        created_at: post.created_at,
-        display_name: prof?.display_name || "Usuária",
-        avatar_url: prof?.avatar_url || null,
-        liked_by_me: likedPostIds.has(post.id),
-        comments,
-        comments_count: comments.length,
-        media_url: post.media_url || null,
-        media_type: post.media_type || null,
+        id: post.id, user_id: post.user_id, text: post.text, likes_count: post.likes_count,
+        created_at: post.created_at, display_name: prof?.display_name || "Usuária",
+        avatar_url: prof?.avatar_url || null, liked_by_me: likedPostIds.has(post.id),
+        comments, comments_count: comments.length,
+        media_url: post.media_url || null, media_type: post.media_type || null,
         views_count: viewCountMap.get(post.id) || 0,
-        viewers: viewersMap.get(post.id) || [],
+        viewers: (viewersMap.get(post.id) || []).slice(0, 50),
       };
     });
 
