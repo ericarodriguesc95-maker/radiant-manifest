@@ -1217,8 +1217,8 @@ const ComunidadePage = () => {
             </div>
           ))
         )}
+        </div>
       </div>
-
     </div>
   );
 };
