@@ -137,15 +137,23 @@ const HomePage = () => {
 
       <div className="px-5 space-y-6 pb-6">
         {/* Daily Streak */}
-        <DailyStreak completedHabits={completedHabits} requiredHabits={["meditate", "goals"]} />
+        <div className="animate-stagger" style={{ "--stagger": 0 } as React.CSSProperties}>
+          <DailyStreak completedHabits={completedHabits} requiredHabits={["meditate", "goals"]} />
+        </div>
 
         {/* Streak Medals */}
-        <StreakMedals streak={streakCount} />
+        <div className="animate-stagger" style={{ "--stagger": 1 } as React.CSSProperties}>
+          <StreakMedals streak={streakCount} />
+        </div>
 
         {/* Guias do Dia */}
         <section className="space-y-3">
-          <DailyDevotional />
-          <AffirmationCard />
+          <div className="animate-stagger" style={{ "--stagger": 2 } as React.CSSProperties}>
+            <DailyDevotional />
+          </div>
+          <div className="animate-stagger" style={{ "--stagger": 3 } as React.CSSProperties}>
+            <AffirmationCard />
+          </div>
         </section>
 
         {/* Quick Actions */}
@@ -155,11 +163,12 @@ const HomePage = () => {
             { icon: Zap, label: "Alta Performance", to: "/alta-performance" },
             { icon: BookOpen, label: "Diário", to: "/diario" },
             { icon: Droplets, label: "Saúde & Fitness", to: "/guias" },
-          ].map(({ icon: Icon, label, to }) => (
+          ].map(({ icon: Icon, label, to }, i) => (
             <button
               key={label}
               onClick={() => navigate(to)}
-              className="bg-foreground text-background rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-card active:scale-[0.98]"
+              className="animate-stagger bg-foreground text-background rounded-xl p-4 flex flex-col items-start gap-2 transition-all hover:shadow-card hover-glow active:scale-[0.98]"
+              style={{ "--stagger": 4 + i } as React.CSSProperties}
             >
               <Icon className="h-5 w-5 text-gold" />
               <span className="text-xs font-body font-semibold tracking-wide">{label}</span>
@@ -168,20 +177,22 @@ const HomePage = () => {
         </div>
 
         {/* Desafios CTA */}
-        <button
-          onClick={() => navigate("/desafios")}
-          className="w-full bg-gradient-to-r from-[hsl(43,72%,52%)] to-[hsl(43,60%,65%)] text-white rounded-2xl p-4 flex items-center gap-3 transition-all hover:shadow-brand active:scale-[0.98]"
-        >
-          <Trophy className="h-6 w-6" />
-          <div className="flex-1 text-left">
-            <p className="text-sm font-display font-bold">Desafios Progressivos</p>
-            <p className="text-xs opacity-80 font-body">Jornadas de 7 a 90 dias</p>
-          </div>
-          <ChevronRight className="h-5 w-5 opacity-60" />
-        </button>
+        <div className="animate-stagger" style={{ "--stagger": 8 } as React.CSSProperties}>
+          <button
+            onClick={() => navigate("/desafios")}
+            className="w-full bg-gradient-brand text-primary-foreground rounded-2xl p-4 flex items-center gap-3 transition-all hover:shadow-brand hover-lift active:scale-[0.98]"
+          >
+            <Trophy className="h-6 w-6" />
+            <div className="flex-1 text-left">
+              <p className="text-sm font-display font-bold">Desafios Progressivos</p>
+              <p className="text-xs opacity-80 font-body">Jornadas de 7 a 90 dias</p>
+            </div>
+            <ChevronRight className="h-5 w-5 opacity-60" />
+          </button>
+        </div>
 
         {/* Monthly Calendar */}
-        <section>
+        <section className="animate-stagger" style={{ "--stagger": 9 } as React.CSSProperties}>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-lg font-display font-semibold">Planejamento Mensal</h2>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -190,20 +201,22 @@ const HomePage = () => {
         </section>
 
         {/* Habit Tracker */}
-        <section>
+        <section className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
           <h2 className="text-lg font-display font-semibold mb-3">Hábitos de Hoje</h2>
           <HabitTracker onCompletedChange={setCompletedHabits} />
         </section>
 
         {/* Post Conquista */}
-        <PostConquista
-          completedCount={completedHabits.size}
-          totalCount={HABITS_COUNT}
-          streak={streakCount}
-        />
+        <div className="animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
+          <PostConquista
+            completedCount={completedHabits.size}
+            totalCount={HABITS_COUNT}
+            streak={streakCount}
+          />
+        </div>
 
         {/* Notification Settings */}
-        <section>
+        <section className="animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
           <NotificationSettingsCard />
         </section>
       </div>
