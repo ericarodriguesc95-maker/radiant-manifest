@@ -115,6 +115,48 @@
   .border-gold-subtle {
     border-color: hsl(var(--gold) / 0.2);
   }
+
+  /* Glassmorphism utilities */
+  .glass {
+    background: hsl(0 0% 8% / 0.6);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border: 1px solid hsl(43 72% 52% / 0.1);
+  }
+  .glass-strong {
+    background: hsl(0 0% 6% / 0.75);
+    backdrop-filter: blur(24px) saturate(1.6);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    border: 1px solid hsl(43 72% 52% / 0.15);
+  }
+  .glass-gold {
+    background: hsl(43 72% 52% / 0.08);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    border: 1px solid hsl(43 72% 52% / 0.2);
+  }
+
+  /* Premium hover glow */
+  .hover-glow {
+    transition: box-shadow 0.35s ease, border-color 0.35s ease, transform 0.25s ease;
+  }
+  .hover-glow:hover {
+    box-shadow: 0 0 24px -4px hsl(43 72% 52% / 0.3), 0 4px 20px -4px hsl(0 0% 0% / 0.5);
+    border-color: hsl(43 72% 52% / 0.3);
+    transform: translateY(-2px);
+  }
+  .hover-glow:active {
+    transform: translateY(0);
+  }
+
+  /* Subtle lift on hover */
+  .hover-lift {
+    transition: transform 0.25s ease, box-shadow 0.3s ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px -8px hsl(0 0% 0% / 0.6);
+  }
 }
 
 /* Hide scrollbar for mobile feel */
