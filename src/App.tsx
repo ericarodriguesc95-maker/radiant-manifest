@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import FourPointStar from "@/components/FourPointStar";
+import SplashScreen from "@/components/SplashScreen";
 import AppLayout from "@/components/AppLayout";
 import HomePage from "@/pages/HomePage";
 import MetasPage from "@/pages/MetasPage";
@@ -76,20 +78,29 @@ const AppRoutes = () => (
   </Routes>
 );
 
-const App = () => (
-  <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
-            <AppRoutes />
-          </AuthProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </ErrorBoundary>
-);
+const App = () => {
+  const [splashDone, setSplashDone] = useState(() => sessionStorage.getItem("splash-seen") === "1");
+
+  useEffect(() => {
+    if (splashDone) sessionStorage.setItem("splash-seen", "1");
+  }, [splashDone]);
+
+  return (
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          {!splashDone && <SplashScreen onFinish={() => setSplashDone(true)} />}
+          <BrowserRouter>
+            <AuthProvider>
+              <AppRoutes />
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  );
+};
 
 export default App;
