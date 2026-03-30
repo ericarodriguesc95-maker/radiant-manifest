@@ -68,6 +68,7 @@ const MetasPage = () => {
   const [updateProgress, setUpdateProgress] = useState<number>(0);
   const [updateNote, setUpdateNote] = useState("");
   const [showHistory, setShowHistory] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"manifestacao" | "metas">("manifestacao");
 
   const fetchGoals = async () => {
     if (!user) return;
