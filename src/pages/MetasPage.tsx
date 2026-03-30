@@ -227,11 +227,39 @@ const MetasPage = () => {
   return (
     <div className="min-h-screen">
       <header className="px-5 pt-12 pb-4">
-        <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Suas</p>
-        <h1 className="text-2xl font-display font-bold">Metas <span className="text-gold">SMART</span></h1>
+        <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Sua jornada</p>
+        <h1 className="text-2xl font-display font-bold">Metas & <span className="text-gold">Manifestação</span></h1>
       </header>
 
       <div className="px-5 space-y-4 pb-6">
+        {/* Tabs */}
+        <div className="flex gap-2 bg-muted/30 rounded-xl p-1">
+          <button
+            onClick={() => setActiveTab("manifestacao")}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-body font-semibold transition-all",
+              activeTab === "manifestacao" ? "bg-gold text-background shadow-lg" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            Manifestação
+          </button>
+          <button
+            onClick={() => setActiveTab("metas")}
+            className={cn(
+              "flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-body font-semibold transition-all",
+              activeTab === "metas" ? "bg-gold text-background shadow-lg" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Target className="h-3.5 w-3.5" />
+            Metas SMART
+          </button>
+        </div>
+
+        {activeTab === "manifestacao" ? (
+          <ManifestacaoHub />
+        ) : (
+        <>
         {/* Categories */}
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
           {Object.entries(categoryLabels).map(([key, label]) => (
