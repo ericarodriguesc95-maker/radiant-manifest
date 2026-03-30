@@ -533,6 +533,9 @@ const MetasPage = () => {
             <Plus className="h-4 w-4 mr-2" /> Nova Meta
           </Button>
         )}
+        )}
+        </>
+        )}
       </div>
     </div>
   );
