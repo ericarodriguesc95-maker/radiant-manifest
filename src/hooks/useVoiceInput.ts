@@ -11,7 +11,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
   const { lang = "pt-BR", continuous = false, onResult, onEnd } = options;
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<any>(null);
 
   const isSupported = typeof window !== "undefined" && 
     ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
@@ -19,7 +19,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
   const start = useCallback(() => {
     if (!isSupported || isListening) return;
 
-    const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
     recognition.lang = lang;
     recognition.continuous = continuous;
