@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { ArrowLeft, Sun, Sparkles, Music, Thermometer, PenLine, Heart, Mic, ImageIcon } from "lucide-react";
+import { useState, useMemo, useCallback } from "react";
+import { ArrowLeft, Sun, Sparkles, Music, Thermometer, PenLine, Heart, Mic, ImageIcon, Volume2, VolumeX, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import RitualMatinal from "./RitualMatinal";
 import EuSuperior from "./EuSuperior";
@@ -7,42 +7,10 @@ import FrequenciasCura from "./FrequenciasCura";
 import TermometroVibracional from "./TermometroVibracional";
 import ManifestacaoEscrita from "./ManifestacaoEscrita";
 import QuadroDosSonhos from "./QuadroDosSonhos";
+import { dailyQuotes } from "./dailyQuotes";
+import { speakWithPauses } from "@/lib/voiceUtils";
 
 type View = "hub" | "ritual" | "eu-superior" | "frequencias" | "termometro" | "manifestacao-escrita" | "quadro-sonhos";
-
-const dailyQuotes = [
-  "Você não precisa de mais uma técnica. Você precisa ser cuidada todos os dias, enquanto constrói a realidade que deseja viver.",
-  "Manifestar não acontece apenas quando você visualiza. Acontece no jeito como você pensa, sente e se posiciona no dia a dia.",
-  "A sua vibração é o convite que o universo lê antes de qualquer palavra que você diga.",
-  "Gratidão não é só agradecer. É vibrar na frequência de quem já recebeu.",
-  "Você já é a versão que deseja ser. Só precisa parar de duvidar disso.",
-  "O universo não responde ao que você quer. Responde ao que você vibra.",
-  "Cada pensamento é uma semente. Escolha plantar o que deseja colher.",
-  "A abundância começa quando você para de contar o que falta e começa a celebrar o que já existe.",
-  "Sua energia fala antes de você. Cuide dela como cuida do seu sonho mais bonito.",
-  "Não espere o momento perfeito. Crie a vibração perfeita agora.",
-  "Quando você muda a frequência, muda a realidade.",
-  "Confie no tempo do universo. Ele sabe exatamente quando entregar o que é seu.",
-  "Tudo sempre dá certo pra mim — repita até que seu corpo acredite.",
-  "Você merece tudo aquilo que não consegue parar de imaginar.",
-  "A melhor versão de você não está no futuro. Está em cada escolha que você faz agora.",
-  "Solte o controle. O que é seu vai te encontrar no caminho.",
-  "Sua intuição é a voz do seu Eu Superior. Aprenda a ouvi-la.",
-  "Cada amanhecer é um recomeço. Use-o com intenção.",
-  "Você não atrai o que quer, atrai o que você é. Seja magnética.",
-  "A realidade que você deseja já existe. Alinhe-se a ela.",
-  "Permita-se receber. Você já fez o suficiente para merecer.",
-  "O impossível é só o possível que ainda não acreditaram.",
-  "Sua história está sendo reescrita a cada pensamento consciente.",
-  "Respire fundo. Você está exatamente onde precisa estar.",
-  "A magia acontece quando você para de forçar e começa a fluir.",
-  "Não subestime o poder de um dia vivido com presença.",
-  "Você é a criadora da sua realidade. Crie com amor.",
-  "Quando a dúvida aparecer, lembre-se: você já superou coisas que achou impossíveis.",
-  "Seu brilho incomoda quem ainda não encontrou o próprio. Continue brilhando.",
-  "Hoje é o dia perfeito pra manifestar algo extraordinário.",
-  "A constância transforma intenção em realidade.",
-];
 
 const menuItems: { id: View; icon: React.ElementType; label: string }[] = [
   { id: "ritual", icon: Sun, label: "Começar meu dia" },
@@ -55,12 +23,36 @@ const menuItems: { id: View; icon: React.ElementType; label: string }[] = [
 
 export default function ManifestacaoHub() {
   const [view, setView] = useState<View>("hub");
-  const todayQuote = useMemo(() => {
+  const [quoteIndex, setQuoteIndex] = useState(() => {
     const start = new Date(2024, 0, 1).getTime();
     const today = new Date().setHours(0, 0, 0, 0);
-    const dayIndex = Math.floor((today - start) / 86400000) % dailyQuotes.length;
-    return dailyQuotes[dayIndex];
-  }, []);
+    return Math.floor((today - start) / 86400000) % dailyQuotes.length;
+  });
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [cancelSpeech, setCancelSpeech] = useState<(() => void) | null>(null);
+
+  const todayQuote = dailyQuotes[quoteIndex];
+
+  const handleNextQuote = () => {
+    if (cancelSpeech) { cancelSpeech(); setCancelSpeech(null); setIsSpeaking(false); }
+    setQuoteIndex((prev) => (prev + 1) % dailyQuotes.length);
+  };
+
+  const handleSpeakQuote = useCallback(() => {
+    if (isSpeaking && cancelSpeech) {
+      cancelSpeech();
+      setCancelSpeech(null);
+      setIsSpeaking(false);
+      return;
+    }
+    const cancel = speakWithPauses(todayQuote, "female", {
+      rate: 0.85,
+      pitch: 0.95,
+      onStart: () => setIsSpeaking(true),
+      onEnd: () => { setIsSpeaking(false); setCancelSpeech(null); },
+    });
+    setCancelSpeech(() => cancel);
+  }, [todayQuote, isSpeaking, cancelSpeech]);
 
   if (view !== "hub") {
     const Component = {
@@ -106,11 +98,32 @@ export default function ManifestacaoHub() {
       </div>
 
       {/* Quote card */}
-      <div className="glass-gold rounded-2xl p-4 text-center space-y-2">
+      <div className="glass-gold rounded-2xl p-4 text-center space-y-3">
         <Heart className="h-4 w-4 text-gold mx-auto" />
-        <p className="text-xs font-body text-foreground/80 italic leading-relaxed">
+        <p className="text-xs font-body text-foreground/80 italic leading-relaxed min-h-[3rem]">
           "{todayQuote}"
         </p>
+        <div className="flex items-center justify-center gap-3">
+          <button
+            onClick={handleSpeakQuote}
+            className={cn(
+              "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-body font-semibold transition-all",
+              isSpeaking
+                ? "bg-gold text-background"
+                : "bg-gold/10 text-gold border border-gold/20 hover:bg-gold/20"
+            )}
+          >
+            {isSpeaking ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
+            {isSpeaking ? "Parar" : "Ouvir"}
+          </button>
+          <button
+            onClick={handleNextQuote}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-body font-semibold bg-gold/10 text-gold border border-gold/20 hover:bg-gold/20 transition-all"
+          >
+            <RefreshCw className="h-3 w-3" />
+            Próxima frase
+          </button>
+        </div>
       </div>
 
       {/* Menu buttons */}
