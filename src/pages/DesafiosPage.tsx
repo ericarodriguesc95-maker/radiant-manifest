@@ -698,33 +698,33 @@ function TaskDetailModal({ task, open, onClose }: { task: TaskDetail | null; ope
         </DialogHeader>
         <div className="space-y-5">
           {/* Dica Prática */}
-          <div className="rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/20 border border-amber-200/50 dark:border-amber-800/30 p-4">
+          <div className="rounded-xl bg-gradient-to-br from-amber-900/40 to-orange-900/30 border border-amber-700/40 p-4">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-base">💡</span>
-              <h4 className="font-display font-semibold text-sm text-amber-800 dark:text-amber-300">Dica Prática</h4>
+              <h4 className="font-display font-semibold text-sm text-amber-300">Dica Prática</h4>
             </div>
-            <p className="text-xs leading-relaxed font-body text-amber-900/80 dark:text-amber-200/80">{task.dicaPratica}</p>
+            <p className="text-xs leading-relaxed font-body text-amber-200/80">{task.dicaPratica}</p>
           </div>
 
           {/* Neurociência */}
-          <div className="rounded-xl bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/30 dark:to-indigo-950/20 border border-purple-200/50 dark:border-purple-800/30 p-4">
+          <div className="rounded-xl bg-gradient-to-br from-purple-900/40 to-indigo-900/30 border border-purple-700/40 p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Brain className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-              <h4 className="font-display font-semibold text-sm text-purple-800 dark:text-purple-300">O Que Diz a Neurociência</h4>
+              <Brain className="h-4 w-4 text-purple-400" />
+              <h4 className="font-display font-semibold text-sm text-purple-300">O Que Diz a Neurociência</h4>
             </div>
-            <p className="text-xs leading-relaxed font-body text-purple-900/80 dark:text-purple-200/80">{task.neurociencia}</p>
+            <p className="text-xs leading-relaxed font-body text-purple-200/80">{task.neurociencia}</p>
           </div>
 
           {/* Exercício */}
-          <div className="rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/20 border border-emerald-200/50 dark:border-emerald-800/30 p-4">
+          <div className="rounded-xl bg-gradient-to-br from-emerald-900/40 to-teal-900/30 border border-emerald-700/40 p-4">
             <div className="flex items-center gap-2 mb-2">
-              <BookOpen className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-              <h4 className="font-display font-semibold text-sm text-emerald-800 dark:text-emerald-300">Como Fazer (Passo a Passo)</h4>
+              <BookOpen className="h-4 w-4 text-emerald-400" />
+              <h4 className="font-display font-semibold text-sm text-emerald-300">Como Fazer (Passo a Passo)</h4>
             </div>
             <ol className="space-y-1.5">
               {task.exercicio.map((step, i) => (
-                <li key={i} className="flex items-start gap-2 text-xs font-body text-emerald-900/80 dark:text-emerald-200/80">
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0">{i + 1}.</span>
+                <li key={i} className="flex items-start gap-2 text-xs font-body text-emerald-200/80">
+                  <span className="font-bold text-emerald-400 mt-0.5 shrink-0">{i + 1}.</span>
                   <span className="leading-relaxed">{step}</span>
                 </li>
               ))}
