@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { ChevronRight, CheckCircle2, Circle, Lock, Unlock, BookOpen, Brain, Compass, ChevronDown, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { lessonContent } from "@/components/destravar/quizData";
 import LessonQuiz from "@/components/destravar/LessonQuiz";
+import BlockBadges, { BadgeCelebration } from "@/components/destravar/BlockBadges";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -110,8 +111,35 @@ function getSavedProgress(): Record<string, boolean[]> {
 
 export default function JornadaPage() {
   const [expandedBlock, setExpandedBlock] = useState<string | null>(null);
-  const [openLesson, setOpenLesson] = useState<string | null>(null); // "blockId-lessonIdx"
+  const [openLesson, setOpenLesson] = useState<string | null>(null);
   const [progress, setProgress] = useState<Record<string, boolean[]>>(getSavedProgress);
+  const [celebratingBadge, setCelebratingBadge] = useState<string | null>(null);
+  const prevCompletedRef = useRef<Set<string>>(new Set());
+
+  // Track which blocks are 100%
+  const completedBlocks = blocks
+    .filter(b => {
+      const arr = progress[b.id] || [];
+      return arr.length === b.lessons.length && arr.every(Boolean);
+    })
+    .map(b => b.id);
+
+  // Detect newly completed blocks
+  useEffect(() => {
+    const prev = prevCompletedRef.current;
+    for (const id of completedBlocks) {
+      if (!prev.has(id)) {
+        // Check if all blocks are now complete
+        if (completedBlocks.length === blocks.length) {
+          setCelebratingBadge("master");
+        } else {
+          setCelebratingBadge(id);
+        }
+        break;
+      }
+    }
+    prevCompletedRef.current = new Set(completedBlocks);
+  }, [completedBlocks]);
 
   const markLessonComplete = (blockId: string, lessonIdx: number) => {
     setProgress(prev => {
@@ -191,7 +219,10 @@ export default function JornadaPage() {
           </div>
         </div>
 
-        {/* Progress */}
+        {/* Badges */}
+        <BlockBadges completedBlocks={completedBlocks} />
+
+
         <div className="bg-card rounded-2xl border border-border p-4">
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-body font-semibold text-foreground">Seu progresso</p>
@@ -331,6 +362,9 @@ export default function JornadaPage() {
           </p>
         </div>
       </div>
+
+      {/* Celebration modal */}
+      <BadgeCelebration blockId={celebratingBadge} onClose={() => setCelebratingBadge(null)} />
     </div>
   );
 }
