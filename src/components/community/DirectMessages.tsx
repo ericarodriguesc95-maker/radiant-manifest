@@ -160,13 +160,16 @@ export default function DirectMessages({ onClose, openConversationUserId }: { on
       setShowNewChat(false);
       return;
     }
-    const { data: conv } = await supabase.from("conversations").insert({}).select("id").single();
-    if (!conv) return;
-    await supabase.from("conversation_participants").insert([
-      { conversation_id: conv.id, user_id: user.id },
-      { conversation_id: conv.id, user_id: otherUser.user_id },
+    // Generate ID client-side to avoid SELECT after INSERT (RLS blocks SELECT before participants exist)
+    const convId = crypto.randomUUID();
+    const { error: convErr } = await supabase.from("conversations").insert({ id: convId });
+    if (convErr) { console.error("conv insert error", convErr); return; }
+    const { error: partErr } = await supabase.from("conversation_participants").insert([
+      { conversation_id: convId, user_id: user.id },
+      { conversation_id: convId, user_id: otherUser.user_id },
     ]);
-    setSelectedConv(conv.id);
+    if (partErr) { console.error("participants insert error", partErr); return; }
+    setSelectedConv(convId);
     setSelectedOther(otherUser);
     setShowNewChat(false);
     fetchConversations();
