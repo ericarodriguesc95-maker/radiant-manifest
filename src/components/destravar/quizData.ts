@@ -142,6 +142,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Crenças vs Verdade
       reading:
         "Muitas crenças que carregamos não são verdades — são mentiras que acreditamos por repetição. 'Eu não sou boa o suficiente', 'Eu não mereço', 'Sempre vai dar errado'. A Palavra de Deus é o filtro para separar crença de verdade. Renovar a mente é trocar essas mentiras pela verdade que liberta.",
+      verse: "E conhecereis a verdade, e a verdade vos libertará.",
+      verseRef: "João 8:32",
       quiz: [
         {
           question: "Por que carregamos crenças que não são verdades?",
