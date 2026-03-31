@@ -155,6 +155,15 @@ export function BadgeCelebration({ blockId, onClose }: BadgeCelebrationProps) {
         <p className="text-xs font-body text-muted-foreground">
           {isMaster ? MASTER_BADGE.subtitle : badge!.subtitle}
         </p>
+
+        {isMaster && (
+          <div className="bg-gold/5 border border-gold/15 rounded-xl p-3 mt-2 space-y-1">
+            <p className="text-[11px] font-body text-foreground italic leading-relaxed">
+              "{MASTER_BADGE.verse}"
+            </p>
+            <p className="text-[10px] font-body font-semibold text-gold">— {MASTER_BADGE.verseRef}</p>
+          </div>
+        )}
       </div>
     </div>
   );
