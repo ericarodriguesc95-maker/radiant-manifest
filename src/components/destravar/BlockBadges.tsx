@@ -104,6 +104,12 @@ export default function BlockBadges({ completedBlocks }: BlockBadgesProps) {
           </div>
           <p className="text-sm font-display font-bold text-gold">{MASTER_BADGE.title}</p>
           <p className="text-[10px] font-body text-muted-foreground">{MASTER_BADGE.subtitle}</p>
+          <div className="bg-gold/5 border border-gold/15 rounded-lg p-2.5 mt-1 space-y-0.5">
+            <p className="text-[11px] font-body text-foreground italic leading-relaxed">
+              "{MASTER_BADGE.verse}"
+            </p>
+            <p className="text-[10px] font-body font-semibold text-gold">— {MASTER_BADGE.verseRef}</p>
+          </div>
         </div>
       )}
     </div>
