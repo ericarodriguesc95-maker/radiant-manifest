@@ -250,6 +250,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Governo na prática
       reading:
         "Governar na prática é organizar sua vida como um ato de obediência. Isso inclui sua rotina, suas finanças, seu tempo e suas prioridades. Não é sobre ser perfeita, é sobre ser intencional. Uma vida governada tem estrutura, tem ordem e tem direção — porque reflete o caráter de Deus.",
+      verse: "Tudo, porém, seja feito com decência e ordem.",
+      verseRef: "1 Coríntios 14:40",
       quiz: [
         {
           question: "O que significa governar na prática?",
