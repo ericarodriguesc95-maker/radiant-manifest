@@ -121,6 +121,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Controle vs Governo
       reading:
         "Controle é tentar forçar resultados por medo. Governo é administrar a vida com sabedoria. A mulher controladora vive ansiosa porque tenta segurar o que não está em suas mãos. A mulher que governa entrega a Deus o que não controla e administra com excelência o que está sob sua responsabilidade.",
+      verse: "Entrega o teu caminho ao Senhor; confia nele, e ele tudo fará.",
+      verseRef: "Salmos 37:5",
       quiz: [
         {
           question: "Qual a diferença entre controle e governo?",
