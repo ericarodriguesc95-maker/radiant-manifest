@@ -18,7 +18,7 @@ const menuItems: { id: View; icon: React.ElementType; label: string }[] = [
   { id: "frequencias", icon: Music, label: "Preciso alinhar minha vibração" },
   { id: "manifestacao-escrita", icon: PenLine, label: "Escrever no meu diário vibracional" },
   { id: "quadro-sonhos", icon: ImageIcon, label: "Meu quadro dos sonhos" },
-  { id: "termometro", icon: Thermometer, label: "Meu termômetro emocional" },
+  { id: "termometro", icon: Thermometer, label: "Escala de Hawkins — Minha frequência" },
 ];
 
 export default function ManifestacaoHub() {
