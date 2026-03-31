@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Thermometer, TrendingUp, Mic, MicOff, Sparkles, Star, Lightbulb, CalendarIcon, Zap } from "lucide-react";
+import { TrendingUp, Mic, MicOff, Sparkles, Star, Lightbulb, CalendarIcon, Zap, Brain, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
@@ -11,14 +11,13 @@ const STORAGE_KEY = "glow-termometro";
 interface DailyEntry {
   date: string;
   emotions: string[];
-  level: number; // Hawkins scale index (0-based into hawkinsScale)
+  level: number;
 }
 
-// Escala de Hawkins - Mapa da Consciência
 interface HawkinsLevel {
   id: number;
   emotion: string;
-  frequency: number; // Hz on Hawkins scale
+  frequency: number;
   level: string;
   emoji: string;
   color: string;
@@ -46,7 +45,6 @@ const hawkinsScale: HawkinsLevel[] = [
   { id: 17, emotion: "Iluminação", frequency: 700, level: "Inefável", emoji: "✨", color: "bg-gold", textColor: "text-gold", description: "Consciência pura. Estado dos grandes mestres espirituais." },
 ];
 
-// Group emotions for the picker with their Hawkins mapping
 const emotionPicker = [
   { label: "Vergonha", hawkinsId: 1, emoji: "😔" },
   { label: "Culpa", hawkinsId: 2, emoji: "😢" },
@@ -68,25 +66,95 @@ const emotionPicker = [
   { label: "Paz", hawkinsId: 16, emoji: "🕊️" },
 ];
 
-const moodTips: Record<string, string[]> = {
-  low: [
-    "Permita-se sentir. Respire fundo 5 vezes e coloque uma mão no coração. Você está segura.",
-    "Tome um banho quente, coloque uma música suave e se abrace. Amanhã é um novo dia.",
-    "Escreva o que sente sem julgamento. A cura começa quando damos nome à dor.",
-    "Ouvir frequências de 528Hz (frequência do amor) pode ajudar a elevar sua vibração.",
-  ],
-  mid: [
-    "Você está no ponto de virada! A coragem é o portal para frequências mais altas.",
-    "Faça uma caminhada de 10 minutos ao ar livre. O movimento eleva sua frequência.",
-    "Pratique visualização por 5 minutos: imagine-se vibrando em 500Hz (Amor).",
-    "Escreva 3 coisas pelas quais você é grata. A gratidão vibra a 540Hz!",
-  ],
-  high: [
-    "Sua vibração está linda! Mantenha-se nessa frequência praticando meditação.",
-    "Você está irradiando amor (500Hz+). Continue nutrindo esse estado.",
-    "Aproveite essa energia elevada para manifestar e criar. O universo conspira a seu favor!",
-    "Compartilhe essa vibração com o mundo. Quando você brilha, ilumina quem está ao redor.",
-  ],
+// Emotion-specific tips based on what the user selected
+const emotionTips: Record<string, { tip: string; neuroscience: string }> = {
+  Vergonha: {
+    tip: "A vergonha ativa o sistema nervoso simpático. Pratique autocompaixão: coloque a mão no peito e diga 'Eu me aceito como sou'. Isso ativa o nervo vago e reduz o cortisol.",
+    neuroscience: "A vergonha ativa a ínsula anterior e o córtex cingulado — áreas ligadas à dor social. Estudos da Dra. Brené Brown mostram que nomear a vergonha reduz seu poder em até 50%.",
+  },
+  Culpa: {
+    tip: "Escreva uma carta de perdão para si mesma. A neurociência mostra que o autoperdão libera ocitocina e reduz inflamação no corpo.",
+    neuroscience: "A culpa crônica mantém o córtex pré-frontal em hiperatividade, esgotando recursos cognitivos. O perdão ativa o córtex pré-frontal ventromedial, associado à regulação emocional.",
+  },
+  Apatia: {
+    tip: "Comece com micro-ações: beba um copo de água, abra uma janela, sinta o sol. Pequenos estímulos sensoriais reativam o sistema de recompensa.",
+    neuroscience: "A apatia está ligada à baixa atividade no núcleo accumbens (centro de motivação). Dopamina é liberada não pela conquista, mas pela antecipação — planejar algo pequeno já ativa o circuito.",
+  },
+  Tristeza: {
+    tip: "Permita-se chorar — lágrimas emocionais contêm leucina-encefalina, um analgésico natural. Depois, ouça uma música que te conecte com um momento feliz.",
+    neuroscience: "A tristeza reduz a atividade no córtex pré-frontal esquerdo (associado a emoções positivas). Exercício físico de apenas 20 minutos equilibra essa assimetria hemisférica.",
+  },
+  Medo: {
+    tip: "Use a técnica 5-4-3-2-1: nomeie 5 coisas que vê, 4 que toca, 3 que ouve, 2 que cheira, 1 que saboreia. Isso ancora seu cérebro no presente.",
+    neuroscience: "O medo ativa a amígdala em 12ms — mais rápido que a consciência. A técnica de grounding ativa o córtex pré-frontal, que inibe a resposta da amígdala em segundos.",
+  },
+  Ansiedade: {
+    tip: "Respiração 4-7-8: inspire por 4s, segure 7s, expire por 8s. Repita 4 vezes. Isso ativa o sistema nervoso parassimpático imediatamente.",
+    neuroscience: "A ansiedade é uma hiperativação da rede de modo padrão (DMN). A respiração lenta aumenta a variabilidade da frequência cardíaca (HRV) e reduz cortisol em até 23%.",
+  },
+  Raiva: {
+    tip: "Canalize a energia: faça 20 polichinelos ou escreva tudo que sente em um papel (pode rasgar depois). A raiva é energia — redirecione-a.",
+    neuroscience: "A raiva libera noradrenalina e aumenta o fluxo sanguíneo no córtex pré-frontal dorsolateral. Exercício físico metaboliza esses hormônios em 20 minutos.",
+  },
+  Frustração: {
+    tip: "Identifique a expectativa por trás da frustração. Depois pergunte: 'O que está no meu controle agora?' Foque apenas nisso.",
+    neuroscience: "A frustração surge quando há discrepância entre expectativa (córtex orbitofrontal) e realidade. Reenquadrar a situação ativa novas redes neurais de solução.",
+  },
+  Orgulho: {
+    tip: "O orgulho saudável celebra conquistas. Mas quando se torna comparação, nos isola. Pratique gratidão por quem contribuiu para suas vitórias.",
+    neuroscience: "O orgulho ativa o sistema de recompensa (estriado ventral), mas o orgulho excessivo reduz a empatia ao diminuir a atividade na junção temporoparietal.",
+  },
+  Coragem: {
+    tip: "Você está no ponto de virada de Hawkins! Acima de 200Hz, a energia se torna construtiva. Tome uma decisão que tem adiado.",
+    neuroscience: "A coragem não é ausência de medo — é ativação simultânea da amígdala (medo) e do córtex pré-frontal (decisão). Quanto mais pratica, mais forte fica essa conexão.",
+  },
+  Confiança: {
+    tip: "Mantenha essa frequência: adote uma postura expansiva por 2 minutos. A linguagem corporal retroalimenta o cérebro.",
+    neuroscience: "A confiança está associada a níveis elevados de testosterona e baixos de cortisol. A postura de poder (Amy Cuddy) altera esses hormônios em apenas 2 minutos.",
+  },
+  Esperança: {
+    tip: "Visualize o resultado que deseja por 5 minutos com todos os sentidos. Seu cérebro não diferencia o imaginado do vivido.",
+    neuroscience: "A esperança ativa o córtex pré-frontal e o sistema dopaminérgico mesolímbico. Estudos mostram que pessoas esperançosas têm 14% mais chances de atingir suas metas.",
+  },
+  Aceitação: {
+    tip: "A aceitação não é resignação — é sabedoria. Ao aceitar o que é, você libera energia para criar o que será.",
+    neuroscience: "A aceitação reduz a atividade na amígdala e aumenta no córtex pré-frontal ventromedial. Praticantes de mindfulness mostram essa mudança em apenas 8 semanas (Harvard, 2011).",
+  },
+  Força: {
+    tip: "Use essa clareza mental para criar planos concretos. A razão combinada com intenção é a fórmula da manifestação consciente.",
+    neuroscience: "O pensamento analítico ativa o córtex pré-frontal dorsolateral. Quando combinado com emoções positivas (sistema límbico), cria as conexões neurais mais duradouras.",
+  },
+  Amor: {
+    tip: "Você está vibrando a 500Hz! Espalhe esse amor: envie uma mensagem carinhosa para alguém, abrace quem está perto, ou simplesmente sorria para um estranho.",
+    neuroscience: "O amor libera ocitocina, dopamina e serotonina simultaneamente. O HeartMath Institute provou que o coração em coerência emite campo eletromagnético 5.000x maior que o cérebro.",
+  },
+  Gratidão: {
+    tip: "A gratidão vibra a 540Hz! Escreva 5 coisas pelas quais é grata agora. Sinta cada uma no coração. Isso reprograma seu filtro reticular.",
+    neuroscience: "Robert Emmons (UC Davis) provou que 21 dias de gratidão diária aumentam o bem-estar em 25%, melhoram o sono e reduzem visitas ao médico em 35%.",
+  },
+  Alegria: {
+    tip: "Celebre! Dance, cante, pule! A alegria é contagiante — quando você vibra alto, eleva todos ao redor. Esse é o efeito de campo.",
+    neuroscience: "A alegria ativa o nucleus accumbens e libera endorfinas naturais. O cérebro em estado de alegria tem neuroplasticidade 31% maior (Shawn Achor, Harvard).",
+  },
+  Paz: {
+    tip: "Você está em estado de beatitude (600Hz). Medite, contemple a natureza, ou simplesmente SEJA. Nenhuma ação é necessária — sua presença já transforma.",
+    neuroscience: "A paz profunda produz ondas cerebrais gama (40Hz+), associadas à iluminação e insight. Monges tibetanos em meditação profunda mostram atividade gama 30x acima do normal.",
+  },
+};
+
+const defaultTips = {
+  low: {
+    tip: "Respire fundo 5 vezes. Coloque uma mão no coração. Ouvir frequências de 528Hz pode ajudar a elevar sua vibração.",
+    neuroscience: "Emoções de baixa frequência mantêm o sistema nervoso simpático em alerta constante. A respiração diafragmática ativa o nervo vago, reduzindo cortisol em minutos.",
+  },
+  mid: {
+    tip: "Você está no ponto de virada! Caminhe 10 minutos ao ar livre. O movimento eleva a frequência vibracional.",
+    neuroscience: "Acima de 200Hz na escala de Hawkins, o córtex pré-frontal assume o controle sobre a amígdala. Cada dia nessa faixa fortalece as conexões neurais construtivas.",
+  },
+  high: {
+    tip: "Sua vibração está elevada! Aproveite para manifestar, criar e irradiar essa energia. O universo conspira a seu favor!",
+    neuroscience: "Emoções elevadas (amor, alegria, paz) ativam o sistema nervoso parassimpático, produzem DHEA (hormônio da vitalidade) e aumentam a coerência cardíaca.",
+  },
 };
 
 function getToday() {
@@ -103,34 +171,64 @@ function normalize(str: string) {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 }
 
-function getRandomTip(hawkinsId: number): string {
-  const category = hawkinsId <= 8 ? "low" : hawkinsId <= 11 ? "mid" : "high";
-  const tips = moodTips[category];
-  return tips[Math.floor(Math.random() * tips.length)];
-}
-
 function getHawkinsFromEmotions(emotions: string[]): HawkinsLevel {
-  if (emotions.length === 0) return hawkinsScale[8]; // Default: Coragem
+  if (emotions.length === 0) return hawkinsScale[8];
   const ids = emotions.map(e => {
     const found = emotionPicker.find(ep => ep.label === e);
     return found ? found.hawkinsId : 9;
   });
-  // Use the highest frequency emotion as dominant
   const maxId = Math.max(...ids);
   return hawkinsScale.find(h => h.id === maxId) || hawkinsScale[8];
+}
+
+function getTipForEmotions(emotions: string[], hawkinsId: number): { tip: string; neuroscience: string } {
+  // Use the dominant (first selected) emotion for specific tips
+  const dominant = emotions[0];
+  if (dominant && emotionTips[dominant]) return emotionTips[dominant];
+  const cat = hawkinsId <= 8 ? "low" : hawkinsId <= 11 ? "mid" : "high";
+  return defaultTips[cat];
+}
+
+// Calculate weekly averages for the last 4 weeks
+function getWeeklyAverages(entries: DailyEntry[]): { weekLabel: string; avgFrequency: number; avgId: number; count: number }[] {
+  const weeks: { weekLabel: string; avgFrequency: number; avgId: number; count: number }[] = [];
+  
+  for (let w = 3; w >= 0; w--) {
+    const weekEntries: DailyEntry[] = [];
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - (w * 7 + 6));
+    const weekEnd = new Date();
+    weekEnd.setDate(weekEnd.getDate() - (w * 7));
+
+    for (const entry of entries) {
+      const d = new Date(entry.date + "T12:00:00");
+      if (d >= weekStart && d <= weekEnd) weekEntries.push(entry);
+    }
+
+    const label = `${format(weekStart, "dd/MM")} - ${format(weekEnd, "dd/MM")}`;
+    if (weekEntries.length === 0) {
+      weeks.push({ weekLabel: label, avgFrequency: 0, avgId: 0, count: 0 });
+    } else {
+      const avgId = Math.round(weekEntries.reduce((s, e) => s + e.level, 0) / weekEntries.length);
+      const hawkins = hawkinsScale.find(h => h.id === avgId) || hawkinsScale[8];
+      weeks.push({ weekLabel: label, avgFrequency: hawkins.frequency, avgId, count: weekEntries.length });
+    }
+  }
+  return weeks;
 }
 
 export default function TermometroVibracional() {
   const [entries, setEntries] = useState<DailyEntry[]>(getSavedEntries);
   const [selectedEmotions, setSelectedEmotions] = useState<string[]>([]);
   const [showCelebration, setShowCelebration] = useState(false);
-  const [currentTip, setCurrentTip] = useState("");
+  const [savedTipData, setSavedTipData] = useState<{ tip: string; neuroscience: string } | null>(null);
   const [showHistory, setShowHistory] = useState(false);
 
   const todayEntry = entries.find(e => e.date === getToday());
   const [saved, setSaved] = useState(!!todayEntry);
 
   const currentHawkins = useMemo(() => getHawkinsFromEmotions(selectedEmotions), [selectedEmotions]);
+  const weeklyAverages = useMemo(() => getWeeklyAverages(entries), [entries]);
 
   const voice = useVoiceInput({
     onResult: (result) => {
@@ -167,12 +265,11 @@ export default function TermometroVibracional() {
     setEntries(updated);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
     setSaved(true);
-    setCurrentTip(getRandomTip(currentHawkins.id));
+    setSavedTipData(getTipForEmotions(selectedEmotions, currentHawkins.id));
     setShowCelebration(true);
     setTimeout(() => setShowCelebration(false), 3000);
   };
 
-  // For the bar chart — normalize id to percentage
   const frequencyPercent = (id: number) => Math.round((id / 17) * 100);
 
   const last7 = Array.from({ length: 7 }, (_, i) => {
@@ -233,22 +330,15 @@ export default function TermometroVibracional() {
       {/* Current Hawkins reading */}
       <div className="glass-gold rounded-2xl p-4 space-y-4">
         <p className="text-[10px] font-body font-semibold text-gold uppercase tracking-wider text-center">Sua Frequência Vibracional</p>
-
-        {/* Frequency meter */}
         <div className="relative">
           <div className="flex items-center gap-0.5 h-4 rounded-full overflow-hidden">
             {hawkinsScale.map((h) => (
               <div
                 key={h.id}
-                className={cn(
-                  "h-full flex-1 transition-all duration-500",
-                  h.color,
-                  currentHawkins.id >= h.id ? "opacity-100" : "opacity-15"
-                )}
+                className={cn("h-full flex-1 transition-all duration-500", h.color, currentHawkins.id >= h.id ? "opacity-100" : "opacity-15")}
               />
             ))}
           </div>
-          {/* Pointer */}
           <div
             className="absolute -top-1 transition-all duration-700 ease-out"
             style={{ left: `${((currentHawkins.id - 0.5) / hawkinsScale.length) * 100}%` }}
@@ -256,25 +346,17 @@ export default function TermometroVibracional() {
             <div className="w-0 h-0 border-l-[5px] border-r-[5px] border-t-[6px] border-l-transparent border-r-transparent border-t-gold mx-auto" />
           </div>
         </div>
-
-        {/* Labels */}
         <div className="flex justify-between text-[7px] font-body text-muted-foreground px-0.5">
           <span>20 Hz</span>
           <span>200 Hz</span>
           <span>500 Hz</span>
           <span>700+ Hz</span>
         </div>
-
-        {/* Current state card */}
         <div className="text-center space-y-2 pt-1">
           <div className="text-4xl">{currentHawkins.emoji}</div>
           <div>
-            <p className={cn("text-2xl font-display font-bold", currentHawkins.textColor)}>
-              {currentHawkins.frequency} Hz
-            </p>
-            <p className="text-sm font-display font-bold text-foreground mt-0.5">
-              {currentHawkins.emotion}
-            </p>
+            <p className={cn("text-2xl font-display font-bold", currentHawkins.textColor)}>{currentHawkins.frequency} Hz</p>
+            <p className="text-sm font-display font-bold text-foreground mt-0.5">{currentHawkins.emotion}</p>
             <p className={cn("text-[10px] font-body font-semibold uppercase tracking-wider mt-0.5", currentHawkins.textColor)}>
               Nível: {currentHawkins.level}
             </p>
@@ -341,35 +423,39 @@ export default function TermometroVibracional() {
         onClick={saveEntry}
         className={cn(
           "w-full font-body font-semibold transition-all duration-300",
-          saved
-            ? "bg-green-500 hover:bg-green-500/90 text-background"
-            : "bg-gold hover:bg-gold/90 text-background"
+          saved ? "bg-green-500 hover:bg-green-500/90 text-background" : "bg-gold hover:bg-gold/90 text-background"
         )}
         disabled={selectedEmotions.length === 0}
       >
         {saved ? (
-          <>
-            <Star className="h-4 w-4 mr-2" />
-            Atualizar frequência
-          </>
+          <><Star className="h-4 w-4 mr-2" />Atualizar frequência</>
         ) : (
-          <>
-            <Sparkles className="h-4 w-4 mr-2" />
-            Registrar frequência
-          </>
+          <><Sparkles className="h-4 w-4 mr-2" />Registrar frequência</>
         )}
       </Button>
 
-      {/* Tip card */}
-      {saved && currentTip && (
-        <div className="glass-gold rounded-2xl p-4 space-y-2 animate-fade-in">
-          <div className="flex items-center gap-2">
-            <Lightbulb className="h-4 w-4 text-gold" />
-            <p className="text-[10px] font-body font-semibold text-gold uppercase tracking-wider">
-              {currentHawkins.id >= 12 ? "Continue assim!" : "Dica para elevar sua frequência"}
-            </p>
+      {/* Emotion-specific tip + neuroscience */}
+      {saved && savedTipData && (
+        <div className="space-y-3 animate-fade-in">
+          {/* Tip */}
+          <div className="glass-gold rounded-2xl p-4 space-y-2">
+            <div className="flex items-center gap-2">
+              <Lightbulb className="h-4 w-4 text-gold" />
+              <p className="text-[10px] font-body font-semibold text-gold uppercase tracking-wider">
+                {currentHawkins.id >= 12 ? "Continue assim!" : "Dica personalizada"}
+              </p>
+            </div>
+            <p className="text-xs font-body text-foreground/80 leading-relaxed">{savedTipData.tip}</p>
           </div>
-          <p className="text-xs font-body text-foreground/80 leading-relaxed">{currentTip}</p>
+
+          {/* Neuroscience insight */}
+          <div className="glass rounded-2xl p-4 space-y-2 border border-purple-500/20">
+            <div className="flex items-center gap-2">
+              <Brain className="h-4 w-4 text-purple-400" />
+              <p className="text-[10px] font-body font-semibold text-purple-400 uppercase tracking-wider">O que a neurociência diz</p>
+            </div>
+            <p className="text-xs font-body text-foreground/80 leading-relaxed">{savedTipData.neuroscience}</p>
+          </div>
         </div>
       )}
 
@@ -387,9 +473,7 @@ export default function TermometroVibracional() {
             const isToday = date.toISOString().slice(0, 10) === getToday();
             return (
               <div key={i} className="flex flex-col items-center gap-1 flex-1">
-                {hawkins && (
-                  <span className="text-[7px] font-body text-muted-foreground">{hawkins.frequency}</span>
-                )}
+                {hawkins && <span className="text-[7px] font-body text-muted-foreground">{hawkins.frequency}</span>}
                 <div
                   className={cn(
                     "w-full rounded-t-md transition-all duration-500",
@@ -402,6 +486,104 @@ export default function TermometroVibracional() {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Monthly evolution - Weekly averages */}
+      <div className="glass rounded-2xl p-4 space-y-3">
+        <div className="flex items-center gap-2">
+          <BarChart3 className="h-4 w-4 text-gold" />
+          <span className="text-xs font-body font-semibold text-gold uppercase tracking-wider">Evolução mensal</span>
+        </div>
+        <p className="text-[10px] font-body text-muted-foreground">Média semanal da sua frequência vibracional</p>
+        
+        <div className="space-y-2">
+          {weeklyAverages.map((week, i) => {
+            const hawkins = week.avgId > 0 ? (hawkinsScale.find(h => h.id === week.avgId) || hawkinsScale[8]) : null;
+            const barWidth = week.avgId > 0 ? frequencyPercent(week.avgId) : 0;
+            return (
+              <div key={i} className="space-y-1">
+                <div className="flex items-center justify-between text-[9px] font-body">
+                  <span className="text-muted-foreground">{week.weekLabel}</span>
+                  {hawkins ? (
+                    <span className={cn("font-bold", hawkins.textColor)}>
+                      {hawkins.emoji} {week.avgFrequency}Hz • {hawkins.emotion}
+                    </span>
+                  ) : (
+                    <span className="text-muted-foreground/50">Sem registro</span>
+                  )}
+                </div>
+                <div className="h-3 rounded-full bg-muted/30 overflow-hidden">
+                  <div
+                    className={cn("h-full rounded-full transition-all duration-700", hawkins ? hawkins.color : "bg-muted/20")}
+                    style={{ width: `${barWidth}%` }}
+                  />
+                </div>
+                {week.count > 0 && (
+                  <p className="text-[8px] font-body text-muted-foreground/60 text-right">{week.count} registro{week.count > 1 ? "s" : ""}</p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Trend analysis */}
+        {weeklyAverages.filter(w => w.count > 0).length >= 2 && (() => {
+          const valid = weeklyAverages.filter(w => w.count > 0);
+          const first = valid[0].avgId;
+          const last = valid[valid.length - 1].avgId;
+          const trend = last > first ? "subindo" : last < first ? "descendo" : "estável";
+          const trendEmoji = trend === "subindo" ? "📈" : trend === "descendo" ? "📉" : "➡️";
+          const trendColor = trend === "subindo" ? "text-green-400" : trend === "descendo" ? "text-orange-400" : "text-yellow-400";
+          return (
+            <div className="glass-gold rounded-xl p-3 mt-2">
+              <p className={cn("text-[11px] font-body font-semibold", trendColor)}>
+                {trendEmoji} Sua frequência está {trend} nas últimas semanas
+              </p>
+              <p className="text-[10px] font-body text-muted-foreground mt-1">
+                {trend === "subindo" && "Parabéns! Sua prática está elevando sua consciência. Continue assim!"}
+                {trend === "descendo" && "Momento de atenção amorosa. Intensifique suas práticas de gratidão e meditação."}
+                {trend === "estável" && "Estabilidade é bom sinal. Para evoluir, experimente novas práticas de elevação."}
+              </p>
+            </div>
+          );
+        })()}
+      </div>
+
+      {/* Neuroscience general section */}
+      <div className="glass rounded-2xl p-4 space-y-3 border border-purple-500/10">
+        <div className="flex items-center gap-2">
+          <Brain className="h-4 w-4 text-purple-400" />
+          <span className="text-xs font-body font-semibold text-purple-400 uppercase tracking-wider">Neurociência das emoções</span>
+        </div>
+        <div className="space-y-2.5">
+          {[
+            {
+              title: "Seu cérebro muda com suas emoções",
+              text: "Cada emoção ativa circuitos neurais específicos. Emoções de alta frequência (amor, gratidão, paz) fortalecem o córtex pré-frontal — responsável por decisões, criatividade e autoconsciência.",
+            },
+            {
+              title: "A Escala de Hawkins é mensurável",
+              text: "Dr. David Hawkins usou cinesiologia para mapear os níveis de consciência. Estudos com EEG e fMRI confirmam que estados emocionais alteram padrões de ondas cerebrais de forma consistente.",
+            },
+            {
+              title: "Neuroplasticidade emocional",
+              text: "Registrar suas emoções diariamente aumenta a inteligência emocional e reduz a reatividade da amígdala em até 50% (UCLA, 2007). Você está literalmente reconfigurando seu cérebro.",
+            },
+            {
+              title: "Coerência cardíaca",
+              text: "O HeartMath Institute provou que emoções elevadas criam coerência entre coração e cérebro, aumentando intuição, clareza mental e resiliência ao estresse.",
+            },
+            {
+              title: "O efeito de campo vibracional",
+              text: "Pesquisas mostram que estados emocionais se propagam até 3 graus de separação social. Quando você eleva sua frequência, impacta até pessoas que não conhece diretamente.",
+            },
+          ].map((item, i) => (
+            <div key={i} className="space-y-1">
+              <p className="text-[11px] font-body font-semibold text-foreground">{item.title}</p>
+              <p className="text-[10px] font-body text-muted-foreground leading-relaxed">{item.text}</p>
+            </div>
+          ))}
         </div>
       </div>
 
