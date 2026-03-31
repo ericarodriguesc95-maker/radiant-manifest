@@ -110,6 +110,7 @@ function getSavedProgress(): Record<string, boolean[]> {
 
 export default function JornadaPage() {
   const [expandedBlock, setExpandedBlock] = useState<string | null>(null);
+  const [openLesson, setOpenLesson] = useState<string | null>(null); // "blockId-lessonIdx"
   const [progress, setProgress] = useState<Record<string, boolean[]>>(getSavedProgress);
 
   const toggleLesson = (blockId: string, lessonIdx: number) => {
