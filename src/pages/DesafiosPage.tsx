@@ -718,7 +718,7 @@ function TaskDetailModal({ task, open, onClose }: { task: TaskDetail | null; ope
           {/* Exercício */}
           <div className="rounded-xl bg-gradient-to-br from-emerald-900/40 to-teal-900/30 border border-emerald-700/40 p-4">
             <div className="flex items-center gap-2 mb-2">
-              <BookOpen className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <BookOpen className="h-4 w-4 text-emerald-400" />
               <h4 className="font-display font-semibold text-sm text-emerald-800 dark:text-emerald-300">Como Fazer (Passo a Passo)</h4>
             </div>
             <ol className="space-y-1.5">
