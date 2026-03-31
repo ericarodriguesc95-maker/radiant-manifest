@@ -707,7 +707,7 @@ function TaskDetailModal({ task, open, onClose }: { task: TaskDetail | null; ope
           </div>
 
           {/* Neurociência */}
-          <div className="rounded-xl bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/30 dark:to-indigo-950/20 border border-purple-200/50 dark:border-purple-800/30 p-4">
+          <div className="rounded-xl bg-gradient-to-br from-purple-900/40 to-indigo-900/30 border border-purple-700/40 p-4">
             <div className="flex items-center gap-2 mb-2">
               <Brain className="h-4 w-4 text-purple-600 dark:text-purple-400" />
               <h4 className="font-display font-semibold text-sm text-purple-800 dark:text-purple-300">O Que Diz a Neurociência</h4>
