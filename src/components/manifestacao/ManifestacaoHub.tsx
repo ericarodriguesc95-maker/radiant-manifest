@@ -63,6 +63,7 @@ export default function ManifestacaoHub() {
       frequencias: FrequenciasCura,
       termometro: TermometroVibracional,
       "manifestacao-escrita": ManifestacaoEscrita,
+      "quadro-sonhos": QuadroDosSonhos,
     }[view];
 
     return (
