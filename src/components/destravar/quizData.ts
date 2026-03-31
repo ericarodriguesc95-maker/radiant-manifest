@@ -271,6 +271,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Relacionamentos
       reading:
         "Relacionamentos saudáveis exigem posicionamento. Isso significa saber dizer não sem culpa, estabelecer limites com amor e parar de aceitar menos do que Deus preparou para você. Sabedoria relacional é entender que nem todo relacionamento é para toda a vida — e tudo bem.",
+      verse: "O homem que tem muitos amigos pode congratular-se, mas há amigo mais chegado do que um irmão.",
+      verseRef: "Provérbios 18:24",
       quiz: [
         {
           question: "O que é posicionamento nos relacionamentos?",
