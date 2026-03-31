@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { ChevronRight, CheckCircle2, Circle, Lock, Unlock, BookOpen, Brain, Compass, ChevronDown, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { lessonContent } from "@/components/destravar/quizData";
 import LessonQuiz from "@/components/destravar/LessonQuiz";
+import BlockBadges, { BadgeCelebration } from "@/components/destravar/BlockBadges";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
