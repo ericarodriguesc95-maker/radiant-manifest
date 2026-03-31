@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sparkles, BookOpen, Droplets, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield, Trophy } from "lucide-react";
+import { Sparkles, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
@@ -161,8 +161,6 @@ const HomePage = () => {
           {[
             { icon: Brain, label: "Reprogramação Mental", to: "/reprogramacao" },
             { icon: Zap, label: "Alta Performance", to: "/alta-performance" },
-            { icon: BookOpen, label: "Diário", to: "/diario" },
-            { icon: Droplets, label: "Saúde & Fitness", to: "/guias" },
           ].map(({ icon: Icon, label, to }, i) => (
             <button
               key={label}
