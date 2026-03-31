@@ -52,6 +52,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Feminilidade distorcida
       reading:
         "A cultura atual apresenta dois extremos: a mulher que precisa ser forte demais e não pode ser vulnerável, ou a mulher passiva que aceita tudo. Ambos são distorções. A feminilidade bíblica é marcada por força e delicadeza, sabedoria e ousadia. Não é sobre se encaixar num molde, mas sobre viver a partir de quem Deus criou você para ser.",
+      verse: "Força e dignidade são as suas vestes, e ela sorri diante do futuro.",
+      verseRef: "Provérbios 31:25",
       quiz: [
         {
           question: "Quais são os dois extremos da feminilidade distorcida?",
