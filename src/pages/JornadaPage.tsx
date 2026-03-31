@@ -1,102 +1,102 @@
 import { useState } from "react";
-import { BookOpen, ChevronRight, CheckCircle2, Circle, Sparkles, Target, Eye, Brain, PenLine } from "lucide-react";
+import { ChevronRight, CheckCircle2, Circle, Lock, Unlock, BookOpen, Brain, Compass, ChevronDown, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface Chapter {
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+interface Lesson {
+  title: string;
+  subtitle: string;
+}
+
+interface Block {
   id: string;
   number: number;
   title: string;
   subtitle: string;
-  description: string;
+  summary: string;
+  closingLine: string;
   icon: React.ElementType;
-  prompts: string[];
   color: string;
+  lessons: Lesson[];
 }
 
-const chapters: Chapter[] = [
+// ─── Data ────────────────────────────────────────────────────────────────────
+
+const painPoints = [
+  "Você trabalha, se esforça, faz tudo certo e mesmo assim sente que a vida não anda.",
+  "Você toma decisões no impulso e depois se arrepende.",
+  "Seus relacionamentos drenam mais energia do que dão.",
+  "Você compensa no trabalho o que não resolve nas outras áreas.",
+  "Ganha dinheiro mas não prospera de verdade.",
+  "Já tentou terapia, curso, livro e continua travada.",
+  "Sente que perdeu a conexão com quem você realmente é.",
+];
+
+const forYouIf = [
+  "Sente que tá vivendo no piloto automático e quer retomar o controle.",
+  "Sabe que o problema não é falta de esforço, é algo mais profundo.",
+  "Quer parar de reagir e começar a decidir com clareza.",
+  "Tá disposta a olhar pra dentro de verdade, mesmo que doa.",
+  "Quer prosperar no dinheiro, nos relacionamentos e na carreira.",
+];
+
+const blocks: Block[] = [
   {
-    id: "reflexao-2025",
+    id: "identidade",
     number: 1,
-    title: "Reflexão Sobre 2025",
-    subtitle: "O Que Aprendemos?",
-    description: "Faça uma pausa para refletir sobre 2025: os momentos bons, os desafios, as conquistas e os aprendizados.",
+    title: "Identidade",
+    subtitle: "Quem Você Se Tornou vs. Quem Deus Te Chamou Para Ser",
+    summary: "Você vai entender quem se tornou e quem Deus te chamou para ser.",
+    closingLine: "Você vai parar de se enxergar pela dor e começar a se enxergar pela paternidade de Deus.",
     icon: BookOpen,
-    prompts: [
-      "Quais momentos você se orgulha? Que metas você alcançou?",
-      "Quais foram os momentos mais difíceis? Como você os superou?",
-      "Quais lições valiosas você tirou de 2025?",
-      "Quais hábitos te ajudaram? Quais te atrapalharam?",
-      "O que você faria diferente?",
+    color: "from-rose-500/20 to-pink-500/20",
+    lessons: [
+      { title: "Identidade formada fora de Deus", subtitle: "Reconhecer padrões construídos na dor" },
+      { title: "Feminilidade distorcida", subtitle: "Identificar excessos e desalinhamento bíblico" },
+      { title: "Ciclo da mulher reativa", subtitle: "Identificar ausência de governo espiritual" },
     ],
-    color: "from-amber-500/20 to-orange-500/20",
   },
   {
-    id: "nova-era",
+    id: "sabedoria",
     number: 2,
-    title: "Definindo Sua Nova Era",
-    subtitle: "Quem Você Quer Ser em 2026?",
-    description: "A sua Nova Era é uma transformação completa: de quem você é, como se sente, e o que decide fazer com seu tempo e energia.",
-    icon: Sparkles,
-    prompts: [
-      "Quais novos valores vão te guiar em 2026?",
-      "Que tipo de energia você quer emanar?",
-      "Quais hábitos farão parte do seu dia a dia?",
-      "Como você se sentirá ao viver essa versão mais autêntica?",
-      "Que crenças limitantes você vai deixar para trás?",
+    title: "Sabedoria",
+    subtitle: "Alinhe Sua Mente à Verdade",
+    summary: "Você vai alinhar sua mente à verdade e parar de viver guiada por emoções.",
+    closingLine: "Você vai discernir o que vem de Deus e o que está te prendendo.",
+    icon: Brain,
+    color: "from-amber-500/20 to-yellow-500/20",
+    lessons: [
+      { title: "Controle vs Governo", subtitle: "Substituir controle por sabedoria" },
+      { title: "Crenças vs Verdade", subtitle: "Confrontar mentiras com a Palavra" },
+      { title: "Postura de solteira x postura de casada", subtitle: "Posicionamento relacional" },
+      { title: "Vocação", subtitle: "Alinhar chamado com obediência" },
+      { title: "Espiritualidade superficial", subtitle: "Sair da vida espiritual sem transformação" },
+      { title: "Mente renovada", subtitle: "Pensar como alguém transformada" },
     ],
-    color: "from-purple-500/20 to-pink-500/20",
   },
   {
-    id: "vision-board",
+    id: "proposito",
     number: 3,
-    title: "Vision Board 2026",
-    subtitle: "Visualize Seus Sonhos",
-    description: "Um Vision Board é uma ferramenta poderosa para visualizar seus sonhos e metas, mantendo o foco e a motivação.",
-    icon: Eye,
-    prompts: [
-      "Defina suas metas: pessoal, profissional, saúde, relacionamentos, diversão.",
-      "Reúna imagens e frases que representem seus objetivos.",
-      "Adicione afirmações: 'Eu sou capaz', 'Eu mereço prosperar'.",
-      "Coloque seu Vision Board em um lugar visível.",
-      "Revise e atualize conforme o ano avança.",
-    ],
-    color: "from-cyan-500/20 to-blue-500/20",
-  },
-  {
-    id: "metas-smart",
-    number: 4,
-    title: "Metas SMART",
-    subtitle: "Metas Que Funcionam",
-    description: "Use o método SMART para criar metas Específicas, Mensuráveis, Alcançáveis, Relevantes e com Prazo.",
-    icon: Target,
-    prompts: [
-      "1º Trimestre (Jan-Mar): Fundação e início — quais são suas metas?",
-      "2º Trimestre (Abr-Jun): Desenvolvimento — como vai avançar?",
-      "3º Trimestre (Jul-Set): Consolidação — o que vai fortalecer?",
-      "4º Trimestre (Out-Dez): Finalização — como vai concluir o ano?",
-    ],
+    title: "Propósito",
+    subtitle: "Viva Alinhada e Governada Por Deus",
+    summary: "Você vai viver uma vida estruturada, alinhada e governada por Deus.",
+    closingLine: "Você vai sair com uma vida alinhada e estrutura para permanecer.",
+    icon: Compass,
     color: "from-emerald-500/20 to-teal-500/20",
-  },
-  {
-    id: "reflexao-final",
-    number: 5,
-    title: "Reflexão Final",
-    subtitle: "Carta Para Si Mesma",
-    description: "Escreva uma carta para você mesma, para ser lida em dezembro de 2026. Descreva quem você será.",
-    icon: PenLine,
-    prompts: [
-      "Como é a versão de mim que viveu 2026 com propósito?",
-      "O que essa nova versão conquistou?",
-      "Como me sinto em relação ao meu corpo, mente e relacionamentos?",
-      "Quais hábitos saudáveis fazem parte da minha rotina?",
+    lessons: [
+      { title: "Governo na prática", subtitle: "Organizar vida como obediência" },
+      { title: "Relacionamentos", subtitle: "Posicionamento com sabedoria e firmeza" },
+      { title: "Direção profissional", subtitle: "Carreira vs chamado" },
+      { title: "Ordem espiritual na rotina", subtitle: "Viver alinhada diariamente" },
+      { title: "Blindagem de ambiente", subtitle: "Sustentar transformação" },
     ],
-    color: "from-rose-500/20 to-amber-500/20",
   },
 ];
 
-const STORAGE_KEY = "glow-up-jornada";
+const STORAGE_KEY = "destravar-feminino-progress";
 
-function getSavedAnswers(): Record<string, Record<number, string>> {
+function getSavedProgress(): Record<string, boolean[]> {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
   } catch {
@@ -104,45 +104,94 @@ function getSavedAnswers(): Record<string, Record<number, string>> {
   }
 }
 
-export default function JornadaPage() {
-  const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
-  const [answers, setAnswers] = useState<Record<string, Record<number, string>>>(getSavedAnswers);
+// ─── Component ───────────────────────────────────────────────────────────────
 
-  const saveAnswer = (chapterId: string, promptIndex: number, value: string) => {
-    setAnswers(prev => {
-      const updated = {
-        ...prev,
-        [chapterId]: { ...(prev[chapterId] || {}), [promptIndex]: value },
-      };
+export default function JornadaPage() {
+  const [expandedBlock, setExpandedBlock] = useState<string | null>(null);
+  const [progress, setProgress] = useState<Record<string, boolean[]>>(getSavedProgress);
+
+  const toggleLesson = (blockId: string, lessonIdx: number) => {
+    setProgress(prev => {
+      const block = blocks.find(b => b.id === blockId)!;
+      const arr = [...(prev[blockId] || new Array(block.lessons.length).fill(false))];
+      arr[lessonIdx] = !arr[lessonIdx];
+      const updated = { ...prev, [blockId]: arr };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       return updated;
     });
   };
 
-  const getChapterProgress = (chapter: Chapter) => {
-    const chapterAnswers = answers[chapter.id] || {};
-    const answered = Object.values(chapterAnswers).filter(v => v.trim().length > 0).length;
-    return Math.round((answered / chapter.prompts.length) * 100);
+  const getBlockProgress = (block: Block) => {
+    const arr = progress[block.id] || [];
+    const done = arr.filter(Boolean).length;
+    return Math.round((done / block.lessons.length) * 100);
   };
 
-  const totalProgress = Math.round(
-    chapters.reduce((sum, ch) => sum + getChapterProgress(ch), 0) / chapters.length
-  );
+  const totalLessons = blocks.reduce((s, b) => s + b.lessons.length, 0);
+  const totalDone = blocks.reduce((s, b) => (progress[b.id] || []).filter(Boolean).length + s, 0);
+  const totalProgress = Math.round((totalDone / totalLessons) * 100);
 
   return (
     <div className="min-h-screen">
-      <header className="px-5 pt-12 pb-4">
-        <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Minha</p>
+      {/* Header */}
+      <header className="px-5 pt-12 pb-2">
+        <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Jornada do</p>
         <h1 className="text-2xl font-display font-bold">
-          Jornada 2026 <span className="text-gold">✦</span>
+          Destravar Feminino <span className="text-gold">✦</span>
         </h1>
       </header>
 
-      <div className="px-5 space-y-4 pb-28">
-        {/* Overall progress */}
+      <div className="px-5 space-y-5 pb-28">
+        {/* Hero */}
+        <div className="bg-card rounded-2xl border border-border p-5 space-y-3">
+          <p className="text-sm font-display font-semibold text-foreground leading-snug">
+            Reencontre a sua verdadeira identidade.
+          </p>
+          <p className="text-xs font-body text-muted-foreground leading-relaxed">
+            Você vai aprender a governar suas emoções, tomar decisões com clareza e sair com um plano real para prosperar na vida financeira, nos relacionamentos e na carreira.
+          </p>
+        </div>
+
+        {/* Pain points */}
+        <div className="bg-card rounded-2xl border border-border p-5 space-y-3">
+          <p className="text-xs font-display font-bold text-gold uppercase tracking-wider">
+            Quais dessas situações você vive hoje?
+          </p>
+          <ul className="space-y-2.5">
+            {painPoints.map((point, i) => (
+              <li key={i} className="flex items-start gap-2.5">
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-gold shrink-0" />
+                <p className="text-xs font-body text-muted-foreground leading-relaxed">{point}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Insight */}
+        <div className="bg-gradient-to-br from-gold/10 to-gold/5 rounded-2xl border border-gold/20 p-5 space-y-3">
+          <p className="text-xs font-body text-foreground leading-relaxed">
+            Isso não é falta de esforço. <span className="font-bold text-gold">É falta de autogoverno.</span>
+          </p>
+          <p className="text-xs font-body text-muted-foreground leading-relaxed">
+            O problema não é a sua vida. É a identidade que você tá vivendo. Você foi construindo uma versão de si mesma em cima do que te disseram pra ser. Do que esperavam de você, do que parecia seguro.
+          </p>
+          <p className="text-xs font-body text-muted-foreground leading-relaxed">
+            E essa versão não dá conta. Ela trava nos relacionamentos. Compensa no trabalho. Se sabota com dinheiro. Porque não é você de verdade. É uma identidade montada — e identidade montada não sustenta uma vida próspera.
+          </p>
+          <div className="pt-2 border-t border-gold/20">
+            <p className="text-sm font-display font-bold text-center text-foreground italic">
+              "Enquanto você não governa, você é governada."
+            </p>
+            <p className="text-[10px] font-body text-center text-muted-foreground mt-1">
+              Pelas emoções. Pelas expectativas dos outros. Pelo medo. Pela culpa.
+            </p>
+          </div>
+        </div>
+
+        {/* Progress */}
         <div className="bg-card rounded-2xl border border-border p-4">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-body font-semibold text-foreground">Progresso geral</p>
+            <p className="text-sm font-body font-semibold text-foreground">Seu progresso</p>
             <span className="text-sm font-body font-bold text-gold">{totalProgress}%</span>
           </div>
           <div className="bg-muted rounded-full h-2.5 overflow-hidden">
@@ -151,44 +200,41 @@ export default function JornadaPage() {
               style={{ width: `${totalProgress}%` }}
             />
           </div>
-          <p className="text-xs text-muted-foreground font-body mt-2">
-            Baseado no ebook "Meu Propósito 2026"
+          <p className="text-[10px] text-muted-foreground font-body mt-2">
+            {totalDone} de {totalLessons} lições concluídas
           </p>
         </div>
 
-        {/* Chapters */}
-        {chapters.map((chapter) => {
-          const isExpanded = expandedChapter === chapter.id;
-          const progress = getChapterProgress(chapter);
-          const chapterAnswers = answers[chapter.id] || {};
+        {/* Blocks */}
+        {blocks.map(block => {
+          const isExpanded = expandedBlock === block.id;
+          const blockProgress = getBlockProgress(block);
+          const blockArr = progress[block.id] || [];
 
           return (
-            <div key={chapter.id} className="bg-card rounded-2xl border border-border overflow-hidden">
-              {/* Chapter header */}
+            <div key={block.id} className="bg-card rounded-2xl border border-border overflow-hidden">
               <button
-                onClick={() => setExpandedChapter(isExpanded ? null : chapter.id)}
+                onClick={() => setExpandedBlock(isExpanded ? null : block.id)}
                 className="w-full p-4 flex items-center gap-3 text-left"
               >
                 <div className={cn(
                   "h-11 w-11 rounded-xl flex items-center justify-center bg-gradient-to-br shrink-0",
-                  chapter.color
+                  block.color
                 )}>
-                  <chapter.icon className="h-5 w-5 text-foreground" />
+                  <block.icon className="h-5 w-5 text-foreground" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-body font-semibold text-gold uppercase tracking-wider">
-                      Capítulo {chapter.number}
+                      Bloco {block.number}
                     </span>
-                    {progress === 100 && (
-                      <CheckCircle2 className="h-3.5 w-3.5 text-gold" />
-                    )}
+                    {blockProgress === 100 && <CheckCircle2 className="h-3.5 w-3.5 text-gold" />}
                   </div>
-                  <p className="text-sm font-display font-semibold truncate">{chapter.title}</p>
-                  <p className="text-xs font-body text-muted-foreground">{chapter.subtitle}</p>
+                  <p className="text-sm font-display font-semibold truncate">{block.title}</p>
+                  <p className="text-xs font-body text-muted-foreground">{block.subtitle}</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-xs font-body text-muted-foreground">{progress}%</span>
+                  <span className="text-xs font-body text-muted-foreground">{blockProgress}%</span>
                   <ChevronRight className={cn(
                     "h-4 w-4 text-muted-foreground transition-transform",
                     isExpanded && "rotate-90"
@@ -196,40 +242,69 @@ export default function JornadaPage() {
                 </div>
               </button>
 
-              {/* Chapter content */}
               {isExpanded && (
-                <div className="px-4 pb-4 space-y-4 animate-fade-in border-t border-border pt-4">
-                  <p className="text-xs font-body text-muted-foreground leading-relaxed">
-                    {chapter.description}
+                <div className="px-4 pb-4 space-y-3 animate-fade-in border-t border-border pt-4">
+                  <p className="text-xs font-body text-muted-foreground leading-relaxed italic">
+                    {block.summary}
                   </p>
 
-                  {chapter.prompts.map((prompt, i) => {
-                    const hasAnswer = (chapterAnswers[i] || "").trim().length > 0;
+                  {block.lessons.map((lesson, i) => {
+                    const done = blockArr[i] || false;
                     return (
-                      <div key={i} className="space-y-2">
-                        <div className="flex items-start gap-2">
-                          {hasAnswer ? (
-                            <CheckCircle2 className="h-4 w-4 text-gold shrink-0 mt-0.5" />
-                          ) : (
-                            <Circle className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
-                          )}
-                          <p className="text-xs font-body font-medium text-foreground">{prompt}</p>
+                      <button
+                        key={i}
+                        onClick={() => toggleLesson(block.id, i)}
+                        className="w-full flex items-center gap-3 p-3 rounded-xl bg-muted/40 hover:bg-muted/70 transition-colors text-left"
+                      >
+                        {done ? (
+                          <CheckCircle2 className="h-5 w-5 text-gold shrink-0" />
+                        ) : (
+                          <Circle className="h-5 w-5 text-muted-foreground shrink-0" />
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className={cn("text-xs font-body font-semibold", done && "line-through text-muted-foreground")}>
+                            {lesson.title}
+                          </p>
+                          <p className="text-[10px] font-body text-muted-foreground">{lesson.subtitle}</p>
                         </div>
-                        <textarea
-                          value={chapterAnswers[i] || ""}
-                          onChange={(e) => saveAnswer(chapter.id, i, e.target.value)}
-                          placeholder="Escreva sua reflexão..."
-                          rows={3}
-                          className="w-full bg-muted/50 border border-border rounded-xl p-3 text-xs font-body outline-none resize-none placeholder:text-muted-foreground focus:border-gold/50 transition-colors"
-                        />
-                      </div>
+                      </button>
                     );
                   })}
+
+                  <p className="text-xs font-body text-gold font-medium pt-1 italic">
+                    ✦ {block.closingLine}
+                  </p>
                 </div>
               )}
             </div>
           );
         })}
+
+        {/* For you if */}
+        <div className="bg-card rounded-2xl border border-border p-5 space-y-3">
+          <p className="text-xs font-display font-bold text-gold uppercase tracking-wider">
+            É pra você se:
+          </p>
+          <ul className="space-y-2.5">
+            {forYouIf.map((item, i) => (
+              <li key={i} className="flex items-start gap-2.5">
+                <Sparkles className="h-3.5 w-3.5 text-gold shrink-0 mt-0.5" />
+                <p className="text-xs font-body text-muted-foreground leading-relaxed">{item}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* CTA */}
+        <div className="bg-gradient-to-br from-gold/15 to-gold/5 rounded-2xl border border-gold/30 p-5 text-center space-y-2">
+          <Unlock className="h-6 w-6 text-gold mx-auto" />
+          <p className="text-sm font-display font-bold text-foreground">
+            O botão de Destravar é o que muda.
+          </p>
+          <p className="text-[10px] font-body text-muted-foreground">
+            Leituras curtas · Exercícios práticos · Quizzes com lições
+          </p>
+        </div>
       </div>
     </div>
   );
