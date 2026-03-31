@@ -292,6 +292,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Direção profissional
       reading:
         "Carreira e chamado nem sempre coincidem — e isso gera frustração. Muitas mulheres estão em carreiras que pagam as contas mas não alimentam a alma. Alinhar direção profissional com propósito exige coragem: às vezes é mudar de rota, às vezes é florescer onde está com uma nova perspectiva.",
+      verse: "Commit your works to the Lord, and your thoughts will be established. — Confia ao Senhor as tuas obras, e os teus pensamentos serão estabelecidos.",
+      verseRef: "Provérbios 16:3",
       quiz: [
         {
           question: "Por que muitas mulheres se sentem frustradas profissionalmente?",
