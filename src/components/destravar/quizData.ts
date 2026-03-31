@@ -85,6 +85,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Ciclo da mulher reativa
       reading:
         "A mulher reativa vive apagando incêndios. Ela reage às emoções, às crises e às pessoas ao redor sem nunca parar para governar sua própria vida. O governo espiritual é a capacidade de pausar, discernir e agir com intencionalidade. Sem ele, você é levada pelas circunstâncias em vez de caminhar com propósito.",
+      verse: "Melhor é o que governa o seu espírito do que o que toma uma cidade.",
+      verseRef: "Provérbios 16:32",
       quiz: [
         {
           question: "O que caracteriza o ciclo da mulher reativa?",
