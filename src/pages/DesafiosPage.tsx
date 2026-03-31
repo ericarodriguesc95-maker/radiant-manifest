@@ -1085,8 +1085,8 @@ export default function DesafiosPage() {
                 {joined ? (
                   <Button
                     size="sm"
-                    variant="outline"
-                    className="text-xs border-gold text-gold hover:bg-gold/10"
+                    variant="gold"
+                    className="text-xs"
                     onClick={(e) => { e.stopPropagation(); setSelectedChallenge(challenge); }}
                   >
                     Continuar
@@ -1094,7 +1094,8 @@ export default function DesafiosPage() {
                 ) : (
                   <Button
                     size="sm"
-                    className="text-xs bg-gold hover:bg-gold/90 text-white"
+                    variant="gold"
+                    className="text-xs"
                     onClick={(e) => { e.stopPropagation(); handleJoin(challenge); }}
                   >
                     Participar também
