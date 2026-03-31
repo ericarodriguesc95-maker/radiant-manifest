@@ -701,7 +701,7 @@ function TaskDetailModal({ task, open, onClose }: { task: TaskDetail | null; ope
           <div className="rounded-xl bg-gradient-to-br from-amber-900/40 to-orange-900/30 border border-amber-700/40 p-4">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-base">💡</span>
-              <h4 className="font-display font-semibold text-sm text-amber-800 dark:text-amber-300">Dica Prática</h4>
+              <h4 className="font-display font-semibold text-sm text-amber-300">Dica Prática</h4>
             </div>
             <p className="text-xs leading-relaxed font-body text-amber-900/80 dark:text-amber-200/80">{task.dicaPratica}</p>
           </div>
