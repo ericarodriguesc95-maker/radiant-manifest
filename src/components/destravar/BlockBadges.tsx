@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
-import { Award, Crown, Sparkles, X } from "lucide-react";
+import { Award, Crown, Sparkles, X, Share2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 interface Badge {
   id: string;
