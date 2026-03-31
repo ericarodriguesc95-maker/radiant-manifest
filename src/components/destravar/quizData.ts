@@ -163,6 +163,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Postura de solteira x postura de casada
       reading:
         "A postura de solteira não é sobre estado civil, é sobre mentalidade. É viver centrada em si mesma, nas próprias vontades, sem considerar aliança. A postura de casada — mesmo para quem é solteira — é sobre maturidade: pensar em aliança, em legado, em construir algo maior que você mesma.",
+      verse: "Há uma diferença entre a mulher casada e a virgem: a solteira cuida das coisas do Senhor, para ser santa no corpo e no espírito.",
+      verseRef: "1 Coríntios 7:34",
       quiz: [
         {
           question: "A 'postura de solteira' se refere a quê?",
