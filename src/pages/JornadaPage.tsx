@@ -287,7 +287,7 @@ export default function JornadaPage() {
                               lessonTitle={lesson.title}
                               isCompleted={done}
                               onComplete={() => {
-                                if (!done) toggleLesson(block.id, i);
+                                if (!done) markLessonComplete(block.id, i);
                               }}
                             />
                           </div>
