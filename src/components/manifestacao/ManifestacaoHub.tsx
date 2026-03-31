@@ -95,7 +95,7 @@ export default function ManifestacaoHub() {
           <span className="text-[10px] font-body font-semibold text-gold uppercase tracking-widest">Manifestação Consciente</span>
         </div>
         <h2 className="text-xl font-display font-bold text-foreground">
-          Meu Manifesto <span className="text-gold">Diário</span>
+          Minha Manifestação <span className="text-gold">Diária</span>
         </h2>
         <p className="text-xs font-body text-muted-foreground italic leading-relaxed max-w-xs mx-auto">
           "Tudo sempre dá certo pra mim!"
