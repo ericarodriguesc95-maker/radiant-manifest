@@ -19,6 +19,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Identidade formada fora de Deus
       reading:
         "Muitas mulheres crescem moldadas pela dor, pela rejeição ou pela necessidade de agradar. Esses padrões criam uma identidade que não reflete quem Deus planejou. Reconhecer esses padrões é o primeiro passo para se libertar deles. A identidade verdadeira não vem do que fizeram com você, mas do que Deus diz sobre você.",
+      verse: "Antes que satisfaça eu te formei no ventre; antes que nascesses, eu te consagrei.",
+      verseRef: "Jeremias 1:5",
       quiz: [
         {
           question: "O que significa ter uma identidade formada fora de Deus?",
