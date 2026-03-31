@@ -253,24 +253,46 @@ export default function JornadaPage() {
 
                   {block.lessons.map((lesson, i) => {
                     const done = blockArr[i] || false;
+                    const lessonKey = `${block.id}-${i}`;
+                    const isLessonOpen = openLesson === lessonKey;
+                    const content = lessonContent[block.id]?.[i];
+
                     return (
-                      <button
-                        key={i}
-                        onClick={() => toggleLesson(block.id, i)}
-                        className="w-full flex items-center gap-3 p-3 rounded-xl bg-muted/40 hover:bg-muted/70 transition-colors text-left"
-                      >
-                        {done ? (
-                          <CheckCircle2 className="h-5 w-5 text-gold shrink-0" />
-                        ) : (
-                          <Circle className="h-5 w-5 text-muted-foreground shrink-0" />
+                      <div key={i} className="space-y-0">
+                        <button
+                          onClick={() => setOpenLesson(isLessonOpen ? null : lessonKey)}
+                          className="w-full flex items-center gap-3 p-3 rounded-xl bg-muted/40 hover:bg-muted/70 transition-colors text-left"
+                        >
+                          {done ? (
+                            <CheckCircle2 className="h-5 w-5 text-gold shrink-0" />
+                          ) : (
+                            <Circle className="h-5 w-5 text-muted-foreground shrink-0" />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <p className={cn("text-xs font-body font-semibold", done && "text-muted-foreground")}>
+                              {lesson.title}
+                            </p>
+                            <p className="text-[10px] font-body text-muted-foreground">{lesson.subtitle}</p>
+                          </div>
+                          <ChevronRight className={cn(
+                            "h-3.5 w-3.5 text-muted-foreground transition-transform shrink-0",
+                            isLessonOpen && "rotate-90"
+                          )} />
+                        </button>
+
+                        {isLessonOpen && content && (
+                          <div className="ml-8 mt-2 p-3 rounded-xl border border-border/50 bg-background/50">
+                            <LessonQuiz
+                              content={content}
+                              lessonTitle={lesson.title}
+                              isCompleted={done}
+                              onComplete={() => {
+                                if (!done) toggleLesson(block.id, i);
+                              }}
+                            />
+                          </div>
                         )}
-                        <div className="flex-1 min-w-0">
-                          <p className={cn("text-xs font-body font-semibold", done && "line-through text-muted-foreground")}>
-                            {lesson.title}
-                          </p>
-                          <p className="text-[10px] font-body text-muted-foreground">{lesson.subtitle}</p>
-                        </div>
-                      </button>
+                      </div>
                     );
                   })}
 
