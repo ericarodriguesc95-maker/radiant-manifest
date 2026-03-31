@@ -55,6 +55,12 @@ const menuItems: { id: View; icon: React.ElementType; label: string }[] = [
 
 export default function ManifestacaoHub() {
   const [view, setView] = useState<View>("hub");
+  const todayQuote = useMemo(() => {
+    const start = new Date(2024, 0, 1).getTime();
+    const today = new Date().setHours(0, 0, 0, 0);
+    const dayIndex = Math.floor((today - start) / 86400000) % dailyQuotes.length;
+    return dailyQuotes[dayIndex];
+  }, []);
 
   if (view !== "hub") {
     const Component = {
