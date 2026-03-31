@@ -1,19 +1,55 @@
-import { useState } from "react";
-import { ArrowLeft, Sun, Sparkles, Music, Thermometer, PenLine, Heart, Mic } from "lucide-react";
+import { useState, useMemo } from "react";
+import { ArrowLeft, Sun, Sparkles, Music, Thermometer, PenLine, Heart, Mic, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import RitualMatinal from "./RitualMatinal";
 import EuSuperior from "./EuSuperior";
 import FrequenciasCura from "./FrequenciasCura";
 import TermometroVibracional from "./TermometroVibracional";
 import ManifestacaoEscrita from "./ManifestacaoEscrita";
+import QuadroDosSonhos from "./QuadroDosSonhos";
 
-type View = "hub" | "ritual" | "eu-superior" | "frequencias" | "termometro" | "manifestacao-escrita";
+type View = "hub" | "ritual" | "eu-superior" | "frequencias" | "termometro" | "manifestacao-escrita" | "quadro-sonhos";
+
+const dailyQuotes = [
+  "Você não precisa de mais uma técnica. Você precisa ser cuidada todos os dias, enquanto constrói a realidade que deseja viver.",
+  "Manifestar não acontece apenas quando você visualiza. Acontece no jeito como você pensa, sente e se posiciona no dia a dia.",
+  "A sua vibração é o convite que o universo lê antes de qualquer palavra que você diga.",
+  "Gratidão não é só agradecer. É vibrar na frequência de quem já recebeu.",
+  "Você já é a versão que deseja ser. Só precisa parar de duvidar disso.",
+  "O universo não responde ao que você quer. Responde ao que você vibra.",
+  "Cada pensamento é uma semente. Escolha plantar o que deseja colher.",
+  "A abundância começa quando você para de contar o que falta e começa a celebrar o que já existe.",
+  "Sua energia fala antes de você. Cuide dela como cuida do seu sonho mais bonito.",
+  "Não espere o momento perfeito. Crie a vibração perfeita agora.",
+  "Quando você muda a frequência, muda a realidade.",
+  "Confie no tempo do universo. Ele sabe exatamente quando entregar o que é seu.",
+  "Tudo sempre dá certo pra mim — repita até que seu corpo acredite.",
+  "Você merece tudo aquilo que não consegue parar de imaginar.",
+  "A melhor versão de você não está no futuro. Está em cada escolha que você faz agora.",
+  "Solte o controle. O que é seu vai te encontrar no caminho.",
+  "Sua intuição é a voz do seu Eu Superior. Aprenda a ouvi-la.",
+  "Cada amanhecer é um recomeço. Use-o com intenção.",
+  "Você não atrai o que quer, atrai o que você é. Seja magnética.",
+  "A realidade que você deseja já existe. Alinhe-se a ela.",
+  "Permita-se receber. Você já fez o suficiente para merecer.",
+  "O impossível é só o possível que ainda não acreditaram.",
+  "Sua história está sendo reescrita a cada pensamento consciente.",
+  "Respire fundo. Você está exatamente onde precisa estar.",
+  "A magia acontece quando você para de forçar e começa a fluir.",
+  "Não subestime o poder de um dia vivido com presença.",
+  "Você é a criadora da sua realidade. Crie com amor.",
+  "Quando a dúvida aparecer, lembre-se: você já superou coisas que achou impossíveis.",
+  "Seu brilho incomoda quem ainda não encontrou o próprio. Continue brilhando.",
+  "Hoje é o dia perfeito pra manifestar algo extraordinário.",
+  "A constância transforma intenção em realidade.",
+];
 
 const menuItems: { id: View; icon: React.ElementType; label: string }[] = [
   { id: "ritual", icon: Sun, label: "Começar meu dia" },
   { id: "eu-superior", icon: Sparkles, label: "Conversar com meu Eu Superior" },
   { id: "frequencias", icon: Music, label: "Preciso alinhar minha vibração" },
   { id: "manifestacao-escrita", icon: PenLine, label: "Escrever no meu diário vibracional" },
+  { id: "quadro-sonhos", icon: ImageIcon, label: "Meu quadro dos sonhos" },
   { id: "termometro", icon: Thermometer, label: "Meu termômetro emocional" },
 ];
 
