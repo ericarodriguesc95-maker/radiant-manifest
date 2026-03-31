@@ -113,11 +113,11 @@ export default function JornadaPage() {
   const [openLesson, setOpenLesson] = useState<string | null>(null); // "blockId-lessonIdx"
   const [progress, setProgress] = useState<Record<string, boolean[]>>(getSavedProgress);
 
-  const toggleLesson = (blockId: string, lessonIdx: number) => {
+  const markLessonComplete = (blockId: string, lessonIdx: number) => {
     setProgress(prev => {
       const block = blocks.find(b => b.id === blockId)!;
       const arr = [...(prev[blockId] || new Array(block.lessons.length).fill(false))];
-      arr[lessonIdx] = !arr[lessonIdx];
+      arr[lessonIdx] = true;
       const updated = { ...prev, [blockId]: arr };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
       return updated;
