@@ -226,6 +226,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Mente renovada
       reading:
         "Renovar a mente não é pensar positivo — é pensar como alguém transformada por Deus. É trocar a lente pela qual você enxerga a vida. Quando a mente é renovada, as decisões mudam, os padrões mudam, os resultados mudam. Não é esforço humano, é rendição ao processo de Deus.",
+      verse: "E não vos conformeis com este mundo, mas transformai-vos pela renovação da vossa mente.",
+      verseRef: "Romanos 12:2",
       quiz: [
         {
           question: "Renovar a mente é o mesmo que pensamento positivo?",
