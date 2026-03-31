@@ -7,6 +7,8 @@ export interface QuizQuestion {
 
 export interface LessonContent {
   reading: string;
+  verse: string;
+  verseRef: string;
   quiz: QuizQuestion[];
 }
 
@@ -17,6 +19,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Identidade formada fora de Deus
       reading:
         "Muitas mulheres crescem moldadas pela dor, pela rejeição ou pela necessidade de agradar. Esses padrões criam uma identidade que não reflete quem Deus planejou. Reconhecer esses padrões é o primeiro passo para se libertar deles. A identidade verdadeira não vem do que fizeram com você, mas do que Deus diz sobre você.",
+      verse: "Antes que satisfaça eu te formei no ventre; antes que nascesses, eu te consagrei.",
+      verseRef: "Jeremias 1:5",
       quiz: [
         {
           question: "O que significa ter uma identidade formada fora de Deus?",
@@ -48,6 +52,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Feminilidade distorcida
       reading:
         "A cultura atual apresenta dois extremos: a mulher que precisa ser forte demais e não pode ser vulnerável, ou a mulher passiva que aceita tudo. Ambos são distorções. A feminilidade bíblica é marcada por força e delicadeza, sabedoria e ousadia. Não é sobre se encaixar num molde, mas sobre viver a partir de quem Deus criou você para ser.",
+      verse: "Força e dignidade são as suas vestes, e ela sorri diante do futuro.",
+      verseRef: "Provérbios 31:25",
       quiz: [
         {
           question: "Quais são os dois extremos da feminilidade distorcida?",
@@ -79,6 +85,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Ciclo da mulher reativa
       reading:
         "A mulher reativa vive apagando incêndios. Ela reage às emoções, às crises e às pessoas ao redor sem nunca parar para governar sua própria vida. O governo espiritual é a capacidade de pausar, discernir e agir com intencionalidade. Sem ele, você é levada pelas circunstâncias em vez de caminhar com propósito.",
+      verse: "Melhor é o que governa o seu espírito do que o que toma uma cidade.",
+      verseRef: "Provérbios 16:32",
       quiz: [
         {
           question: "O que caracteriza o ciclo da mulher reativa?",
@@ -113,6 +121,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Controle vs Governo
       reading:
         "Controle é tentar forçar resultados por medo. Governo é administrar a vida com sabedoria. A mulher controladora vive ansiosa porque tenta segurar o que não está em suas mãos. A mulher que governa entrega a Deus o que não controla e administra com excelência o que está sob sua responsabilidade.",
+      verse: "Entrega o teu caminho ao Senhor; confia nele, e ele tudo fará.",
+      verseRef: "Salmos 37:5",
       quiz: [
         {
           question: "Qual a diferença entre controle e governo?",
@@ -132,6 +142,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Crenças vs Verdade
       reading:
         "Muitas crenças que carregamos não são verdades — são mentiras que acreditamos por repetição. 'Eu não sou boa o suficiente', 'Eu não mereço', 'Sempre vai dar errado'. A Palavra de Deus é o filtro para separar crença de verdade. Renovar a mente é trocar essas mentiras pela verdade que liberta.",
+      verse: "E conhecereis a verdade, e a verdade vos libertará.",
+      verseRef: "João 8:32",
       quiz: [
         {
           question: "Por que carregamos crenças que não são verdades?",
@@ -151,6 +163,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Postura de solteira x postura de casada
       reading:
         "A postura de solteira não é sobre estado civil, é sobre mentalidade. É viver centrada em si mesma, nas próprias vontades, sem considerar aliança. A postura de casada — mesmo para quem é solteira — é sobre maturidade: pensar em aliança, em legado, em construir algo maior que você mesma.",
+      verse: "Há uma diferença entre a mulher casada e a virgem: a solteira cuida das coisas do Senhor, para ser santa no corpo e no espírito.",
+      verseRef: "1 Coríntios 7:34",
       quiz: [
         {
           question: "A 'postura de solteira' se refere a quê?",
@@ -170,6 +184,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Vocação
       reading:
         "Vocação não é só profissão — é chamado. Muitas mulheres estão ocupadas demais fazendo coisas boas, mas não estão fazendo o que Deus as chamou para fazer. Alinhar vocação com obediência significa perguntar: 'Senhor, onde Tu queres que eu invista meu tempo e energia?'",
+      verse: "Porque somos feitura sua, criados em Cristo Jesus para as boas obras, as quais Deus preparou para que andássemos nelas.",
+      verseRef: "Efésios 2:10",
       quiz: [
         {
           question: "Qual a diferença entre profissão e vocação segundo a lição?",
@@ -189,6 +205,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Espiritualidade superficial
       reading:
         "Ir à igreja, postar versículos e orar antes de dormir pode parecer espiritualidade, mas sem transformação real, é superficial. Espiritualidade verdadeira muda comportamento, muda decisões, muda relacionamentos. Se sua fé não está transformando sua vida prática, algo precisa ser revisado.",
+      verse: "Sede, pois, praticantes da palavra, e não somente ouvintes, enganando-vos a vós mesmos.",
+      verseRef: "Tiago 1:22",
       quiz: [
         {
           question: "O que caracteriza uma espiritualidade superficial?",
@@ -208,6 +226,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Mente renovada
       reading:
         "Renovar a mente não é pensar positivo — é pensar como alguém transformada por Deus. É trocar a lente pela qual você enxerga a vida. Quando a mente é renovada, as decisões mudam, os padrões mudam, os resultados mudam. Não é esforço humano, é rendição ao processo de Deus.",
+      verse: "E não vos conformeis com este mundo, mas transformai-vos pela renovação da vossa mente.",
+      verseRef: "Romanos 12:2",
       quiz: [
         {
           question: "Renovar a mente é o mesmo que pensamento positivo?",
@@ -230,6 +250,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Governo na prática
       reading:
         "Governar na prática é organizar sua vida como um ato de obediência. Isso inclui sua rotina, suas finanças, seu tempo e suas prioridades. Não é sobre ser perfeita, é sobre ser intencional. Uma vida governada tem estrutura, tem ordem e tem direção — porque reflete o caráter de Deus.",
+      verse: "Tudo, porém, seja feito com decência e ordem.",
+      verseRef: "1 Coríntios 14:40",
       quiz: [
         {
           question: "O que significa governar na prática?",
@@ -249,6 +271,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Relacionamentos
       reading:
         "Relacionamentos saudáveis exigem posicionamento. Isso significa saber dizer não sem culpa, estabelecer limites com amor e parar de aceitar menos do que Deus preparou para você. Sabedoria relacional é entender que nem todo relacionamento é para toda a vida — e tudo bem.",
+      verse: "O homem que tem muitos amigos pode congratular-se, mas há amigo mais chegado do que um irmão.",
+      verseRef: "Provérbios 18:24",
       quiz: [
         {
           question: "O que é posicionamento nos relacionamentos?",
@@ -268,6 +292,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Direção profissional
       reading:
         "Carreira e chamado nem sempre coincidem — e isso gera frustração. Muitas mulheres estão em carreiras que pagam as contas mas não alimentam a alma. Alinhar direção profissional com propósito exige coragem: às vezes é mudar de rota, às vezes é florescer onde está com uma nova perspectiva.",
+      verse: "Confia ao Senhor as tuas obras, e os teus pensamentos serão estabelecidos.",
+      verseRef: "Provérbios 16:3",
       quiz: [
         {
           question: "Por que muitas mulheres se sentem frustradas profissionalmente?",
@@ -287,6 +313,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Ordem espiritual na rotina
       reading:
         "Sua rotina revela suas prioridades reais. Se Deus não está na sua agenda, Ele não está no governo da sua vida. Ordem espiritual na rotina é colocar Deus no centro de cada dia — não como um item a mais na lista, mas como o fundamento de tudo que você faz.",
+      verse: "Buscai primeiro o Reino de Deus e a sua justiça, e todas essas coisas vos serão acrescentadas.",
+      verseRef: "Mateus 6:33",
       quiz: [
         {
           question: "O que a sua rotina revela sobre você?",
@@ -306,6 +334,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Blindagem de ambiente
       reading:
         "Transformação sem blindagem é temporária. O ambiente ao seu redor influencia diretamente sua mentalidade, suas emoções e suas decisões. Blindar o ambiente significa escolher com sabedoria o que você consome, com quem convive e que vozes você permite na sua vida.",
+      verse: "Não vos enganeis: as más companhias corrompem os bons costumes.",
+      verseRef: "1 Coríntios 15:33",
       quiz: [
         {
           question: "Por que a blindagem de ambiente é necessária?",
