@@ -703,7 +703,7 @@ function TaskDetailModal({ task, open, onClose }: { task: TaskDetail | null; ope
               <span className="text-base">💡</span>
               <h4 className="font-display font-semibold text-sm text-amber-300">Dica Prática</h4>
             </div>
-            <p className="text-xs leading-relaxed font-body text-amber-900/80 dark:text-amber-200/80">{task.dicaPratica}</p>
+            <p className="text-xs leading-relaxed font-body text-amber-200/80">{task.dicaPratica}</p>
           </div>
 
           {/* Neurociência */}
