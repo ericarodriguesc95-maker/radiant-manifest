@@ -211,9 +211,6 @@ const HomePage = () => {
         {/* ═══════════════════════════════════════════ */}
         {/* CHALLENGES — Premium CTA */}
         {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
-          <WhatsAppAIAssistant />
-        </div>
 
         <div className="animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
           <button
