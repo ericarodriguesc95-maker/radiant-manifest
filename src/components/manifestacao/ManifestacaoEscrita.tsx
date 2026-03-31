@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { PenLine, Sparkles } from "lucide-react";
+import { PenLine, Sparkles, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useVoiceInput } from "@/hooks/useVoiceInput";
+import { cn } from "@/lib/utils";
 
 const STORAGE_KEY = "glow-manifestacao-escrita";
 
@@ -21,6 +23,17 @@ function getSaved(): { date: string; text: string } | null {
 export default function ManifestacaoEscrita() {
   const [text, setText] = useState(getSaved()?.text || "");
   const [saved, setSaved] = useState(!!getSaved());
+
+  const voice = useVoiceInput({
+    continuous: true,
+    onResult: (result) => {
+      setText(prev => {
+        const newText = prev ? prev + " " + result : result;
+        setSaved(false);
+        return newText;
+      });
+    },
+  });
 
   const save = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: getToday(), text }));
@@ -44,13 +57,36 @@ export default function ManifestacaoEscrita() {
         </p>
       </div>
 
-      <textarea
-        value={text}
-        onChange={e => { setText(e.target.value); setSaved(false); }}
-        placeholder="Hoje eu manifestei... Eu sinto gratidão porque... Minha vida é..."
-        rows={6}
-        className="w-full glass rounded-xl p-4 text-sm font-body outline-none resize-none placeholder:text-muted-foreground focus:border-gold/50 transition-colors border border-border"
-      />
+      <div className="relative">
+        <textarea
+          value={text}
+          onChange={e => { setText(e.target.value); setSaved(false); }}
+          placeholder="Hoje eu manifestei... Eu sinto gratidão porque... Minha vida é..."
+          rows={6}
+          className="w-full glass rounded-xl p-4 pr-12 text-sm font-body outline-none resize-none placeholder:text-muted-foreground focus:border-gold/50 transition-colors border border-border"
+        />
+        {voice.isSupported && (
+          <button
+            onClick={voice.toggle}
+            className={cn(
+              "absolute top-3 right-3 p-2 rounded-full transition-all",
+              voice.isListening
+                ? "bg-red-500/20 text-red-400 animate-pulse"
+                : "bg-gold/10 text-gold hover:bg-gold/20"
+            )}
+            title={voice.isListening ? "Parar gravação" : "Ditar por voz"}
+          >
+            {voice.isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+          </button>
+        )}
+      </div>
+
+      {voice.isListening && (
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20">
+          <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+          <p className="text-[10px] font-body text-red-400">Ouvindo... fale sua manifestação</p>
+        </div>
+      )}
 
       <Button
         onClick={save}

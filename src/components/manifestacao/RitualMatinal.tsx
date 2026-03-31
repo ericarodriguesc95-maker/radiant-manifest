@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { Sun, CheckCircle2, Circle, Sparkles } from "lucide-react";
+import { useState, useCallback } from "react";
+import { Sun, CheckCircle2, Circle, Sparkles, Mic, MicOff } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useVoiceInput } from "@/hooks/useVoiceInput";
 
 const STORAGE_KEY = "glow-ritual-matinal";
 
@@ -33,6 +34,7 @@ function getSaved(): Record<string, string> {
 
 export default function RitualMatinal() {
   const [answers, setAnswers] = useState<Record<string, string>>(getSaved);
+  const [activeVoiceStep, setActiveVoiceStep] = useState<string | null>(null);
 
   const save = (key: string, value: string) => {
     setAnswers(prev => {
@@ -41,6 +43,27 @@ export default function RitualMatinal() {
       return updated;
     });
   };
+
+  const voice = useVoiceInput({
+    continuous: true,
+    onResult: (result) => {
+      if (activeVoiceStep) {
+        save(activeVoiceStep, (answers[activeVoiceStep] || "") + (answers[activeVoiceStep] ? " " : "") + result);
+      }
+    },
+    onEnd: () => setActiveVoiceStep(null),
+  });
+
+  const toggleVoiceForStep = useCallback((stepId: string) => {
+    if (voice.isListening && activeVoiceStep === stepId) {
+      voice.stop();
+      setActiveVoiceStep(null);
+    } else {
+      if (voice.isListening) voice.stop();
+      setActiveVoiceStep(stepId);
+      setTimeout(() => voice.start(), 100);
+    }
+  }, [voice, activeVoiceStep]);
 
   const completed = steps.filter(s => (answers[s.id] || "").trim().length > 0).length;
   const allDone = completed === steps.length;
@@ -80,6 +103,7 @@ export default function RitualMatinal() {
       <div className="space-y-3">
         {steps.map((step, i) => {
           const hasAnswer = (answers[step.id] || "").trim().length > 0;
+          const isVoiceActive = voice.isListening && activeVoiceStep === step.id;
           return (
             <div
               key={step.id}
@@ -92,8 +116,28 @@ export default function RitualMatinal() {
                 ) : (
                   <Circle className="h-4 w-4 text-muted-foreground shrink-0" />
                 )}
-                <span className="text-sm font-body font-semibold">{step.label}</span>
+                <span className="text-sm font-body font-semibold flex-1">{step.label}</span>
+                {voice.isSupported && (
+                  <button
+                    onClick={() => toggleVoiceForStep(step.id)}
+                    className={cn(
+                      "p-1.5 rounded-full transition-all",
+                      isVoiceActive
+                        ? "bg-red-500/20 text-red-400 animate-pulse"
+                        : "bg-gold/10 text-gold hover:bg-gold/20"
+                    )}
+                    title={isVoiceActive ? "Parar" : "Ditar por voz"}
+                  >
+                    {isVoiceActive ? <MicOff className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
+                  </button>
+                )}
               </div>
+              {isVoiceActive && (
+                <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-red-500/10 border border-red-500/20">
+                  <div className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
+                  <p className="text-[9px] font-body text-red-400">Ouvindo...</p>
+                </div>
+              )}
               <textarea
                 value={answers[step.id] || ""}
                 onChange={e => save(step.id, e.target.value)}

@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import { Thermometer, TrendingUp } from "lucide-react";
+import { Thermometer, TrendingUp, Mic, MicOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useVoiceInput } from "@/hooks/useVoiceInput";
 
 const STORAGE_KEY = "glow-termometro";
 
 interface DailyEntry {
   date: string;
   emotions: string[];
-  level: number; // 1-5
+  level: number;
 }
 
 const emotionOptions = [
@@ -35,6 +36,11 @@ function getSavedEntries(): DailyEntry[] {
   } catch { return []; }
 }
 
+// Normalize accents for matching
+function normalize(str: string) {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+}
+
 export default function TermometroVibracional() {
   const [entries, setEntries] = useState<DailyEntry[]>(getSavedEntries);
   const [selectedEmotions, setSelectedEmotions] = useState<string[]>([]);
@@ -42,6 +48,21 @@ export default function TermometroVibracional() {
 
   const todayEntry = entries.find(e => e.date === getToday());
   const [saved, setSaved] = useState(!!todayEntry);
+
+  const voice = useVoiceInput({
+    onResult: (result) => {
+      // Match spoken emotion to options
+      const spoken = normalize(result);
+      for (const emotion of emotionOptions) {
+        if (spoken.includes(normalize(emotion)) && !selectedEmotions.includes(emotion)) {
+          if (selectedEmotions.length < 3) {
+            setSelectedEmotions(prev => [...prev, emotion]);
+          }
+          break;
+        }
+      }
+    },
+  });
 
   useEffect(() => {
     if (todayEntry) {
@@ -69,7 +90,6 @@ export default function TermometroVibracional() {
 
   const currentZone = vibeZones.find(z => z.level === level) || vibeZones[2];
 
-  // Last 7 days
   const last7 = Array.from({ length: 7 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - (6 - i));
@@ -90,13 +110,11 @@ export default function TermometroVibracional() {
       {/* Vibration scale */}
       <div className="glass-gold rounded-2xl p-4 space-y-3">
         <p className="text-[10px] font-body font-semibold text-gold uppercase tracking-wider text-center">Sua Vibração de Hoje</p>
-
         <div className="flex items-center gap-1 h-5 rounded-full overflow-hidden">
           {vibeZones.map(z => (
             <div key={z.level} className={cn("h-full flex-1 transition-all", z.color, level >= z.level ? "opacity-100" : "opacity-20")} />
           ))}
         </div>
-
         <div className="flex justify-between px-1">
           {vibeZones.map(z => (
             <button
@@ -108,7 +126,6 @@ export default function TermometroVibracional() {
             </button>
           ))}
         </div>
-
         <div className="text-center">
           <p className={cn("text-lg font-display font-bold", currentZone.textColor)}>
             Zona de {currentZone.label}
@@ -118,7 +135,29 @@ export default function TermometroVibracional() {
 
       {/* Emotions picker */}
       <div className="space-y-2">
-        <p className="text-xs font-body font-semibold">Emoções mais presentes <span className="text-muted-foreground">(máx 3)</span></p>
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-body font-semibold">Emoções mais presentes <span className="text-muted-foreground">(máx 3)</span></p>
+          {voice.isSupported && (
+            <button
+              onClick={voice.toggle}
+              className={cn(
+                "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-body font-semibold transition-all",
+                voice.isListening
+                  ? "bg-red-500/20 text-red-400 animate-pulse"
+                  : "bg-gold/10 text-gold border border-gold/20 hover:bg-gold/20"
+              )}
+            >
+              {voice.isListening ? <MicOff className="h-3 w-3" /> : <Mic className="h-3 w-3" />}
+              {voice.isListening ? "Parar" : "Ditar emoção"}
+            </button>
+          )}
+        </div>
+        {voice.isListening && (
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20">
+            <div className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
+            <p className="text-[9px] font-body text-red-400">Fale o nome da emoção: ex. "Gratidão", "Paz"...</p>
+          </div>
+        )}
         <div className="flex flex-wrap gap-2">
           {emotionOptions.map(emotion => {
             const isSelected = selectedEmotions.includes(emotion);
