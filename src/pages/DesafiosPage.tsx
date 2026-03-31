@@ -724,7 +724,7 @@ function TaskDetailModal({ task, open, onClose }: { task: TaskDetail | null; ope
             <ol className="space-y-1.5">
               {task.exercicio.map((step, i) => (
                 <li key={i} className="flex items-start gap-2 text-xs font-body text-emerald-200/80">
-                  <span className="font-bold text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0">{i + 1}.</span>
+                  <span className="font-bold text-emerald-400 mt-0.5 shrink-0">{i + 1}.</span>
                   <span className="leading-relaxed">{step}</span>
                 </li>
               ))}
