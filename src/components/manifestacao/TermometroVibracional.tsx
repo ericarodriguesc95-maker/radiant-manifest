@@ -258,6 +258,43 @@ export default function TermometroVibracional() {
     });
   };
 
+  const playFrequencyTone = (hawkinsId: number) => {
+    try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      // Higher consciousness = 528Hz (love/miracles), lower = 432Hz (grounding/calm)
+      const freq = hawkinsId >= 12 ? 528 : 432;
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(freq, ctx.currentTime);
+      // Fade in
+      gainNode.gain.setValueAtTime(0, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.3);
+      // Sustain then fade out
+      gainNode.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 2);
+      gainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 3);
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + 3);
+      // Add a subtle harmonic
+      const harmonic = ctx.createOscillator();
+      const hGain = ctx.createGain();
+      harmonic.type = "sine";
+      harmonic.frequency.setValueAtTime(freq * 1.5, ctx.currentTime);
+      hGain.gain.setValueAtTime(0, ctx.currentTime);
+      hGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 0.5);
+      hGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 3);
+      harmonic.connect(hGain);
+      hGain.connect(ctx.destination);
+      harmonic.start(ctx.currentTime);
+      harmonic.stop(ctx.currentTime + 3);
+      setTimeout(() => ctx.close(), 4000);
+    } catch (e) {
+      console.log("Audio not supported");
+    }
+  };
+
   const saveEntry = () => {
     const entry: DailyEntry = { date: getToday(), emotions: selectedEmotions, level: currentHawkins.id };
     const updated = entries.filter(e => e.date !== getToday());
@@ -267,7 +304,8 @@ export default function TermometroVibracional() {
     setSaved(true);
     setSavedTipData(getTipForEmotions(selectedEmotions, currentHawkins.id));
     setShowCelebration(true);
-    setTimeout(() => setShowCelebration(false), 3000);
+    playFrequencyTone(currentHawkins.id);
+    setTimeout(() => setShowCelebration(false), 3500);
   };
 
   const frequencyPercent = (id: number) => Math.round((id / 17) * 100);
