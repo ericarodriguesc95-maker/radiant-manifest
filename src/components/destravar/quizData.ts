@@ -7,6 +7,8 @@ export interface QuizQuestion {
 
 export interface LessonContent {
   reading: string;
+  verse: string;
+  verseRef: string;
   quiz: QuizQuestion[];
 }
 
