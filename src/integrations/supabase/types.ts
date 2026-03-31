@@ -1282,6 +1282,10 @@ export type Database = {
     }
     Functions: {
       calculate_streak: { Args: { _user_id: string }; Returns: number }
+      conversation_has_participants: {
+        Args: { _conversation_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
