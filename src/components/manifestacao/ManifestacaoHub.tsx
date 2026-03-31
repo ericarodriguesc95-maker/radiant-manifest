@@ -109,7 +109,7 @@ export default function ManifestacaoHub() {
       <div className="glass-gold rounded-2xl p-4 text-center space-y-2">
         <Heart className="h-4 w-4 text-gold mx-auto" />
         <p className="text-xs font-body text-foreground/80 italic leading-relaxed">
-          "Você não precisa de mais uma técnica. Você precisa ser cuidada todos os dias, enquanto constrói a realidade que deseja viver."
+          "{todayQuote}"
         </p>
       </div>
 
