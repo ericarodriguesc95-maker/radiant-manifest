@@ -32,6 +32,7 @@ export default function QuadroDosSonhos() {
   const [newDescription, setNewDescription] = useState("");
   const [newCategory, setNewCategory] = useState(CATEGORIES[0]);
   const [newTargetDate, setNewTargetDate] = useState<Date | undefined>();
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const save = (updated: DreamImage[]) => {
@@ -134,14 +135,13 @@ export default function QuadroDosSonhos() {
           />
 
           <textarea
-            placeholder="Descreva esse sonho com suas palavras... O que ele significa pra você?"
+            placeholder="Descreva esse sonho com suas palavras..."
             value={newDescription}
             onChange={e => setNewDescription(e.target.value)}
             rows={3}
             className="w-full px-3 py-2 rounded-lg bg-background/50 border border-gold/20 text-sm font-body text-foreground placeholder:text-muted-foreground resize-none"
           />
 
-          {/* Target date (optional) */}
           <div className="space-y-1.5">
             <p className="text-[11px] font-body text-muted-foreground">Data desejada para realizar (opcional)</p>
             <Popover>
@@ -181,49 +181,78 @@ export default function QuadroDosSonhos() {
         </div>
       )}
 
-      {/* Grid */}
+      {/* 2-column Pinterest grid */}
       {filtered.length === 0 ? (
         <div className="text-center py-10 space-y-2">
           <ImageIcon className="h-8 w-8 text-gold/30 mx-auto" />
           <p className="text-xs font-body text-muted-foreground">Seu mural está esperando seus sonhos ✨</p>
         </div>
       ) : (
-        <div className="space-y-3">
-          {filtered.map((img, i) => (
-            <div
-              key={img.id}
-              className="glass rounded-2xl overflow-hidden shadow-lg animate-stagger"
-              style={{ "--stagger": i } as React.CSSProperties}
-            >
-              {/* Image */}
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <img src={img.url} alt={img.note || "Sonho"} className="w-full h-full object-cover" />
-                <button onClick={() => removeImage(img.id)} className="absolute top-2 right-2 p-1.5 rounded-full bg-background/70 text-foreground hover:bg-destructive hover:text-destructive-foreground transition-colors">
-                  <Trash2 className="h-3.5 w-3.5" />
-                </button>
-                <span className="absolute top-2 left-2 text-[10px] font-body font-semibold text-gold bg-background/70 px-2 py-0.5 rounded-full">{img.category}</span>
-              </div>
-
-              {/* Info */}
-              <div className="p-3 space-y-1.5">
-                {img.note && <p className="text-sm font-body font-semibold text-foreground">{img.note}</p>}
-                {img.description && <p className="text-xs font-body text-muted-foreground leading-relaxed">{img.description}</p>}
-
-                <div className="flex items-center gap-3 pt-1">
-                  <div className="flex items-center gap-1 text-[10px] font-body text-muted-foreground">
-                    <CalendarIcon className="h-3 w-3 text-gold/60" />
-                    Criado em {format(new Date(img.createdAt), "dd/MM/yyyy")}
-                  </div>
-                  {img.targetDate && (
-                    <div className="flex items-center gap-1 text-[10px] font-body text-gold font-semibold">
-                      <Sparkles className="h-3 w-3" />
-                      Meta: {format(new Date(img.targetDate), "dd/MM/yyyy")}
-                    </div>
-                  )}
+        <div className="grid grid-cols-2 gap-2.5">
+          {filtered.map((img, i) => {
+            const isExpanded = expandedId === img.id;
+            return (
+              <div
+                key={img.id}
+                className="glass rounded-xl overflow-hidden shadow-md animate-stagger group relative"
+                style={{ "--stagger": i } as React.CSSProperties}
+              >
+                {/* Image */}
+                <div
+                  className="relative aspect-square overflow-hidden cursor-pointer"
+                  onClick={() => setExpandedId(isExpanded ? null : img.id)}
+                >
+                  <img src={img.url} alt={img.note || "Sonho"} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                  <button
+                    onClick={(e) => { e.stopPropagation(); removeImage(img.id); }}
+                    className="absolute top-1.5 right-1.5 p-1 rounded-full bg-background/70 text-foreground hover:bg-destructive hover:text-destructive-foreground transition-colors opacity-0 group-hover:opacity-100"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </button>
+                  <span className="absolute bottom-1.5 left-1.5 text-[8px] font-body font-semibold text-gold bg-background/80 px-1.5 py-0.5 rounded-full">{img.category}</span>
                 </div>
+
+                {/* Compact info */}
+                <div className="p-2 space-y-0.5">
+                  {img.note && <p className="text-[11px] font-body font-semibold text-foreground truncate">{img.note}</p>}
+                  <div className="flex items-center gap-1 text-[8px] font-body text-muted-foreground">
+                    <CalendarIcon className="h-2.5 w-2.5 text-gold/60" />
+                    {format(new Date(img.createdAt), "dd/MM/yy")}
+                    {img.targetDate && (
+                      <>
+                        <span className="text-gold mx-0.5">•</span>
+                        <Sparkles className="h-2.5 w-2.5 text-gold" />
+                        <span className="text-gold font-semibold">{format(new Date(img.targetDate), "dd/MM/yy")}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Expanded details overlay */}
+                {isExpanded && (
+                  <div
+                    className="absolute inset-0 bg-background/95 p-3 flex flex-col justify-center space-y-2 animate-fade-in z-10 cursor-pointer"
+                    onClick={() => setExpandedId(null)}
+                  >
+                    {img.note && <p className="text-xs font-body font-bold text-foreground">{img.note}</p>}
+                    {img.description && <p className="text-[10px] font-body text-muted-foreground leading-relaxed">{img.description}</p>}
+                    <div className="space-y-0.5">
+                      <p className="text-[9px] font-body text-muted-foreground">
+                        <CalendarIcon className="h-2.5 w-2.5 inline mr-1 text-gold/60" />
+                        Criado em {format(new Date(img.createdAt), "dd/MM/yyyy")}
+                      </p>
+                      {img.targetDate && (
+                        <p className="text-[9px] font-body text-gold font-semibold">
+                          <Sparkles className="h-2.5 w-2.5 inline mr-1" />
+                          Meta: {format(new Date(img.targetDate), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
