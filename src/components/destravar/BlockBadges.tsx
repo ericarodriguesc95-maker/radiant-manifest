@@ -54,17 +54,56 @@ interface BlockBadgesProps {
 }
 
 export default function BlockBadges({ completedBlocks }: BlockBadgesProps) {
+  const { user } = useAuth();
+  const [sharing, setSharing] = useState(false);
   const allComplete = badges.every(b => completedBlocks.includes(b.id));
+
+  const shareToCommmunity = async () => {
+    if (!user || sharing) return;
+    setSharing(true);
+    try {
+      const unlockedBadges = badges.filter(b => completedBlocks.includes(b.id));
+      const badgeEmojis = unlockedBadges.map(b => b.emoji).join(" ");
+      const badgeNames = unlockedBadges.map(b => b.title).join(", ");
+
+      let text: string;
+      if (allComplete) {
+        text = `${MASTER_BADGE.emoji} Completei a Jornada do Destravar Feminino! ${MASTER_BADGE.emoji}\n\n${badgeEmojis} Todas as conquistas desbloqueadas: ${badgeNames}\n\n"${MASTER_BADGE.verse}" — ${MASTER_BADGE.verseRef}\n\n#DestravadaFeminino #JornadaCompleta ✨`;
+      } else {
+        text = `${badgeEmojis} Desbloqueei ${unlockedBadges.length === 1 ? "uma conquista" : `${unlockedBadges.length} conquistas`} na Jornada do Destravar Feminino!\n\n🏆 ${badgeNames}\n\n#DestravadaFeminino #GlowUp ✨`;
+      }
+
+      await supabase.from("community_posts").insert({
+        user_id: user.id,
+        text,
+      });
+      toast.success("Conquista compartilhada na comunidade! ✨");
+    } catch {
+      toast.error("Erro ao compartilhar. Tente novamente.");
+    } finally {
+      setSharing(false);
+    }
+  };
 
   if (completedBlocks.length === 0) return null;
 
   return (
     <div className="bg-card rounded-2xl border border-border p-5 space-y-4">
-      <div className="flex items-center gap-2">
-        <Award className="h-4 w-4 text-gold" />
-        <p className="text-xs font-display font-bold text-gold uppercase tracking-wider">
-          Suas Conquistas
-        </p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Award className="h-4 w-4 text-gold" />
+          <p className="text-xs font-display font-bold text-gold uppercase tracking-wider">
+            Suas Conquistas
+          </p>
+        </div>
+        <button
+          onClick={shareToCommmunity}
+          disabled={sharing}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gold/10 hover:bg-gold/20 text-gold text-[10px] font-body font-semibold transition-colors disabled:opacity-50"
+        >
+          <Share2 className="h-3 w-3" />
+          {sharing ? "Postando..." : "Compartilhar"}
+        </button>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
