@@ -219,7 +219,10 @@ export default function JornadaPage() {
           </div>
         </div>
 
-        {/* Progress */}
+        {/* Badges */}
+        <BlockBadges completedBlocks={completedBlocks} />
+
+
         <div className="bg-card rounded-2xl border border-border p-4">
           <div className="flex items-center justify-between mb-2">
             <p className="text-sm font-body font-semibold text-foreground">Seu progresso</p>
