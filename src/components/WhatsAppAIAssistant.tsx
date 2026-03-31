@@ -33,7 +33,11 @@ const WhatsAppAIAssistant = () => {
   };
 
   const openWhatsApp = (phone: string, message: string) => {
-    const cleanPhone = phone.replace(/\D/g, "");
+    let cleanPhone = phone.replace(/\D/g, "");
+    // Add Brazil country code if missing
+    if (!cleanPhone.startsWith("55")) {
+      cleanPhone = "55" + cleanPhone;
+    }
     const encoded = encodeURIComponent(message);
     const url = `https://wa.me/${cleanPhone}?text=${encoded}`;
     const link = document.createElement("a");
