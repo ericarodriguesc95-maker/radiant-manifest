@@ -334,6 +334,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Blindagem de ambiente
       reading:
         "Transformação sem blindagem é temporária. O ambiente ao seu redor influencia diretamente sua mentalidade, suas emoções e suas decisões. Blindar o ambiente significa escolher com sabedoria o que você consome, com quem convive e que vozes você permite na sua vida.",
+      verse: "Não vos enganeis: as más companhias corrompem os bons costumes.",
+      verseRef: "1 Coríntios 15:33",
       quiz: [
         {
           question: "Por que a blindagem de ambiente é necessária?",
