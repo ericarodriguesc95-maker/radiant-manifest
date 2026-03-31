@@ -698,7 +698,7 @@ function TaskDetailModal({ task, open, onClose }: { task: TaskDetail | null; ope
         </DialogHeader>
         <div className="space-y-5">
           {/* Dica Prática */}
-          <div className="rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/20 border border-amber-200/50 dark:border-amber-800/30 p-4">
+          <div className="rounded-xl bg-gradient-to-br from-amber-900/40 to-orange-900/30 border border-amber-700/40 p-4">
             <div className="flex items-center gap-2 mb-2">
               <span className="text-base">💡</span>
               <h4 className="font-display font-semibold text-sm text-amber-800 dark:text-amber-300">Dica Prática</h4>
