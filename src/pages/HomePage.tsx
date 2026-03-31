@@ -9,6 +9,7 @@ import NotificationsPanel from "@/components/NotificationsPanel";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
 import PostConquista from "@/components/PostConquista";
+import WhatsAppAIAssistant from "@/components/WhatsAppAIAssistant";
 import StreakMedals from "@/components/StreakMedals";
 import AppUpdatesModal from "@/components/AppUpdatesModal";
 import { supabase } from "@/integrations/supabase/client";
@@ -211,14 +212,16 @@ const HomePage = () => {
         {/* CHALLENGES — Premium CTA */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
+          <WhatsAppAIAssistant />
+        </div>
+
+        <div className="animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
           <button
             onClick={() => navigate("/desafios")}
             className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
           >
-            {/* Cinematic gradient bg */}
             <div className="absolute inset-0 bg-gradient-to-r from-gold/20 via-gold/10 to-gold/5" />
             <div className="absolute inset-0 glass-gold" />
-
             <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
               <Trophy className="h-6 w-6 text-gold" />
             </div>
