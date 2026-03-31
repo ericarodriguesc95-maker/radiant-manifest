@@ -184,6 +184,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Vocação
       reading:
         "Vocação não é só profissão — é chamado. Muitas mulheres estão ocupadas demais fazendo coisas boas, mas não estão fazendo o que Deus as chamou para fazer. Alinhar vocação com obediência significa perguntar: 'Senhor, onde Tu queres que eu invista meu tempo e energia?'",
+      verse: "Porque somos feitura sua, criados em Cristo Jesus para as boas obras, as quais Deus preparou para que andássemos nelas.",
+      verseRef: "Efésios 2:10",
       quiz: [
         {
           question: "Qual a diferença entre profissão e vocação segundo a lição?",
