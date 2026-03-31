@@ -205,6 +205,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Espiritualidade superficial
       reading:
         "Ir à igreja, postar versículos e orar antes de dormir pode parecer espiritualidade, mas sem transformação real, é superficial. Espiritualidade verdadeira muda comportamento, muda decisões, muda relacionamentos. Se sua fé não está transformando sua vida prática, algo precisa ser revisado.",
+      verse: "Sede, pois, praticantes da palavra, e não somente ouvintes, enganando-vos a vós mesmos.",
+      verseRef: "Tiago 1:22",
       quiz: [
         {
           question: "O que caracteriza uma espiritualidade superficial?",
