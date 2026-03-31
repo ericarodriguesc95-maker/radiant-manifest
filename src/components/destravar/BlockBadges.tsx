@@ -42,6 +42,8 @@ const MASTER_BADGE = {
   title: "Destravada",
   subtitle: "Você completou toda a jornada. Sua identidade foi restaurada.",
   emoji: "✦",
+  verse: "Aquele que em vós começou a boa obra a aperfeiçoará até ao Dia de Cristo Jesus.",
+  verseRef: "Filipenses 1:6",
 };
 
 interface BlockBadgesProps {

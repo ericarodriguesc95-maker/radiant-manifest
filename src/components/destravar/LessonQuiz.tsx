@@ -61,6 +61,15 @@ export default function LessonQuiz({ content, lessonTitle, onComplete, isComplet
         <p className="text-xs font-body text-muted-foreground leading-relaxed">
           {content.reading}
         </p>
+
+        {/* Versículo */}
+        <div className="bg-gold/5 border border-gold/15 rounded-xl p-3 text-center space-y-1">
+          <p className="text-xs font-body text-foreground italic leading-relaxed">
+            "{content.verse}"
+          </p>
+          <p className="text-[10px] font-body font-semibold text-gold">— {content.verseRef}</p>
+        </div>
+
         <button
           onClick={() => setPhase("quiz")}
           className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gold/10 hover:bg-gold/20 text-gold text-xs font-body font-semibold transition-colors"
