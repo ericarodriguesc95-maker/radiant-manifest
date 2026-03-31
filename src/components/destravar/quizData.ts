@@ -313,6 +313,8 @@ export const lessonContent: Record<string, LessonContent[]> = {
       // Ordem espiritual na rotina
       reading:
         "Sua rotina revela suas prioridades reais. Se Deus não está na sua agenda, Ele não está no governo da sua vida. Ordem espiritual na rotina é colocar Deus no centro de cada dia — não como um item a mais na lista, mas como o fundamento de tudo que você faz.",
+      verse: "Buscai primeiro o Reino de Deus e a sua justiça, e todas essas coisas vos serão acrescentadas.",
+      verseRef: "Mateus 6:33",
       quiz: [
         {
           question: "O que a sua rotina revela sobre você?",
