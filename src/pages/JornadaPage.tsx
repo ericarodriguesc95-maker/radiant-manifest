@@ -362,7 +362,6 @@ export default function JornadaPage() {
           </p>
         </div>
       </div>
-      </div>
 
       {/* Celebration modal */}
       <BadgeCelebration blockId={celebratingBadge} onClose={() => setCelebratingBadge(null)} />
