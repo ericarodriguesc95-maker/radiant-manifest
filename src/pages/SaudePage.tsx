@@ -1057,6 +1057,10 @@ export default function SaudePage() {
               </div>
             </CardContent>
           </Card>
+          {/* Protein & Water Calculators */}
+          <Suspense fallback={<div className="h-32 animate-pulse bg-muted/30 rounded-xl" />}>
+            <ProteinWaterCalculator weight={profile.current_weight} goal={profile.goal} activityLevel={profile.activity_level} />
+          </Suspense>
         </TabsContent>
 
         {/* ====== DIETA ====== */}
