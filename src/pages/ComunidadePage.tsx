@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText, Pencil, Check, Smile, Bell, UserPlus, UserMinus, Settings, Mail, Hash, Eye } from "lucide-react";
 import EmojiPicker from "@/components/EmojiPicker";
 import StoryBar from "@/components/stories/StoryBar";
@@ -671,14 +672,7 @@ const ComunidadePage = () => {
     return <>{elements}</>;
   };
 
-  // DMs / Chat Rooms overlay
-  if (showDMs) {
-    return (
-      <div className="min-h-screen bg-background">
-        <DirectMessages onClose={() => { setShowDMs(false); setDmTargetUserId(null); }} openConversationUserId={dmTargetUserId} />
-      </div>
-    );
-  }
+  // DMs are now rendered as a floating bubble/sheet overlay below
 
   if (showChatRooms) {
     return (
@@ -1220,6 +1214,12 @@ const ComunidadePage = () => {
         )}
         </div>
       </div>
+      {/* DM Floating Sheet */}
+      <Sheet open={showDMs} onOpenChange={(open) => { if (!open) { setShowDMs(false); setDmTargetUserId(null); } }}>
+        <SheetContent side="right" className="w-full sm:w-[420px] p-0 overflow-hidden">
+          <DirectMessages onClose={() => { setShowDMs(false); setDmTargetUserId(null); }} openConversationUserId={dmTargetUserId} />
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };

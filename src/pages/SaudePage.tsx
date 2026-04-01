@@ -7,6 +7,7 @@ const ShareGlowUp = lazy(() => import("@/components/health/ShareGlowUp"));
 const SmartWatchConnect = lazy(() => import("@/components/health/SmartWatchConnect"));
 const InjectableMedsEnhanced = lazy(() => import("@/components/health/InjectableMedsEnhanced"));
 const WeeklyDashboard = lazy(() => import("@/components/health/WeeklyDashboard"));
+const ProteinWaterCalculator = lazy(() => import("@/components/health/ProteinWaterCalculator"));
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -1056,6 +1057,10 @@ export default function SaudePage() {
               </div>
             </CardContent>
           </Card>
+          {/* Protein & Water Calculators */}
+          <Suspense fallback={<div className="h-32 animate-pulse bg-muted/30 rounded-xl" />}>
+            <ProteinWaterCalculator weight={profile.current_weight} goal={profile.goal} activityLevel={profile.activity_level} />
+          </Suspense>
         </TabsContent>
 
         {/* ====== DIETA ====== */}
