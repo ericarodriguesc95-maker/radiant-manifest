@@ -101,7 +101,20 @@ export default function MessageBubble({
         {/* Sticker (no bubble) */}
         {isSticker && media_url && (
           <div className="mb-1">
-            <img src={media_url} alt="sticker" className="h-24 w-24 object-contain" loading="lazy" />
+            <img
+              src={media_url}
+              alt="sticker"
+              className="h-24 w-24 object-contain"
+              loading="lazy"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = "none";
+                const fallback = document.createElement("div");
+                fallback.className = "h-24 w-24 rounded-xl bg-muted/40 flex items-center justify-center text-xs text-muted-foreground";
+                fallback.textContent = "Sticker";
+                target.parentElement?.appendChild(fallback);
+              }}
+            />
           </div>
         )}
 
