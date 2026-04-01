@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Heart, Send, Trash2, MessageCircle, ChevronDown, ChevronUp, Image, Paperclip, Camera, Mic, X, Play, Pause, FileText, Pencil, Check, Smile, Bell, UserPlus, UserMinus, Settings, Mail, Hash, Eye } from "lucide-react";
 import EmojiPicker from "@/components/EmojiPicker";
 import StoryBar from "@/components/stories/StoryBar";
