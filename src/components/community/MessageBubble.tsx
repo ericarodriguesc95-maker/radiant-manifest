@@ -101,7 +101,19 @@ export default function MessageBubble({
         {/* Sticker (no bubble) */}
         {isSticker && media_url && (
           <div className="mb-1">
-            <img src={media_url} alt="sticker" className="h-24 w-24 object-contain" loading="lazy" />
+            {media_url.startsWith("emoji:") ? (
+              <span className="text-5xl">{media_url.replace("emoji:", "")}</span>
+            ) : (
+              <img
+                src={media_url}
+                alt="sticker"
+                className="h-24 w-24 object-contain"
+                loading="lazy"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
+              />
+            )}
           </div>
         )}
 
