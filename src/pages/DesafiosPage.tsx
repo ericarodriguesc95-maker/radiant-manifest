@@ -955,7 +955,7 @@ export default function DesafiosPage() {
           </button>
         </div>
 
-        <div className={cn("rounded-2xl p-6 mb-6 bg-gradient-to-br text-white", selectedChallenge.gradient)}>
+        <div className="rounded-2xl p-6 mb-6 bg-gold text-primary-foreground">
           <div className="flex items-center gap-3 mb-3">
             {selectedChallenge.icon}
             <div>
