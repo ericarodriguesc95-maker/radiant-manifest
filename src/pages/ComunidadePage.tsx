@@ -1214,6 +1214,12 @@ const ComunidadePage = () => {
         )}
         </div>
       </div>
+      {/* DM Floating Sheet */}
+      <Sheet open={showDMs} onOpenChange={(open) => { if (!open) { setShowDMs(false); setDmTargetUserId(null); } }}>
+        <SheetContent side="right" className="w-full sm:w-[420px] p-0 overflow-hidden">
+          <DirectMessages onClose={() => { setShowDMs(false); setDmTargetUserId(null); }} openConversationUserId={dmTargetUserId} />
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
