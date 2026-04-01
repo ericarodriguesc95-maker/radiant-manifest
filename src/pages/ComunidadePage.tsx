@@ -671,14 +671,7 @@ const ComunidadePage = () => {
     return <>{elements}</>;
   };
 
-  // DMs / Chat Rooms overlay
-  if (showDMs) {
-    return (
-      <div className="min-h-screen bg-background">
-        <DirectMessages onClose={() => { setShowDMs(false); setDmTargetUserId(null); }} openConversationUserId={dmTargetUserId} />
-      </div>
-    );
-  }
+  // DMs are now rendered as a floating bubble/sheet overlay below
 
   if (showChatRooms) {
     return (

@@ -1062,7 +1062,7 @@ export default function DesafiosPage() {
               style={{ animationDelay: `${idx * 80}ms` }}
               onClick={() => joined ? setSelectedChallenge(challenge) : undefined}
             >
-              <div className={cn("bg-gradient-to-r p-5 text-white", challenge.gradient)}>
+              <div className="bg-gold p-5 text-primary-foreground">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     {challenge.icon}
