@@ -9,6 +9,7 @@ import { ViewModeProvider } from "@/contexts/ViewModeContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import FourPointStar from "@/components/FourPointStar";
 import SplashScreen from "@/components/SplashScreen";
+import AppLayout from "@/components/AppLayout";
 import HomePage from "@/pages/HomePage";
 import MetasPage from "@/pages/MetasPage";
 import FinancasPage from "@/pages/FinancasPage";
