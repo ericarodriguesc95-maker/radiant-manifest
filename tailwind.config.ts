@@ -84,12 +84,22 @@ export default {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
+        "slide-up": {
+          from: { opacity: "0", transform: "translateY(100%)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "slide-down": {
+          from: { opacity: "0", transform: "translateY(-100%)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.4s ease-out forwards",
         shimmer: "shimmer 2s infinite linear",
+        "slide-up": "slide-up 0.5s ease-out forwards",
+        "slide-down": "slide-down 0.5s ease-out forwards",
       },
     },
   },
