@@ -63,6 +63,13 @@ const HomePage = () => {
     checkUpdates();
   }, [user]);
 
+  // Listen for global event to open updates modal (from push notification toast)
+  useEffect(() => {
+    const handler = () => setShowUpdates(true);
+    window.addEventListener("glowup:show-updates", handler);
+    return () => window.removeEventListener("glowup:show-updates", handler);
+  }, []);
+
   useEffect(() => {
     if (!user) return;
     const channel = supabase
