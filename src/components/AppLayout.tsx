@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import BottomNav from "./BottomNav";
 import GuidedTour from "./GuidedTour";
+import InstallAppBanner from "./InstallAppBanner";
+import WelcomeBackAlert from "./WelcomeBackAlert";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
 import { usePushNotificationListener } from "@/hooks/usePushNotificationListener";
 import { initNotifications } from "@/lib/notifications";
@@ -36,8 +38,10 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
+      <WelcomeBackAlert />
       <Outlet />
       <BottomNav />
+      <InstallAppBanner />
       {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
     </div>
   );
