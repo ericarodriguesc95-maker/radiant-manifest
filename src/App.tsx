@@ -94,7 +94,9 @@ const App = () => {
           {!splashDone && <SplashScreen onFinish={() => setSplashDone(true)} />}
           <BrowserRouter>
             <AuthProvider>
-              <AppRoutes />
+              <ViewModeProvider>
+                <AppRoutes />
+              </ViewModeProvider>
             </AuthProvider>
           </BrowserRouter>
         </TooltipProvider>

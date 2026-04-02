@@ -1,24 +1,26 @@
 import { useState, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import BottomNav from "./BottomNav";
+import DesktopSidebar from "./DesktopSidebar";
+import ViewModeToggle from "./ViewModeToggle";
 import GuidedTour from "./GuidedTour";
 import InstallAppBanner from "./InstallAppBanner";
 import WelcomeBackAlert from "./WelcomeBackAlert";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
 import { usePushNotificationListener } from "@/hooks/usePushNotificationListener";
 import { initNotifications } from "@/lib/notifications";
+import { useViewMode } from "@/contexts/ViewModeContext";
+import { cn } from "@/lib/utils";
 
 export default function AppLayout() {
   const [showTour, setShowTour] = useState(false);
   const location = useLocation();
+  const { mode } = useViewMode();
+  const isDesktop = mode === "desktop";
 
-  // Activity tracking - auto-logs page views
   useActivityTracker();
-
-  // Listen for social notifications + app updates and send push to device
   usePushNotificationListener();
 
-  // Initialize push notifications (request permission + schedule daily alerts)
   useEffect(() => {
     initNotifications();
   }, []);
@@ -37,11 +39,16 @@ export default function AppLayout() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className={cn("min-h-screen bg-background", isDesktop ? "pl-64" : "pb-20")}>
+      {isDesktop ? <DesktopSidebar /> : <BottomNav />}
+      <ViewModeToggle />
       <WelcomeBackAlert />
-      <Outlet />
-      <BottomNav />
-      <InstallAppBanner />
+
+      <div className={cn(isDesktop && "max-w-5xl mx-auto px-6 py-4")}>
+        <Outlet />
+      </div>
+
+      {!isDesktop && <InstallAppBanner />}
       {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
     </div>
   );
