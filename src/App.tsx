@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { ViewModeProvider } from "@/contexts/ViewModeContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import FourPointStar from "@/components/FourPointStar";
 import SplashScreen from "@/components/SplashScreen";
@@ -94,7 +95,9 @@ const App = () => {
           {!splashDone && <SplashScreen onFinish={() => setSplashDone(true)} />}
           <BrowserRouter>
             <AuthProvider>
-              <AppRoutes />
+              <ViewModeProvider>
+                <AppRoutes />
+              </ViewModeProvider>
             </AuthProvider>
           </BrowserRouter>
         </TooltipProvider>
