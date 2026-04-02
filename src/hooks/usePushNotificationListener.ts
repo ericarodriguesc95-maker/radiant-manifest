@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { sendSocialNotification, sendAppUpdateNotification } from "@/lib/notifications";
+import { toast } from "sonner";
 
 /**
  * Global hook that listens for:
  * 1. New social notifications (likes, comments, follows, etc.)
  * 2. New app updates
- * and triggers push notifications on the user's device.
+ * and triggers push notifications + in-app toasts.
  */
 export function usePushNotificationListener() {
   const { user } = useAuth();
@@ -47,7 +48,7 @@ export function usePushNotificationListener() {
       )
       .subscribe();
 
-    // Listen for new app updates
+    // Listen for new app updates — push + in-app toast
     const updatesChannel = supabase
       .channel("push-app-updates")
       .on(
@@ -60,7 +61,22 @@ export function usePushNotificationListener() {
         (payload) => {
           const update = payload.new as any;
           if (!update) return;
+
+          // Push notification
           sendAppUpdateNotification(update.title, update.description);
+
+          // In-app toast
+          toast(`🎁 ${update.title}`, {
+            description: update.description,
+            duration: 8000,
+            action: {
+              label: "Ver",
+              onClick: () => {
+                // Trigger updates modal via global event
+                window.dispatchEvent(new CustomEvent("glowup:show-updates"));
+              },
+            },
+          });
         }
       )
       .subscribe();
