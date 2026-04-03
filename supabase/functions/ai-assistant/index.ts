@@ -28,6 +28,27 @@ serve(async (req) => {
       });
     }
 
+    // Check subscription status
+    const serviceClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    const { data: subData } = await serviceClient
+      .from("subscriptions")
+      .select("status, plan_type, expiry_date")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    const hasAccess = subData && (
+      subData.plan_type === "lifetime" ||
+      subData.status === "trialing" ||
+      (subData.status === "active" && (!subData.expiry_date || new Date(subData.expiry_date) > new Date()))
+    );
+
+    if (!hasAccess) {
+      return new Response(JSON.stringify({ error: "Assinatura inativa. Renove para usar a assistente IA." }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const { messages } = await req.json();
 
     // Fetch user's upcoming events for context
