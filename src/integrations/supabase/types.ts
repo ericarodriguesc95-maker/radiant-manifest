@@ -1139,6 +1139,39 @@ export type Database = {
           },
         ]
       }
+      subscriptions: {
+        Row: {
+          created_at: string
+          email: string
+          expiry_date: string | null
+          id: string
+          plan_type: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          expiry_date?: string | null
+          id?: string
+          plan_type?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          expiry_date?: string | null
+          id?: string
+          plan_type?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       supplement_checkins: {
         Row: {
           checkin_date: string
@@ -1286,6 +1319,7 @@ export type Database = {
         Args: { _conversation_id: string }
         Returns: boolean
       }
+      has_active_subscription: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
