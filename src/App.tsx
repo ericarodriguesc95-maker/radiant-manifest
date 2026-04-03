@@ -29,6 +29,7 @@ import ProfilePage from "@/pages/ProfilePage";
 import DiarioPage from "@/pages/DiarioPage";
 import AdminActivityPage from "@/pages/AdminActivityPage";
 import AdminContentPage from "@/pages/AdminContentPage";
+import AdminSubscriptionsPage from "@/pages/AdminSubscriptionsPage";
 import SaudePage from "@/pages/SaudePage";
 import DesafiosPage from "@/pages/DesafiosPage";
 import RenovarBrilhoPage from "@/pages/RenovarBrilhoPage";
