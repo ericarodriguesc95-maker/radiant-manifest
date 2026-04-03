@@ -31,6 +31,8 @@ import AdminActivityPage from "@/pages/AdminActivityPage";
 import AdminContentPage from "@/pages/AdminContentPage";
 import SaudePage from "@/pages/SaudePage";
 import DesafiosPage from "@/pages/DesafiosPage";
+import RenovarBrilhoPage from "@/pages/RenovarBrilhoPage";
+import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +40,20 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   if (loading) return <div className="min-h-screen flex items-center justify-center"><FourPointStar size={40} animate="spin" className="text-gold" fill="hsl(43 72% 52%)" /></div>;
   if (!user) return <Navigate to="/login" replace />;
+  return <>{children}</>;
+}
+
+function SubscriptionGuard({ children }: { children: React.ReactNode }) {
+  const { isActive, isLoading } = useSubscription();
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center"><FourPointStar size={40} animate="spin" className="text-gold" fill="hsl(43 72% 52%)" /></div>;
+  if (!isActive) return <Navigate to="/renovar-brilho" replace />;
+  return <>{children}</>;
+}
+
+function PremiumRoute({ children }: { children: React.ReactNode }) {
+  const { isActive, isLoading } = useSubscription();
+  if (isLoading) return <div className="min-h-screen flex items-center justify-center"><FourPointStar size={40} animate="spin" className="text-gold" fill="hsl(43 72% 52%)" /></div>;
+  if (!isActive) return <Navigate to="/renovar-brilho" replace />;
   return <>{children}</>;
 }
 
@@ -56,24 +72,29 @@ const AppRoutes = () => (
     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
     <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-    {/* Protected routes */}
-    <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+    {/* Renewal page - accessible when logged in but no active sub */}
+    <Route path="/renovar-brilho" element={<ProtectedRoute><RenovarBrilhoPage /></ProtectedRoute>} />
+
+    {/* Protected + subscription required routes */}
+    <Route element={<ProtectedRoute><SubscriptionGuard><AppLayout /></SubscriptionGuard></ProtectedRoute>}>
       <Route path="/" element={<ErrorBoundary><HomePage /></ErrorBoundary>} />
       <Route path="/metas" element={<ErrorBoundary><MetasPage /></ErrorBoundary>} />
       <Route path="/financas" element={<ErrorBoundary><FinancasPage /></ErrorBoundary>} />
-      <Route path="/comunidade" element={<ErrorBoundary><ComunidadePage /></ErrorBoundary>} />
       <Route path="/vision-board" element={<ErrorBoundary><VisionBoardPage /></ErrorBoundary>} />
       <Route path="/jornada" element={<ErrorBoundary><JornadaPage /></ErrorBoundary>} />
       <Route path="/reprogramacao" element={<ErrorBoundary><ReprogramacaoPage /></ErrorBoundary>} />
       <Route path="/guias" element={<ErrorBoundary><GuiasPage /></ErrorBoundary>} />
       <Route path="/alta-performance" element={<ErrorBoundary><AltaPerformancePage /></ErrorBoundary>} />
-      <Route path="/saude" element={<ErrorBoundary><SaudePage /></ErrorBoundary>} />
-      <Route path="/desafios" element={<ErrorBoundary><DesafiosPage /></ErrorBoundary>} />
       <Route path="/diario" element={<ErrorBoundary><DiarioPage /></ErrorBoundary>} />
       <Route path="/settings" element={<ErrorBoundary><SettingsPage /></ErrorBoundary>} />
       <Route path="/admin/atividade" element={<ErrorBoundary><AdminActivityPage /></ErrorBoundary>} />
       <Route path="/admin/conteudo" element={<ErrorBoundary><AdminContentPage /></ErrorBoundary>} />
       <Route path="/perfil/:userId" element={<ErrorBoundary><ProfilePage /></ErrorBoundary>} />
+
+      {/* Premium-locked routes (extra guard for clarity) */}
+      <Route path="/comunidade" element={<ErrorBoundary><PremiumRoute><ComunidadePage /></PremiumRoute></ErrorBoundary>} />
+      <Route path="/saude" element={<ErrorBoundary><PremiumRoute><SaudePage /></PremiumRoute></ErrorBoundary>} />
+      <Route path="/desafios" element={<ErrorBoundary><PremiumRoute><DesafiosPage /></PremiumRoute></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>
