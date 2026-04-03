@@ -63,7 +63,7 @@ export default function RenovarBrilhoPage() {
           className="w-full h-14 text-lg font-bold bg-gradient-to-r from-gold to-amber-500 hover:from-amber-500 hover:to-gold text-black rounded-2xl shadow-lg shadow-gold/30 transition-all duration-300 hover:scale-[1.02]"
         >
           <a
-            href="https://pay.kiwify.com.br/seu-checkout"
+            href="https://planosdosite.lovable.app/"
             target="_blank"
             rel="noopener noreferrer"
           >
