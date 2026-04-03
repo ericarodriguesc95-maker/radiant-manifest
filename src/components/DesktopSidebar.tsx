@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Target, Wallet, Users, BookOpen, User, Heart, Crown, Monitor, Smartphone, Settings, Zap, Brain, Trophy } from "lucide-react";
+import { Home, Target, Wallet, Users, BookOpen, User, Heart, Crown, Smartphone, Settings, Zap, Brain, Trophy, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useViewMode } from "@/contexts/ViewModeContext";
@@ -64,6 +64,10 @@ export default function DesktopSidebar() {
         <div className="h-px bg-border my-3" />
         <p className="text-[9px] font-body tracking-[0.2em] uppercase text-muted-foreground/50 px-4 mb-2">Módulos</p>
         {extraTabs.map(renderLink)}
+
+        <div className="h-px bg-border my-3" />
+        <p className="text-[9px] font-body tracking-[0.2em] uppercase text-muted-foreground/50 px-4 mb-2">Admin</p>
+        {renderLink({ to: "/admin/assinaturas", icon: ShieldCheck, label: "Assinaturas" })}
       </nav>
 
       {/* Profile + mode toggle */}

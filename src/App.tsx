@@ -29,6 +29,7 @@ import ProfilePage from "@/pages/ProfilePage";
 import DiarioPage from "@/pages/DiarioPage";
 import AdminActivityPage from "@/pages/AdminActivityPage";
 import AdminContentPage from "@/pages/AdminContentPage";
+import AdminSubscriptionsPage from "@/pages/AdminSubscriptionsPage";
 import SaudePage from "@/pages/SaudePage";
 import DesafiosPage from "@/pages/DesafiosPage";
 import RenovarBrilhoPage from "@/pages/RenovarBrilhoPage";
@@ -89,6 +90,7 @@ const AppRoutes = () => (
       <Route path="/settings" element={<ErrorBoundary><SettingsPage /></ErrorBoundary>} />
       <Route path="/admin/atividade" element={<ErrorBoundary><AdminActivityPage /></ErrorBoundary>} />
       <Route path="/admin/conteudo" element={<ErrorBoundary><AdminContentPage /></ErrorBoundary>} />
+      <Route path="/admin/assinaturas" element={<ErrorBoundary><AdminSubscriptionsPage /></ErrorBoundary>} />
       <Route path="/perfil/:userId" element={<ErrorBoundary><ProfilePage /></ErrorBoundary>} />
 
       {/* Premium-locked routes (extra guard for clarity) */}
