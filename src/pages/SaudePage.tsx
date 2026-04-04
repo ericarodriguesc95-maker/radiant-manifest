@@ -251,6 +251,12 @@ export default function SaudePage() {
   const [weightPhoto, setWeightPhoto] = useState<File | null>(null);
   const weightFileRef = useRef<HTMLInputElement>(null);
   const [expandedWeightPhoto, setExpandedWeightPhoto] = useState<string | null>(null);
+  const [editingWeightId, setEditingWeightId] = useState<string | null>(null);
+  const [editWeight, setEditWeight] = useState("");
+  const [editWeightNote, setEditWeightNote] = useState("");
+  const [editWeightDate, setEditWeightDate] = useState("");
+  const [editWeightPhoto, setEditWeightPhoto] = useState<File | null>(null);
+  const editWeightFileRef = useRef<HTMLInputElement>(null);
 
   // Diet
   const createDefaultDietForm = () => ({
