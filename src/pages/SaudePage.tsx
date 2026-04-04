@@ -818,7 +818,8 @@ export default function SaudePage() {
   const bmi = bmiValue ? bmiValue.toFixed(1) : null;
   const bmiLabel = bmiValue ? (bmiValue < 18.5 ? "Abaixo do peso" : bmiValue < 25 ? "Peso normal" : bmiValue < 30 ? "Sobrepeso" : "Obesidade") : null;
   const bmiColor = bmiValue ? (bmiValue < 18.5 ? "text-amber-500" : bmiValue < 25 ? "text-green-500" : bmiValue < 30 ? "text-amber-500" : "text-destructive") : "";
-  const tmb = profile.current_weight && profile.height_cm && profile.age ? calculateTMB(profile.current_weight, profile.height_cm, profile.age, profile.sex) : null;
+  const heightInCm = profile.height_cm ? (profile.height_cm > 3 ? profile.height_cm : profile.height_cm * 100) : null;
+  const tmb = profile.current_weight && heightInCm && profile.age ? calculateTMB(profile.current_weight, heightInCm, profile.age, profile.sex) : null;
   const dailyCalories = tmb ? Math.round(tmb * (activityMultipliers[profile.activity_level]?.factor || 1.55)) : null;
   const goalCalories = dailyCalories ? (profile.goal === "emagrecer" ? Math.round(dailyCalories - 500) : profile.goal === "ganhar_massa" ? Math.round(dailyCalories + 300) : dailyCalories) : null;
 
