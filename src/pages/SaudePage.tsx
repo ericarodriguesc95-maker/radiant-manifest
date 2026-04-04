@@ -1081,16 +1081,39 @@ export default function SaudePage() {
               <div className="space-y-2 max-h-60 overflow-y-auto">
                 {weightRecords.map((r) => (
                   <div key={r.id} className="p-2 rounded-lg bg-muted/30 space-y-1">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="font-semibold text-foreground text-sm">{Number(r.weight).toFixed(1)} kg</span>
-                        <span className="text-muted-foreground text-xs ml-2">{formatDateLabel(r.recorded_at)}</span>
-                        {r.note && <span className="text-xs text-muted-foreground ml-2">— {r.note}</span>}
+                    {editingWeightId === r.id ? (
+                      <div className="space-y-2">
+                        <div className="flex gap-2">
+                          <Input type="number" step="0.1" placeholder="Peso (kg)" value={editWeight} onChange={(e) => setEditWeight(e.target.value)} className="flex-1" />
+                          <Input type="date" value={editWeightDate} onChange={(e) => setEditWeightDate(e.target.value)} className="flex-1" />
+                        </div>
+                        <Input placeholder="Nota (opcional)" value={editWeightNote} onChange={(e) => setEditWeightNote(e.target.value)} />
+                        <div className="flex gap-2">
+                          <input ref={editWeightFileRef} type="file" accept="image/*" className="hidden" onChange={(e) => setEditWeightPhoto(e.target.files?.[0] || null)} />
+                          <Button variant="outline" size="sm" className="flex-1 text-xs" onClick={() => editWeightFileRef.current?.click()}>
+                            <Camera className="h-3 w-3 mr-1" /> {editWeightPhoto ? editWeightPhoto.name.slice(0, 15) + "…" : "Trocar foto"}
+                          </Button>
+                          <Button size="sm" onClick={saveEditWeight} disabled={!editWeight}><Check className="h-3 w-3" /></Button>
+                          <Button size="sm" variant="ghost" onClick={() => setEditingWeightId(null)}><X className="h-3 w-3" /></Button>
+                        </div>
                       </div>
-                      <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => deleteWeightRecord(r.id)}><Trash2 className="h-3 w-3 text-destructive" /></Button>
-                    </div>
-                    {r.photo_url && (
-                      <img src={r.photo_url} alt="Evolução" className={`w-full rounded-lg cursor-pointer object-cover ${expandedWeightPhoto === r.id ? "" : "max-h-32"}`} onClick={() => setExpandedWeightPhoto(expandedWeightPhoto === r.id ? null : r.id)} />
+                    ) : (
+                      <>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <span className="font-semibold text-foreground text-sm">{Number(r.weight).toFixed(1)} kg</span>
+                            <span className="text-muted-foreground text-xs ml-2">{formatDateLabel(r.recorded_at)}</span>
+                            {r.note && <span className="text-xs text-muted-foreground ml-2">— {r.note}</span>}
+                          </div>
+                          <div className="flex gap-1">
+                            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => startEditWeight(r)}><Edit2 className="h-3 w-3 text-primary" /></Button>
+                            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => deleteWeightRecord(r.id)}><Trash2 className="h-3 w-3 text-destructive" /></Button>
+                          </div>
+                        </div>
+                        {r.photo_url && (
+                          <img src={r.photo_url} alt="Evolução" className={`w-full rounded-lg cursor-pointer object-cover ${expandedWeightPhoto === r.id ? "" : "max-h-32"}`} onClick={() => setExpandedWeightPhoto(expandedWeightPhoto === r.id ? null : r.id)} />
+                        )}
+                      </>
                     )}
                   </div>
                 ))}
