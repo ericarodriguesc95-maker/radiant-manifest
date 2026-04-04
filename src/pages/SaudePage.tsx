@@ -813,7 +813,8 @@ export default function SaudePage() {
     { calories: 0, protein: 0, carbs: 0, fat: 0 }
   );
 
-  const bmiValue = profile.current_weight && profile.height_cm ? profile.current_weight / Math.pow(profile.height_cm / 100, 2) : null;
+  const heightInMeters = profile.height_cm ? (profile.height_cm > 3 ? profile.height_cm / 100 : profile.height_cm) : null;
+  const bmiValue = profile.current_weight && heightInMeters ? profile.current_weight / Math.pow(heightInMeters, 2) : null;
   const bmi = bmiValue ? bmiValue.toFixed(1) : null;
   const bmiLabel = bmiValue ? (bmiValue < 18.5 ? "Abaixo do peso" : bmiValue < 25 ? "Peso normal" : bmiValue < 30 ? "Sobrepeso" : "Obesidade") : null;
   const bmiColor = bmiValue ? (bmiValue < 18.5 ? "text-amber-500" : bmiValue < 25 ? "text-green-500" : bmiValue < 30 ? "text-amber-500" : "text-destructive") : "";
