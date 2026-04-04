@@ -425,6 +425,39 @@ export default function SaudePage() {
     toast.success("Peso registrado!");
   }
 
+  function startEditWeight(record: WeightRecord) {
+    setEditingWeightId(record.id);
+    setEditWeight(String(record.weight));
+    setEditWeightNote(record.note || "");
+    setEditWeightDate(record.recorded_at);
+    setEditWeightPhoto(null);
+  }
+
+  async function saveEditWeight() {
+    if (!user || !editingWeightId || !editWeight) return;
+    const parsedWeight = Number.parseFloat(editWeight);
+    if (!Number.isFinite(parsedWeight)) { toast.error("Peso inválido"); return; }
+
+    let photoUrl: string | null | undefined = undefined;
+    if (editWeightPhoto) {
+      photoUrl = await uploadPhoto(user.id, editWeightPhoto, "weight");
+    }
+
+    const updateData: Record<string, any> = {
+      weight: parsedWeight,
+      note: editWeightNote || null,
+      recorded_at: editWeightDate,
+    };
+    if (photoUrl !== undefined) updateData.photo_url = photoUrl;
+
+    const { error } = await supabase.from("weight_records").update(updateData).eq("id", editingWeightId);
+    if (error) { toast.error("Erro ao atualizar: " + error.message); return; }
+
+    setEditingWeightId(null);
+    await loadWeightRecords();
+    toast.success("Registro atualizado!");
+  }
+
   async function deleteWeightRecord(id: string) {
     const { error } = await supabase.from("weight_records").delete().eq("id", id);
     if (error) {
