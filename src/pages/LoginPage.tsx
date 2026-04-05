@@ -20,11 +20,39 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
+    const { data: authData, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
+      setLoading(false);
       toast({ title: "Erro ao entrar", description: error.message, variant: "destructive" });
+      return;
+    }
+
+    // Check subscription status before redirecting
+    if (authData?.user) {
+      const { data: sub } = await supabase
+        .from("subscriptions")
+        .select("status, plan_type, expiry_date")
+        .eq("user_id", authData.user.id)
+        .maybeSingle();
+
+      const isActive = sub && (
+        sub.plan_type === "lifetime" ||
+        sub.status === "active" ||
+        sub.status === "trialing"
+      );
+
+      // Check expiry
+      const isExpired = sub?.plan_type !== "lifetime" && sub?.expiry_date && new Date(sub.expiry_date) < new Date();
+
+      setLoading(false);
+
+      if (!sub || !isActive || isExpired) {
+        navigate("/renovar-brilho");
+      } else {
+        navigate("/");
+      }
     } else {
+      setLoading(false);
       navigate("/");
     }
   };
