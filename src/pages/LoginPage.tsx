@@ -1,14 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
-import { Sparkles, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Crown, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+
+const eliteQuotes = [
+  "Mulheres fortes não esperam oportunidades — elas as criam.",
+  "Sua energia é seu maior investimento.",
+  "Disciplina é liberdade disfarçada.",
+  "O luxo começa com uma mente organizada.",
+  "Silêncio e estratégia vencem qualquer ruído.",
+  "Você não precisa de permissão para brilhar.",
+  "Elegância é a forma mais poderosa de autoridade.",
+  "Invista em você — o retorno é garantido.",
+  "A mulher que se conhece, governa o mundo.",
+  "Consistência transforma o ordinário em extraordinário.",
+  "Seu próximo nível exige uma nova versão de você.",
+  "Grandes mulheres constroem em silêncio e surpreendem em público.",
+];
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -16,6 +28,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [currentQuote, setCurrentQuote] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentQuote((prev) => (prev + 1) % eliteQuotes.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +47,6 @@ export default function LoginPage() {
       return;
     }
 
-    // Check subscription status before redirecting
     if (authData?.user) {
       const { data: sub } = await supabase
         .from("subscriptions")
@@ -40,12 +59,9 @@ export default function LoginPage() {
         sub.status === "active" ||
         sub.status === "trialing"
       );
-
-      // Check expiry
       const isExpired = sub?.plan_type !== "lifetime" && sub?.expiry_date && new Date(sub.expiry_date) < new Date();
 
       setLoading(false);
-
       if (!sub || !isActive || isExpired) {
         navigate("/renovar-brilho");
       } else {
@@ -69,84 +85,228 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-background">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center space-y-2">
-          <div className="flex justify-center mb-2">
-            <Sparkles className="h-8 w-8 text-primary" />
+    <div className="min-h-screen relative overflow-hidden" style={{ background: "#0A0A0A" }}>
+      {/* Ambient glow effects */}
+      <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.3), transparent 70%)" }} />
+      <div className="absolute bottom-[-15%] right-[-10%] w-[400px] h-[400px] rounded-full opacity-15" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.2), transparent 70%)" }} />
+
+      {/* Floating quotes - scattered around */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {eliteQuotes.slice(0, 6).map((quote, i) => {
+          const positions = [
+            { top: "8%", left: "5%", maxW: "200px" },
+            { top: "15%", right: "4%", maxW: "180px" },
+            { top: "45%", left: "3%", maxW: "190px" },
+            { bottom: "25%", right: "3%", maxW: "200px" },
+            { bottom: "8%", left: "6%", maxW: "170px" },
+            { top: "70%", right: "5%", maxW: "185px" },
+          ];
+          const pos = positions[i];
+          return (
+            <p
+              key={i}
+              className="absolute text-[10px] sm:text-xs italic leading-relaxed hidden lg:block"
+              style={{
+                ...pos,
+                maxWidth: pos.maxW,
+                color: "hsl(43 50% 55% / 0.25)",
+                fontFamily: "'Georgia', serif",
+              }}
+            >
+              "{quote}"
+            </p>
+          );
+        })}
+      </div>
+
+      {/* Main content */}
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-8">
+        {/* Rotating quote at top */}
+        <div className="mb-8 text-center max-w-sm px-4 h-16 flex items-center justify-center">
+          <p
+            key={currentQuote}
+            className="text-sm italic animate-fade-in"
+            style={{
+              color: "hsl(43 60% 60% / 0.6)",
+              fontFamily: "'Georgia', serif",
+              letterSpacing: "0.02em",
+            }}
+          >
+            "{eliteQuotes[currentQuote]}"
+          </p>
+        </div>
+
+        {/* Login card */}
+        <div
+          className="w-full max-w-md rounded-3xl p-8 space-y-6 border"
+          style={{
+            background: "linear-gradient(145deg, rgba(20,20,20,0.95), rgba(12,12,12,0.98))",
+            borderColor: "hsl(43 72% 52% / 0.15)",
+            boxShadow: "0 25px 60px -15px rgba(0,0,0,0.7), 0 0 40px -10px hsl(43 72% 52% / 0.08)",
+          }}
+        >
+          {/* Logo area */}
+          <div className="text-center space-y-3">
+            <div
+              className="mx-auto w-16 h-16 rounded-2xl flex items-center justify-center"
+              style={{
+                background: "linear-gradient(135deg, hsl(43 72% 52% / 0.2), hsl(43 72% 52% / 0.05))",
+                border: "1px solid hsl(43 72% 52% / 0.3)",
+              }}
+            >
+              <Crown className="w-8 h-8" style={{ color: "hsl(43 72% 52%)" }} />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#F5F5F5" }}>
+                GLOW UP <span style={{ color: "hsl(43 72% 52%)" }}>✦</span>
+              </h1>
+              <p className="text-xs tracking-[0.3em] uppercase mt-1" style={{ color: "hsl(43 50% 55% / 0.5)" }}>
+                Exclusivo para mulheres de elite
+              </p>
+            </div>
           </div>
-          <CardTitle className="text-2xl font-display">Glow Up ✦</CardTitle>
-          <CardDescription>Entre na sua conta</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* OAuth Buttons */}
+
+          {/* OAuth */}
           <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" onClick={() => handleOAuth("google")} disabled={loading} className="gap-2">
+            <button
+              onClick={() => handleOAuth("google")}
+              disabled={loading}
+              className="flex items-center justify-center gap-2 h-11 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-[1.02] disabled:opacity-50"
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                color: "#ccc",
+              }}
+            >
               <svg className="h-4 w-4" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
               Google
-            </Button>
-            <Button variant="outline" onClick={() => handleOAuth("apple")} disabled={loading} className="gap-2">
+            </button>
+            <button
+              onClick={() => handleOAuth("apple")}
+              disabled={loading}
+              className="flex items-center justify-center gap-2 h-11 rounded-xl text-sm font-medium transition-all duration-200 hover:scale-[1.02] disabled:opacity-50"
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                color: "#ccc",
+              }}
+            >
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
               Apple
-            </Button>
+            </button>
           </div>
 
+          {/* Divider */}
           <div className="flex items-center gap-3">
-            <Separator className="flex-1" />
-            <span className="text-xs text-muted-foreground">ou</span>
-            <Separator className="flex-1" />
+            <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
+            <span className="text-[10px] uppercase tracking-widest" style={{ color: "rgba(255,255,255,0.2)" }}>ou</span>
+            <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
           </div>
 
-          {/* Email/Password Form */}
+          {/* Form */}
           <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input id="email" type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-10" required />
+            <div className="space-y-1.5">
+              <div
+                className="relative flex items-center rounded-xl h-12 px-4 gap-3 transition-all focus-within:ring-1"
+                style={{
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                  focusRing: "hsl(43 72% 52% / 0.3)",
+                }}
+              >
+                <Mail className="h-4 w-4 flex-shrink-0" style={{ color: "hsl(43 72% 52% / 0.5)" }} />
+                <input
+                  type="email"
+                  placeholder="seu@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="flex-1 bg-transparent outline-none text-sm placeholder:text-white/20"
+                  style={{ color: "#E5E5E5" }}
+                />
               </div>
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Senha</Label>
-                <Link to="/forgot-password" className="text-xs text-primary hover:underline">Esqueci a senha</Link>
-              </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input id="password" type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-10 pr-10" required />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2">
-                  {showPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
+            <div className="space-y-1.5">
+              <div
+                className="relative flex items-center rounded-xl h-12 px-4 gap-3"
+                style={{
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                }}
+              >
+                <Lock className="h-4 w-4 flex-shrink-0" style={{ color: "hsl(43 72% 52% / 0.5)" }} />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="flex-1 bg-transparent outline-none text-sm placeholder:text-white/20"
+                  style={{ color: "#E5E5E5" }}
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="flex-shrink-0">
+                  {showPassword ? <EyeOff className="h-4 w-4" style={{ color: "rgba(255,255,255,0.3)" }} /> : <Eye className="h-4 w-4" style={{ color: "rgba(255,255,255,0.3)" }} />}
                 </button>
               </div>
+              <div className="text-right">
+                <Link to="/forgot-password" className="text-[11px] hover:underline" style={{ color: "hsl(43 60% 55% / 0.5)" }}>
+                  Esqueci minha senha
+                </Link>
+              </div>
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Entrando..." : "Entrar"}
-            </Button>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full h-12 rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:scale-[1.02] hover:shadow-lg disabled:opacity-50"
+              style={{
+                background: "linear-gradient(135deg, hsl(43 72% 52%), hsl(43 72% 42%))",
+                color: "#0A0A0A",
+                boxShadow: "0 4px 20px -4px hsl(43 72% 52% / 0.4)",
+              }}
+            >
+              {loading ? "Entrando..." : "Acessar minha conta"}
+            </button>
           </form>
 
-          <p className="text-center text-sm text-muted-foreground">
-            Não tem conta? <Link to="/signup" className="text-primary hover:underline font-medium">Criar conta</Link>
+          {/* Signup link */}
+          <p className="text-center text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>
+            Primeira vez?{" "}
+            <Link to="/signup" className="font-semibold hover:underline" style={{ color: "hsl(43 72% 52% / 0.8)" }}>
+              Criar conta
+            </Link>
           </p>
+        </div>
 
-          <div className="bg-gradient-to-r from-gold/10 to-amber-500/10 border border-gold/30 rounded-xl p-4 space-y-2">
-            <p className="text-sm font-semibold text-foreground flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-gold" />
-              Ainda não tem um plano?
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Adquira seu acesso ao Glow Up e desbloqueie todas as funcionalidades.
-            </p>
-            <a
-              href="https://planosdosite.lovable.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm font-bold text-gold hover:text-amber-400 transition-colors"
-            >
-              Ver planos disponíveis →
-            </a>
-          </div>
-        </CardContent>
-      </Card>
+        {/* Premium plan CTA */}
+        <div className="mt-6 w-full max-w-md">
+          <a
+            href="https://planosdosite.lovable.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center justify-between w-full rounded-2xl px-6 py-4 transition-all duration-300 hover:scale-[1.01]"
+            style={{
+              background: "linear-gradient(135deg, hsl(43 72% 52% / 0.08), hsl(43 72% 52% / 0.03))",
+              border: "1px solid hsl(43 72% 52% / 0.12)",
+            }}
+          >
+            <div className="space-y-1">
+              <p className="text-sm font-semibold" style={{ color: "hsl(43 72% 52% / 0.9)" }}>
+                ✦ Ainda não tem um plano?
+              </p>
+              <p className="text-xs" style={{ color: "rgba(255,255,255,0.3)" }}>
+                Desbloqueie a versão mais poderosa de você
+              </p>
+            </div>
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" style={{ color: "hsl(43 72% 52% / 0.6)" }} />
+          </a>
+        </div>
+
+        {/* Bottom quote */}
+        <p className="mt-8 text-center text-[11px] max-w-xs" style={{ color: "rgba(255,255,255,0.12)", fontFamily: "'Georgia', serif" }}>
+          "A única competição de uma mulher de elite é com a versão que ela era ontem."
+        </p>
+      </div>
     </div>
   );
 }
