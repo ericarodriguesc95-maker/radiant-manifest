@@ -127,6 +127,24 @@ export default function LoginPage() {
           <p className="text-center text-sm text-muted-foreground">
             Não tem conta? <Link to="/signup" className="text-primary hover:underline font-medium">Criar conta</Link>
           </p>
+
+          <div className="bg-gradient-to-r from-gold/10 to-amber-500/10 border border-gold/30 rounded-xl p-4 space-y-2">
+            <p className="text-sm font-semibold text-foreground flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-gold" />
+              Ainda não tem um plano?
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Adquira seu acesso ao Glow Up e desbloqueie todas as funcionalidades.
+            </p>
+            <a
+              href="https://planosdosite.lovable.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-sm font-bold text-gold hover:text-amber-400 transition-colors"
+            >
+              Ver planos disponíveis →
+            </a>
+          </div>
         </CardContent>
       </Card>
     </div>
