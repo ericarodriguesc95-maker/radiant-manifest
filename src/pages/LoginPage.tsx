@@ -207,11 +207,10 @@ export default function LoginPage() {
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-1.5">
               <div
-                className="relative flex items-center rounded-xl h-12 px-4 gap-3 transition-all focus-within:ring-1"
+                className="relative flex items-center rounded-xl h-12 px-4 gap-3 transition-all focus-within:ring-1 focus-within:ring-gold/30"
                 style={{
                   background: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(255,255,255,0.06)",
-                  focusRing: "hsl(43 72% 52% / 0.3)",
                 }}
               >
                 <Mail className="h-4 w-4 flex-shrink-0" style={{ color: "hsl(43 72% 52% / 0.5)" }} />
