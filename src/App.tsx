@@ -33,6 +33,7 @@ import AdminSubscriptionsPage from "@/pages/AdminSubscriptionsPage";
 import SaudePage from "@/pages/SaudePage";
 import DesafiosPage from "@/pages/DesafiosPage";
 import RenovarBrilhoPage from "@/pages/RenovarBrilhoPage";
+import Biblia365Page from "@/pages/Biblia365Page";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
@@ -97,6 +98,7 @@ const AppRoutes = () => (
       <Route path="/comunidade" element={<ErrorBoundary><PremiumRoute><ComunidadePage /></PremiumRoute></ErrorBoundary>} />
       <Route path="/saude" element={<ErrorBoundary><PremiumRoute><SaudePage /></PremiumRoute></ErrorBoundary>} />
       <Route path="/desafios" element={<ErrorBoundary><PremiumRoute><DesafiosPage /></PremiumRoute></ErrorBoundary>} />
+      <Route path="/biblia-365" element={<ErrorBoundary><Biblia365Page /></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>
