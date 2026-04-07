@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sparkles, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield, Trophy, Crown, Star, Heart, Target } from "lucide-react";
+import { Sparkles, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield, Trophy, Crown, Star, Heart, Target, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
@@ -214,6 +214,27 @@ const HomePage = () => {
             ))}
           </div>
         </section>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* BIBLE 365 — Premium CTA */}
+        {/* ═══════════════════════════════════════════ */}
+        <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
+          <button
+            onClick={() => navigate("/biblia-365")}
+            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-900/30 via-amber-800/15 to-amber-700/5" />
+            <div className="absolute inset-0 glass-gold" />
+            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
+              <BookOpen className="h-6 w-6 text-gold" />
+            </div>
+            <div className="relative z-10 flex-1 text-left">
+              <p className="text-sm font-display font-bold text-foreground">Bíblia em 365 Dias</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Leitura diária + neurociência aplicada</p>
+            </div>
+            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
+          </button>
+        </div>
 
         {/* ═══════════════════════════════════════════ */}
         {/* CHALLENGES — Premium CTA */}

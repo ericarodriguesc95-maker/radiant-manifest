@@ -142,6 +142,33 @@ export type Database = {
         }
         Relationships: []
       }
+      bible_reading_progress: {
+        Row: {
+          completed_days: number[]
+          created_at: string
+          id: string
+          start_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_days?: number[]
+          created_at?: string
+          id?: string
+          start_date?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_days?: number[]
+          created_at?: string
+          id?: string
+          start_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       calendar_events: {
         Row: {
           color: string
