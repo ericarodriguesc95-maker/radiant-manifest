@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { BookOpen, ChevronLeft, ChevronRight, CheckCircle2, Circle, Brain, Sparkles, ArrowLeft } from "lucide-react";
+import { BookOpen, ChevronLeft, ChevronRight, CheckCircle2, Circle, Brain, Sparkles, ArrowLeft, CalendarDays } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { bibleReadingPlan } from "@/components/bible/bibleReadingPlan";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import BibleHistoryCalendar from "@/components/bible/BibleHistoryCalendar";
 import { cn } from "@/lib/utils";
 
 const Biblia365Page = () => {
