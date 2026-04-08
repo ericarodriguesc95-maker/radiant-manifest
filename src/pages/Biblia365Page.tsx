@@ -261,7 +261,6 @@ const Biblia365Page = () => {
         </Tabs>
       </div>
     </div>
-    </div>
   );
 };
 
