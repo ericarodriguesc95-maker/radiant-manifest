@@ -1,16 +1,25 @@
-import { useState, useEffect, useCallback } from "react";
-import { Plus, Trash2, Pencil, Check, X } from "lucide-react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line, ResponsiveContainer } from "recharts";
+
+type EntryType = "renda" | "fixa" | "variavel" | "cartao" | "poupanca";
 
 interface FinanceEntry {
   id: string;
   description: string;
   amount: number;
-  type: "renda" | "fixa" | "variavel";
+  type: EntryType;
 }
 
 const monthNames = [
@@ -18,11 +27,28 @@ const monthNames = [
   "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 
-const typeLabels: Record<string, string> = { renda: "Renda", fixa: "Despesa Fixa", variavel: "Despesa Variável" };
-const typeColors: Record<string, string> = {
+const typeLabels: Record<EntryType, string> = {
+  renda: "Renda",
+  fixa: "Despesa Fixa",
+  variavel: "Despesa Variável",
+  cartao: "Cartão de Crédito",
+  poupanca: "Poupança",
+};
+
+const typeColors: Record<EntryType, string> = {
   renda: "text-green-500",
   fixa: "text-red-400",
   variavel: "text-orange-400",
+  cartao: "text-purple-400",
+  poupanca: "text-blue-400",
+};
+
+const typeIcons: Record<EntryType, string> = {
+  renda: "💰",
+  fixa: "📌",
+  variavel: "🛒",
+  cartao: "💳",
+  poupanca: "🐷",
 };
 
 const FinancasPage = () => {
@@ -31,48 +57,77 @@ const FinancasPage = () => {
   const [currentMonth, setCurrentMonth] = useState(now.getMonth());
   const [currentYear] = useState(now.getFullYear());
   const [entries, setEntries] = useState<FinanceEntry[]>([]);
+  const [allYearEntries, setAllYearEntries] = useState<{ month: number; type: string; amount: number }[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
   const [newDesc, setNewDesc] = useState("");
   const [newAmount, setNewAmount] = useState("");
-  const [newType, setNewType] = useState<FinanceEntry["type"]>("renda");
+  const [newType, setNewType] = useState<EntryType>("renda");
   const [notes, setNotes] = useState("");
   const [notesSaving, setNotesSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editDesc, setEditDesc] = useState("");
   const [editAmount, setEditAmount] = useState("");
-  const [editType, setEditType] = useState<FinanceEntry["type"]>("renda");
+  const [editType, setEditType] = useState<EntryType>("renda");
+  const [activeTab, setActiveTab] = useState("registros");
 
   const fetchEntries = useCallback(async () => {
     if (!user) return;
     setLoading(true);
-    const { data } = await supabase
-      .from("finance_entries")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("month", currentMonth)
-      .eq("year", currentYear)
-      .order("created_at", { ascending: true });
+    const [{ data }, { data: noteData }, { data: yearData }] = await Promise.all([
+      supabase
+        .from("finance_entries")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("month", currentMonth)
+        .eq("year", currentYear)
+        .order("created_at", { ascending: true }),
+      supabase
+        .from("finance_notes")
+        .select("content")
+        .eq("user_id", user.id)
+        .eq("month", currentMonth)
+        .eq("year", currentYear)
+        .maybeSingle(),
+      supabase
+        .from("finance_entries")
+        .select("month, type, amount")
+        .eq("user_id", user.id)
+        .eq("year", currentYear),
+    ]);
     setEntries((data || []).map((e: any) => ({ id: e.id, description: e.description, amount: Number(e.amount), type: e.type })));
-
-    // Fetch notes
-    const { data: noteData } = await supabase
-      .from("finance_notes")
-      .select("content")
-      .eq("user_id", user.id)
-      .eq("month", currentMonth)
-      .eq("year", currentYear)
-      .maybeSingle();
+    setAllYearEntries((yearData || []).map((e: any) => ({ month: e.month, type: e.type, amount: Number(e.amount) })));
     setNotes(noteData?.content || "");
     setLoading(false);
   }, [user, currentMonth, currentYear]);
 
   useEffect(() => { fetchEntries(); }, [fetchEntries]);
 
+  const filterByTypes = (types: EntryType[]) => entries.filter(e => types.includes(e.type));
+
   const renda = entries.filter(e => e.type === "renda").reduce((s, e) => s + e.amount, 0);
   const despFixas = entries.filter(e => e.type === "fixa").reduce((s, e) => s + e.amount, 0);
   const despVar = entries.filter(e => e.type === "variavel").reduce((s, e) => s + e.amount, 0);
-  const saldo = renda - despFixas - despVar;
+  const cartao = entries.filter(e => e.type === "cartao").reduce((s, e) => s + e.amount, 0);
+  const poupanca = entries.filter(e => e.type === "poupanca").reduce((s, e) => s + e.amount, 0);
+  const saldo = renda - despFixas - despVar - cartao;
+
+  // Chart data
+  const chartData = useMemo(() => {
+    return monthNames.map((name, i) => {
+      const monthEntries = allYearEntries.filter(e => e.month === i);
+      const r = monthEntries.filter(e => e.type === "renda").reduce((s, e) => s + e.amount, 0);
+      const gastos = monthEntries.filter(e => ["fixa", "variavel", "cartao"].includes(e.type)).reduce((s, e) => s + e.amount, 0);
+      const p = monthEntries.filter(e => e.type === "poupanca").reduce((s, e) => s + e.amount, 0);
+      return { name: name.slice(0, 3), renda: r, gastos, poupanca: p };
+    });
+  }, [allYearEntries]);
+
+  const chartConfig = {
+    renda: { label: "Renda", color: "hsl(142, 71%, 45%)" },
+    gastos: { label: "Gastos", color: "hsl(0, 72%, 50%)" },
+    poupanca: { label: "Poupança", color: "hsl(210, 80%, 55%)" },
+  };
 
   const addEntry = async () => {
     if (!newDesc || !newAmount || !user) return;
@@ -84,7 +139,8 @@ const FinancasPage = () => {
       .select()
       .single();
     if (error) { toast.error("Erro ao adicionar"); return; }
-    setEntries(prev => [...prev, { id: data.id, description: data.description, amount: Number(data.amount), type: data.type as FinanceEntry["type"] }]);
+    setEntries(prev => [...prev, { id: data.id, description: data.description, amount: Number(data.amount), type: data.type as EntryType }]);
+    setAllYearEntries(prev => [...prev, { month: currentMonth, type: data.type, amount: Number(data.amount) }]);
     setNewDesc(""); setNewAmount(""); setShowAdd(false);
     toast.success("Lançamento adicionado!");
   };
@@ -94,6 +150,7 @@ const FinancasPage = () => {
     setEntries(e => e.filter(x => x.id !== id));
     const { error } = await supabase.from("finance_entries").delete().eq("id", id);
     if (error) { setEntries(prev); toast.error("Erro ao excluir"); }
+    else fetchEntries();
   };
 
   const startEdit = (entry: FinanceEntry) => {
@@ -114,7 +171,7 @@ const FinancasPage = () => {
       .update({ description: editDesc, amount, type: editType })
       .eq("id", editingId);
     if (error) { setEntries(prev); toast.error("Erro ao salvar"); }
-    else toast.success("Atualizado!");
+    else { toast.success("Atualizado!"); fetchEntries(); }
     setEditingId(null);
   };
 
@@ -126,6 +183,54 @@ const FinancasPage = () => {
       .upsert({ user_id: user.id, month: currentMonth, year: currentYear, content: notes, updated_at: new Date().toISOString() }, { onConflict: "user_id,month,year" });
     setNotesSaving(false);
     toast.success("Notas salvas!");
+  };
+
+  const renderEntryList = (types: EntryType[], emptyMsg: string) => {
+    const filtered = filterByTypes(types);
+    if (loading) return <div className="p-4 text-center text-muted-foreground text-sm font-body">Carregando...</div>;
+    if (filtered.length === 0) return <div className="p-4 text-center text-muted-foreground text-sm font-body">{emptyMsg}</div>;
+    return (
+      <div className="divide-y divide-border">
+        {filtered.map(entry => (
+          <div key={entry.id} className="flex items-center justify-between p-4">
+            {editingId === entry.id ? (
+              <div className="flex-1 space-y-2">
+                <input value={editDesc} onChange={e => setEditDesc(e.target.value)} className="w-full bg-muted rounded-lg px-2 py-1 text-sm font-body outline-none" />
+                <input value={editAmount} onChange={e => setEditAmount(e.target.value)} type="number" className="w-full bg-muted rounded-lg px-2 py-1 text-sm font-body outline-none" />
+                <div className="flex gap-1 flex-wrap">
+                  {types.map(t => (
+                    <button key={t} onClick={() => setEditType(t)} className={cn("px-2 py-0.5 rounded-full text-[10px] font-body", editType === t ? "bg-gold/20 text-gold" : "bg-muted text-muted-foreground")}>
+                      {typeLabels[t]}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex gap-1">
+                  <button onClick={saveEdit} className="p-1 text-green-500"><Check className="h-4 w-4" /></button>
+                  <button onClick={() => setEditingId(null)} className="p-1 text-muted-foreground"><X className="h-4 w-4" /></button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">{typeIcons[entry.type]}</span>
+                  <div>
+                    <p className="text-sm font-body font-medium">{entry.description}</p>
+                    <p className={cn("text-[10px] font-body", typeColors[entry.type])}>{typeLabels[entry.type]}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className={cn("text-sm font-body font-semibold", typeColors[entry.type])}>
+                    {entry.type === "renda" ? "+" : "-"} R$ {entry.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  </span>
+                  <button onClick={() => startEdit(entry)} className="p-1 text-muted-foreground hover:text-gold"><Pencil className="h-3 w-3" /></button>
+                  <button onClick={() => removeEntry(entry.id)} className="p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3 w-3" /></button>
+                </div>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    );
   };
 
   if (!user) {
@@ -143,7 +248,7 @@ const FinancasPage = () => {
         <h1 className="text-2xl font-display font-bold">Finanças <span className="text-gold">✦</span></h1>
       </header>
 
-      <div className="px-5 space-y-4 pb-6">
+      <div className="px-5 space-y-4 pb-28">
         {/* Month selector */}
         <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
           {monthNames.map((m, i) => (
@@ -186,84 +291,192 @@ const FinancasPage = () => {
               R$ {despVar.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </p>
           </div>
+          <div className="bg-card rounded-xl p-4 shadow-card">
+            <p className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">Cartão Crédito</p>
+            <p className="text-lg font-display font-bold text-purple-400">
+              R$ {cartao.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+            </p>
+          </div>
+          <div className="bg-card rounded-xl p-4 shadow-card">
+            <p className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">Poupança</p>
+            <p className="text-lg font-display font-bold text-blue-400">
+              R$ {poupanca.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+            </p>
+          </div>
         </div>
 
-        {/* Entries list */}
-        <div className="bg-card rounded-2xl border border-border overflow-hidden">
-          <div className="p-4 border-b border-border">
-            <h3 className="text-sm font-display font-semibold">Lançamentos</h3>
-          </div>
-          {loading ? (
-            <div className="p-4 text-center text-muted-foreground text-sm font-body">Carregando...</div>
-          ) : entries.length === 0 ? (
-            <div className="p-4 text-center text-muted-foreground text-sm font-body">Nenhum lançamento neste mês.</div>
-          ) : (
-            <div className="divide-y divide-border">
-              {entries.map(entry => (
-                <div key={entry.id} className="flex items-center justify-between p-4">
-                  {editingId === entry.id ? (
-                    <div className="flex-1 space-y-2">
-                      <input value={editDesc} onChange={e => setEditDesc(e.target.value)} className="w-full bg-muted rounded-lg px-2 py-1 text-sm font-body outline-none" />
-                      <input value={editAmount} onChange={e => setEditAmount(e.target.value)} type="number" className="w-full bg-muted rounded-lg px-2 py-1 text-sm font-body outline-none" />
-                      <div className="flex gap-1">
-                        {(Object.keys(typeLabels) as FinanceEntry["type"][]).map(t => (
-                          <button key={t} onClick={() => setEditType(t)} className={cn("px-2 py-0.5 rounded-full text-[10px] font-body", editType === t ? "bg-gold/20 text-gold" : "bg-muted text-muted-foreground")}>
-                            {typeLabels[t]}
-                          </button>
-                        ))}
-                      </div>
-                      <div className="flex gap-1">
-                        <button onClick={saveEdit} className="p-1 text-green-500"><Check className="h-4 w-4" /></button>
-                        <button onClick={() => setEditingId(null)} className="p-1 text-muted-foreground"><X className="h-4 w-4" /></button>
-                      </div>
-                    </div>
-                  ) : (
-                    <>
-                      <div>
-                        <p className="text-sm font-body font-medium">{entry.description}</p>
-                        <p className={cn("text-[10px] font-body", typeColors[entry.type])}>{typeLabels[entry.type]}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className={cn("text-sm font-body font-semibold", typeColors[entry.type])}>
-                          {entry.type === "renda" ? "+" : "-"} R$ {entry.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-                        </span>
-                        <button onClick={() => startEdit(entry)} className="p-1 text-muted-foreground hover:text-gold"><Pencil className="h-3 w-3" /></button>
-                        <button onClick={() => removeEntry(entry.id)} className="p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3 w-3" /></button>
-                      </div>
-                    </>
-                  )}
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="w-full grid grid-cols-4 bg-muted/50">
+            <TabsTrigger value="registros" className="text-xs gap-1 data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+              <ArrowUpDown className="h-3 w-3" /> Registros
+            </TabsTrigger>
+            <TabsTrigger value="cartao" className="text-xs gap-1 data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400">
+              <CreditCard className="h-3 w-3" /> Cartão
+            </TabsTrigger>
+            <TabsTrigger value="poupanca" className="text-xs gap-1 data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400">
+              <PiggyBank className="h-3 w-3" /> Poupança
+            </TabsTrigger>
+            <TabsTrigger value="grafico" className="text-xs gap-1 data-[state=active]:bg-gold/20 data-[state=active]:text-gold">
+              <TrendingUp className="h-3 w-3" /> Gráfico
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Registros (Entradas/Saídas) */}
+          <TabsContent value="registros">
+            <div className="bg-card rounded-2xl border border-border overflow-hidden mt-3">
+              <div className="p-4 border-b border-border">
+                <h3 className="text-sm font-display font-semibold">Entradas e Saídas</h3>
+              </div>
+              {renderEntryList(["renda", "fixa", "variavel"], "Nenhum lançamento neste mês.")}
+            </div>
+
+            {showAdd && activeTab === "registros" ? (
+              <div className="bg-card rounded-2xl p-4 border border-border space-y-3 animate-fade-in mt-3">
+                <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Descrição" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" autoFocus />
+                <input value={newAmount} onChange={e => setNewAmount(e.target.value)} placeholder="Valor (R$)" type="number" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" />
+                <div className="flex gap-2 flex-wrap">
+                  {(["renda", "fixa", "variavel"] as EntryType[]).map(t => (
+                    <button key={t} onClick={() => setNewType(t)} className={cn("px-3 py-1 rounded-full text-[10px] font-body font-medium transition-all", newType === t ? "bg-gold/20 text-gold ring-1 ring-gold/30" : "bg-muted text-muted-foreground")}>
+                      {typeIcons[t]} {typeLabels[t]}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="gold" size="sm" onClick={addEntry}>Adicionar</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setShowAdd(false)}>Cancelar</Button>
+                </div>
+              </div>
+            ) : activeTab === "registros" && (
+              <Button variant="outline" className="w-full border-dashed mt-3" onClick={() => { setShowAdd(true); setNewType("renda"); }}>
+                <Plus className="h-4 w-4 mr-2" /> Novo Lançamento
+              </Button>
+            )}
+          </TabsContent>
+
+          {/* Cartão de Crédito */}
+          <TabsContent value="cartao">
+            <div className="bg-card rounded-2xl border border-border overflow-hidden mt-3">
+              <div className="p-4 border-b border-border flex items-center gap-2">
+                <CreditCard className="h-4 w-4 text-purple-400" />
+                <h3 className="text-sm font-display font-semibold">Cartão de Crédito</h3>
+              </div>
+              {renderEntryList(["cartao"], "Nenhum gasto no cartão neste mês.")}
+            </div>
+
+            <div className="bg-card/50 rounded-xl p-3 mt-3 border border-purple-500/20">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-body text-muted-foreground">Total da Fatura</span>
+                <span className="text-sm font-display font-bold text-purple-400">
+                  R$ {cartao.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+            </div>
+
+            {showAdd && activeTab === "cartao" ? (
+              <div className="bg-card rounded-2xl p-4 border border-border space-y-3 animate-fade-in mt-3">
+                <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Descrição da compra" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" autoFocus />
+                <input value={newAmount} onChange={e => setNewAmount(e.target.value)} placeholder="Valor (R$)" type="number" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" />
+                <div className="flex gap-2">
+                  <Button variant="gold" size="sm" onClick={() => { setNewType("cartao"); addEntry(); }}>Adicionar</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setShowAdd(false)}>Cancelar</Button>
+                </div>
+              </div>
+            ) : activeTab === "cartao" && (
+              <Button variant="outline" className="w-full border-dashed mt-3 border-purple-500/30 text-purple-400 hover:bg-purple-500/10" onClick={() => { setShowAdd(true); setNewType("cartao"); }}>
+                <Plus className="h-4 w-4 mr-2" /> Adicionar Gasto no Cartão
+              </Button>
+            )}
+          </TabsContent>
+
+          {/* Poupança */}
+          <TabsContent value="poupanca">
+            <div className="bg-card rounded-2xl border border-border overflow-hidden mt-3">
+              <div className="p-4 border-b border-border flex items-center gap-2">
+                <PiggyBank className="h-4 w-4 text-blue-400" />
+                <h3 className="text-sm font-display font-semibold">Poupança</h3>
+              </div>
+              {renderEntryList(["poupanca"], "Nenhum depósito na poupança neste mês.")}
+            </div>
+
+            <div className="bg-card/50 rounded-xl p-3 mt-3 border border-blue-500/20">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-body text-muted-foreground">Total Guardado no Mês</span>
+                <span className="text-sm font-display font-bold text-blue-400">
+                  R$ {poupanca.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+            </div>
+
+            {showAdd && activeTab === "poupanca" ? (
+              <div className="bg-card rounded-2xl p-4 border border-border space-y-3 animate-fade-in mt-3">
+                <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Descrição do depósito" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" autoFocus />
+                <input value={newAmount} onChange={e => setNewAmount(e.target.value)} placeholder="Valor (R$)" type="number" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" />
+                <div className="flex gap-2">
+                  <Button variant="gold" size="sm" onClick={() => { setNewType("poupanca"); addEntry(); }}>Adicionar</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setShowAdd(false)}>Cancelar</Button>
+                </div>
+              </div>
+            ) : activeTab === "poupanca" && (
+              <Button variant="outline" className="w-full border-dashed mt-3 border-blue-500/30 text-blue-400 hover:bg-blue-500/10" onClick={() => { setShowAdd(true); setNewType("poupanca"); }}>
+                <Plus className="h-4 w-4 mr-2" /> Adicionar à Poupança
+              </Button>
+            )}
+          </TabsContent>
+
+          {/* Gráfico */}
+          <TabsContent value="grafico">
+            <div className="bg-card rounded-2xl border border-border p-4 mt-3">
+              <div className="flex items-center gap-2 mb-4">
+                <TrendingUp className="h-4 w-4 text-gold" />
+                <h3 className="text-sm font-display font-semibold">Evolução Mensal — {currentYear}</h3>
+              </div>
+
+              <ChartContainer config={chartConfig} className="h-[250px] w-full">
+                <BarChart data={chartData} margin={{ top: 5, right: 5, left: -10, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="name" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
+                  <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Bar dataKey="renda" fill="hsl(142, 71%, 45%)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="gastos" fill="hsl(0, 72%, 50%)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="poupanca" fill="hsl(210, 80%, 55%)" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ChartContainer>
+
+              {/* Legend */}
+              <div className="flex justify-center gap-4 mt-3">
+                <div className="flex items-center gap-1.5">
+                  <div className="h-2.5 w-2.5 rounded-sm bg-green-500" />
+                  <span className="text-[10px] font-body text-muted-foreground">Renda</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="h-2.5 w-2.5 rounded-sm bg-red-500" />
+                  <span className="text-[10px] font-body text-muted-foreground">Gastos</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="h-2.5 w-2.5 rounded-sm bg-blue-500" />
+                  <span className="text-[10px] font-body text-muted-foreground">Poupança</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Monthly comparison mini cards */}
+            <div className="grid grid-cols-3 gap-2 mt-3">
+              {chartData.filter((_, i) => i <= currentMonth).slice(-3).map(d => (
+                <div key={d.name} className="bg-card rounded-xl p-3 border border-border text-center">
+                  <p className="text-[10px] font-body text-muted-foreground uppercase">{d.name}</p>
+                  <p className="text-xs font-display font-bold text-green-500">+{d.renda.toLocaleString("pt-BR", { minimumFractionDigits: 0 })}</p>
+                  <p className="text-xs font-display font-bold text-red-400">-{d.gastos.toLocaleString("pt-BR", { minimumFractionDigits: 0 })}</p>
                 </div>
               ))}
             </div>
-          )}
-        </div>
-
-        {/* Add entry */}
-        {showAdd ? (
-          <div className="bg-card rounded-2xl p-4 border border-border space-y-3 animate-fade-in">
-            <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Descrição" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" autoFocus />
-            <input value={newAmount} onChange={e => setNewAmount(e.target.value)} placeholder="Valor (R$)" type="number" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" />
-            <div className="flex gap-2">
-              {(Object.keys(typeLabels) as FinanceEntry["type"][]).map(t => (
-                <button key={t} onClick={() => setNewType(t)} className={cn("px-3 py-1 rounded-full text-[10px] font-body font-medium transition-all", newType === t ? "bg-gold/20 text-gold ring-1 ring-gold/30" : "bg-muted text-muted-foreground")}>
-                  {typeLabels[t]}
-                </button>
-              ))}
-            </div>
-            <div className="flex gap-2">
-              <Button variant="gold" size="sm" onClick={addEntry}>Adicionar</Button>
-              <Button variant="ghost" size="sm" onClick={() => setShowAdd(false)}>Cancelar</Button>
-            </div>
-          </div>
-        ) : (
-          <Button variant="outline" className="w-full border-dashed" onClick={() => setShowAdd(true)}>
-            <Plus className="h-4 w-4 mr-2" /> Novo Lançamento
-          </Button>
-        )}
+          </TabsContent>
+        </Tabs>
 
         {/* Notes */}
         <div className="bg-card rounded-2xl border border-border p-4">
-          <h3 className="text-sm font-display font-semibold mb-2">Bloco de Notas</h3>
+          <h3 className="text-sm font-display font-semibold mb-2">📝 Bloco de Notas</h3>
           <textarea
             value={notes}
             onChange={e => setNotes(e.target.value)}
