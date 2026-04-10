@@ -53,16 +53,21 @@ const typeIcons: Record<EntryType, string> = {
 };
 
 const financeTips = [
-  { icon: "💎", title: "Regra 50/30/20", desc: "Destine 50% da renda para necessidades, 30% para desejos e 20% para investimentos. Mulheres que dominam essa regra constroem patrimônio sólido." },
-  { icon: "🏦", title: "Reserva de Emergência", desc: "Tenha pelo menos 6 meses de despesas guardados. Essa é a base da sua liberdade financeira — nunca dependa de ninguém." },
-  { icon: "📈", title: "Invista Cedo, Invista Sempre", desc: "Juros compostos são sua melhor amiga. R$500/mês investidos por 20 anos a 10% a.a. viram mais de R$380 mil." },
-  { icon: "💳", title: "Cartão com Inteligência", desc: "Use o cartão como aliado: cashback, milhas e prazo. Mas pague SEMPRE a fatura total. Rotativo é armadilha." },
-  { icon: "🎯", title: "Metas Financeiras Claras", desc: "Defina metas com prazo e valor. Ex: 'R$10.000 em 12 meses para intercâmbio'. Meta sem número é apenas desejo." },
-  { icon: "👑", title: "Renda Extra é Poder", desc: "Não dependa de uma única fonte. Explore freelance, investimentos, infoprodutos. Diversifique suas fontes de renda." },
-  { icon: "🧠", title: "Educação Financeira Contínua", desc: "Leia pelo menos 1 livro de finanças por trimestre. Conhecimento é o investimento com maior retorno." },
-  { icon: "🛡️", title: "Proteção Patrimonial", desc: "Seguro de vida, previdência privada e planejamento sucessório. Mulheres inteligentes protegem o que constroem." },
-  { icon: "💄", title: "Autocuidado com Orçamento", desc: "Beleza e bem-estar são investimentos, não gastos. Mas planeje — defina um valor mensal fixo para isso." },
-  { icon: "🌟", title: "Mindset de Abundância", desc: "Pare de pensar em escassez. Foque em como gerar mais, não apenas em cortar. Mulheres de elite pensam em expansão." },
+  // Consultoria Comportamental Financeira
+  { icon: "🧠", title: "Gatilhos Emocionais de Compra", desc: "Identifique quando você compra por ansiedade, tédio ou recompensa emocional. Antes de comprar, espere 48h — se ainda quiser, é desejo real. A neurociência mostra que 70% das compras impulsivas são motivadas por dopamina, não necessidade." },
+  { icon: "💔", title: "Síndrome da Impostora Financeira", desc: "Muitas mulheres sentem que 'não merecem' ter dinheiro ou investir. Isso vem de crenças limitantes da infância. Reprograme: 'Eu mereço abundância e sei administrar meu dinheiro com sabedoria.'" },
+  { icon: "🪞", title: "Autoconhecimento Financeiro", desc: "Qual seu perfil: gastadora emocional, acumuladora ansiosa ou equilibrada? Entender seu padrão comportamental é o primeiro passo para transformar sua relação com dinheiro." },
+  { icon: "⚡", title: "Efeito Manada nas Finanças", desc: "Não compre algo só porque 'todo mundo tem'. Comparação social é o maior sabotador financeiro. Mulheres de elite definem seu próprio padrão de vida baseado em seus valores, não nos dos outros." },
+  { icon: "🎯", title: "Metas com Propósito Emocional", desc: "Metas financeiras genéricas falham. Conecte cada meta a um 'porquê' emocional forte: 'Quero R$50 mil para nunca mais depender de ninguém'. O cérebro se motiva mais com significado do que com números." },
+  { icon: "💎", title: "Regra 50/30/20 Consciente", desc: "50% necessidades, 30% desejos, 20% investimentos. Mas o segredo comportamental é: pague-se primeiro. Transfira os 20% no dia que receber, antes de gastar qualquer centavo." },
+  { icon: "🏦", title: "Reserva = Liberdade Emocional", desc: "6 meses de despesas guardados não é só segurança financeira — é saúde mental. Pesquisas mostram que ter reserva reduz ansiedade em 40% e melhora qualidade do sono." },
+  { icon: "💳", title: "Desintoxicação do Cartão", desc: "Se você usa o cartão compulsivamente, faça um 'detox': 30 dias só com dinheiro/débito. Isso ativa a 'dor de pagar' no cérebro, tornando você mais consciente de cada gasto." },
+  { icon: "👑", title: "Mentalidade de CEO da Sua Vida", desc: "Trate suas finanças como uma empresa. Faça reuniões semanais consigo mesma: analise receitas, despesas e investimentos. CEOs não ignoram o financeiro — você também não deveria." },
+  { icon: "🌙", title: "Ritual Financeiro Noturno", desc: "Antes de dormir, revise seus gastos do dia em 2 minutos. Esse hábito ativa o córtex pré-frontal e cria consciência financeira automática em 21 dias." },
+  { icon: "🦋", title: "Perdoe Seus Erros Financeiros", desc: "Culpa por dívidas passadas paralisa. Perdoe-se, aprenda e siga em frente. Neurociência comprova: autocrítica excessiva ativa o modo de sobrevivência e leva a mais gastos compulsivos." },
+  { icon: "🔥", title: "Inflação do Estilo de Vida", desc: "Ganhou aumento? Não aumente seus gastos na mesma proporção. Invista pelo menos 50% de cada aumento. Esse é o segredo silencioso das mulheres que constroem riqueza real." },
+  { icon: "🛡️", title: "Proteção x Autossabotagem", desc: "Adiar seguro de vida e previdência é autossabotagem disfarçada de 'depois eu vejo'. Mulheres inteligentes protegem o que constroem HOJE, não amanhã." },
+  { icon: "🌟", title: "Abundância é Decisão", desc: "Escassez é um programa mental, não uma realidade. Troque 'não tenho dinheiro' por 'como posso gerar mais?'. Seu cérebro responde às perguntas que você faz — faça as certas." },
 ];
 
 // ─── Finance AI Chat Component ─────────────────────────────────────────────
