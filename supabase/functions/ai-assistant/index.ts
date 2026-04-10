@@ -49,7 +49,7 @@ serve(async (req) => {
       });
     }
 
-    const { messages } = await req.json();
+    const { messages, systemOverride } = await req.json();
 
     // Fetch user's upcoming events for context
     const now = new Date();
@@ -156,11 +156,10 @@ Fale como uma amiga próxima e profissional. Trate no feminino. Seja concisa mas
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: systemPrompt },
+          { role: "system", content: systemOverride || systemPrompt },
           ...messages,
         ],
-        tools,
-        tool_choice: "auto",
+        ...(systemOverride ? {} : { tools, tool_choice: "auto" }),
         stream: false,
       }),
     });
