@@ -479,6 +479,35 @@ const FinancasPage = () => {
               ))}
             </div>
           </TabsContent>
+          {/* Dicas Financeiras */}
+          <TabsContent value="dicas">
+            <div className="space-y-3 mt-3">
+              <div className="bg-card rounded-2xl border border-border p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <Lightbulb className="h-4 w-4 text-gold" />
+                  <h3 className="text-sm font-display font-semibold">Dicas de Gestão Financeira para Mulheres de Elite ✨</h3>
+                </div>
+                <div className="space-y-3">
+                  {financeTips.map((tip, i) => (
+                    <div key={i} className="bg-muted/30 rounded-xl p-3 border border-border/50">
+                      <div className="flex items-start gap-2">
+                        <span className="text-lg shrink-0">{tip.icon}</span>
+                        <div>
+                          <p className="text-xs font-display font-semibold text-foreground">{tip.title}</p>
+                          <p className="text-[11px] font-body text-muted-foreground mt-1 leading-relaxed">{tip.desc}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* IA Financeira */}
+          <TabsContent value="ia">
+            <FinanceAIChat userId={user.id} renda={renda} despFixas={despFixas} despVar={despVar} cartao={cartao} poupanca={poupanca} saldo={saldo} />
+          </TabsContent>
         </Tabs>
 
         {/* Notes */}
