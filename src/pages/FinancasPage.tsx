@@ -681,6 +681,11 @@ const FinancasPage = () => {
           <TabsContent value="ia">
             <FinanceAIChat userId={user.id} renda={renda} despFixas={despFixas} despVar={despVar} cartao={cartao} poupanca={poupanca} saldo={saldo} />
           </TabsContent>
+
+          {/* Quiz */}
+          <TabsContent value="quiz">
+            <FinanceProfileQuiz />
+          </TabsContent>
         </Tabs>
 
         {/* Notes */}
