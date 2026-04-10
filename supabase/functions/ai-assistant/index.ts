@@ -49,7 +49,7 @@ serve(async (req) => {
       });
     }
 
-    const { messages } = await req.json();
+    const { messages, systemOverride } = await req.json();
 
     // Fetch user's upcoming events for context
     const now = new Date();
