@@ -654,7 +654,7 @@ const FinancasPage = () => {
               <div className="bg-card rounded-2xl border border-border p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Lightbulb className="h-4 w-4 text-gold" />
-                  <h3 className="text-sm font-display font-semibold">Dicas de Gestão Financeira para Mulheres de Elite ✨</h3>
+                  <h3 className="text-sm font-display font-semibold">Consultoria Comportamental Financeira ✨</h3>
                 </div>
                 <div className="space-y-3">
                   {financeTips.map((tip, i) => (
