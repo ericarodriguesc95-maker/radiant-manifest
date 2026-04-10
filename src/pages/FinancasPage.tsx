@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown } from "lucide-react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown, Lightbulb, Bot, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
