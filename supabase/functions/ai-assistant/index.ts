@@ -159,8 +159,7 @@ Fale como uma amiga próxima e profissional. Trate no feminino. Seja concisa mas
           { role: "system", content: systemOverride || systemPrompt },
           ...messages,
         ],
-        tools,
-        tool_choice: "auto",
+        ...(systemOverride ? {} : { tools, tool_choice: "auto" }),
         stream: false,
       }),
     });
