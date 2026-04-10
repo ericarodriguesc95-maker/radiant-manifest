@@ -52,6 +52,170 @@ const typeIcons: Record<EntryType, string> = {
   poupanca: "🐷",
 };
 
+const financeTips = [
+  { icon: "💎", title: "Regra 50/30/20", desc: "Destine 50% da renda para necessidades, 30% para desejos e 20% para investimentos. Mulheres que dominam essa regra constroem patrimônio sólido." },
+  { icon: "🏦", title: "Reserva de Emergência", desc: "Tenha pelo menos 6 meses de despesas guardados. Essa é a base da sua liberdade financeira — nunca dependa de ninguém." },
+  { icon: "📈", title: "Invista Cedo, Invista Sempre", desc: "Juros compostos são sua melhor amiga. R$500/mês investidos por 20 anos a 10% a.a. viram mais de R$380 mil." },
+  { icon: "💳", title: "Cartão com Inteligência", desc: "Use o cartão como aliado: cashback, milhas e prazo. Mas pague SEMPRE a fatura total. Rotativo é armadilha." },
+  { icon: "🎯", title: "Metas Financeiras Claras", desc: "Defina metas com prazo e valor. Ex: 'R$10.000 em 12 meses para intercâmbio'. Meta sem número é apenas desejo." },
+  { icon: "👑", title: "Renda Extra é Poder", desc: "Não dependa de uma única fonte. Explore freelance, investimentos, infoprodutos. Diversifique suas fontes de renda." },
+  { icon: "🧠", title: "Educação Financeira Contínua", desc: "Leia pelo menos 1 livro de finanças por trimestre. Conhecimento é o investimento com maior retorno." },
+  { icon: "🛡️", title: "Proteção Patrimonial", desc: "Seguro de vida, previdência privada e planejamento sucessório. Mulheres inteligentes protegem o que constroem." },
+  { icon: "💄", title: "Autocuidado com Orçamento", desc: "Beleza e bem-estar são investimentos, não gastos. Mas planeje — defina um valor mensal fixo para isso." },
+  { icon: "🌟", title: "Mindset de Abundância", desc: "Pare de pensar em escassez. Foque em como gerar mais, não apenas em cortar. Mulheres de elite pensam em expansão." },
+];
+
+// ─── Finance AI Chat Component ─────────────────────────────────────────────
+
+interface FinanceAIChatProps {
+  userId: string;
+  renda: number;
+  despFixas: number;
+  despVar: number;
+  cartao: number;
+  poupanca: number;
+  saldo: number;
+}
+
+interface AiMsg {
+  role: "user" | "assistant";
+  content: string;
+}
+
+const FINANCE_AI_KEY = "finance-ai-messages";
+
+function FinanceAIChat({ renda, despFixas, despVar, cartao, poupanca, saldo }: FinanceAIChatProps) {
+  const [messages, setMessages] = useState<AiMsg[]>(() => {
+    try { const r = localStorage.getItem(FINANCE_AI_KEY); return r ? JSON.parse(r) : []; } catch { return []; }
+  });
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    try { localStorage.setItem(FINANCE_AI_KEY, JSON.stringify(messages)); } catch {}
+  }, [messages]);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      requestAnimationFrame(() => { scrollRef.current && (scrollRef.current.scrollTop = scrollRef.current.scrollHeight); });
+    }
+  }, [messages, loading]);
+
+  const sendMessage = async (text?: string) => {
+    const msg = (text || input).trim();
+    if (!msg || loading) return;
+    const userMsg: AiMsg = { role: "user", content: msg };
+    const newMsgs = [...messages, userMsg];
+    setMessages(newMsgs);
+    setInput("");
+    setLoading(true);
+
+    try {
+      const contextMsg = `Contexto financeiro atual da usuária: Renda: R$${renda.toFixed(2)}, Despesas Fixas: R$${despFixas.toFixed(2)}, Despesas Variáveis: R$${despVar.toFixed(2)}, Cartão de Crédito: R$${cartao.toFixed(2)}, Poupança: R$${poupanca.toFixed(2)}, Saldo: R$${saldo.toFixed(2)}`;
+
+      const { data, error } = await supabase.functions.invoke("ai-assistant", {
+        body: {
+          messages: [
+            { role: "user", content: contextMsg },
+            { role: "assistant", content: "Entendi seu contexto financeiro! Como posso te ajudar?" },
+            ...newMsgs,
+          ],
+          systemOverride: "Você é uma consultora financeira especializada em gestão financeira para mulheres. Responda sempre em português brasileiro, com linguagem empoderada e prática. Dê dicas específicas baseadas no contexto financeiro da usuária. Seja concisa, use emojis e formate com markdown. Foque em: investimentos, economia, planejamento, renda extra e mindset financeiro feminino.",
+        },
+      });
+
+      if (error) throw error;
+      const reply = data?.reply || "Desculpe, tente novamente 💛";
+      setMessages(prev => [...prev, { role: "assistant", content: reply }]);
+    } catch {
+      toast.error("Erro ao consultar IA financeira");
+      setMessages(messages);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const suggestions = [
+    "Como economizar mais com meu salário atual?",
+    "Dicas para sair das dívidas do cartão",
+    "Como começar a investir com pouco dinheiro?",
+    "Monte um plano financeiro para mim",
+  ];
+
+  return (
+    <div className="bg-card rounded-2xl border border-border overflow-hidden mt-3">
+      <div className="p-4 border-b border-border flex items-center gap-2">
+        <Bot className="h-4 w-4 text-gold" />
+        <div>
+          <h3 className="text-sm font-display font-semibold">Consultora Financeira IA ✨</h3>
+          <p className="text-[10px] text-muted-foreground font-body">Sua mentora de finanças pessoal</p>
+        </div>
+      </div>
+
+      <div ref={scrollRef} className="h-[350px] overflow-y-auto p-4 space-y-3">
+        {messages.length === 0 && (
+          <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
+            <div className="h-12 w-12 rounded-full bg-gold/10 flex items-center justify-center">
+              <Bot className="h-6 w-6 text-gold" />
+            </div>
+            <p className="text-xs font-body text-muted-foreground">
+              Pergunte sobre investimentos, economia, planejamento...
+            </p>
+            <div className="space-y-2 w-full max-w-xs">
+              {suggestions.map(s => (
+                <button key={s} onClick={() => sendMessage(s)} className="w-full text-left text-[11px] p-2 rounded-lg border border-border bg-muted/30 hover:bg-muted transition-colors text-muted-foreground font-body">
+                  💡 {s}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {messages.map((m, i) => (
+          <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
+            <div className={cn("max-w-[85%] rounded-2xl px-3 py-2 text-sm font-body",
+              m.role === "user" ? "bg-gold text-primary-foreground rounded-br-sm" : "bg-muted/50 border border-border rounded-bl-sm"
+            )}>
+              {m.role === "assistant" ? (
+                <div className="prose prose-sm dark:prose-invert max-w-none [&_p]:m-0 [&_ul]:my-1 [&_li]:my-0">
+                  <ReactMarkdown>{m.content}</ReactMarkdown>
+                </div>
+              ) : <p>{m.content}</p>}
+            </div>
+          </div>
+        ))}
+
+        {loading && (
+          <div className="flex justify-start">
+            <div className="bg-muted/50 border border-border rounded-2xl rounded-bl-sm px-4 py-3">
+              <div className="flex gap-1.5">
+                <div className="h-2 w-2 rounded-full bg-gold animate-bounce" style={{ animationDelay: "0ms" }} />
+                <div className="h-2 w-2 rounded-full bg-gold animate-bounce" style={{ animationDelay: "150ms" }} />
+                <div className="h-2 w-2 rounded-full bg-gold animate-bounce" style={{ animationDelay: "300ms" }} />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="p-3 border-t border-border flex gap-2">
+        <input
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
+          placeholder="Pergunte sobre finanças..."
+          disabled={loading}
+          className="flex-1 bg-muted/50 border border-border rounded-xl px-3 py-2 text-sm font-body outline-none focus:ring-2 focus:ring-gold/50 placeholder:text-muted-foreground/50 disabled:opacity-50 text-foreground"
+        />
+        <Button onClick={() => sendMessage()} disabled={!input.trim() || loading} size="icon" className="h-9 w-9 rounded-xl bg-gold text-primary-foreground hover:bg-gold/90 shrink-0">
+          <Send className="h-4 w-4" />
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 const FinancasPage = () => {
   const { user } = useAuth();
   const now = new Date();
