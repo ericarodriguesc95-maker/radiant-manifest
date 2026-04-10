@@ -156,7 +156,7 @@ Fale como uma amiga próxima e profissional. Trate no feminino. Seja concisa mas
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
-          { role: "system", content: systemPrompt },
+          { role: "system", content: systemOverride || systemPrompt },
           ...messages,
         ],
         tools,
