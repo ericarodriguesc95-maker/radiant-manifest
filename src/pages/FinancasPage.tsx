@@ -497,6 +497,9 @@ const FinancasPage = () => {
             <TabsTrigger value="ia" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
               <Bot className="h-3 w-3 shrink-0" /> IA
             </TabsTrigger>
+            <TabsTrigger value="quiz" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
+              <Brain className="h-3 w-3 shrink-0" /> Quiz
+            </TabsTrigger>
           </TabsList>
 
           {/* Registros (Entradas/Saídas) */}
