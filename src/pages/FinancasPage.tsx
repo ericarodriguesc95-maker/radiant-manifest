@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown, Lightbulb, Bot, Send } from "lucide-react";
+import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown, Lightbulb, Bot, Send, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
+import FinanceProfileQuiz from "@/components/finance/FinanceProfileQuiz";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -496,6 +497,9 @@ const FinancasPage = () => {
             <TabsTrigger value="ia" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
               <Bot className="h-3 w-3 shrink-0" /> IA
             </TabsTrigger>
+            <TabsTrigger value="quiz" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
+              <Brain className="h-3 w-3 shrink-0" /> Quiz
+            </TabsTrigger>
           </TabsList>
 
           {/* Registros (Entradas/Saídas) */}
@@ -676,6 +680,11 @@ const FinancasPage = () => {
           {/* IA Financeira */}
           <TabsContent value="ia">
             <FinanceAIChat userId={user.id} renda={renda} despFixas={despFixas} despVar={despVar} cartao={cartao} poupanca={poupanca} saldo={saldo} />
+          </TabsContent>
+
+          {/* Quiz */}
+          <TabsContent value="quiz">
+            <FinanceProfileQuiz />
           </TabsContent>
         </Tabs>
 
