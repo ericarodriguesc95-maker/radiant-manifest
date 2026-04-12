@@ -479,21 +479,11 @@ const ComunidadePage = () => {
 
   const toggleLike = async (postId: string, postOwnerId: string, currentlyLiked: boolean) => {
     if (!user) return;
-    if (currentlyLiked) {
-      await supabase.from("post_likes").delete().eq("post_id", postId).eq("user_id", user.id);
-      await supabase.from("community_posts").update({
-        likes_count: Math.max(0, (posts.find(p => p.id === postId)?.likes_count || 1) - 1)
-      }).eq("id", postId);
-    } else {
-      await supabase.from("post_likes").insert({ post_id: postId, user_id: user.id });
-      await supabase.from("community_posts").update({
-        likes_count: (posts.find(p => p.id === postId)?.likes_count || 0) + 1
-      }).eq("id", postId);
-      if (postOwnerId !== user.id) {
-        await supabase.from("notifications").insert({
-          user_id: postOwnerId, from_user_id: user.id, type: "like", post_id: postId,
-        });
-      }
+    const { data: liked } = await supabase.rpc("toggle_post_like", { _post_id: postId });
+    if (liked && postOwnerId !== user.id) {
+      await supabase.from("notifications").insert({
+        user_id: postOwnerId, from_user_id: user.id, type: "like", post_id: postId,
+      });
     }
     fetchPosts();
   };
