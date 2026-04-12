@@ -133,7 +133,7 @@ export default function AdminActivityPage() {
     setLoading(true);
     const [{ data: actData }, { data: profData }] = await Promise.all([
       supabase.from("activity_log" as any).select("*").order("created_at", { ascending: false }).limit(PAGE_SIZE),
-      supabase.from("profiles").select("user_id, display_name, avatar_url"),
+      supabase.from("profiles_public" as any).select("user_id, display_name, avatar_url"),
     ]);
     if (actData) setActivities(actData as unknown as ActivityEntry[]);
     if (profData) {

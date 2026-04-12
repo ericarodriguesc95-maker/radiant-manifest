@@ -47,7 +47,7 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
 
     const fromIds = [...new Set(data.map((n: any) => n.from_user_id))];
     const { data: profiles } = await supabase
-      .from("profiles")
+      .from("profiles_public" as any)
       .select("user_id, display_name, avatar_url")
       .in("user_id", fromIds);
 

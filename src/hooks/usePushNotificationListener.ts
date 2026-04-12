@@ -32,7 +32,7 @@ export function usePushNotificationListener() {
           if (!notification) return;
 
           const { data: profile } = await supabase
-            .from("profiles")
+            .from("profiles_public" as any)
             .select("display_name")
             .eq("user_id", notification.from_user_id)
             .single();

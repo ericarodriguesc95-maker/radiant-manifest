@@ -27,7 +27,7 @@ export default function UserProfileModal({ userId, onClose, isFollowing, onToggl
   useEffect(() => {
     const fetchProfile = async () => {
       const [{ data: prof }, { count: followers }, { count: following }, { count: posts }] = await Promise.all([
-        supabase.from("profiles").select("display_name, avatar_url, bio, created_at").eq("user_id", userId).single(),
+        supabase.from("profiles_public" as any).select("display_name, avatar_url, bio, created_at").eq("user_id", userId).single(),
         supabase.from("user_follows").select("*", { count: "exact", head: true }).eq("following_id", userId),
         supabase.from("user_follows").select("*", { count: "exact", head: true }).eq("follower_id", userId),
         supabase.from("community_posts").select("*", { count: "exact", head: true }).eq("user_id", userId),

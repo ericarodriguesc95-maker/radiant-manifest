@@ -74,7 +74,7 @@ const ProfilePage = () => {
     setLoading(true);
 
     const [{ data: prof }, { count: followers }, { count: following }, { data: postsData }] = await Promise.all([
-      supabase.from("profiles").select("user_id, display_name, avatar_url, cover_url, cover_position, bio, created_at").eq("user_id", userId).single(),
+      supabase.from("profiles_public" as any).select("user_id, display_name, avatar_url, cover_url, cover_position, bio, created_at").eq("user_id", userId).single(),
       supabase.from("user_follows").select("*", { count: "exact", head: true }).eq("following_id", userId),
       supabase.from("user_follows").select("*", { count: "exact", head: true }).eq("follower_id", userId),
       supabase.from("community_posts").select("*").eq("user_id", userId).order("created_at", { ascending: false }),
@@ -172,7 +172,7 @@ const ProfilePage = () => {
       const { data } = await supabase.from("user_follows").select("follower_id").eq("following_id", userId);
       if (data && data.length > 0) {
         const ids = data.map((f: any) => f.follower_id);
-        const { data: profiles } = await supabase.from("profiles").select("user_id, display_name, avatar_url").in("user_id", ids);
+        const { data: profiles } = await supabase.from("profiles_public" as any).select("user_id, display_name, avatar_url").in("user_id", ids);
         setListUsers(profiles || []);
       } else {
         setListUsers([]);
@@ -181,7 +181,7 @@ const ProfilePage = () => {
       const { data } = await supabase.from("user_follows").select("following_id").eq("follower_id", userId);
       if (data && data.length > 0) {
         const ids = data.map((f: any) => f.following_id);
-        const { data: profiles } = await supabase.from("profiles").select("user_id, display_name, avatar_url").in("user_id", ids);
+        const { data: profiles } = await supabase.from("profiles_public" as any).select("user_id, display_name, avatar_url").in("user_id", ids);
         setListUsers(profiles || []);
       } else {
         setListUsers([]);
