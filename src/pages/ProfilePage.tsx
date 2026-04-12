@@ -81,9 +81,9 @@ const ProfilePage = () => {
     ]);
 
     if (prof) {
-      setProfile(prof as ProfileData);
-      setEditName(prof.display_name || "");
-      setEditBio(prof.bio || "");
+      setProfile(prof as any as ProfileData);
+      setEditName((prof as any).display_name || "");
+      setEditBio((prof as any).bio || "");
       setCoverPosition((prof as any).cover_position ?? 50);
     }
     setFollowersCount(followers || 0);
@@ -173,7 +173,7 @@ const ProfilePage = () => {
       if (data && data.length > 0) {
         const ids = data.map((f: any) => f.follower_id);
         const { data: profiles } = await supabase.from("profiles_public" as any).select("user_id, display_name, avatar_url").in("user_id", ids);
-        setListUsers(profiles || []);
+        setListUsers((profiles || []) as any);
       } else {
         setListUsers([]);
       }
@@ -182,7 +182,7 @@ const ProfilePage = () => {
       if (data && data.length > 0) {
         const ids = data.map((f: any) => f.following_id);
         const { data: profiles } = await supabase.from("profiles_public" as any).select("user_id, display_name, avatar_url").in("user_id", ids);
-        setListUsers(profiles || []);
+        setListUsers((profiles || []) as any);
       } else {
         setListUsers([]);
       }

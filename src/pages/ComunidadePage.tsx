@@ -103,7 +103,7 @@ const ComunidadePage = () => {
     if (!user) return;
     const fetchUsers = async () => {
       const { data } = await supabase.from("profiles_public" as any).select("user_id, display_name, avatar_url");
-      if (data) setAllUsers(data.filter(u => u.user_id !== user?.id));
+      if (data) setAllUsers((data as any).filter((u: any) => u.user_id !== user?.id));
     };
     const fetchFollows = async () => {
       const { data } = await supabase.from("user_follows").select("following_id").eq("follower_id", user.id);
@@ -236,7 +236,7 @@ const ComunidadePage = () => {
           .select("display_name")
           .eq("user_id", n.from_user_id)
           .single();
-        const name = prof?.display_name || "Alguém";
+        const name = (prof as any)?.display_name || "Alguém";
 
         if (n.type === "like") {
           sendNotification("❤️ Curtida", `${name} curtiu seu post!`, `like-${n.id}`);

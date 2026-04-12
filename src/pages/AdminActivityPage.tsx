@@ -138,9 +138,9 @@ export default function AdminActivityPage() {
     if (actData) setActivities(actData as unknown as ActivityEntry[]);
     if (profData) {
       const map = new Map<string, UserProfile>();
-      (profData as UserProfile[]).forEach(p => map.set(p.user_id, p));
+      (profData as unknown as UserProfile[]).forEach(p => map.set(p.user_id, p));
       setProfiles(map);
-      setAllUsers(profData as UserProfile[]);
+      setAllUsers(profData as unknown as UserProfile[]);
     }
     setLoading(false);
   }, []);

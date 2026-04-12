@@ -218,7 +218,7 @@ const StoryViewer = ({ group, onClose }: StoryViewerProps) => {
         .from("profiles_public" as any)
         .select("display_name, avatar_url")
         .in("user_id", viewerIds);
-      setViewers(profiles || []);
+      setViewers((profiles || []) as any);
     } else {
       setViewers([]);
     }

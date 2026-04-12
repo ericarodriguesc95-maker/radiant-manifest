@@ -32,7 +32,7 @@ export default function UserProfileModal({ userId, onClose, isFollowing, onToggl
         supabase.from("user_follows").select("*", { count: "exact", head: true }).eq("follower_id", userId),
         supabase.from("community_posts").select("*", { count: "exact", head: true }).eq("user_id", userId),
       ]);
-      if (prof) setProfile(prof);
+      if (prof) setProfile(prof as any);
       setFollowersCount(followers || 0);
       setFollowingCount(following || 0);
       setPostsCount(posts || 0);
