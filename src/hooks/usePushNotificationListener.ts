@@ -32,12 +32,12 @@ export function usePushNotificationListener() {
           if (!notification) return;
 
           const { data: profile } = await supabase
-            .from("profiles")
+            .from("profiles_public" as any)
             .select("display_name")
             .eq("user_id", notification.from_user_id)
             .single();
 
-          const fromName = profile?.display_name || "Alguém";
+          const fromName = (profile as any)?.display_name || "Alguém";
 
           sendSocialNotification(
             fromName,

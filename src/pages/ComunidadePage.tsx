@@ -102,8 +102,8 @@ const ComunidadePage = () => {
   useEffect(() => {
     if (!user) return;
     const fetchUsers = async () => {
-      const { data } = await supabase.from("profiles").select("user_id, display_name, avatar_url");
-      if (data) setAllUsers(data.filter(u => u.user_id !== user?.id));
+      const { data } = await supabase.from("profiles_public" as any).select("user_id, display_name, avatar_url");
+      if (data) setAllUsers((data as any).filter((u: any) => u.user_id !== user?.id));
     };
     const fetchFollows = async () => {
       const { data } = await supabase.from("user_follows").select("following_id").eq("follower_id", user.id);
@@ -146,7 +146,7 @@ const ComunidadePage = () => {
     const safeUserIds = allUserIds.length > 0 ? allUserIds : ["00000000-0000-0000-0000-000000000000"];
 
     const { data: profiles } = await supabase
-      .from("profiles")
+      .from("profiles_public" as any)
       .select("user_id, display_name, avatar_url")
       .in("user_id", safeUserIds);
 
@@ -232,11 +232,11 @@ const ComunidadePage = () => {
 
         // Fetch from_user name
         const { data: prof } = await supabase
-          .from("profiles")
+          .from("profiles_public" as any)
           .select("display_name")
           .eq("user_id", n.from_user_id)
           .single();
-        const name = prof?.display_name || "Alguém";
+        const name = (prof as any)?.display_name || "Alguém";
 
         if (n.type === "like") {
           sendNotification("❤️ Curtida", `${name} curtiu seu post!`, `like-${n.id}`);

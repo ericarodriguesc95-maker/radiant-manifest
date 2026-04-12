@@ -78,7 +78,7 @@ export default function Leaderboard() {
       // Get profiles
       const userIds = userStreaks.map(u => u.userId);
       const { data: profiles } = await supabase
-        .from("profiles")
+        .from("profiles_public" as any)
         .select("user_id, display_name, avatar_url")
         .in("user_id", userIds.length > 0 ? userIds : ["none"]);
 

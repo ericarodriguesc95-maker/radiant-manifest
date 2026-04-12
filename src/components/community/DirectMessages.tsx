@@ -101,7 +101,7 @@ export default function DirectMessages({ onClose, openConversationUserId }: { on
 
   useEffect(() => {
     fetchConversations();
-    supabase.from("profiles").select("user_id, display_name, avatar_url").then(({ data }) => {
+    supabase.from("profiles_public" as any).select("user_id, display_name, avatar_url").then(({ data }: any) => {
       if (data) setAllUsers(data.filter(u => u.user_id !== user?.id));
     });
   }, [fetchConversations, user]);

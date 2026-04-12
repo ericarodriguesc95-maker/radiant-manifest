@@ -1338,7 +1338,42 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      profiles_public: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          cover_position: number | null
+          cover_url: string | null
+          created_at: string | null
+          display_name: string | null
+          id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          cover_position?: number | null
+          cover_url?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          cover_position?: number | null
+          cover_url?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       calculate_streak: { Args: { _user_id: string }; Returns: number }
