@@ -102,7 +102,7 @@ const ComunidadePage = () => {
   useEffect(() => {
     if (!user) return;
     const fetchUsers = async () => {
-      const { data } = await supabase.from("profiles").select("user_id, display_name, avatar_url");
+      const { data } = await supabase.from("profiles_public" as any).select("user_id, display_name, avatar_url");
       if (data) setAllUsers(data.filter(u => u.user_id !== user?.id));
     };
     const fetchFollows = async () => {
@@ -146,7 +146,7 @@ const ComunidadePage = () => {
     const safeUserIds = allUserIds.length > 0 ? allUserIds : ["00000000-0000-0000-0000-000000000000"];
 
     const { data: profiles } = await supabase
-      .from("profiles")
+      .from("profiles_public" as any)
       .select("user_id, display_name, avatar_url")
       .in("user_id", safeUserIds);
 
@@ -232,7 +232,7 @@ const ComunidadePage = () => {
 
         // Fetch from_user name
         const { data: prof } = await supabase
-          .from("profiles")
+          .from("profiles_public" as any)
           .select("display_name")
           .eq("user_id", n.from_user_id)
           .single();
