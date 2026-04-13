@@ -391,6 +391,48 @@ export type Database = {
         }
         Relationships: []
       }
+      cycle_logs: {
+        Row: {
+          created_at: string
+          cycle_length: number | null
+          flow_intensity: string | null
+          id: string
+          mood: string | null
+          notes: string | null
+          period_end: string | null
+          period_start: string
+          symptoms: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          cycle_length?: number | null
+          flow_intensity?: string | null
+          id?: string
+          mood?: string | null
+          notes?: string | null
+          period_end?: string | null
+          period_start: string
+          symptoms?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          cycle_length?: number | null
+          flow_intensity?: string | null
+          id?: string
+          mood?: string | null
+          notes?: string | null
+          period_end?: string | null
+          period_start?: string
+          symptoms?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       daily_completions: {
         Row: {
           all_completed: boolean
