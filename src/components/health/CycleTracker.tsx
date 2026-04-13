@@ -234,6 +234,34 @@ export default function CycleTracker() {
 
   const currentPhaseIndex = getCurrentPhase();
 
+  // Fertility window: ovulation ~day 14, fertile window days 10-16
+  const ovulationDay = avgCycleLength - 14;
+  const fertileStart = ovulationDay - 4;
+  const fertileEnd = ovulationDay + 1;
+
+  const isFertileNow = currentDay ? currentDay >= fertileStart && currentDay <= fertileEnd : false;
+  const isOvulationNow = currentDay ? currentDay === ovulationDay : false;
+
+  // Days until fertile window
+  const daysUntilFertile = currentDay && currentDay < fertileStart ? fertileStart - currentDay : null;
+
+  // Build cycle timeline data for chart
+  const cycleTimelineData = logs.slice(0, 8).reverse().map((log, i, arr) => {
+    const periodDays = log.period_end
+      ? differenceInDays(new Date(log.period_end + "T12:00:00"), new Date(log.period_start + "T12:00:00")) + 1
+      : 5;
+    const cycleDays = i < arr.length - 1
+      ? differenceInDays(new Date(arr[i + 1].period_start + "T12:00:00"), new Date(log.period_start + "T12:00:00"))
+      : avgCycleLength;
+    return {
+      label: format(new Date(log.period_start + "T12:00:00"), "MMM yy", { locale: ptBR }),
+      cycleLength: cycleDays,
+      periodDays,
+      fertileStart: cycleDays - 14 - 4,
+      fertileEnd: cycleDays - 14 + 1,
+    };
+  });
+
   return (
     <div className="space-y-4">
       {/* Status Card */}
@@ -247,20 +275,26 @@ export default function CycleTracker() {
         <CardContent className="space-y-3">
           {logs.length > 0 ? (
             <>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-muted/50 rounded-lg p-3 text-center">
-                  <p className="text-xs text-muted-foreground">Ciclo médio</p>
-                  <p className="text-xl font-bold text-primary">{avgCycleLength} dias</p>
+              <div className="grid grid-cols-3 gap-2">
+                <div className="bg-muted/50 rounded-lg p-2.5 text-center">
+                  <p className="text-[10px] text-muted-foreground">Ciclo médio</p>
+                  <p className="text-lg font-bold text-primary">{avgCycleLength}d</p>
                 </div>
-                <div className="bg-muted/50 rounded-lg p-3 text-center">
-                  <p className="text-xs text-muted-foreground">Próxima menstruação</p>
-                  <p className="text-xl font-bold text-primary">
+                <div className="bg-muted/50 rounded-lg p-2.5 text-center">
+                  <p className="text-[10px] text-muted-foreground">Próx. menstruação</p>
+                  <p className="text-lg font-bold text-primary">
                     {daysUntilNext !== null ? (daysUntilNext > 0 ? `${daysUntilNext}d` : "Hoje!") : "—"}
                   </p>
                 </div>
+                <div className="bg-muted/50 rounded-lg p-2.5 text-center">
+                  <p className="text-[10px] text-muted-foreground">Ovulação (dia)</p>
+                  <p className="text-lg font-bold text-primary">{ovulationDay}</p>
+                </div>
               </div>
+
+              {/* Current Phase */}
               {currentPhaseIndex !== null && (
-                <div className={`flex items-center gap-2 bg-muted/30 rounded-lg p-3`}>
+                <div className="flex items-center gap-2 bg-muted/30 rounded-lg p-3">
                   {phaseInfo[currentPhaseIndex].icon}
                   <div>
                     <p className={`text-sm font-semibold ${phaseInfo[currentPhaseIndex].color}`}>
@@ -270,6 +304,31 @@ export default function CycleTracker() {
                   </div>
                 </div>
               )}
+
+              {/* Fertility Status */}
+              <div className={`flex items-center gap-2 rounded-lg p-3 ${isFertileNow ? "bg-pink-500/10 border border-pink-500/20" : "bg-emerald-500/10 border border-emerald-500/20"}`}>
+                {isFertileNow ? (
+                  <>
+                    <Baby className="h-5 w-5 text-pink-500" />
+                    <div>
+                      <p className="text-sm font-semibold text-pink-500">
+                        {isOvulationNow ? "🔴 Dia da Ovulação — Pico de fertilidade" : "Período Fértil"}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Dias {fertileStart}-{fertileEnd} do ciclo (você está no dia {currentDay})</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck className="h-5 w-5 text-emerald-500" />
+                    <div>
+                      <p className="text-sm font-semibold text-emerald-500">Período Não Fértil</p>
+                      <p className="text-xs text-muted-foreground">
+                        {daysUntilFertile ? `Janela fértil em ${daysUntilFertile} dias` : `Janela fértil: dias ${fertileStart}-${fertileEnd}`}
+                      </p>
+                    </div>
+                  </>
+                )}
+              </div>
             </>
           ) : (
             <p className="text-sm text-muted-foreground text-center py-2">
@@ -279,6 +338,156 @@ export default function CycleTracker() {
           <Button onClick={() => setShowForm(true)} className="w-full" size="sm">
             <Plus className="h-4 w-4 mr-1" /> Registrar Ciclo
           </Button>
+        </CardContent>
+      </Card>
+
+      {/* Visual Cycle Map */}
+      {logs.length > 0 && currentDay && currentDay > 0 && currentDay <= 40 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">Mapa do Ciclo Atual</CardTitle>
+            <CardDescription>Dia {currentDay} de ~{avgCycleLength}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="relative">
+              {/* Phase bar */}
+              <div className="flex rounded-full overflow-hidden h-6 bg-muted/30">
+                <div className="bg-red-400/70 flex items-center justify-center" style={{ width: `${(5 / avgCycleLength) * 100}%` }}>
+                  <span className="text-[8px] text-white font-medium">Menstrual</span>
+                </div>
+                <div className="bg-emerald-400/70 flex items-center justify-center" style={{ width: `${((fertileStart - 6) / avgCycleLength) * 100}%` }}>
+                  <span className="text-[8px] text-white font-medium">Folicular</span>
+                </div>
+                <div className="bg-pink-400/80 flex items-center justify-center" style={{ width: `${((fertileEnd - fertileStart + 1) / avgCycleLength) * 100}%` }}>
+                  <span className="text-[8px] text-white font-medium">Fértil</span>
+                </div>
+                <div className="bg-violet-400/70 flex items-center justify-center" style={{ width: `${((avgCycleLength - fertileEnd) / avgCycleLength) * 100}%` }}>
+                  <span className="text-[8px] text-white font-medium">Lútea</span>
+                </div>
+              </div>
+              {/* Current day marker */}
+              <div
+                className="absolute top-0 h-6 flex items-end justify-center"
+                style={{ left: `${((currentDay - 0.5) / avgCycleLength) * 100}%`, transform: "translateX(-50%)" }}
+              >
+                <div className="w-0.5 h-full bg-foreground rounded-full" />
+              </div>
+              <div
+                className="absolute -bottom-4"
+                style={{ left: `${((currentDay - 0.5) / avgCycleLength) * 100}%`, transform: "translateX(-50%)" }}
+              >
+                <span className="text-[9px] font-bold text-foreground">Dia {currentDay}</span>
+              </div>
+            </div>
+            {/* Legend */}
+            <div className="flex flex-wrap gap-2 mt-7">
+              <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-red-400/70" /><span className="text-[9px] text-muted-foreground">Menstrual</span></div>
+              <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-emerald-400/70" /><span className="text-[9px] text-muted-foreground">Folicular</span></div>
+              <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-pink-400/80" /><span className="text-[9px] text-muted-foreground">Fértil</span></div>
+              <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-violet-400/70" /><span className="text-[9px] text-muted-foreground">Lútea</span></div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Cycle History Chart */}
+      {cycleTimelineData.length >= 2 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">Histórico de Ciclos</CardTitle>
+            <CardDescription>Duração do ciclo e período ao longo dos meses</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {cycleTimelineData.map((d, i) => (
+                <div key={i}>
+                  <div className="flex items-center justify-between mb-0.5">
+                    <span className="text-[10px] font-medium text-muted-foreground w-14">{d.label}</span>
+                    <span className="text-[10px] text-muted-foreground">{d.cycleLength}d</span>
+                  </div>
+                  <div className="relative h-4 bg-muted/20 rounded-full overflow-hidden">
+                    {/* Period days */}
+                    <div
+                      className="absolute h-full bg-red-400/70 rounded-l-full"
+                      style={{ left: 0, width: `${(d.periodDays / d.cycleLength) * 100}%` }}
+                    />
+                    {/* Fertile window */}
+                    <div
+                      className="absolute h-full bg-pink-400/60"
+                      style={{
+                        left: `${(d.fertileStart / d.cycleLength) * 100}%`,
+                        width: `${((d.fertileEnd - d.fertileStart + 1) / d.cycleLength) * 100}%`,
+                      }}
+                    />
+                    {/* Luteal */}
+                    <div
+                      className="absolute h-full bg-violet-400/40 rounded-r-full"
+                      style={{
+                        left: `${(d.fertileEnd / d.cycleLength) * 100}%`,
+                        width: `${((d.cycleLength - d.fertileEnd) / d.cycleLength) * 100}%`,
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-3 mt-3 pt-2 border-t border-border/50">
+              <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-red-400/70" /><span className="text-[9px] text-muted-foreground">Menstruação</span></div>
+              <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-pink-400/60" /><span className="text-[9px] text-muted-foreground">Janela Fértil</span></div>
+              <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-violet-400/40" /><span className="text-[9px] text-muted-foreground">Fase Lútea</span></div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Fertility Guide */}
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Baby className="h-5 w-5 text-primary" />
+            Fertilidade & Ciclo
+          </CardTitle>
+          <CardDescription>Entenda seus períodos férteis e não férteis</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="bg-pink-500/5 rounded-lg p-3 border border-pink-500/10">
+            <p className="text-sm font-semibold text-pink-500 flex items-center gap-1 mb-1">
+              <Baby className="h-4 w-4" /> Período Fértil
+            </p>
+            <p className="text-xs text-muted-foreground mb-2">
+              A janela fértil dura cerca de 6 dias: 5 dias antes da ovulação + o dia da ovulação.
+              O óvulo sobrevive 12-24h após a ovulação, e os espermatozoides até 5 dias.
+            </p>
+            <ul className="space-y-1">
+              <li className="text-xs text-muted-foreground flex gap-1.5"><span>•</span> Ovulação ocorre ~14 dias antes da próxima menstruação</li>
+              <li className="text-xs text-muted-foreground flex gap-1.5"><span>•</span> Muco cervical fica transparente e elástico ("clara de ovo")</li>
+              <li className="text-xs text-muted-foreground flex gap-1.5"><span>•</span> Temperatura basal sobe 0.2-0.5°C após ovulação</li>
+              <li className="text-xs text-muted-foreground flex gap-1.5"><span>•</span> Libido naturalmente aumenta neste período</li>
+            </ul>
+          </div>
+          <div className="bg-emerald-500/5 rounded-lg p-3 border border-emerald-500/10">
+            <p className="text-sm font-semibold text-emerald-500 flex items-center gap-1 mb-1">
+              <ShieldCheck className="h-4 w-4" /> Período Não Fértil
+            </p>
+            <p className="text-xs text-muted-foreground mb-2">
+              Fora da janela fértil, a probabilidade de gravidez é muito baixa, mas nenhum método de calendário é 100% confiável.
+            </p>
+            <ul className="space-y-1">
+              <li className="text-xs text-muted-foreground flex gap-1.5"><span>•</span> Fase lútea tardia e menstrual são as menos férteis</li>
+              <li className="text-xs text-muted-foreground flex gap-1.5"><span>•</span> Ciclos irregulares tornam a previsão menos precisa</li>
+              <li className="text-xs text-muted-foreground flex gap-1.5"><span>•</span> Consulte seu ginecologista para contracepção segura</li>
+            </ul>
+          </div>
+          <div className="bg-primary/5 rounded-lg p-2.5">
+            <p className="text-xs font-semibold text-primary flex items-center gap-1 mb-1">
+              <Brain className="h-3.5 w-3.5" /> Neurociência da Fertilidade
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Durante a janela fértil, estrogênio e LH em pico aumentam dopamina e ocitocina, 
+              elevando a atração social, confiança e desejo. O cérebro literalmente muda a percepção de rostos 
+              e cheiros. Após a ovulação, progesterona ativa GABA, favorecendo recolhimento e nesting.
+            </p>
+          </div>
         </CardContent>
       </Card>
 
