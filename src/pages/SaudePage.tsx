@@ -6,6 +6,7 @@ const ActivityTracker = lazy(() => import("@/components/health/ActivityTracker")
 const ShareGlowUp = lazy(() => import("@/components/health/ShareGlowUp"));
 const SmartWatchConnect = lazy(() => import("@/components/health/SmartWatchConnect"));
 const InjectableMedsEnhanced = lazy(() => import("@/components/health/InjectableMedsEnhanced"));
+const CycleTracker = lazy(() => import("@/components/health/CycleTracker"));
 const WeeklyDashboard = lazy(() => import("@/components/health/WeeklyDashboard"));
 const ProteinWaterCalculator = lazy(() => import("@/components/health/ProteinWaterCalculator"));
 import { useNavigate } from "react-router-dom";
@@ -888,12 +889,13 @@ export default function SaudePage() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid grid-cols-5 w-full h-auto p-1">
-          <TabsTrigger value="perfil" className="text-[10px] px-1 py-1.5">⚖️ Perfil</TabsTrigger>
-          <TabsTrigger value="dieta" className="text-[10px] px-1 py-1.5">🍽️ Dieta</TabsTrigger>
-          <TabsTrigger value="treino" className="text-[10px] px-1 py-1.5">💪 Treino</TabsTrigger>
-          <TabsTrigger value="suplem" className="text-[10px] px-1 py-1.5">💊 Suplem.</TabsTrigger>
-          <TabsTrigger value="medic" className="text-[10px] px-1 py-1.5">💉 Medic.</TabsTrigger>
+        <TabsList className="grid grid-cols-6 w-full h-auto p-1">
+          <TabsTrigger value="perfil" className="text-[9px] px-0.5 py-1.5">⚖️ Perfil</TabsTrigger>
+          <TabsTrigger value="dieta" className="text-[9px] px-0.5 py-1.5">🍽️ Dieta</TabsTrigger>
+          <TabsTrigger value="treino" className="text-[9px] px-0.5 py-1.5">💪 Treino</TabsTrigger>
+          <TabsTrigger value="suplem" className="text-[9px] px-0.5 py-1.5">💊 Suplem.</TabsTrigger>
+          <TabsTrigger value="ciclo" className="text-[9px] px-0.5 py-1.5">🩸 Ciclo</TabsTrigger>
+          <TabsTrigger value="medic" className="text-[9px] px-0.5 py-1.5">💉 Medic.</TabsTrigger>
         </TabsList>
 
         <TabsContent value="perfil" className="space-y-4">
@@ -1575,6 +1577,13 @@ export default function SaudePage() {
               </Accordion>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* ====== CICLO MENSTRUAL ====== */}
+        <TabsContent value="ciclo" className="space-y-4">
+          <Suspense fallback={<div className="text-center py-8 text-xs text-muted-foreground">Carregando...</div>}>
+            <CycleTracker />
+          </Suspense>
         </TabsContent>
 
         {/* ====== MEDICAÇÕES ====== */}
