@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Trash2, Edit2, Check, X, Moon, Brain, Heart, Sparkles, Droplets, AlertCircle } from "lucide-react";
+import { Plus, Trash2, Edit2, Check, X, Moon, Brain, Heart, Sparkles, Droplets, AlertCircle, Baby, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
