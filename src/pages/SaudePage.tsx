@@ -6,6 +6,7 @@ const ActivityTracker = lazy(() => import("@/components/health/ActivityTracker")
 const ShareGlowUp = lazy(() => import("@/components/health/ShareGlowUp"));
 const SmartWatchConnect = lazy(() => import("@/components/health/SmartWatchConnect"));
 const InjectableMedsEnhanced = lazy(() => import("@/components/health/InjectableMedsEnhanced"));
+const CycleTracker = lazy(() => import("@/components/health/CycleTracker"));
 const WeeklyDashboard = lazy(() => import("@/components/health/WeeklyDashboard"));
 const ProteinWaterCalculator = lazy(() => import("@/components/health/ProteinWaterCalculator"));
 import { useNavigate } from "react-router-dom";
