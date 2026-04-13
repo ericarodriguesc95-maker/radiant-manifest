@@ -1579,6 +1579,13 @@ export default function SaudePage() {
           </Card>
         </TabsContent>
 
+        {/* ====== CICLO MENSTRUAL ====== */}
+        <TabsContent value="ciclo" className="space-y-4">
+          <Suspense fallback={<div className="text-center py-8 text-xs text-muted-foreground">Carregando...</div>}>
+            <CycleTracker />
+          </Suspense>
+        </TabsContent>
+
         {/* ====== MEDICAÇÕES ====== */}
         <TabsContent value="medic" className="space-y-4">
           <Suspense fallback={<div className="text-center py-8 text-xs text-muted-foreground">Carregando...</div>}>
