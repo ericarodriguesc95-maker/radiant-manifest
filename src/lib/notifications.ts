@@ -105,7 +105,41 @@ export function sendDailyDevotionalNotification(text: string) {
   sendNotification("✝️ Palavra do Dia", text, "daily-devotional");
 }
 
-/** Send habit reminder notification */
+/** Send cycle fertile window notification */
+export function sendCycleFertileNotification(daysUntil: number) {
+  if (daysUntil === 0) {
+    sendNotification(
+      "🌸 Período Fértil Hoje",
+      "Sua janela fértil começa hoje! Confira o rastreador de ciclo para mais detalhes.",
+      "cycle-fertile"
+    );
+  } else {
+    sendNotification(
+      "🌸 Período Fértil Próximo",
+      `Sua janela fértil começa em ${daysUntil} dia${daysUntil > 1 ? "s" : ""}. Fique atenta aos sinais do seu corpo.`,
+      "cycle-fertile"
+    );
+  }
+}
+
+/** Send next period notification */
+export function sendCyclePeriodNotification(daysUntil: number) {
+  if (daysUntil === 0) {
+    sendNotification(
+      "🩸 Menstruação Prevista para Hoje",
+      "Sua menstruação está prevista para hoje. Cuide-se e prepare-se! ❤️",
+      "cycle-period"
+    );
+  } else {
+    sendNotification(
+      "🩸 Menstruação Próxima",
+      `Sua menstruação está prevista em ${daysUntil} dia${daysUntil > 1 ? "s" : ""}. Prepare-se e cuide do seu corpo.`,
+      "cycle-period"
+    );
+  }
+}
+
+
 export function sendHabitReminderNotification() {
   sendNotification(
     "📋 Hábitos Diários",
