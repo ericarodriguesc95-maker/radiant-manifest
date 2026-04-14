@@ -343,6 +343,8 @@ export default function CycleTracker() {
     };
   });
 
+  const dailyGuide = getDailyGuide(currentDay);
+
   return (
     <div className="space-y-4">
       {/* Status Card */}
