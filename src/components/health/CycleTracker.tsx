@@ -424,6 +424,67 @@ export default function CycleTracker() {
         </CardContent>
       </Card>
 
+      {/* Daily Guide Card */}
+      {dailyGuide && currentDay && (
+        <Card className="border-primary/20">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Sparkles className="h-5 w-5 text-primary" />
+              Guia do Dia {currentDay}
+            </CardTitle>
+            <CardDescription>{dailyGuide.days} — O que esperar hoje</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {/* Energy & Libido */}
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-muted/40 rounded-lg p-2.5 text-center">
+                <p className="text-[10px] text-muted-foreground mb-0.5">Energia</p>
+                <p className="text-sm font-semibold">{dailyGuide.energy}</p>
+              </div>
+              <div className="bg-muted/40 rounded-lg p-2.5 text-center">
+                <p className="text-[10px] text-muted-foreground mb-0.5">Libido</p>
+                <p className="text-sm font-semibold">{dailyGuide.libido}</p>
+              </div>
+            </div>
+
+            {/* Possible Moods */}
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground mb-1.5">😊 Humores possíveis hoje</p>
+              <div className="flex flex-wrap gap-1.5">
+                {dailyGuide.moods.map(m => (
+                  <Badge key={m} variant="outline" className="text-[10px] bg-primary/5">{m}</Badge>
+                ))}
+              </div>
+            </div>
+
+            {/* Expected Symptoms */}
+            <div>
+              <p className="text-xs font-semibold text-muted-foreground mb-1.5">⚡ Sintomas comuns</p>
+              <div className="flex flex-wrap gap-1.5">
+                {dailyGuide.symptoms.map(s => (
+                  <Badge key={s} variant="outline" className="text-[10px] bg-muted/50">{s}</Badge>
+                ))}
+              </div>
+            </div>
+
+            {/* Tips */}
+            <div className="bg-primary/5 rounded-lg p-3">
+              <p className="text-xs font-semibold text-primary mb-1.5 flex items-center gap-1">
+                <Brain className="h-3.5 w-3.5" /> Dicas para hoje
+              </p>
+              <div className="space-y-1.5">
+                {dailyGuide.tips.map((tip, j) => (
+                  <div key={j} className="flex gap-2 items-start">
+                    <div className="h-1.5 w-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                    <p className="text-xs text-muted-foreground">{tip}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Visual Cycle Map */}
       {logs.length > 0 && currentDay && currentDay > 0 && currentDay <= 40 && (
         <Card>
