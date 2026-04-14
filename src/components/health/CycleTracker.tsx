@@ -93,6 +93,87 @@ const phaseInfo = [
   },
 ];
 
+// Daily cycle guide: mood, symptoms, tips per day range
+const dailyCycleGuide: Record<string, { days: string; moods: string[]; symptoms: string[]; tips: string[]; energy: string; libido: string }> = {
+  "1-2": {
+    days: "Dias 1-2",
+    moods: ["😢 Sensível", "😴 Cansada", "😤 Irritada"],
+    symptoms: ["Cólica forte", "Fadiga intensa", "Dor lombar", "Inchaço"],
+    tips: ["Descanse sem culpa — seu corpo está trabalhando", "Bolsa de água quente na barriga", "Chá de camomila ou gengibre para cólica", "Evite cafeína em excesso"],
+    energy: "🔋 Muito baixa",
+    libido: "❄️ Baixa",
+  },
+  "3-5": {
+    days: "Dias 3-5",
+    moods: ["😐 Neutra", "🙂 Melhorando", "😌 Aliviada"],
+    symptoms: ["Cólica leve", "Fadiga moderada", "Sensibilidade nos seios diminuindo"],
+    tips: ["Caminhada leve ajuda com o humor", "Alimentos ricos em ferro: espinafre, feijão, carne", "Vitamina C para absorver melhor o ferro", "Hidrate-se bastante"],
+    energy: "🔋 Baixa → média",
+    libido: "🌡️ Aumentando",
+  },
+  "6-9": {
+    days: "Dias 6-9 (Folicular inicial)",
+    moods: ["😊 Animada", "✨ Motivada", "🧠 Focada"],
+    symptoms: ["Poucos ou nenhum", "Energia crescente", "Pele melhorando"],
+    tips: ["Comece projetos novos — criatividade em alta!", "Ótimo momento para treinos mais intensos", "Planeje compromissos sociais", "Estrogênio sobe = serotonina sobe = humor ótimo"],
+    energy: "🔋🔋 Média-alta",
+    libido: "🌡️ Crescente",
+  },
+  "10-13": {
+    days: "Dias 10-13 (Folicular tardio)",
+    moods: ["🤩 Confiante", "💪 Empoderada", "🗣️ Comunicativa"],
+    symptoms: ["Muco cervical aumentando", "Energia no pico", "Pele brilhante"],
+    tips: ["Pico de performance física — melhor fase para HIIT e musculação", "Estrogênio alto = memória e aprendizado no máximo", "Tome decisões importantes agora", "Apresentações e reuniões: você está no seu melhor verbal"],
+    energy: "🔋🔋🔋 Alta",
+    libido: "🔥 Alta",
+  },
+  "14-16": {
+    days: "Dias 14-16 (Ovulação)",
+    moods: ["🥰 Sociável", "💃 Atraente", "😊 Eufórica"],
+    symptoms: ["Dor leve no ovário (mittelschmerz)", "Muco cervical 'clara de ovo'", "Temperatura basal subindo", "Libido no pico"],
+    tips: ["Pico de fertilidade — atenção se não deseja engravidar", "Ocitocina e dopamina em alta = maior conexão social", "Beba bastante água — temperatura corporal sobe", "Vegetais crucíferos ajudam a metabolizar o estrogênio extra"],
+    energy: "🔋🔋🔋 Máxima",
+    libido: "🔥🔥 Pico",
+  },
+  "17-21": {
+    days: "Dias 17-21 (Lútea inicial)",
+    moods: ["😌 Calma", "🧘 Introspectiva", "😴 Sonolenta"],
+    symptoms: ["Fome aumentada", "Sono mais profundo", "Leve inchaço"],
+    tips: ["Progesterona sobe = efeito calmante natural via GABA", "Prefira treinos moderados: pilates, yoga, natação", "Carboidratos complexos: batata-doce, aveia, arroz integral", "Prepare-se para possível TPM nos próximos dias"],
+    energy: "🔋🔋 Média",
+    libido: "🌡️ Diminuindo",
+  },
+  "22-25": {
+    days: "Dias 22-25 (Lútea média — TPM)",
+    moods: ["😤 Irritável", "😢 Emotiva", "😰 Ansiosa", "🤬 Frustrada"],
+    symptoms: ["Inchaço", "Compulsão por doces", "Sensibilidade nos seios", "Dor de cabeça", "Acne", "Retenção de líquido"],
+    tips: ["Serotonina caindo = compulsão por carboidratos é biológica, não fraqueza", "Magnésio (400mg) reduz irritabilidade e cólica", "Vitamina B6 ajuda com retenção e humor", "Chocolate amargo 70%+ libera endorfina sem excesso de açúcar"],
+    energy: "🔋 Baixa-média",
+    libido: "❄️ Baixa",
+  },
+  "26-28": {
+    days: "Dias 26-28 (Pré-menstrual)",
+    moods: ["😔 Melancólica", "😤 Impaciente", "😢 Chorosa"],
+    symptoms: ["Cólica antecipada", "Fadiga", "Insônia", "Inchaço máximo", "Mudança de apetite"],
+    tips: ["Progesterona e estrogênio caem juntos = maior desregulação emocional", "Priorize sono — melatonina pode estar desregulada", "Evite álcool e ultraprocessados", "Isso vai passar — seu cérebro estará renovado em 2-3 dias"],
+    energy: "🔋 Muito baixa",
+    libido: "❄️ Muito baixa",
+  },
+};
+
+function getDailyGuide(day: number | null): typeof dailyCycleGuide[string] | null {
+  if (!day || day < 1) return null;
+  if (day <= 2) return dailyCycleGuide["1-2"];
+  if (day <= 5) return dailyCycleGuide["3-5"];
+  if (day <= 9) return dailyCycleGuide["6-9"];
+  if (day <= 13) return dailyCycleGuide["10-13"];
+  if (day <= 16) return dailyCycleGuide["14-16"];
+  if (day <= 21) return dailyCycleGuide["17-21"];
+  if (day <= 25) return dailyCycleGuide["22-25"];
+  if (day <= 35) return dailyCycleGuide["26-28"];
+  return null;
+}
+
 const neuroscienceFacts = [
   {
     title: "Cérebro e Hormônios",
