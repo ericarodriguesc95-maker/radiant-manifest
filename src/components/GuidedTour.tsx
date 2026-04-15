@@ -24,7 +24,7 @@ const TOUR_STEPS: TourStep[] = [
     tab: "Home",
     route: "/",
     title: "Sua Central de Comando",
-    description: "A Home é o coração do Glow Up! Aqui você encontra o resumo do seu dia: hábitos, streak, afirmações, devocional e planejamento mensal.",
+    description: "A Home é o coração do Gloow Up Club! Aqui você encontra o resumo do seu dia: hábitos, streak, afirmações, devocional e planejamento mensal.",
     tips: [
       "Marque hábitos diários para manter seu streak 🔥",
       "Ganhe medalhas de bronze, prata e ouro pela consistência",
@@ -114,7 +114,7 @@ const TOUR_STEPS: TourStep[] = [
     tab: "Perfil",
     route: "/perfil",
     title: "Seu Perfil Social",
-    description: "Personalize seu perfil com foto, capa arrastável, bio com links clicáveis e veja seus seguidores. É sua identidade no Glow Up!",
+    description: "Personalize seu perfil com foto, capa arrastável, bio com links clicáveis e veja seus seguidores. É sua identidade no Gloow Up Club!",
     tips: [
       "Arraste a capa para reposicionar a imagem",
       "Cole links na bio — ficam clicáveis automaticamente",
@@ -177,7 +177,7 @@ export default function GuidedTour({ onClose }: GuidedTourProps) {
             </button>
             <div className="text-6xl mb-4">🦋</div>
             <h2 className="text-2xl font-heading font-bold text-primary-foreground">
-              Bem-vinda ao Glow Up!
+              Bem-vinda ao Gloow Up Club!
             </h2>
             <p className="text-sm font-body text-primary-foreground/80 mt-2">
               Vamos fazer um tour rápido pelo app?
