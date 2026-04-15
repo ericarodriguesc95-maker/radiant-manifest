@@ -245,7 +245,7 @@ const ComunidadePage = () => {
         } else if (n.type === "mention") {
           sendNotification("📣 Menção", `${name} mencionou você: "${(n.comment_text || "").slice(0, 60)}"`, `mention-${n.id}`);
         } else if (n.type === "welcome") {
-          sendNotification("🦋 Nova integrante!", `${name} entrou para o Glow Up!`, `welcome-${n.id}`);
+          sendNotification("🦋 Nova integrante!", `${name} entrou para o Gloow Up Club!`, `welcome-${n.id}`);
         } else if (n.type === "new_post") {
           sendNotification("📝 Novo post!", `${name} publicou: "${(n.comment_text || "").slice(0, 60)}"`, `new_post-${n.id}`);
         } else if (n.type === "follow") {

@@ -51,8 +51,8 @@ export default function DesktopSidebar() {
       <div className="px-5 pt-6 pb-4 flex items-center gap-3 border-b border-border">
         <FourPointStar size={28} fill="hsl(43 72% 52%)" className="text-gold flex-shrink-0" />
         <div>
-          <h1 className="text-lg font-display font-bold text-foreground">Glow Up</h1>
-          <p className="text-[9px] font-body tracking-[0.2em] uppercase text-gold/60">Performance</p>
+          <h1 className="text-lg font-display font-bold text-foreground">Gloow Up</h1>
+          <p className="text-[9px] font-body tracking-[0.2em] uppercase text-gold/60">Club</p>
         </div>
       </div>
 

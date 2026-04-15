@@ -158,7 +158,7 @@ export default function LoginPage() {
             </div>
             <div>
               <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#F5F5F5" }}>
-                GLOW UP <span style={{ color: "hsl(43 72% 52%)" }}>✦</span>
+                GLOOW UP <span style={{ color: "hsl(43 72% 52%)" }}>CLUB ✦</span>
               </h1>
               <p className="text-xs tracking-[0.3em] uppercase mt-1" style={{ color: "hsl(43 50% 55% / 0.5)" }}>
                 Exclusivo para mulheres de elite
