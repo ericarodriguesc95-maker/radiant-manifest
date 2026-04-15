@@ -23,9 +23,9 @@ export default defineConfig(({ mode }) => ({
         importScripts: ["sw-custom.js"],
       },
       manifest: {
-        name: "Performance Glow Up",
-        short_name: "Glow Up",
-        description: "Seu app de desenvolvimento pessoal e glow up",
+        name: "Gloow Up Club",
+        short_name: "Gloow Up",
+        description: "Seu app de desenvolvimento pessoal e transformação",
         theme_color: "#1A1A1A",
         background_color: "#FFFFFF",
         display: "standalone",

@@ -45,7 +45,7 @@ export default function RenovarBrilhoPage() {
             {[
               "Assistente IA personalizada",
               "Rastreamento completo de saúde",
-              "Comunidade exclusiva Glow Up",
+              "Comunidade exclusiva Gloow Up Club",
               "Desafios de alta performance",
               "Meditações e reprogramação mental",
             ].map((item) => (

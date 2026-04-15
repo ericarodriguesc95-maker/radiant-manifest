@@ -47,7 +47,7 @@ export default function SignupPage() {
             <Sparkles className="h-8 w-8 text-primary" />
           </div>
           <CardTitle className="text-2xl font-display">Criar Conta</CardTitle>
-          <CardDescription>Comece sua jornada de glow up</CardDescription>
+          <CardDescription>Comece sua jornada no Gloow Up Club</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignup} className="space-y-4">

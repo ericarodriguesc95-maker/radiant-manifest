@@ -47,7 +47,7 @@ export async function sendNotification(title: string, body: string, tag: string)
 
 /** Send social notification (like, comment, follow, etc.) — always sends */
 export function sendSocialNotification(fromName: string, type: string, commentText?: string) {
-  let title = "Glow Up 🦋";
+  let title = "Gloow Up Club 🦋";
   let body = "";
 
   switch (type) {
@@ -73,7 +73,7 @@ export function sendSocialNotification(fromName: string, type: string, commentTe
       break;
     case "welcome":
       title = "🦋 Nova integrante";
-      body = `${fromName} entrou para o Glow Up!`;
+      body = `${fromName} entrou para o Gloow Up Club!`;
       break;
     case "new_post":
       title = "📝 Nova publicação";

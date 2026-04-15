@@ -110,13 +110,13 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
               backgroundSize: "200% 100%",
             }}
           >
-            PERFORMANCE
+            GLOOW UP
           </h1>
           <p
             className="font-body text-sm tracking-[0.4em] mt-1"
             style={{ color: "hsl(43 30% 55%)" }}
           >
-            GLOW UP
+            CLUB
           </p>
         </div>
 

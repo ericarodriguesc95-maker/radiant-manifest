@@ -109,7 +109,7 @@ const HomePage = () => {
           <div className="space-y-0.5">
             <p className="text-[10px] font-body tracking-[0.3em] uppercase text-gold/70">{greeting()}, rainha</p>
             <h1 className="text-2xl font-display font-bold text-foreground flex items-center gap-2">
-              Glow Up
+              Gloow Up Club
               <Crown className="h-5 w-5 text-gold animate-pulse" />
             </h1>
           </div>
@@ -304,7 +304,7 @@ const HomePage = () => {
         <div className="text-center pt-4 pb-2 animate-stagger" style={{ "--stagger": 15 } as React.CSSProperties}>
           <div className="h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-4" />
           <p className="text-[9px] font-body tracking-[0.3em] uppercase text-gold/30">
-            Glow Up · Feito para mulheres extraordinárias
+            Gloow Up Club · Feito para mulheres extraordinárias
           </p>
         </div>
       </div>
