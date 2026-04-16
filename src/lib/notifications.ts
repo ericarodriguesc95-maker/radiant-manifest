@@ -1,5 +1,20 @@
+import { supabase } from "@/integrations/supabase/client";
+
 const LAST_MORNING_KEY = "glowup_last_morning_notification";
 const LAST_HABIT_KEY = "glowup_last_habit_notification";
+
+const VAPID_PUBLIC_KEY = 'BLd6x5tyfPzGO4-R6tpHnYD8F4BwG5cSTy7f6kK7XBYS_B7A0_ETssDQ_HUYMBrOD_pxAJ-Y3JudSMAwBn-eYxo';
+
+function urlBase64ToUint8Array(base64String: string): Uint8Array {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
 
 export async function requestNotificationPermission(): Promise<boolean> {
   if (!("Notification" in window)) return false;
@@ -15,6 +30,52 @@ export function getPermissionStatus(): NotificationPermission | "unsupported" {
 }
 
 /**
+ * Subscribe to Web Push via PushManager (works in any browser/APK wrapper with SW support)
+ */
+export async function subscribeToPush(userId: string): Promise<boolean> {
+  try {
+    const registration = await navigator.serviceWorker?.ready;
+    if (!registration?.pushManager) {
+      console.log('PushManager not available');
+      return false;
+    }
+
+    // Check existing subscription
+    let subscription = await registration.pushManager.getSubscription();
+    
+    if (!subscription) {
+      subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) as BufferSource,
+      });
+    }
+
+    if (!subscription) return false;
+
+    const key = subscription.getKey('p256dh');
+    const auth = subscription.getKey('auth');
+    if (!key || !auth) return false;
+
+    const p256dh = btoa(String.fromCharCode(...new Uint8Array(key)));
+    const authStr = btoa(String.fromCharCode(...new Uint8Array(auth)));
+
+    // Save to database
+    const { error } = await supabase.from('push_subscriptions').upsert({
+      user_id: userId,
+      endpoint: subscription.endpoint,
+      p256dh: p256dh,
+      auth: authStr,
+    }, { onConflict: 'user_id,endpoint' });
+
+    if (error) console.error('Error saving push subscription:', error);
+    return !error;
+  } catch (err) {
+    console.log('Push subscription failed (may not be supported):', err);
+    return false;
+  }
+}
+
+/**
  * Send notification via Service Worker (better for mobile - vibrates, shows in tray)
  */
 export async function sendNotification(title: string, body: string, tag: string) {
@@ -22,8 +83,8 @@ export async function sendNotification(title: string, body: string, tag: string)
 
   const options: NotificationOptions & { vibrate?: number[]; requireInteraction?: boolean } = {
     body,
-    icon: "/favicon.ico",
-    badge: "/favicon.ico",
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
     tag,
     silent: false,
     vibrate: [200, 100, 200],
@@ -139,7 +200,6 @@ export function sendCyclePeriodNotification(daysUntil: number) {
   }
 }
 
-
 export function sendHabitReminderNotification() {
   sendNotification(
     "📋 Hábitos Diários",
@@ -158,9 +218,6 @@ function clearAllScheduled() {
   if (habitIntervalId) { clearInterval(habitIntervalId); habitIntervalId = null; }
 }
 
-/**
- * Get the affirmation for a given date (deterministic, same as AffirmationCard)
- */
 function getAffirmationForDate(date: Date): string {
   const affirmations = [
     "Eu sou digna de amor, sucesso e abundância.",
@@ -239,14 +296,9 @@ function getDevotionalForDate(date: Date): string {
   return devotionals[dayOfYear % devotionals.length];
 }
 
-/**
- * Schedule morning notifications (affirmation + devotional) at 08:00
- * and habit reminder at 20:00. Always active regardless of settings toggles.
- */
 function scheduleAllNotifications() {
   clearAllScheduled();
 
-  // Morning: affirmation + devotional at 08:00
   morningIntervalId = setInterval(() => {
     const now = new Date();
     const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
@@ -259,7 +311,6 @@ function scheduleAllNotifications() {
     }
   }, 30_000);
 
-  // Evening: habit reminder at 20:00
   habitIntervalId = setInterval(() => {
     const now = new Date();
     const currentTime = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
@@ -273,13 +324,16 @@ function scheduleAllNotifications() {
 }
 
 /**
- * Initialize notification system — always requests permission and schedules.
- * No dependency on any in-app toggle.
+ * Initialize notification system — requests permission, subscribes to push, schedules local.
  */
-export async function initNotifications() {
-  await requestNotificationPermission();
-  if (Notification.permission === "granted") {
+export async function initNotifications(userId?: string) {
+  const granted = await requestNotificationPermission();
+  if (granted) {
     scheduleAllNotifications();
+    // Subscribe to Web Push if userId available
+    if (userId) {
+      subscribeToPush(userId).catch(console.error);
+    }
   }
 }
 
