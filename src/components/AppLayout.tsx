@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Outlet, useLocation } from "react-router-dom";
 import BottomNav from "./BottomNav";
 import DesktopSidebar from "./DesktopSidebar";
@@ -17,6 +18,7 @@ export default function AppLayout() {
   const [showTour, setShowTour] = useState(false);
   const location = useLocation();
   const { mode } = useViewMode();
+  const { user } = useAuth();
   const isDesktop = mode === "desktop";
 
   useActivityTracker();
@@ -24,8 +26,8 @@ export default function AppLayout() {
   useCycleNotifications();
 
   useEffect(() => {
-    initNotifications();
-  }, []);
+    initNotifications(user?.id);
+  }, [user?.id]);
 
   useEffect(() => {
     const completed = localStorage.getItem("glow-tour-completed");
