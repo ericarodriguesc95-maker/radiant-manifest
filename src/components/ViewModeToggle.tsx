@@ -6,7 +6,7 @@ export default function ViewModeToggle() {
   const { mode, setMode } = useViewMode();
 
   return (
-    <div className="fixed top-4 right-4 z-50 flex items-center bg-card border border-border rounded-xl shadow-lg overflow-hidden">
+    <div className="flex items-center bg-card border border-border rounded-xl shadow-lg overflow-hidden">
       <button
         onClick={() => setMode("mobile")}
         className={cn(
