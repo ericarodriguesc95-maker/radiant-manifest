@@ -12,6 +12,7 @@ import PostConquista from "@/components/PostConquista";
 
 import StreakMedals from "@/components/StreakMedals";
 import AppUpdatesModal from "@/components/AppUpdatesModal";
+import SuccessKeysCards from "@/components/SuccessKeysCards";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -237,9 +238,42 @@ const HomePage = () => {
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* TESTS — Autoconhecimento CTA */}
+        {/* CHAVES DO SUCESSO — 3 cards de mentalidade */}
+        {/* ═══════════════════════════════════════════ */}
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
+            <Sparkles className="h-3.5 w-3.5 text-gold" />
+            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Chaves do Sucesso</h2>
+            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
+          </div>
+          <SuccessKeysCards />
+        </section>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* JORNADA ELITE — Programa premium CTA */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
+          <button
+            onClick={() => navigate("/jornada-elite")}
+            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-gold/25 via-amber-700/15 to-amber-900/5" />
+            <div className="absolute inset-0 glass-gold" />
+            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
+              <Crown className="h-6 w-6 text-gold" />
+            </div>
+            <div className="relative z-10 flex-1 text-left">
+              <p className="text-sm font-display font-bold text-foreground">Jornada Elite</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Trilha 5 níveis · Diagnóstico · 80+ aulas</p>
+            </div>
+            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
+          </button>
+        </div>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* TESTS — Autoconhecimento CTA */}
+        {/* ═══════════════════════════════════════════ */}
+        <div className="animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
           <button
             onClick={() => navigate("/testes")}
             className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"

@@ -576,6 +576,93 @@ export type Database = {
           },
         ]
       }
+      elite_diagnostic_results: {
+        Row: {
+          acceleration_plan: Json
+          archetype: string
+          created_at: string
+          id: string
+          scores: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          acceleration_plan?: Json
+          archetype: string
+          created_at?: string
+          id?: string
+          scores?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          acceleration_plan?: Json
+          archetype?: string
+          created_at?: string
+          id?: string
+          scores?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      elite_journey_progress: {
+        Row: {
+          completed_at: string | null
+          completed_modules: string[]
+          created_at: string
+          id: string
+          is_completed: boolean
+          level_id: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          completed_modules?: string[]
+          created_at?: string
+          id?: string
+          is_completed?: boolean
+          level_id: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          completed_modules?: string[]
+          created_at?: string
+          id?: string
+          is_completed?: boolean
+          level_id?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      elite_video_completions: {
+        Row: {
+          completed_at: string
+          id: string
+          track_id: string
+          user_id: string
+          video_id: string
+        }
+        Insert: {
+          completed_at?: string
+          id?: string
+          track_id: string
+          user_id: string
+          video_id: string
+        }
+        Update: {
+          completed_at?: string
+          id?: string
+          track_id?: string
+          user_id?: string
+          video_id?: string
+        }
+        Relationships: []
+      }
       exercise_entries: {
         Row: {
           calories_burned: number | null
