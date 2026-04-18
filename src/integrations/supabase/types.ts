@@ -1017,6 +1017,30 @@ export type Database = {
           },
         ]
       }
+      nps_responses: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          score: number
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          score: number
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       post_comments: {
         Row: {
           created_at: string
@@ -1413,6 +1437,74 @@ export type Database = {
           id?: string
           plan_type?: string
           status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      suggestion_replies: {
+        Row: {
+          author_id: string
+          created_at: string
+          id: string
+          is_admin_reply: boolean
+          message: string
+          suggestion_id: string
+        }
+        Insert: {
+          author_id: string
+          created_at?: string
+          id?: string
+          is_admin_reply?: boolean
+          message: string
+          suggestion_id: string
+        }
+        Update: {
+          author_id?: string
+          created_at?: string
+          id?: string
+          is_admin_reply?: boolean
+          message?: string
+          suggestion_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "suggestion_replies_suggestion_id_fkey"
+            columns: ["suggestion_id"]
+            isOneToOne: false
+            referencedRelation: "suggestions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      suggestions: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          id: string
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          content: string
+          created_at?: string
+          id?: string
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          status?: string
+          title?: string
           updated_at?: string
           user_id?: string
         }

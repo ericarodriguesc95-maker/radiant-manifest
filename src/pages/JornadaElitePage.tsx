@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Lock, CheckCircle2, Crown, Play, ClipboardCheck, BookOpen, X, ExternalLink } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { ArrowLeft, Lock, CheckCircle2, Crown, Play, ClipboardCheck, BookOpen, X, ExternalLink, Settings } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { JOURNEY_LEVELS, VIDEO_TRACKS, DIAGNOSTIC_QUESTIONS, ARCHETYPE_PLANS, AccelerationPlan } from "@/data/eliteJourneyData";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -12,6 +13,7 @@ type Tab = "trilha" | "diagnostico" | "aulas";
 export default function JornadaElitePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const [tab, setTab] = useState<Tab>("trilha");
 
   // Trilha
@@ -126,6 +128,15 @@ export default function JornadaElitePage() {
               Jornada Elite <Crown className="h-4 w-4 text-gold" />
             </h1>
           </div>
+          {isAdmin && (
+            <Link
+              to="/admin/biblioteca-elite"
+              title="Gerenciar Biblioteca Elite"
+              className="p-2 rounded-xl text-muted-foreground/60 hover:text-gold hover:bg-gold/10 transition-colors"
+            >
+              <Settings className="h-4 w-4" />
+            </Link>
+          )}
         </div>
       </header>
 

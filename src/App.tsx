@@ -38,6 +38,8 @@ import TestesPage from "@/pages/TestesPage";
 import JornadaElitePage from "@/pages/JornadaElitePage";
 import ModuloElitePage from "@/pages/ModuloElitePage";
 import AdminBibliotecaElitePage from "@/pages/AdminBibliotecaElitePage";
+import SugestoesPage from "@/pages/SugestoesPage";
+import AdminSugestoesPage from "@/pages/AdminSugestoesPage";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
@@ -97,6 +99,8 @@ const AppRoutes = () => (
       <Route path="/admin/conteudo" element={<ErrorBoundary><AdminContentPage /></ErrorBoundary>} />
       <Route path="/admin/assinaturas" element={<ErrorBoundary><AdminSubscriptionsPage /></ErrorBoundary>} />
       <Route path="/admin/biblioteca-elite" element={<ErrorBoundary><AdminBibliotecaElitePage /></ErrorBoundary>} />
+      <Route path="/admin/sugestoes" element={<ErrorBoundary><AdminSugestoesPage /></ErrorBoundary>} />
+      <Route path="/sugestoes" element={<ErrorBoundary><SugestoesPage /></ErrorBoundary>} />
       <Route path="/perfil/:userId" element={<ErrorBoundary><ProfilePage /></ErrorBoundary>} />
 
       {/* Premium-locked routes (extra guard for clarity) */}
