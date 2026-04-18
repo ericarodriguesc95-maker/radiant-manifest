@@ -198,10 +198,10 @@ export default function JornadaElitePage() {
                               return (
                                 <button
                                   key={mod.id}
-                                  onClick={() => toggleModule(level.id, mod.id)}
+                                  onClick={() => setActiveModule({ levelId: level.id, module: mod })}
                                   className={cn(
-                                    "w-full flex items-center gap-2 p-2.5 rounded-lg text-left transition-all",
-                                    done ? "bg-gold/10 border border-gold/30" : "bg-muted/20 border border-transparent hover:border-gold/20"
+                                    "w-full flex items-center gap-2 p-2.5 rounded-lg text-left transition-all active:scale-[0.98]",
+                                    done ? "bg-gold/10 border border-gold/30" : "bg-muted/20 border border-transparent hover:border-gold/30"
                                   )}
                                 >
                                   <div className={cn("h-4 w-4 rounded-full border-2 flex items-center justify-center shrink-0", done ? "bg-gold border-gold" : "border-muted-foreground")}>
@@ -211,6 +211,7 @@ export default function JornadaElitePage() {
                                     <p className={cn("text-[12px] font-body font-semibold", done ? "text-gold" : "text-foreground")}>{mod.title}</p>
                                     <p className="text-[10px] text-muted-foreground truncate">{mod.description} · {mod.duration}</p>
                                   </div>
+                                  <BookOpen className="h-3.5 w-3.5 text-gold/60 shrink-0" />
                                 </button>
                               );
                             })}
