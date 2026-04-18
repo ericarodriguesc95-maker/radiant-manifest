@@ -24,6 +24,8 @@ export default function JornadaElitePage() {
   const [activeTrack, setActiveTrack] = useState<string>("oratoria");
   const [activeVideo, setActiveVideo] = useState<{ youtubeId: string; title: string } | null>(null);
   const [completedVideos, setCompletedVideos] = useState<Set<string>>(new Set());
+  // Module modal
+  const [activeModule, setActiveModule] = useState<{ levelId: number; module: JourneyModule } | null>(null);
 
   // Load data
   useEffect(() => {
