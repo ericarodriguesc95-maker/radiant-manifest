@@ -23,12 +23,10 @@ export default function JornadaElitePage() {
   // Aulas
   const [activeTrack, setActiveTrack] = useState<string>("oratoria");
   const [completedVideos, setCompletedVideos] = useState<Set<string>>(new Set());
-  const [activeVideo, setActiveVideo] = useState<{ id: string; title: string; mentor: string; youtubeId: string } | null>(null);
+  const [activeVideo, setActiveVideo] = useState<{ id: string; title: string; mentor: string } | null>(null);
 
-  const openYouTubeExternal = (title: string, mentor: string, youtubeId?: string) => {
-    const url = youtubeId
-      ? `https://www.youtube.com/watch?v=${youtubeId}`
-      : `https://www.youtube.com/results?search_query=${encodeURIComponent(`${title} ${mentor}`)}`;
+  const openYouTubeExternal = (title: string, mentor: string) => {
+    const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(`${title} ${mentor}`)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
@@ -389,21 +387,11 @@ export default function JornadaElitePage() {
                         style={{ "--stagger": i } as React.CSSProperties}
                       >
                         <button
-                          onClick={() => setActiveVideo({ id: v.id, title: v.title, mentor: v.mentor, youtubeId: (v as any).youtubeId })}
+                          onClick={() => setActiveVideo({ id: v.id, title: v.title, mentor: v.mentor })}
                           className="w-full flex items-center gap-3 text-left"
                         >
                           <div className="relative h-16 w-24 rounded-lg overflow-hidden bg-muted/30 shrink-0 flex items-center justify-center">
-                            {(v as any).youtubeId ? (
-                              <img
-                                src={`https://i.ytimg.com/vi/${(v as any).youtubeId}/mqdefault.jpg`}
-                                alt={v.title}
-                                className="absolute inset-0 h-full w-full object-cover"
-                                loading="lazy"
-                                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                              />
-                            ) : (
-                              <div className="absolute inset-0 bg-gradient-to-br from-gold/20 to-gold/5" />
-                            )}
+                            <div className={cn("absolute inset-0 bg-gradient-to-br opacity-80", track.color)} />
                             <div className="absolute inset-0 bg-black/30" />
                             <Play className="relative h-6 w-6 text-gold fill-gold drop-shadow" />
                           </div>
@@ -424,7 +412,7 @@ export default function JornadaElitePage() {
                             {done ? <><CheckCircle2 className="h-3.5 w-3.5" /> Concluída</> : "Marcar concluída"}
                           </button>
                           <button
-                            onClick={() => openYouTubeExternal(v.title, v.mentor, (v as any).youtubeId)}
+                            onClick={() => openYouTubeExternal(v.title, v.mentor)}
                             className="py-2 rounded-lg text-[11px] font-body font-semibold bg-muted/20 border border-gold/10 text-muted-foreground hover:text-gold hover:border-gold/30 transition-all flex items-center justify-center gap-1.5"
                           >
                             <ExternalLink className="h-3.5 w-3.5" /> YouTube
@@ -457,7 +445,7 @@ export default function JornadaElitePage() {
                 <p className="text-[10px] text-muted-foreground truncate">{activeVideo.mentor}</p>
               </div>
               <button
-                onClick={() => openYouTubeExternal(activeVideo.title, activeVideo.mentor, activeVideo.youtubeId)}
+                onClick={() => openYouTubeExternal(activeVideo.title, activeVideo.mentor)}
                 className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold/10 border border-gold/30 text-[11px] font-body font-semibold text-gold hover:bg-gold/20 transition-all"
               >
                 <ExternalLink className="h-3.5 w-3.5" /> YouTube
