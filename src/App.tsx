@@ -36,6 +36,7 @@ import RenovarBrilhoPage from "@/pages/RenovarBrilhoPage";
 import Biblia365Page from "@/pages/Biblia365Page";
 import TestesPage from "@/pages/TestesPage";
 import JornadaElitePage from "@/pages/JornadaElitePage";
+import ModuloElitePage from "@/pages/ModuloElitePage";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
@@ -103,6 +104,7 @@ const AppRoutes = () => (
       <Route path="/biblia-365" element={<ErrorBoundary><Biblia365Page /></ErrorBoundary>} />
       <Route path="/testes" element={<ErrorBoundary><TestesPage /></ErrorBoundary>} />
       <Route path="/jornada-elite" element={<ErrorBoundary><JornadaElitePage /></ErrorBoundary>} />
+      <Route path="/jornada-elite/modulo/:levelId/:moduleId" element={<ErrorBoundary><ModuloElitePage /></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>
