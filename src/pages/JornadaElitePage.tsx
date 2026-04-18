@@ -24,9 +24,12 @@ export default function JornadaElitePage() {
   const [activeTrack, setActiveTrack] = useState<string>("oratoria");
   const [completedVideos, setCompletedVideos] = useState<Set<string>>(new Set());
   const [activeVideo, setActiveVideo] = useState<{ id: string; title: string; mentor: string } | null>(null);
+  const [overrides, setOverrides] = useState<Record<string, string>>({}); // video_id -> youtube_id
 
-  const openYouTubeExternal = (title: string, mentor: string) => {
-    const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(`${title} ${mentor}`)}`;
+  const openYouTubeExternal = (title: string, mentor: string, ytId?: string) => {
+    const url = ytId
+      ? `https://www.youtube.com/watch?v=${ytId}`
+      : `https://www.youtube.com/results?search_query=${encodeURIComponent(`${title} ${mentor}`)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
@@ -34,16 +37,20 @@ export default function JornadaElitePage() {
   useEffect(() => {
     if (!user) return;
     (async () => {
-      const [{ data: progData }, { data: diagData }, { data: vidData }] = await Promise.all([
+      const [{ data: progData }, { data: diagData }, { data: vidData }, { data: ovData }] = await Promise.all([
         supabase.from("elite_journey_progress" as any).select("*").eq("user_id", user.id),
         supabase.from("elite_diagnostic_results" as any).select("*").eq("user_id", user.id).maybeSingle(),
         supabase.from("elite_video_completions" as any).select("video_id").eq("user_id", user.id),
+        supabase.from("elite_video_overrides" as any).select("video_id, youtube_id"),
       ]);
       const p: Record<number, any> = {};
       (progData as any[])?.forEach((r) => { p[r.level_id] = { completed_modules: r.completed_modules, is_completed: r.is_completed }; });
       setProgress(p);
       if (diagData && (diagData as any).archetype) setPlan(ARCHETYPE_PLANS[(diagData as any).archetype]);
       setCompletedVideos(new Set((vidData as any[])?.map((v) => v.video_id) || []));
+      const ovMap: Record<string, string> = {};
+      (ovData as any[])?.forEach((r) => { ovMap[r.video_id] = r.youtube_id; });
+      setOverrides(ovMap);
     })();
   }, [user]);
 
@@ -377,6 +384,7 @@ export default function JornadaElitePage() {
 
                   {track.videos.map((v, i) => {
                     const done = completedVideos.has(v.id);
+                    const ytId = overrides[v.id];
                     return (
                       <div
                         key={v.id}
@@ -391,7 +399,17 @@ export default function JornadaElitePage() {
                           className="w-full flex items-center gap-3 text-left"
                         >
                           <div className="relative h-16 w-24 rounded-lg overflow-hidden bg-muted/30 shrink-0 flex items-center justify-center">
-                            <div className={cn("absolute inset-0 bg-gradient-to-br opacity-80", track.color)} />
+                            {ytId ? (
+                              <img
+                                src={`https://i.ytimg.com/vi/${ytId}/mqdefault.jpg`}
+                                alt={v.title}
+                                className="absolute inset-0 h-full w-full object-cover"
+                                loading="lazy"
+                                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                              />
+                            ) : (
+                              <div className={cn("absolute inset-0 bg-gradient-to-br opacity-80", track.color)} />
+                            )}
                             <div className="absolute inset-0 bg-black/30" />
                             <Play className="relative h-6 w-6 text-gold fill-gold drop-shadow" />
                           </div>
@@ -412,7 +430,7 @@ export default function JornadaElitePage() {
                             {done ? <><CheckCircle2 className="h-3.5 w-3.5" /> Concluída</> : "Marcar concluída"}
                           </button>
                           <button
-                            onClick={() => openYouTubeExternal(v.title, v.mentor)}
+                            onClick={() => openYouTubeExternal(v.title, v.mentor, ytId)}
                             className="py-2 rounded-lg text-[11px] font-body font-semibold bg-muted/20 border border-gold/10 text-muted-foreground hover:text-gold hover:border-gold/30 transition-all flex items-center justify-center gap-1.5"
                           >
                             <ExternalLink className="h-3.5 w-3.5" /> YouTube
@@ -445,7 +463,7 @@ export default function JornadaElitePage() {
                 <p className="text-[10px] text-muted-foreground truncate">{activeVideo.mentor}</p>
               </div>
               <button
-                onClick={() => openYouTubeExternal(activeVideo.title, activeVideo.mentor)}
+                onClick={() => openYouTubeExternal(activeVideo.title, activeVideo.mentor, overrides[activeVideo.id])}
                 className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold/10 border border-gold/30 text-[11px] font-body font-semibold text-gold hover:bg-gold/20 transition-all"
               >
                 <ExternalLink className="h-3.5 w-3.5" /> YouTube
@@ -459,19 +477,35 @@ export default function JornadaElitePage() {
               </button>
             </div>
             <div className="relative aspect-video bg-black">
-              <iframe
-                key={activeVideo.id}
-                src={`https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(`${activeVideo.title} ${activeVideo.mentor}`)}&autoplay=1&rel=0&modestbranding=1&playsinline=1`}
-                title={activeVideo.title}
-                className="absolute inset-0 h-full w-full"
-                frameBorder={0}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
+              {overrides[activeVideo.id] ? (
+                <iframe
+                  key={activeVideo.id}
+                  src={`https://www.youtube-nocookie.com/embed/${overrides[activeVideo.id]}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
+                  title={activeVideo.title}
+                  className="absolute inset-0 h-full w-full"
+                  frameBorder={0}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              ) : (
+                <iframe
+                  key={activeVideo.id}
+                  src={`https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(`${activeVideo.title} ${activeVideo.mentor}`)}&autoplay=1&rel=0&modestbranding=1&playsinline=1`}
+                  title={activeVideo.title}
+                  className="absolute inset-0 h-full w-full"
+                  frameBorder={0}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              )}
             </div>
             <div className="px-4 py-3 text-[10px] text-muted-foreground text-center border-t border-gold/10 space-y-1">
-              <p>Buscamos automaticamente o melhor vídeo sobre <span className="text-gold">{activeVideo.title}</span>.</p>
-              <p>Se o YouTube estiver bloqueado na sua rede (Wi-Fi do trabalho, controle parental), use dados móveis ou toque em <span className="text-gold font-semibold">YouTube</span>.</p>
+              {overrides[activeVideo.id] ? (
+                <p>Vídeo selecionado pela <span className="text-gold">Érica</span> para essa aula.</p>
+              ) : (
+                <p>Buscamos automaticamente o melhor vídeo sobre <span className="text-gold">{activeVideo.title}</span>.</p>
+              )}
+              <p>Se o YouTube estiver bloqueado na sua rede, use dados móveis ou toque em <span className="text-gold font-semibold">YouTube</span>.</p>
             </div>
           </div>
         </div>

@@ -37,6 +37,7 @@ import Biblia365Page from "@/pages/Biblia365Page";
 import TestesPage from "@/pages/TestesPage";
 import JornadaElitePage from "@/pages/JornadaElitePage";
 import ModuloElitePage from "@/pages/ModuloElitePage";
+import AdminBibliotecaElitePage from "@/pages/AdminBibliotecaElitePage";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
@@ -95,6 +96,7 @@ const AppRoutes = () => (
       <Route path="/admin/atividade" element={<ErrorBoundary><AdminActivityPage /></ErrorBoundary>} />
       <Route path="/admin/conteudo" element={<ErrorBoundary><AdminContentPage /></ErrorBoundary>} />
       <Route path="/admin/assinaturas" element={<ErrorBoundary><AdminSubscriptionsPage /></ErrorBoundary>} />
+      <Route path="/admin/biblioteca-elite" element={<ErrorBoundary><AdminBibliotecaElitePage /></ErrorBoundary>} />
       <Route path="/perfil/:userId" element={<ErrorBoundary><ProfilePage /></ErrorBoundary>} />
 
       {/* Premium-locked routes (extra guard for clarity) */}

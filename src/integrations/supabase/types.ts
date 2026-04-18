@@ -693,6 +693,39 @@ export type Database = {
         }
         Relationships: []
       }
+      elite_video_overrides: {
+        Row: {
+          created_at: string
+          id: string
+          track_id: string
+          updated_at: string
+          updated_by: string | null
+          video_id: string
+          youtube_id: string
+          youtube_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          track_id: string
+          updated_at?: string
+          updated_by?: string | null
+          video_id: string
+          youtube_id: string
+          youtube_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          track_id?: string
+          updated_at?: string
+          updated_by?: string | null
+          video_id?: string
+          youtube_id?: string
+          youtube_url?: string | null
+        }
+        Relationships: []
+      }
       exercise_entries: {
         Row: {
           calories_burned: number | null
