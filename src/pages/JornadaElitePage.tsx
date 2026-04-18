@@ -463,7 +463,7 @@ export default function JornadaElitePage() {
                 <p className="text-[10px] text-muted-foreground truncate">{activeVideo.mentor}</p>
               </div>
               <button
-                onClick={() => openYouTubeExternal(activeVideo.title, activeVideo.mentor)}
+                onClick={() => openYouTubeExternal(activeVideo.title, activeVideo.mentor, overrides[activeVideo.id])}
                 className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold/10 border border-gold/30 text-[11px] font-body font-semibold text-gold hover:bg-gold/20 transition-all"
               >
                 <ExternalLink className="h-3.5 w-3.5" /> YouTube
@@ -477,19 +477,35 @@ export default function JornadaElitePage() {
               </button>
             </div>
             <div className="relative aspect-video bg-black">
-              <iframe
-                key={activeVideo.id}
-                src={`https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(`${activeVideo.title} ${activeVideo.mentor}`)}&autoplay=1&rel=0&modestbranding=1&playsinline=1`}
-                title={activeVideo.title}
-                className="absolute inset-0 h-full w-full"
-                frameBorder={0}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              />
+              {overrides[activeVideo.id] ? (
+                <iframe
+                  key={activeVideo.id}
+                  src={`https://www.youtube-nocookie.com/embed/${overrides[activeVideo.id]}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
+                  title={activeVideo.title}
+                  className="absolute inset-0 h-full w-full"
+                  frameBorder={0}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              ) : (
+                <iframe
+                  key={activeVideo.id}
+                  src={`https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(`${activeVideo.title} ${activeVideo.mentor}`)}&autoplay=1&rel=0&modestbranding=1&playsinline=1`}
+                  title={activeVideo.title}
+                  className="absolute inset-0 h-full w-full"
+                  frameBorder={0}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              )}
             </div>
             <div className="px-4 py-3 text-[10px] text-muted-foreground text-center border-t border-gold/10 space-y-1">
-              <p>Buscamos automaticamente o melhor vídeo sobre <span className="text-gold">{activeVideo.title}</span>.</p>
-              <p>Se o YouTube estiver bloqueado na sua rede (Wi-Fi do trabalho, controle parental), use dados móveis ou toque em <span className="text-gold font-semibold">YouTube</span>.</p>
+              {overrides[activeVideo.id] ? (
+                <p>Vídeo selecionado pela <span className="text-gold">Érica</span> para essa aula.</p>
+              ) : (
+                <p>Buscamos automaticamente o melhor vídeo sobre <span className="text-gold">{activeVideo.title}</span>.</p>
+              )}
+              <p>Se o YouTube estiver bloqueado na sua rede, use dados móveis ou toque em <span className="text-gold font-semibold">YouTube</span>.</p>
             </div>
           </div>
         </div>
