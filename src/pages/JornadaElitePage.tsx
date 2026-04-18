@@ -24,9 +24,12 @@ export default function JornadaElitePage() {
   const [activeTrack, setActiveTrack] = useState<string>("oratoria");
   const [completedVideos, setCompletedVideos] = useState<Set<string>>(new Set());
   const [activeVideo, setActiveVideo] = useState<{ id: string; title: string; mentor: string } | null>(null);
+  const [overrides, setOverrides] = useState<Record<string, string>>({}); // video_id -> youtube_id
 
-  const openYouTubeExternal = (title: string, mentor: string) => {
-    const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(`${title} ${mentor}`)}`;
+  const openYouTubeExternal = (title: string, mentor: string, ytId?: string) => {
+    const url = ytId
+      ? `https://www.youtube.com/watch?v=${ytId}`
+      : `https://www.youtube.com/results?search_query=${encodeURIComponent(`${title} ${mentor}`)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
