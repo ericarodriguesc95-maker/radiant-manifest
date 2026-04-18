@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => ({
         short_name: "Gloow Up",
         description: "Seu app de desenvolvimento pessoal e transformação",
         theme_color: "#1A1A1A",
-        background_color: "#FFFFFF",
+        background_color: "#0D0D0D",
         display: "standalone",
         orientation: "portrait",
         start_url: "/",
