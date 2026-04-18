@@ -51,11 +51,16 @@ const ComunidadePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Auto-open DMs if navigated with ?openDms=1
+  // Auto-open DMs or Salas if navigated with query params
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     if (params.get("openDms") === "1") {
       setShowDMs(true);
+      try { localStorage.setItem("dm-used", "1"); } catch {}
+    }
+    if (params.get("openRooms") === "1") {
+      setShowChatRooms(true);
+      try { localStorage.setItem("chatrooms-used", "1"); } catch {}
     }
   }, [location.search]);
   const [posts, setPosts] = useState<PostWithProfile[]>([]);

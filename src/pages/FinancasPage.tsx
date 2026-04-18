@@ -242,6 +242,23 @@ const FinancasPage = () => {
   const [editType, setEditType] = useState<EntryType>("renda");
   const [activeTab, setActiveTab] = useState("registros");
 
+  // Deep-link from floating IA Financeira bubble
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("openAi") === "1") {
+      setActiveTab("ia");
+      try { localStorage.setItem("ai-finance-used", "1"); } catch {}
+    }
+  }, []);
+
+  // Mark IA Financeira as used whenever the user opens that tab
+  useEffect(() => {
+    if (activeTab === "ia") {
+      try { localStorage.setItem("ai-finance-used", "1"); } catch {}
+    }
+  }, [activeTab]);
+
   const fetchEntries = useCallback(async () => {
     if (!user) return;
     setLoading(true);

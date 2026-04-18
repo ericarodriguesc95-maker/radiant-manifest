@@ -132,6 +132,23 @@ export default function AiAssistantChat() {
   const recognitionRef = useRef<any>(null);
   const { toast } = useToast();
 
+  // Auto-open from floating bubble (?openAi=1)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("openAi") === "1") {
+      setOpen(true);
+      try { localStorage.setItem("ai-assistant-used", "1"); } catch {}
+    }
+  }, []);
+
+  // Mark as used when opened
+  useEffect(() => {
+    if (open) {
+      try { localStorage.setItem("ai-assistant-used", "1"); } catch {}
+    }
+  }, [open]);
+
   useEffect(() => {
     saveMessages(messages);
   }, [messages]);
