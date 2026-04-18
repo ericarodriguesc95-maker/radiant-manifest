@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { JOURNEY_LEVELS } from "@/data/eliteJourneyData";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import LevelCelebration from "@/components/LevelCelebration";
 
 export default function ModuloElitePage() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function ModuloElitePage() {
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   useEffect(() => {
     if (!user || !level || !moduleData) {
@@ -118,7 +120,7 @@ export default function ModuloElitePage() {
     const wasDone = isDone;
     setIsDone(!wasDone);
     if (!wasDone && isComplete) {
-      toast.success(`Nível ${level.name} concluído! 👑`);
+      setShowCelebration(true);
     } else if (!wasDone) {
       toast.success("Aula concluída ✨");
     }
@@ -128,6 +130,15 @@ export default function ModuloElitePage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {showCelebration && (
+        <LevelCelebration
+          levelId={level.id}
+          levelName={level.name}
+          levelSubtitle={level.subtitle}
+          levelIcon={level.icon}
+          onClose={() => setShowCelebration(false)}
+        />
+      )}
       {/* Header */}
       <header className="sticky top-0 z-40 glass-strong border-b border-gold/15 px-5 py-4">
         <div className="flex items-center gap-3 max-w-2xl mx-auto">
