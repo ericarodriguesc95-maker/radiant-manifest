@@ -231,7 +231,7 @@ export default function GuidedTour({ onClose }: GuidedTourProps) {
     setTimeout(() => {
       setCurrentStep(index);
       if (index >= 0 && index < TOUR_STEPS.length) {
-        navigate(TOUR_STEPS[index].route === "/perfil" ? "/" : TOUR_STEPS[index].route);
+        navigate(TOUR_STEPS[index].route);
       }
       setIsAnimating(false);
     }, 200);
@@ -313,32 +313,16 @@ export default function GuidedTour({ onClose }: GuidedTourProps) {
       {/* Dimmed overlay */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] pointer-events-auto" onClick={() => {}} />
 
-      {/* Bottom nav highlight */}
-      <div className="absolute bottom-0 left-0 right-0 z-[201] pointer-events-none">
-        <div className="flex items-center justify-around h-16 max-w-lg mx-auto px-1">
-          {TOUR_STEPS.map((s, i) => {
-            const Icon = s.icon;
-            const isActive = i === currentStep;
-            return (
-              <div
-                key={i}
-                className={cn(
-                  "flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl min-w-[48px] transition-all duration-300",
-                  isActive
-                    ? "text-gold scale-125 drop-shadow-lg"
-                    : "text-muted-foreground/30 scale-90"
-                )}
-              >
-                <Icon className="h-5 w-5" strokeWidth={isActive ? 2.5 : 1.5} />
-                <span className={cn("text-[9px] font-body", isActive ? "font-bold" : "font-normal")}>
-                  {s.tab}
-                </span>
-                {isActive && (
-                  <div className="absolute -top-1.5 h-1 w-6 bg-gold rounded-full animate-pulse" />
-                )}
-              </div>
-            );
-          })}
+      {/* Step indicator chip (replaces bottom nav highlight since we have 13 steps now) */}
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[201] pointer-events-none">
+        <div className="flex items-center gap-2 bg-black/70 backdrop-blur-md border border-gold/30 rounded-full px-4 py-2 shadow-2xl">
+          <span className="text-2xl">{step.emoji}</span>
+          <div className="flex flex-col">
+            <span className="text-[9px] font-body text-gold/70 uppercase tracking-widest">
+              Passo {currentStep + 1}/{TOUR_STEPS.length}
+            </span>
+            <span className="text-xs font-heading font-bold text-gold">{step.tab}</span>
+          </div>
         </div>
       </div>
 
