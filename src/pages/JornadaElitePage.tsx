@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Lock, CheckCircle2, Crown, Sparkles, Play, ClipboardCheck, Trophy, KeyRound } from "lucide-react";
+import { ArrowLeft, Lock, CheckCircle2, Crown, Sparkles, Play, ClipboardCheck, Trophy, KeyRound, X, BookOpen, Target, MessageCircleQuestion } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { JOURNEY_LEVELS, VIDEO_TRACKS, DIAGNOSTIC_QUESTIONS, ARCHETYPE_PLANS, AccelerationPlan } from "@/data/eliteJourneyData";
+import { JOURNEY_LEVELS, VIDEO_TRACKS, DIAGNOSTIC_QUESTIONS, ARCHETYPE_PLANS, AccelerationPlan, JourneyModule } from "@/data/eliteJourneyData";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
