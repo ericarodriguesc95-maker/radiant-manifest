@@ -7,6 +7,7 @@ import ViewModeToggle from "./ViewModeToggle";
 import GuidedTour from "./GuidedTour";
 import InstallAppBanner from "./InstallAppBanner";
 import WelcomeBackAlert from "./WelcomeBackAlert";
+import NpsPopup from "./NpsPopup";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
 import { usePushNotificationListener } from "@/hooks/usePushNotificationListener";
 import { useCycleNotifications } from "@/hooks/useCycleNotifications";
@@ -56,6 +57,7 @@ export default function AppLayout() {
 
       {!isDesktop && <InstallAppBanner />}
       {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
+      <NpsPopup />
     </div>
   );
 }
