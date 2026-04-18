@@ -471,29 +471,19 @@ export default function JornadaElitePage() {
               </button>
             </div>
             <div className="relative aspect-video bg-black">
-              {activeVideo.youtubeId ? (
-                <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${activeVideo.youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
-                  title={activeVideo.title}
-                  className="absolute inset-0 h-full w-full"
-                  frameBorder={0}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
-              ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center p-6">
-                  <p className="text-sm text-muted-foreground">Esta aula está disponível apenas no YouTube.</p>
-                  <button
-                    onClick={() => openYouTubeExternal(activeVideo.title, activeVideo.mentor)}
-                    className="px-4 py-2 rounded-lg bg-gold text-primary-foreground text-sm font-body font-semibold flex items-center gap-2"
-                  >
-                    <ExternalLink className="h-4 w-4" /> Buscar no YouTube
-                  </button>
-                </div>
-              )}
+              <iframe
+                key={activeVideo.id}
+                src={`https://www.youtube-nocookie.com/embed?listType=search&list=${encodeURIComponent(`${activeVideo.title} ${activeVideo.mentor}`)}&autoplay=1&rel=0&modestbranding=1&playsinline=1`}
+                title={activeVideo.title}
+                className="absolute inset-0 h-full w-full"
+                frameBorder={0}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
             </div>
-            <div className="px-4 py-3 text-[10px] text-muted-foreground text-center border-t border-gold/10">
-              Caso o vídeo não carregue, toque em <span className="text-gold font-semibold">YouTube</span> para abrir externamente.
+            <div className="px-4 py-3 text-[10px] text-muted-foreground text-center border-t border-gold/10 space-y-1">
+              <p>Buscamos automaticamente o melhor vídeo sobre <span className="text-gold">{activeVideo.title}</span>.</p>
+              <p>Se o YouTube estiver bloqueado na sua rede (Wi-Fi do trabalho, controle parental), use dados móveis ou toque em <span className="text-gold font-semibold">YouTube</span>.</p>
             </div>
           </div>
         </div>
