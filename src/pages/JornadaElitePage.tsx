@@ -384,6 +384,7 @@ export default function JornadaElitePage() {
 
                   {track.videos.map((v, i) => {
                     const done = completedVideos.has(v.id);
+                    const ytId = overrides[v.id];
                     return (
                       <div
                         key={v.id}
@@ -398,7 +399,17 @@ export default function JornadaElitePage() {
                           className="w-full flex items-center gap-3 text-left"
                         >
                           <div className="relative h-16 w-24 rounded-lg overflow-hidden bg-muted/30 shrink-0 flex items-center justify-center">
-                            <div className={cn("absolute inset-0 bg-gradient-to-br opacity-80", track.color)} />
+                            {ytId ? (
+                              <img
+                                src={`https://i.ytimg.com/vi/${ytId}/mqdefault.jpg`}
+                                alt={v.title}
+                                className="absolute inset-0 h-full w-full object-cover"
+                                loading="lazy"
+                                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                              />
+                            ) : (
+                              <div className={cn("absolute inset-0 bg-gradient-to-br opacity-80", track.color)} />
+                            )}
                             <div className="absolute inset-0 bg-black/30" />
                             <Play className="relative h-6 w-6 text-gold fill-gold drop-shadow" />
                           </div>
@@ -419,7 +430,7 @@ export default function JornadaElitePage() {
                             {done ? <><CheckCircle2 className="h-3.5 w-3.5" /> Concluída</> : "Marcar concluída"}
                           </button>
                           <button
-                            onClick={() => openYouTubeExternal(v.title, v.mentor)}
+                            onClick={() => openYouTubeExternal(v.title, v.mentor, ytId)}
                             className="py-2 rounded-lg text-[11px] font-body font-semibold bg-muted/20 border border-gold/10 text-muted-foreground hover:text-gold hover:border-gold/30 transition-all flex items-center justify-center gap-1.5"
                           >
                             <ExternalLink className="h-3.5 w-3.5" /> YouTube
