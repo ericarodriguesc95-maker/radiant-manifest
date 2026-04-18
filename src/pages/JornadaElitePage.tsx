@@ -386,24 +386,17 @@ export default function JornadaElitePage() {
                         style={{ "--stagger": i } as React.CSSProperties}
                       >
                         <button
-                          onClick={() => setActiveVideo({ youtubeId: v.youtubeId, title: v.title })}
+                          onClick={() => openYouTubeSearch(v.title, v.mentor)}
                           className="w-full flex items-center gap-3 text-left"
                         >
-                          <div className="relative h-16 w-24 rounded-lg overflow-hidden bg-muted/30 shrink-0">
-                            <img
-                              src={`https://img.youtube.com/vi/${v.youtubeId}/mqdefault.jpg`}
-                              alt={v.title}
-                              loading="lazy"
-                              className="w-full h-full object-cover"
-                              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-                            />
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                              <Play className="h-5 w-5 text-gold fill-gold" />
-                            </div>
+                          <div className="relative h-16 w-24 rounded-lg overflow-hidden bg-muted/30 shrink-0 flex items-center justify-center">
+                            <div className="absolute inset-0 bg-gradient-to-br from-gold/20 to-gold/5" />
+                            <Play className="relative h-6 w-6 text-gold fill-gold" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-body font-semibold text-foreground line-clamp-2">{v.title}</p>
                             <p className="text-[10px] text-muted-foreground mt-0.5">{v.mentor} · {v.duration}</p>
+                            <p className="text-[9px] text-gold/70 mt-0.5 font-body tracking-wider uppercase">Abrir no YouTube ↗</p>
                           </div>
                         </button>
                         <button
@@ -422,28 +415,6 @@ export default function JornadaElitePage() {
               );
             })()}
 
-            {/* YouTube Modal */}
-            {activeVideo && (
-              <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4" onClick={() => setActiveVideo(null)}>
-                <div className="w-full max-w-2xl space-y-3" onClick={(e) => e.stopPropagation()}>
-                  <div className="aspect-video rounded-2xl overflow-hidden border border-gold/30 shadow-brand">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${activeVideo.youtubeId}?autoplay=1`}
-                      title={activeVideo.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="w-full h-full"
-                    />
-                  </div>
-                  <button
-                    onClick={() => setActiveVideo(null)}
-                    className="w-full py-2.5 rounded-xl bg-gold text-primary-foreground font-semibold text-sm"
-                  >
-                    Fechar
-                  </button>
-                </div>
-              </div>
-            )}
           </>
         )}
       </div>
