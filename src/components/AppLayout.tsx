@@ -9,7 +9,7 @@ import InstallAppBanner from "./InstallAppBanner";
 import WelcomeBackAlert from "./WelcomeBackAlert";
 import NpsPopup from "./NpsPopup";
 import SuggestionsFloatingButton from "./SuggestionsFloatingButton";
-import DmFloatingBubble from "./DmFloatingBubble";
+import FloatingBubblesDock from "./FloatingBubblesDock";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
 import { usePushNotificationListener } from "@/hooks/usePushNotificationListener";
 import { useCycleNotifications } from "@/hooks/useCycleNotifications";
@@ -61,7 +61,7 @@ export default function AppLayout() {
       {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
       <NpsPopup />
       <SuggestionsFloatingButton />
-      <DmFloatingBubble />
+      <FloatingBubblesDock />
     </div>
   );
 }
