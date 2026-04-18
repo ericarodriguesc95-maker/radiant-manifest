@@ -18,8 +18,12 @@ export default function SuggestionsFloatingButton() {
   const location = useLocation();
   const [count, setCount] = useState(0);
 
-  // Only show on home
-  const onHome = location.pathname === "/";
+  // Hide on auth pages, on the suggestions pages themselves, and on full-screen flows
+  const HIDDEN_PREFIXES = [
+    "/login", "/signup", "/forgot-password", "/reset-password",
+    "/sugestoes", "/admin/sugestoes",
+  ];
+  const isHidden = HIDDEN_PREFIXES.some((p) => location.pathname.startsWith(p));
 
   const lastSeenKey = user ? `sugestoes-last-seen-${user.id}` : "";
 
@@ -66,7 +70,7 @@ export default function SuggestionsFloatingButton() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, isAdmin]);
 
-  if (!onHome || !user) return null;
+  if (isHidden || !user) return null;
 
   const href = isAdmin ? "/admin/sugestoes" : "/sugestoes";
   const label = isAdmin ? "Sugestões para responder" : "Sugestões e respostas";
@@ -79,14 +83,17 @@ export default function SuggestionsFloatingButton() {
         if (!isAdmin) localStorage.setItem(lastSeenKey, new Date().toISOString());
       }}
       className={cn(
-        "fixed z-40 right-4 bottom-24 md:bottom-6 md:right-6",
-        "h-14 w-14 rounded-full bg-gold text-primary-foreground",
+        // Mobile: above bottom nav (pb-20 = 80px) with safe-area padding
+        // Desktop: bottom-right corner
+        "fixed z-40 right-3 md:right-6",
+        "bottom-[calc(env(safe-area-inset-bottom,0px)+88px)] md:bottom-6",
+        "h-12 w-12 md:h-14 md:w-14 rounded-full bg-gold text-primary-foreground",
         "flex items-center justify-center shadow-[0_8px_30px_-4px_rgba(212,175,55,0.55)]",
         "hover:scale-105 active:scale-95 transition-transform",
         "border border-gold/40"
       )}
     >
-      <Lightbulb className="h-6 w-6" />
+      <Lightbulb className="h-5 w-5 md:h-6 md:w-6" />
       {count > 0 && (
         <span className="absolute -top-1 -right-1 min-w-[22px] h-[22px] px-1.5 rounded-full bg-destructive text-destructive-foreground text-[11px] font-bold flex items-center justify-center border-2 border-background">
           {count > 99 ? "99+" : count}
