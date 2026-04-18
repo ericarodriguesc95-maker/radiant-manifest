@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Home, BookOpen, Target, Zap, Wallet, Users, User,
-  ChevronRight, ChevronLeft, X, Sparkles, MapPin
+  Home, BookOpen, Target, Zap, Wallet, User,
+  ChevronRight, ChevronLeft, X, Sparkles, MapPin,
+  Crown, BookMarked, Heart, Trophy, Camera, Bot
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -24,102 +25,192 @@ const TOUR_STEPS: TourStep[] = [
     tab: "Home",
     route: "/",
     title: "Sua Central de Comando",
-    description: "A Home é o coração do Gloow Up Club! Aqui você encontra o resumo do seu dia: hábitos, streak, afirmações, devocional e planejamento mensal.",
+    description: "A Home é o coração do Gloow Up Club! Hábitos, streak, afirmação, devocional, planejamento mensal e atalhos para tudo.",
     tips: [
       "Marque hábitos diários para manter seu streak 🔥",
       "Ganhe medalhas de bronze, prata e ouro pela consistência",
-      "Compartilhe conquistas direto na comunidade",
-      "Ícone 🎁 mostra novidades do app",
+      "Ícone 🎁 mostra novidades retroativas do app",
+      "Toque no mapa para refazer este tour quando quiser",
     ],
     color: "from-amber-500 to-orange-600",
     emoji: "🏠",
   },
   {
-    icon: BookOpen,
-    tab: "Diário",
-    route: "/diario",
-    title: "Seu Bloco de Notas",
-    description: "Escreva seu diário pessoal, anote insights de reuniões, listas de mercado ou qualquer ideia. Cada nota tem título e cor personalizáveis!",
+    icon: Crown,
+    tab: "Elite",
+    route: "/jornada-elite",
+    title: "Jornada Elite Premium 👑",
+    description: "Programa transformacional em níveis com módulos, vídeos, reflexões salvas e celebração com confete dourado a cada nível concluído.",
     tips: [
-      "Toque em '+ Nova nota' para criar",
-      "Escolha entre 10 cores para organizar por tema",
-      "Use como diário, lista de tarefas ou brainstorm",
-      "Tudo salvo na nuvem automaticamente ☁️",
+      "Faça o diagnóstico de arquétipo no início",
+      "Cada módulo tem campo de reflexão que salva no banco",
+      "Complete todos os módulos para ver a animação especial ✨",
+      "Plano de aceleração personalizado pra você",
     ],
-    color: "from-violet-500 to-purple-600",
-    emoji: "📝",
+    color: "from-yellow-600 to-amber-700",
+    emoji: "👑",
   },
   {
-    icon: Target,
-    tab: "Metas",
-    route: "/metas",
-    title: "Metas & Vision Board",
-    description: "Defina seus objetivos com prazos e acompanhe o progresso. Crie um quadro de visão com imagens dos seus sonhos!",
+    icon: Sparkles,
+    tab: "Manifestação",
+    route: "/jornada",
+    title: "Hub de Manifestação 🌟",
+    description: "Escala de Hawkins, Termômetro Vibracional, Quadro dos Sonhos, Ritual Matinal e Frequências de Cura (Solfeggio).",
     tips: [
-      "Crie metas com título, descrição e prazo",
-      "Acompanhe o progresso de cada meta",
-      "Vision Board: adicione imagens inspiradoras",
-      "Visualize diariamente para manifestar ✨",
+      "Termômetro Vibracional mede sua frequência diária",
+      "Frequências 432Hz, 528Hz e mais com Web Audio API 🎵",
+      "Ritual matinal de 5 minutos para começar elevada",
+      "Manifestação escrita com guia passo a passo",
     ],
-    color: "from-emerald-500 to-teal-600",
-    emoji: "🎯",
+    color: "from-fuchsia-500 to-purple-600",
+    emoji: "🌟",
+  },
+  {
+    icon: BookMarked,
+    tab: "Bíblia 365",
+    route: "/biblia-365",
+    title: "Bíblia em 365 Dias 📖",
+    description: "Plano personalizado que começa no SEU primeiro acesso, com cronograma diário, calendário de progresso e Visão da Neurociência.",
+    tips: [
+      "Cronograma único que se adapta à sua data de início",
+      "Marque cada capítulo lido e veja seu progresso",
+      "Calendário visual mostra dias completos",
+      "Reflexões com base científica em cada leitura",
+    ],
+    color: "from-indigo-500 to-blue-600",
+    emoji: "📖",
+  },
+  {
+    icon: Heart,
+    tab: "Saúde",
+    route: "/saude",
+    title: "Saúde, Fitness & Ciclo 💖",
+    description: "Calculadoras de proteína e água, dieta, treinos, suplementos, medicações e rastreador de ciclo menstrual com mapa de fases.",
+    tips: [
+      "Ciclo menstrual com previsão de período fértil 🌸",
+      "Calculadoras automáticas de proteína e água",
+      "Rastreio de suplementos e contraceptivos",
+      "Dashboard semanal com tudo num lugar só",
+    ],
+    color: "from-rose-500 to-pink-600",
+    emoji: "💖",
+  },
+  {
+    icon: Trophy,
+    tab: "Desafios",
+    route: "/desafios",
+    title: "Desafios Progressivos 🏆",
+    description: "Jornadas de 7 a 90 dias temáticas (Mente, Corpo, Alma, Evolução) com base bíblica e neurocientífica.",
+    tips: [
+      "Escolha desafios de 7, 21, 30, 60 ou 90 dias",
+      "Veja quantas girls estão no mesmo desafio",
+      "Cada tarefa explica o porquê (ciência + fé)",
+      "Compartilhe sua vitória na comunidade 💪",
+    ],
+    color: "from-orange-500 to-red-600",
+    emoji: "🏆",
   },
   {
     icon: Zap,
     tab: "Performance",
     route: "/alta-performance",
-    title: "Alta Performance",
-    description: "Ferramentas para alcançar sua melhor versão! Reprogramação mental, neurociência, PNL, meditações guiadas e Lei da Atração.",
+    title: "Reprogramação Mental 🧠",
+    description: "Neurociência + PNL, Ho'oponopono, Meditações Guiadas, Lei da Atração e Pomodoro com técnica Feynman.",
     tips: [
-      "Meditações guiadas para foco e relaxamento",
-      "Ho'oponopono — técnica de cura e perdão",
-      "Exercícios de PNL e neurociência",
-      "Lei da Atração com visualizações práticas 🧠",
+      "Meditações guiadas com voz pt-BR profissional 🎙️",
+      "Hooponopono: técnica havaiana de cura e perdão",
+      "60+ exercícios de PNL e neurociência",
+      "Audio ducking inteligente nos players",
     ],
     color: "from-yellow-500 to-amber-600",
     emoji: "⚡",
   },
   {
+    icon: Target,
+    tab: "Metas",
+    route: "/metas",
+    title: "Metas SMART & Vision Board 🎯",
+    description: "Defina objetivos com prazos, decompose em passos e visualize seus sonhos no quadro Pinterest.",
+    tips: [
+      "Metas SMART com decomposição em tarefas",
+      "Vision Board grid 2 colunas estilo Pinterest 🎨",
+      "Histórico de progresso com cálculo automático",
+      "Manifestação diária integrada às metas",
+    ],
+    color: "from-emerald-500 to-teal-600",
+    emoji: "🎯",
+  },
+  {
     icon: Wallet,
     tab: "Finanças",
     route: "/financas",
-    title: "Finanças Pessoais",
-    description: "Controle suas receitas e despesas de forma simples. Visualize seu saldo e mantenha sua vida financeira organizada!",
+    title: "Finanças Inteligentes 💰",
+    description: "Registros, cartão de crédito, AI assistant financeira e quiz de perfil com 4 arquétipos comportamentais.",
     tips: [
-      "Registre receitas (entradas) e despesas (saídas)",
-      "Saldo calculado automaticamente",
-      "Histórico completo de transações",
-      "Organize sua vida financeira 💰",
+      "Quiz revela seu arquétipo financeiro",
+      "AI assistant te dá dicas personalizadas 🤖",
+      "Renda, despesas fixas e variáveis separadas",
+      "Histórico mensal com gráficos e notas",
     ],
     color: "from-green-500 to-emerald-600",
     emoji: "💰",
   },
   {
-    icon: Users,
+    icon: Camera,
     tab: "Girls",
     route: "/comunidade",
-    title: "Comunidade & Stories",
-    description: "Sua rede social exclusiva! Poste textos, fotos, áudios, figurinhas e GIFs. Crie stories como no Instagram, siga girls e interaja!",
+    title: "Comunidade & Stories 👯",
+    description: "Rede social privada com stories de 24h, posts com mídia, mensagens diretas, salas temáticas e leaderboard.",
     tips: [
-      "Stories no topo: texto ou foto com fontes personalizáveis",
-      "Use @ para mencionar amigas nos posts",
-      "Reaja com figurinhas, GIFs e emojis 😊",
-      "Siga girls e veja quem está online em tempo real",
+      "Stories no topo: editor estilo Instagram 📸",
+      "Mensagens diretas privadas com stickers e GIFs",
+      "Salas temáticas para conversas em grupo",
+      "Use @ para mencionar e ❤️ para reagir",
     ],
     color: "from-pink-500 to-rose-600",
     emoji: "👯",
   },
   {
+    icon: Bot,
+    tab: "AI",
+    route: "/",
+    title: "Assistente de IA Empática 🤖",
+    description: "AI estilo Gemini com raciocínio fluido, memória de conversas e voz pt-BR (fale e ouça).",
+    tips: [
+      "Botão flutuante disponível em qualquer página",
+      "Voz pt-BR com cadência natural 🎙️",
+      "Memória de contexto entre mensagens",
+      "Pergunte sobre rotina, manifestação, fé, saúde...",
+    ],
+    color: "from-violet-500 to-purple-600",
+    emoji: "🤖",
+  },
+  {
+    icon: BookOpen,
+    tab: "Diário",
+    route: "/diario",
+    title: "Diário & Anotações 📝",
+    description: "Bloco de notas pessoal com 10 cores, títulos editáveis e sync na nuvem.",
+    tips: [
+      "Crie notas com título e cor personalizada",
+      "Use como diário, lista ou brainstorm",
+      "Tudo salvo automaticamente ☁️",
+      "Privacidade total: só você vê",
+    ],
+    color: "from-violet-500 to-purple-600",
+    emoji: "📝",
+  },
+  {
     icon: User,
     tab: "Perfil",
     route: "/perfil",
-    title: "Seu Perfil Social",
-    description: "Personalize seu perfil com foto, capa arrastável, bio com links clicáveis e veja seus seguidores. É sua identidade no Gloow Up Club!",
+    title: "Seu Perfil Social ✨",
+    description: "Personalize foto, capa arrastável, bio com links clicáveis e gerencie seguidores.",
     tips: [
-      "Arraste a capa para reposicionar a imagem",
-      "Cole links na bio — ficam clicáveis automaticamente",
-      "Veja seus posts, seguidores e quem você segue",
-      "Visite o perfil de outras girls pela comunidade 💖",
+      "Arraste a capa para reposicionar",
+      "Cole links na bio — viram clicáveis automaticamente",
+      "Notificações push 5x/dia: 08h, 12h, 16h30, 20h, 23h30 🔔",
+      "Visite perfis de outras girls pela comunidade 💖",
     ],
     color: "from-blue-500 to-indigo-600",
     emoji: "✨",
@@ -140,7 +231,7 @@ export default function GuidedTour({ onClose }: GuidedTourProps) {
     setTimeout(() => {
       setCurrentStep(index);
       if (index >= 0 && index < TOUR_STEPS.length) {
-        navigate(TOUR_STEPS[index].route === "/perfil" ? "/" : TOUR_STEPS[index].route);
+        navigate(TOUR_STEPS[index].route);
       }
       setIsAnimating(false);
     }, 200);
@@ -222,32 +313,16 @@ export default function GuidedTour({ onClose }: GuidedTourProps) {
       {/* Dimmed overlay */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] pointer-events-auto" onClick={() => {}} />
 
-      {/* Bottom nav highlight */}
-      <div className="absolute bottom-0 left-0 right-0 z-[201] pointer-events-none">
-        <div className="flex items-center justify-around h-16 max-w-lg mx-auto px-1">
-          {TOUR_STEPS.map((s, i) => {
-            const Icon = s.icon;
-            const isActive = i === currentStep;
-            return (
-              <div
-                key={i}
-                className={cn(
-                  "flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl min-w-[48px] transition-all duration-300",
-                  isActive
-                    ? "text-gold scale-125 drop-shadow-lg"
-                    : "text-muted-foreground/30 scale-90"
-                )}
-              >
-                <Icon className="h-5 w-5" strokeWidth={isActive ? 2.5 : 1.5} />
-                <span className={cn("text-[9px] font-body", isActive ? "font-bold" : "font-normal")}>
-                  {s.tab}
-                </span>
-                {isActive && (
-                  <div className="absolute -top-1.5 h-1 w-6 bg-gold rounded-full animate-pulse" />
-                )}
-              </div>
-            );
-          })}
+      {/* Step indicator chip (replaces bottom nav highlight since we have 13 steps now) */}
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[201] pointer-events-none">
+        <div className="flex items-center gap-2 bg-black/70 backdrop-blur-md border border-gold/30 rounded-full px-4 py-2 shadow-2xl">
+          <span className="text-2xl">{step.emoji}</span>
+          <div className="flex flex-col">
+            <span className="text-[9px] font-body text-gold/70 uppercase tracking-widest">
+              Passo {currentStep + 1}/{TOUR_STEPS.length}
+            </span>
+            <span className="text-xs font-heading font-bold text-gold">{step.tab}</span>
+          </div>
         </div>
       </div>
 
