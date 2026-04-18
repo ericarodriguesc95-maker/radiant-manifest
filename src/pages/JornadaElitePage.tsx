@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Lock, CheckCircle2, Crown, Sparkles, Play, ClipboardCheck, Trophy, KeyRound } from "lucide-react";
+import { ArrowLeft, Lock, CheckCircle2, Crown, Sparkles, Play, ClipboardCheck, Trophy, KeyRound, X, BookOpen, Target, MessageCircleQuestion } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { JOURNEY_LEVELS, VIDEO_TRACKS, DIAGNOSTIC_QUESTIONS, ARCHETYPE_PLANS, AccelerationPlan } from "@/data/eliteJourneyData";
+import { JOURNEY_LEVELS, VIDEO_TRACKS, DIAGNOSTIC_QUESTIONS, ARCHETYPE_PLANS, AccelerationPlan, JourneyModule } from "@/data/eliteJourneyData";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -24,6 +24,8 @@ export default function JornadaElitePage() {
   const [activeTrack, setActiveTrack] = useState<string>("oratoria");
   const [activeVideo, setActiveVideo] = useState<{ youtubeId: string; title: string } | null>(null);
   const [completedVideos, setCompletedVideos] = useState<Set<string>>(new Set());
+  // Module modal
+  const [activeModule, setActiveModule] = useState<{ levelId: number; module: JourneyModule } | null>(null);
 
   // Load data
   useEffect(() => {
@@ -196,10 +198,10 @@ export default function JornadaElitePage() {
                               return (
                                 <button
                                   key={mod.id}
-                                  onClick={() => toggleModule(level.id, mod.id)}
+                                  onClick={() => setActiveModule({ levelId: level.id, module: mod })}
                                   className={cn(
-                                    "w-full flex items-center gap-2 p-2.5 rounded-lg text-left transition-all",
-                                    done ? "bg-gold/10 border border-gold/30" : "bg-muted/20 border border-transparent hover:border-gold/20"
+                                    "w-full flex items-center gap-2 p-2.5 rounded-lg text-left transition-all active:scale-[0.98]",
+                                    done ? "bg-gold/10 border border-gold/30" : "bg-muted/20 border border-transparent hover:border-gold/30"
                                   )}
                                 >
                                   <div className={cn("h-4 w-4 rounded-full border-2 flex items-center justify-center shrink-0", done ? "bg-gold border-gold" : "border-muted-foreground")}>
@@ -209,6 +211,7 @@ export default function JornadaElitePage() {
                                     <p className={cn("text-[12px] font-body font-semibold", done ? "text-gold" : "text-foreground")}>{mod.title}</p>
                                     <p className="text-[10px] text-muted-foreground truncate">{mod.description} · {mod.duration}</p>
                                   </div>
+                                  <BookOpen className="h-3.5 w-3.5 text-gold/60 shrink-0" />
                                 </button>
                               );
                             })}
@@ -442,6 +445,100 @@ export default function JornadaElitePage() {
           </>
         )}
       </div>
+
+      {/* MODULE MODAL */}
+      {activeModule && (
+        <div
+          className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black/85 backdrop-blur-sm p-0 sm:p-4 animate-in fade-in"
+          onClick={() => setActiveModule(null)}
+        >
+          <div
+            className="w-full max-w-2xl max-h-[92vh] overflow-y-auto bg-background border border-gold/30 rounded-t-3xl sm:rounded-3xl shadow-brand"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="sticky top-0 z-10 glass-strong border-b border-gold/15 px-5 py-4 flex items-start gap-3">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-gold/30 to-gold/5 border border-gold/30 flex items-center justify-center shrink-0">
+                <BookOpen className="h-4 w-4 text-gold" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[9px] font-body tracking-[0.25em] uppercase text-gold/70">
+                  Nível {activeModule.levelId} · {activeModule.module.duration}
+                </p>
+                <h3 className="text-base font-display font-bold text-foreground leading-tight">
+                  {activeModule.module.title}
+                </h3>
+              </div>
+              <button
+                onClick={() => setActiveModule(null)}
+                className="p-2 -mr-2 rounded-xl hover:bg-muted/30 transition-colors shrink-0"
+              >
+                <X className="h-4 w-4 text-foreground" />
+              </button>
+            </div>
+
+            <div className="px-5 py-5 space-y-5">
+              {/* Aula */}
+              <div className="space-y-2">
+                <div className="flex items-center gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5 text-gold" />
+                  <p className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80">A aula</p>
+                </div>
+                <p className="text-sm font-body text-foreground/90 leading-relaxed whitespace-pre-line">
+                  {activeModule.module.content}
+                </p>
+              </div>
+
+              {/* Prática */}
+              <div className="rounded-2xl glass border border-gold/20 p-4 space-y-2">
+                <div className="flex items-center gap-1.5">
+                  <Target className="h-3.5 w-3.5 text-gold" />
+                  <p className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80">Prática guiada</p>
+                </div>
+                <p className="text-sm font-body text-foreground leading-relaxed">
+                  {activeModule.module.practice}
+                </p>
+              </div>
+
+              {/* Reflexão */}
+              <div className="rounded-2xl bg-gradient-to-br from-gold/10 to-transparent border border-gold/30 p-4 space-y-2">
+                <div className="flex items-center gap-1.5">
+                  <MessageCircleQuestion className="h-3.5 w-3.5 text-gold" />
+                  <p className="text-[10px] font-body tracking-[0.25em] uppercase text-gold">Reflexão da rainha</p>
+                </div>
+                <p className="text-sm font-display italic text-foreground leading-relaxed">
+                  "{activeModule.module.reflection}"
+                </p>
+              </div>
+
+              {/* Action */}
+              {(() => {
+                const done = progress[activeModule.levelId]?.completed_modules.includes(activeModule.module.id);
+                return (
+                  <button
+                    onClick={async () => {
+                      await toggleModule(activeModule.levelId, activeModule.module.id);
+                      setActiveModule(null);
+                    }}
+                    className={cn(
+                      "w-full py-3.5 rounded-xl font-body font-bold text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2",
+                      done
+                        ? "bg-muted/30 border border-gold/20 text-muted-foreground"
+                        : "bg-gold text-primary-foreground shadow-gold hover:brightness-110"
+                    )}
+                  >
+                    {done ? (
+                      <>Desmarcar conclusão</>
+                    ) : (
+                      <><CheckCircle2 className="h-4 w-4" /> Concluí esta aula</>
+                    )}
+                  </button>
+                );
+              })()}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

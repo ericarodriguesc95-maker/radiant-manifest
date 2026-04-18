@@ -1,11 +1,21 @@
 // Trilha de Aprendizado: 5 níveis hierárquicos
+export interface JourneyModule {
+  id: string;
+  title: string;
+  duration: string;
+  description: string;
+  content: string; // Aula completa em markdown leve
+  practice: string; // Exercício prático
+  reflection: string; // Pergunta para reflexão
+}
+
 export interface JourneyLevel {
   id: number;
   name: string;
   subtitle: string;
   icon: string; // emoji
   color: string;
-  modules: { id: string; title: string; duration: string; description: string }[];
+  modules: JourneyModule[];
 }
 
 export const JOURNEY_LEVELS: JourneyLevel[] = [
@@ -16,9 +26,33 @@ export const JOURNEY_LEVELS: JourneyLevel[] = [
     icon: "👑",
     color: "from-rose-900/30 to-rose-700/10",
     modules: [
-      { id: "auto-1", title: "Quem sou eu hoje", duration: "12 min", description: "Reconheça sua identidade atual sem julgamento" },
-      { id: "auto-2", title: "Reconciliação interna", duration: "15 min", description: "Faça as pazes com versões anteriores de você" },
-      { id: "auto-3", title: "O espelho da rainha", duration: "10 min", description: "Exercício diário de autopercepção" },
+      {
+        id: "auto-1",
+        title: "Quem sou eu hoje",
+        duration: "12 min",
+        description: "Reconheça sua identidade atual sem julgamento",
+        content: "Antes de mudar quem você é, é preciso ENXERGAR quem você é hoje — sem máscara, sem filtro, sem comparação. Autoestima não nasce de afirmações vazias, nasce de auto-honestidade radical. Hoje você vai tirar uma fotografia interna da mulher que existe agora: suas forças reais, suas fraquezas reais, seus desejos reais. Não a versão que sua mãe quer, não a do Instagram, não a que seu chefe espera. A SUA.",
+        practice: "Pegue papel e caneta. Em 7 minutos, responda sem editar: 1) Três adjetivos que me descrevem hoje. 2) Três coisas que eu finjo que não sinto. 3) Uma verdade que estou evitando admitir. Guarde esse papel — você vai voltar a ele no nível 2.",
+        reflection: "Se ninguém estivesse julgando, quem eu seria amanhã de manhã?",
+      },
+      {
+        id: "auto-2",
+        title: "Reconciliação interna",
+        duration: "15 min",
+        description: "Faça as pazes com versões anteriores de você",
+        content: "Toda mulher carrega dentro de si versões anteriores: a menina ferida, a adolescente perdida, a jovem que errou feio, a mulher que se calou. Você não pode amar quem você é HOJE enquanto envergonha quem você foi ONTEM. Reconciliação interna é o ato de virar para essas versões e dizer: 'Você fez o que pôde com o que tinha. Eu te amo. Eu te perdoo. Vamos juntas.'",
+        practice: "Feche os olhos. Visualize você aos 7, aos 15 e aos 25 anos. Diga em voz alta para cada uma: 'Eu te vejo. Eu te entendo. Você está segura comigo agora.' Escreva uma carta curta para a versão de você que mais precisa ouvir isso hoje.",
+        reflection: "Qual versão de mim eu ainda não perdoei — e o que ela precisa ouvir?",
+      },
+      {
+        id: "auto-3",
+        title: "O espelho da rainha",
+        duration: "10 min",
+        description: "Exercício diário de autopercepção",
+        content: "Rainhas não desviam do próprio reflexo. Você sim — quase todo dia. Olha no espelho rápido, julga, corre. Hoje você vai aprender o ritual do Espelho da Rainha: olhar-se nos olhos por 60 segundos, sem mexer no rosto, sem sorrir forçado, apenas se receber. Esse exercício, repetido diariamente, reprograma a relação inconsciente que você tem consigo mesma.",
+        practice: "Vá até um espelho AGORA. Coloque cronômetro de 60 segundos. Olhe nos seus próprios olhos. Sem julgar, sem analisar pele/cabelo. Apenas: olho no olho. Ao final, diga: 'Eu te escolho.' Repita por 7 dias seguidos ao acordar.",
+        reflection: "O que mudou no meu olhar do segundo 1 para o segundo 60?",
+      },
     ],
   },
   {
@@ -28,9 +62,33 @@ export const JOURNEY_LEVELS: JourneyLevel[] = [
     icon: "🔱",
     color: "from-amber-900/30 to-amber-700/10",
     modules: [
-      { id: "conh-1", title: "Mapeamento de gatilhos", duration: "18 min", description: "Identifique o que te ativa positiva e negativamente" },
-      { id: "conh-2", title: "Crenças de base", duration: "20 min", description: "Encontre as histórias que você conta a si mesma" },
-      { id: "conh-3", title: "Sombra & luz", duration: "15 min", description: "Integre os opostos da sua personalidade" },
+      {
+        id: "conh-1",
+        title: "Mapeamento de gatilhos",
+        duration: "18 min",
+        description: "Identifique o que te ativa positiva e negativamente",
+        content: "Gatilho é qualquer estímulo (palavra, tom de voz, situação, cheiro) que dispara uma reação automática em você — antes mesmo da razão entrar. Mulheres de alta performance não eliminam gatilhos: elas os MAPEIAM. Quando você sabe o que te tira do eixo, você para de ser refém. O objetivo aqui não é virar 'imune', é virar consciente.",
+        practice: "Liste 5 situações dos últimos 30 dias em que você reagiu de forma desproporcional (raiva, choro, silêncio, fuga). Para cada uma, responda: O que aconteceu? Que emoção surgiu? Que memória/crença foi ativada? Procure o padrão — geralmente são 2 ou 3 gatilhos centrais que se repetem.",
+        reflection: "Qual é o gatilho mais frequente da minha vida — e o que ele está tentando me ensinar?",
+      },
+      {
+        id: "conh-2",
+        title: "Crenças de base",
+        duration: "20 min",
+        description: "Encontre as histórias que você conta a si mesma",
+        content: "Crenças de base são frases-âncora que você herdou (família, religião, escola, traumas) e que operam silenciosamente como sistema operacional. Exemplos: 'dinheiro é sujo', 'mulher inteligente assusta homem', 'eu não mereço descanso'. Você não escolheu essas frases — mas elas estão tomando 80% das suas decisões. Hoje você vai trazê-las para a luz.",
+        practice: "Complete sem pensar: Dinheiro é ___. Homens são ___. Sucesso exige ___. Eu sou ___. Mulheres bem-sucedidas são ___. Olhe as respostas. Quais delas são SUAS verdades adultas — e quais foram instaladas em você antes dos 12 anos? Marque cada crença limitante com um X.",
+        reflection: "Qual crença, se eu deletasse hoje, mudaria minha vida nos próximos 6 meses?",
+      },
+      {
+        id: "conh-3",
+        title: "Sombra & luz",
+        duration: "15 min",
+        description: "Integre os opostos da sua personalidade",
+        content: "Sombra (conceito junguiano) é tudo aquilo que você rejeita em si: agressividade, ambição, ciúme, vaidade, preguiça. Você empurra para o subconsciente — e ele te governa de lá. Mulheres maduras não cortam a sombra: integram. A ambiciosa que se chama de 'gananciosa' nunca vai prosperar. A sensual que se chama de 'vulgar' nunca vai amar o próprio corpo. Integrar = nomear sem julgar.",
+        practice: "Liste 3 características que você JULGA em outras mulheres (ex: 'fulana é convencida'). Agora reconheça: essas características também existem em você, em alguma medida. Reescreva cada uma como qualidade ('convencida' → 'tem autoestima firme'). Adote 1 dessas qualidades essa semana.",
+        reflection: "O que eu mais critico nas outras é exatamente o que eu mais reprimo em mim?",
+      },
     ],
   },
   {
@@ -40,9 +98,33 @@ export const JOURNEY_LEVELS: JourneyLevel[] = [
     icon: "💎",
     color: "from-violet-900/30 to-violet-700/10",
     modules: [
-      { id: "com-1", title: "Voz que ressoa", duration: "16 min", description: "Técnicas de presença vocal" },
-      { id: "com-2", title: "Diálogo difícil", duration: "22 min", description: "Como abordar conversas que você evita" },
-      { id: "com-3", title: "Escuta profunda", duration: "12 min", description: "A arma secreta das mulheres influentes" },
+      {
+        id: "com-1",
+        title: "Voz que ressoa",
+        duration: "16 min",
+        description: "Técnicas de presença vocal",
+        content: "Sua voz é o instrumento mais subestimado do seu poder. Pesquisas mostram que pessoas com voz grave, ritmada e com pausas são percebidas como 38% mais autoridades. Mulheres tendem a falar agudo (nervosismo) e rápido (medo de tomar tempo). Hoje você aprende 3 ajustes: respiração diafragmática, pausa estratégica e ancoragem vocal no peito.",
+        practice: "Grave 1 minuto de áudio falando sobre seu dia. Escute. Note: você fala do peito ou da garganta? Faz pausas? Termina frases firme ou subindo o tom (estilo pergunta)? Refaça a gravação aplicando: respire fundo antes, fale 20% mais devagar, termine cada frase descendo o tom.",
+        reflection: "Como minha voz mudaria se eu acreditasse 100% no que estou dizendo?",
+      },
+      {
+        id: "com-2",
+        title: "Diálogo difícil",
+        duration: "22 min",
+        description: "Como abordar conversas que você evita",
+        content: "Há uma conversa que você está adiando há semanas (ou anos). Cada dia que passa sem ela, você paga em ansiedade, ressentimento ou ruído mental. Conversas difíceis bem feitas usam o framework DESC: Descrever o fato (sem julgar), Expressar a emoção (sem culpar), Solicitar a mudança (clara), Consequência (real). Não é confronto — é clareza com afeto.",
+        practice: "Identifique 1 conversa pendente. Escreva no formato DESC: 'Quando você [fato], eu sinto [emoção], porque [necessidade]. Eu peço que [pedido específico]. Se não rolar, [consequência].' Marque a conversa para os próximos 7 dias. Real. Não adia.",
+        reflection: "Qual conversa, se eu tivesse hoje, libertaria mais espaço mental na minha semana?",
+      },
+      {
+        id: "com-3",
+        title: "Escuta profunda",
+        duration: "12 min",
+        description: "A arma secreta das mulheres influentes",
+        content: "A maioria das pessoas não escuta — espera para falar. Escuta profunda é uma habilidade rara: ouvir não só o que é dito, mas o que NÃO é dito. O subtexto, a emoção por trás, o medo escondido. Quem escuta assim ganha confiança absoluta dos outros. É o superpoder de líderes, terapeutas e mulheres magnéticas.",
+        practice: "Na próxima conversa importante, aplique: 1) Não interrompa por 3 minutos seguidos. 2) Antes de responder, pergunte: 'Posso ter entendido certo? Você está dizendo que [reformule].' 3) Faça 1 pergunta de aprofundamento ('e como isso te fez sentir?') antes de dar sua opinião.",
+        reflection: "Quando foi a última vez que alguém me escutou de verdade — e como isso me fez sentir?",
+      },
     ],
   },
   {
@@ -52,9 +134,33 @@ export const JOURNEY_LEVELS: JourneyLevel[] = [
     icon: "⚜️",
     color: "from-emerald-900/30 to-emerald-700/10",
     modules: [
-      { id: "inf-1", title: "Carisma estratégico", duration: "20 min", description: "Construa presença sem performance" },
-      { id: "inf-2", title: "Storytelling pessoal", duration: "25 min", description: "Sua história como ferramenta de poder" },
-      { id: "inf-3", title: "Networking de elite", duration: "18 min", description: "Conexões que multiplicam oportunidades" },
+      {
+        id: "inf-1",
+        title: "Carisma estratégico",
+        duration: "20 min",
+        description: "Construa presença sem performance",
+        content: "Carisma não é nascimento, é construção. Pesquisa de Olivia Fox Cabane mostra 3 pilares: presença (estar 100% no momento), poder (postura corporal de quem ocupa espaço) e calor (transmitir cuidado genuíno). Falta um pilar = parece arrogante (poder sem calor) ou apagada (calor sem poder). Os 3 juntos = magnetismo.",
+        practice: "Hoje, na primeira interação importante: 1) Antes de entrar no ambiente, respire e centre-se (presença). 2) Ombros para trás, queixo paralelo ao chão, ocupe seu espaço (poder). 3) Sorria com os olhos antes da boca, faça uma pergunta genuína sobre a outra pessoa (calor).",
+        reflection: "Qual desses 3 pilares (presença, poder, calor) eu mais negligencio — e por quê?",
+      },
+      {
+        id: "inf-2",
+        title: "Storytelling pessoal",
+        duration: "25 min",
+        description: "Sua história como ferramenta de poder",
+        content: "Dados convencem, histórias transformam. Você tem uma história — de virada, de queda, de reconstrução — que pode abrir portas, fechar negócios, inspirar pessoas. A maioria das mulheres minimiza sua própria história ('não foi nada demais'). É hora de estruturar a sua usando o arco clássico: Era uma vez (você antes) → Até que (o ponto de virada) → Agora (você hoje) → Por isso (o que você ensina).",
+        practice: "Escreva sua história em 4 parágrafos curtos seguindo o arco acima. Limite: 250 palavras totais. Leia em voz alta. Sinta onde trava. Refaça até fluir. Essa será sua 'história-âncora' para usar em entrevistas, redes, palestras, primeiros encontros profissionais.",
+        reflection: "Qual capítulo da minha história eu ainda escondo — e como ele poderia inspirar outras mulheres?",
+      },
+      {
+        id: "inf-3",
+        title: "Networking de elite",
+        duration: "18 min",
+        description: "Conexões que multiplicam oportunidades",
+        content: "Networking de baixo nível: trocar cartão e pedir favor. Networking de elite: SERVIR primeiro, pedir depois (ou nunca). A regra é simples: para cada pedido que você faz, ofereça 5 valores antes (apresentação, conteúdo útil, oportunidade, elogio público, conexão). Mulheres de elite cultivam relacionamentos com gratuidade — e quando precisam, têm um exército.",
+        practice: "Liste 10 pessoas que você admira ou de quem precisa em algum momento. Para cada uma, defina 1 forma de servir essa semana (compartilhar artigo dela, indicá-la, comentar com substância um post, enviar um cliente). Execute pelo menos 3.",
+        reflection: "Quem eu posso elevar essa semana — sem esperar nada em troca?",
+      },
     ],
   },
   {
@@ -64,9 +170,33 @@ export const JOURNEY_LEVELS: JourneyLevel[] = [
     icon: "🏛️",
     color: "from-gold/30 to-amber-700/10",
     modules: [
-      { id: "lid-1", title: "Visão & estratégia", duration: "30 min", description: "Pense como uma CEO da própria vida" },
-      { id: "lid-2", title: "Decisões sob pressão", duration: "22 min", description: "Frameworks de decisão usados por líderes" },
-      { id: "lid-3", title: "Legado consciente", duration: "20 min", description: "O que você deixará para trás?" },
+      {
+        id: "lid-1",
+        title: "Visão & estratégia",
+        duration: "30 min",
+        description: "Pense como uma CEO da própria vida",
+        content: "CEOs operam com 3 horizontes simultâneos: hoje (execução), 90 dias (projetos) e 3 anos (visão). A maioria das pessoas vive só no hoje — e por isso vive correndo. Liderar a própria vida começa em desenhar onde você quer estar em 3 anos (com clareza de carreira, finanças, corpo, relacionamentos) e ENGENHAR ATRÁS: o que precisa estar pronto em 1 ano? Em 90 dias? Esta semana?",
+        practice: "Reserve 30 min sem celular. Em 1 página, escreva: 'Em abril de 2029 eu sou ___. Tenho ___. Faço ___. Minha rotina é ___. Meu corpo está ___. Meu dinheiro é ___.' Depois faça engenharia reversa: 1 marco para 1 ano, 1 ação para 90 dias, 1 ação para essa semana.",
+        reflection: "Qual decisão de hoje a CEO de 2029 me agradeceria por ter tomado?",
+      },
+      {
+        id: "lid-2",
+        title: "Decisões sob pressão",
+        duration: "22 min",
+        description: "Frameworks de decisão usados por líderes",
+        content: "Sob pressão, o cérebro emocional sequestra o raciocínio. Líderes treinam frameworks que destravam decisão mesmo no caos. Use o WRAP de Chip Heath: Widen options (não decida entre 2 — busque uma 3ª), Reality-test (busque dado contrário ao que você quer), Attain distance (decida como decidiria por uma amiga), Prepare to be wrong (qual o plano B se der ruim?).",
+        practice: "Pegue UMA decisão que você está adiando. Aplique WRAP: 1) Liste 3 opções (não 2). 2) Pergunte a alguém que discordaria de você. 3) 'Se minha melhor amiga estivesse nesse lugar, o que eu aconselharia?' 4) Defina o pior cenário e como reagiria. DECIDA ATÉ AMANHÃ.",
+        reflection: "Estou adiando essa decisão por falta de dados — ou por medo de assumir o resultado?",
+      },
+      {
+        id: "lid-3",
+        title: "Legado consciente",
+        duration: "20 min",
+        description: "O que você deixará para trás?",
+        content: "Legado não é o que você acumula — é o que continua acontecendo depois que você sai da sala. Pode ser uma filha mais segura, uma equipe mais corajosa, um livro, um método, uma comunidade, uma cura geracional. Mulheres conscientes não deixam legado por acaso: elas DESENHAM. Pergunta central: o que do meu trabalho/vida sobreviveria a mim?",
+        practice: "Escreva seu próprio elogio fúnebre — versão idealizada — em 1 página. Como você quer ser lembrada? Por quem? Por quais frases? Quais histórias contariam de você? Identifique a maior LACUNA entre essa versão e a você de hoje. Defina 1 ação trimestral para fechar essa lacuna.",
+        reflection: "Se eu morresse em 5 anos, do que mais me arrependeria de não ter começado hoje?",
+      },
     ],
   },
 ];
