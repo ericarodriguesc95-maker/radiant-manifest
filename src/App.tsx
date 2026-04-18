@@ -37,6 +37,7 @@ import Biblia365Page from "@/pages/Biblia365Page";
 import TestesPage from "@/pages/TestesPage";
 import JornadaElitePage from "@/pages/JornadaElitePage";
 import ModuloElitePage from "@/pages/ModuloElitePage";
+import AdminBibliotecaElitePage from "@/pages/AdminBibliotecaElitePage";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
