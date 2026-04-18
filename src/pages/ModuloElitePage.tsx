@@ -243,8 +243,8 @@ export default function ModuloElitePage() {
       </div>
 
       {/* Sticky action */}
-      <div className="fixed bottom-0 inset-x-0 z-30 glass-strong border-t border-gold/15 px-5 py-3">
-        <div className="max-w-2xl mx-auto">
+      <div className="fixed bottom-0 inset-x-0 md:left-64 z-30 glass-strong border-t border-gold/15 px-5 py-3">
+        <div className="max-w-2xl mx-auto w-full">
           <button
             onClick={toggleDone}
             className={cn(
