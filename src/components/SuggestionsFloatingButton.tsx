@@ -90,7 +90,8 @@ export default function SuggestionsFloatingButton() {
         "h-12 w-12 md:h-14 md:w-14 rounded-full bg-gold text-primary-foreground",
         "flex items-center justify-center shadow-[0_8px_30px_-4px_rgba(212,175,55,0.55)]",
         "hover:scale-105 active:scale-95 transition-transform",
-        "border border-gold/40"
+        "border border-gold/40",
+        count > 0 && "animate-pulse ring-2 ring-gold/50 ring-offset-2 ring-offset-background"
       )}
     >
       <Lightbulb className="h-5 w-5 md:h-6 md:w-6" />

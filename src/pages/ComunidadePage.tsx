@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import Leaderboard from "@/components/Leaderboard";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -49,6 +49,15 @@ interface PostWithProfile {
 const ComunidadePage = () => {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Auto-open DMs if navigated with ?openDms=1
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("openDms") === "1") {
+      setShowDMs(true);
+    }
+  }, [location.search]);
   const [posts, setPosts] = useState<PostWithProfile[]>([]);
   const [newPost, setNewPost] = useState("");
   const [loading, setLoading] = useState(true);
@@ -680,24 +689,31 @@ const ComunidadePage = () => {
           <h1 className="text-xl font-display font-bold tracking-tight">
             Girls <span className="text-gold">✦</span>
           </h1>
-          <div className="flex items-center gap-0.5">
+          <div className="flex items-end gap-1">
             <button
-              onClick={() => setShowDMs(true)}
-              className="p-2.5 rounded-full hover:bg-muted/50 transition-colors relative"
+              onClick={() => { setShowDMs(true); try { localStorage.setItem("dm-used", "1"); } catch {} }}
+              className="flex flex-col items-center gap-0.5 px-1.5 py-1 rounded-xl hover:bg-muted/50 transition-colors group"
               title="Mensagens diretas"
             >
-              <Mail className="h-5 w-5 text-foreground" />
+              <span className="relative p-2 rounded-full bg-gold/10 ring-1 ring-gold/40 shadow-[0_0_14px_rgba(212,175,55,0.45)] group-hover:shadow-[0_0_20px_rgba(212,175,55,0.7)] transition-shadow">
+                <Mail className="h-[18px] w-[18px] text-gold" />
+              </span>
+              <span className="text-[9px] font-body font-semibold text-gold/90 leading-none">DM</span>
             </button>
             <button
-              onClick={() => setShowChatRooms(true)}
-              className="p-2.5 rounded-full hover:bg-muted/50 transition-colors"
-              title="Salas de chat"
+              onClick={() => { setShowChatRooms(true); try { localStorage.setItem("chatrooms-used", "1"); } catch {} }}
+              className="flex flex-col items-center gap-0.5 px-1.5 py-1 rounded-xl hover:bg-muted/50 transition-colors group"
+              title="Salas de chat por assunto"
             >
-              <Hash className="h-5 w-5 text-foreground" />
+              <span className="relative p-2 rounded-full bg-gold/10 ring-1 ring-gold/40 shadow-[0_0_14px_rgba(212,175,55,0.45)] group-hover:shadow-[0_0_20px_rgba(212,175,55,0.7)] transition-shadow">
+                <Hash className="h-[18px] w-[18px] text-gold" />
+              </span>
+              <span className="text-[9px] font-body font-semibold text-gold/90 leading-none">Salas</span>
             </button>
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="relative p-2.5 rounded-full hover:bg-muted/50 transition-colors"
+              className="relative p-2.5 rounded-full hover:bg-muted/50 transition-colors self-center"
+              title="Notificações"
             >
               <Bell className="h-5 w-5 text-foreground" />
               {unreadCount > 0 && (
@@ -708,7 +724,8 @@ const ComunidadePage = () => {
             </button>
             <button
               onClick={() => navigate("/settings")}
-              className="p-2.5 rounded-full hover:bg-muted/50 transition-colors"
+              className="p-2.5 rounded-full hover:bg-muted/50 transition-colors self-center"
+              title="Configurações"
             >
               <Settings className="h-5 w-5 text-foreground" />
             </button>
