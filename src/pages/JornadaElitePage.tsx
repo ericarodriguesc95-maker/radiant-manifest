@@ -198,7 +198,7 @@ export default function JornadaElitePage() {
                               return (
                                 <button
                                   key={mod.id}
-                                  onClick={() => setActiveModule({ levelId: level.id, module: mod })}
+                                  onClick={() => navigate(`/jornada-elite/modulo/${level.id}/${mod.id}`)}
                                   className={cn(
                                     "w-full flex items-center gap-2 p-2.5 rounded-lg text-left transition-all active:scale-[0.98]",
                                     done ? "bg-gold/10 border border-gold/30" : "bg-muted/20 border border-transparent hover:border-gold/30"
