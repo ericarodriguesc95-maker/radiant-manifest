@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import Leaderboard from "@/components/Leaderboard";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -49,6 +49,15 @@ interface PostWithProfile {
 const ComunidadePage = () => {
   const { user, profile } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Auto-open DMs if navigated with ?openDms=1
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("openDms") === "1") {
+      setShowDMs(true);
+    }
+  }, [location.search]);
   const [posts, setPosts] = useState<PostWithProfile[]>([]);
   const [newPost, setNewPost] = useState("");
   const [loading, setLoading] = useState(true);
