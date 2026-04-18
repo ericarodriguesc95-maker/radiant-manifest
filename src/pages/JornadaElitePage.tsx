@@ -37,16 +37,20 @@ export default function JornadaElitePage() {
   useEffect(() => {
     if (!user) return;
     (async () => {
-      const [{ data: progData }, { data: diagData }, { data: vidData }] = await Promise.all([
+      const [{ data: progData }, { data: diagData }, { data: vidData }, { data: ovData }] = await Promise.all([
         supabase.from("elite_journey_progress" as any).select("*").eq("user_id", user.id),
         supabase.from("elite_diagnostic_results" as any).select("*").eq("user_id", user.id).maybeSingle(),
         supabase.from("elite_video_completions" as any).select("video_id").eq("user_id", user.id),
+        supabase.from("elite_video_overrides" as any).select("video_id, youtube_id"),
       ]);
       const p: Record<number, any> = {};
       (progData as any[])?.forEach((r) => { p[r.level_id] = { completed_modules: r.completed_modules, is_completed: r.is_completed }; });
       setProgress(p);
       if (diagData && (diagData as any).archetype) setPlan(ARCHETYPE_PLANS[(diagData as any).archetype]);
       setCompletedVideos(new Set((vidData as any[])?.map((v) => v.video_id) || []));
+      const ovMap: Record<string, string> = {};
+      (ovData as any[])?.forEach((r) => { ovMap[r.video_id] = r.youtube_id; });
+      setOverrides(ovMap);
     })();
   }, [user]);
 
