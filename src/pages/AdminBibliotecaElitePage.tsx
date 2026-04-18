@@ -295,6 +295,26 @@ export default function AdminBibliotecaElitePage() {
                   maxLength={500}
                 />
 
+                {/* Live preview player */}
+                {previewId && (
+                  <div className="space-y-1.5">
+                    <p className="text-[10px] font-body uppercase tracking-[0.2em] text-gold/70">
+                      Prévia ({extractYouTubeId(draft) ? "novo link" : "vídeo salvo"})
+                    </p>
+                    <div className="relative aspect-video rounded-lg overflow-hidden bg-black border border-gold/20">
+                      <iframe
+                        key={previewId}
+                        src={`https://www.youtube-nocookie.com/embed/${previewId}?rel=0&modestbranding=1`}
+                        title="Prévia do vídeo"
+                        className="absolute inset-0 h-full w-full"
+                        allow="accelerometer; encrypted-media; picture-in-picture"
+                        allowFullScreen
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={() => saveOverride(track.id, v.id)}
