@@ -639,6 +639,36 @@ export type Database = {
         }
         Relationships: []
       }
+      elite_module_notes: {
+        Row: {
+          created_at: string
+          id: string
+          level_id: number
+          module_id: string
+          reflection_answer: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          level_id: number
+          module_id: string
+          reflection_answer?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          level_id?: number
+          module_id?: string
+          reflection_answer?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       elite_video_completions: {
         Row: {
           completed_at: string
