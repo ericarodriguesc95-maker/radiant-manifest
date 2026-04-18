@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { ArrowLeft, Sun, Sparkles, Music, Thermometer, PenLine, Heart, Mic, ImageIcon, Volume2, VolumeX, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import RitualMatinal from "./RitualMatinal";
@@ -23,6 +23,16 @@ const menuItems: { id: View; icon: React.ElementType; label: string }[] = [
 
 export default function ManifestacaoHub() {
   const [view, setView] = useState<View>("hub");
+
+  // Deep-link from floating Eu Superior bubble
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("openEuSuperior") === "1") {
+      setView("eu-superior");
+      try { localStorage.setItem("eu-superior-used", "1"); } catch {}
+    }
+  }, []);
   const [quoteIndex, setQuoteIndex] = useState(() => {
     const start = new Date(2024, 0, 1).getTime();
     const today = new Date().setHours(0, 0, 0, 0);
