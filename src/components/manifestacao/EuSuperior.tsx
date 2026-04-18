@@ -35,6 +35,7 @@ export default function EuSuperior() {
 
   const getResponse = useCallback(async () => {
     if (!answer.trim()) return;
+    try { localStorage.setItem("eu-superior-used", "1"); } catch {}
     setLoading(true);
     setResponse("");
 
