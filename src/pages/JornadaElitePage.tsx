@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Lock, CheckCircle2, Crown, Play, ClipboardCheck, BookOpen } from "lucide-react";
+import { ArrowLeft, Lock, CheckCircle2, Crown, Play, ClipboardCheck, BookOpen, X, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { JOURNEY_LEVELS, VIDEO_TRACKS, DIAGNOSTIC_QUESTIONS, ARCHETYPE_PLANS, AccelerationPlan } from "@/data/eliteJourneyData";
@@ -23,10 +23,13 @@ export default function JornadaElitePage() {
   // Aulas
   const [activeTrack, setActiveTrack] = useState<string>("oratoria");
   const [completedVideos, setCompletedVideos] = useState<Set<string>>(new Set());
+  const [activeVideo, setActiveVideo] = useState<{ id: string; title: string; mentor: string; youtubeId: string } | null>(null);
 
-  const openYouTubeSearch = (title: string, mentor: string) => {
-    const query = encodeURIComponent(`${title} ${mentor}`);
-    window.open(`https://www.youtube.com/results?search_query=${query}`, "_blank", "noopener,noreferrer");
+  const openYouTubeExternal = (title: string, mentor: string, youtubeId?: string) => {
+    const url = youtubeId
+      ? `https://www.youtube.com/watch?v=${youtubeId}`
+      : `https://www.youtube.com/results?search_query=${encodeURIComponent(`${title} ${mentor}`)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   // Load data
@@ -386,28 +389,47 @@ export default function JornadaElitePage() {
                         style={{ "--stagger": i } as React.CSSProperties}
                       >
                         <button
-                          onClick={() => openYouTubeSearch(v.title, v.mentor)}
+                          onClick={() => setActiveVideo({ id: v.id, title: v.title, mentor: v.mentor, youtubeId: (v as any).youtubeId })}
                           className="w-full flex items-center gap-3 text-left"
                         >
                           <div className="relative h-16 w-24 rounded-lg overflow-hidden bg-muted/30 shrink-0 flex items-center justify-center">
-                            <div className="absolute inset-0 bg-gradient-to-br from-gold/20 to-gold/5" />
-                            <Play className="relative h-6 w-6 text-gold fill-gold" />
+                            {(v as any).youtubeId ? (
+                              <img
+                                src={`https://i.ytimg.com/vi/${(v as any).youtubeId}/mqdefault.jpg`}
+                                alt={v.title}
+                                className="absolute inset-0 h-full w-full object-cover"
+                                loading="lazy"
+                                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                              />
+                            ) : (
+                              <div className="absolute inset-0 bg-gradient-to-br from-gold/20 to-gold/5" />
+                            )}
+                            <div className="absolute inset-0 bg-black/30" />
+                            <Play className="relative h-6 w-6 text-gold fill-gold drop-shadow" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-body font-semibold text-foreground line-clamp-2">{v.title}</p>
                             <p className="text-[10px] text-muted-foreground mt-0.5">{v.mentor} · {v.duration}</p>
-                            <p className="text-[9px] text-gold/70 mt-0.5 font-body tracking-wider uppercase">Abrir no YouTube ↗</p>
+                            <p className="text-[9px] text-gold/70 mt-0.5 font-body tracking-wider uppercase">▶ Assistir aqui</p>
                           </div>
                         </button>
-                        <button
-                          onClick={() => toggleVideo(track.id, v.id)}
-                          className={cn(
-                            "mt-3 w-full py-2 rounded-lg text-[11px] font-body font-semibold transition-all flex items-center justify-center gap-1.5",
-                            done ? "bg-gold/10 border border-gold/30 text-gold" : "bg-muted/20 border border-gold/10 text-muted-foreground hover:text-foreground"
-                          )}
-                        >
-                          {done ? <><CheckCircle2 className="h-3.5 w-3.5" /> Concluída</> : "Marcar como concluída"}
-                        </button>
+                        <div className="mt-3 grid grid-cols-2 gap-2">
+                          <button
+                            onClick={() => toggleVideo(track.id, v.id)}
+                            className={cn(
+                              "py-2 rounded-lg text-[11px] font-body font-semibold transition-all flex items-center justify-center gap-1.5",
+                              done ? "bg-gold/10 border border-gold/30 text-gold" : "bg-muted/20 border border-gold/10 text-muted-foreground hover:text-foreground"
+                            )}
+                          >
+                            {done ? <><CheckCircle2 className="h-3.5 w-3.5" /> Concluída</> : "Marcar concluída"}
+                          </button>
+                          <button
+                            onClick={() => openYouTubeExternal(v.title, v.mentor, (v as any).youtubeId)}
+                            className="py-2 rounded-lg text-[11px] font-body font-semibold bg-muted/20 border border-gold/10 text-muted-foreground hover:text-gold hover:border-gold/30 transition-all flex items-center justify-center gap-1.5"
+                          >
+                            <ExternalLink className="h-3.5 w-3.5" /> YouTube
+                          </button>
+                        </div>
                       </div>
                     );
                   })}
@@ -418,6 +440,64 @@ export default function JornadaElitePage() {
           </>
         )}
       </div>
+
+      {/* Video Player Modal */}
+      {activeVideo && (
+        <div
+          className="fixed inset-0 z-[70] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200"
+          onClick={() => setActiveVideo(null)}
+        >
+          <div
+            className="relative w-full max-w-3xl bg-background rounded-2xl border border-gold/20 overflow-hidden shadow-gold"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gold/15 gap-3">
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-display font-bold text-foreground truncate">{activeVideo.title}</p>
+                <p className="text-[10px] text-muted-foreground truncate">{activeVideo.mentor}</p>
+              </div>
+              <button
+                onClick={() => openYouTubeExternal(activeVideo.title, activeVideo.mentor, activeVideo.youtubeId)}
+                className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold/10 border border-gold/30 text-[11px] font-body font-semibold text-gold hover:bg-gold/20 transition-all"
+              >
+                <ExternalLink className="h-3.5 w-3.5" /> YouTube
+              </button>
+              <button
+                onClick={() => setActiveVideo(null)}
+                className="shrink-0 p-2 rounded-lg hover:bg-muted/30 transition-colors"
+                aria-label="Fechar"
+              >
+                <X className="h-4 w-4 text-foreground" />
+              </button>
+            </div>
+            <div className="relative aspect-video bg-black">
+              {activeVideo.youtubeId ? (
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${activeVideo.youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
+                  title={activeVideo.title}
+                  className="absolute inset-0 h-full w-full"
+                  frameBorder={0}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
+              ) : (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center p-6">
+                  <p className="text-sm text-muted-foreground">Esta aula está disponível apenas no YouTube.</p>
+                  <button
+                    onClick={() => openYouTubeExternal(activeVideo.title, activeVideo.mentor)}
+                    className="px-4 py-2 rounded-lg bg-gold text-primary-foreground text-sm font-body font-semibold flex items-center gap-2"
+                  >
+                    <ExternalLink className="h-4 w-4" /> Buscar no YouTube
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="px-4 py-3 text-[10px] text-muted-foreground text-center border-t border-gold/10">
+              Caso o vídeo não carregue, toque em <span className="text-gold font-semibold">YouTube</span> para abrir externamente.
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
