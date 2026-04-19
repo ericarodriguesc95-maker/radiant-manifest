@@ -1233,6 +1233,51 @@ export type Database = {
         }
         Relationships: []
       }
+      sleep_diagnostics: {
+        Row: {
+          ai_plan: string
+          bed_time: string
+          caffeine_alcohol: string | null
+          chronotype: string | null
+          created_at: string
+          energy_afternoon: number
+          energy_morning: number
+          id: string
+          sleep_time: string
+          updated_at: string
+          user_id: string
+          wake_time: string
+        }
+        Insert: {
+          ai_plan: string
+          bed_time: string
+          caffeine_alcohol?: string | null
+          chronotype?: string | null
+          created_at?: string
+          energy_afternoon: number
+          energy_morning: number
+          id?: string
+          sleep_time: string
+          updated_at?: string
+          user_id: string
+          wake_time: string
+        }
+        Update: {
+          ai_plan?: string
+          bed_time?: string
+          caffeine_alcohol?: string | null
+          chronotype?: string | null
+          created_at?: string
+          energy_afternoon?: number
+          energy_morning?: number
+          id?: string
+          sleep_time?: string
+          updated_at?: string
+          user_id?: string
+          wake_time?: string
+        }
+        Relationships: []
+      }
       sticker_pack_items: {
         Row: {
           created_at: string
