@@ -888,6 +888,23 @@ export default function SaudePage() {
         <p className="text-sm text-muted-foreground font-body">Dieta, peso, exercícios, suplementos e medicações</p>
       </div>
 
+      {/* Atalho: Regulador Inteligente do Sono */}
+      <button
+        type="button"
+        onClick={() => navigate("/sono")}
+        className="group w-full mb-6 rounded-2xl glass border border-gold/30 hover:border-gold/60 p-4 flex items-center gap-3 text-left transition-all active:scale-[0.98] shadow-gold/20 hover:shadow-gold"
+      >
+        <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-gold/30 to-gold/5 border border-gold/40 flex items-center justify-center shrink-0">
+          <Moon className="h-6 w-6 text-gold" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[9px] font-body tracking-[0.3em] uppercase text-gold/80">Neurociência do Sono</p>
+          <p className="text-sm font-display font-semibold text-foreground">Regulador Inteligente do Sono</p>
+          <p className="text-[11px] text-muted-foreground line-clamp-1">Diagnóstico circadiano + plano personalizado por IA</p>
+        </div>
+        <ChevronRight className="h-5 w-5 text-gold shrink-0 group-hover:translate-x-1 transition-transform" />
+      </button>
+
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid grid-cols-6 w-full h-auto p-1">
           <TabsTrigger value="perfil" className="text-[9px] px-0.5 py-1.5">⚖️ Perfil</TabsTrigger>
