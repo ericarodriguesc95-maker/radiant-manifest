@@ -472,7 +472,7 @@ export default function SonoPage() {
                                 <Info className="h-3 w-3" />
                               </button>
                             </TooltipTrigger>
-                            <TooltipContent side="bottom" className="max-w-xs bg-card border-gold/30 text-foreground">
+                            <TooltipContent side="bottom" sideOffset={8} className="z-[100] max-w-xs bg-card border border-gold/40 text-foreground shadow-2xl shadow-black/60">
                               <p className="text-[11px] leading-relaxed">
                                 <strong className="text-gold">TST</strong> (Total Sleep Time): tempo real dormindo, da hora em que você pega no sono até acordar.
                               </p>
