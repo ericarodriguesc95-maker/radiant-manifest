@@ -556,7 +556,8 @@ export default function SonoPage() {
               </Button>
             </div>
           </>
-        )}
+          );
+        })()}
       </div>
     </div>
   );
