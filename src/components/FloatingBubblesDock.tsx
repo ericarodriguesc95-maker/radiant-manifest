@@ -36,10 +36,10 @@ const BUBBLES: BubbleDef[] = [
   { id: "salas", label: "Salas de chat", shortLabel: "Salas", icon: Hash,
     href: "/comunidade?openRooms=1", hideOnPrefix: ["/comunidade"], usedFlag: "chatrooms-used" },
   // IAs: SEMPRE visíveis (não exigem uso prévio) — usedFlag vazio funciona como "sempre liberado"
-  { id: "ia", label: "Assistente IA", shortLabel: "IA", icon: Bot,
-    href: "/alta-performance?openAi=1", hideOnPrefix: [], usedFlag: "" },
-  { id: "eu-superior", label: "Eu Superior", shortLabel: "Eu+", icon: Sparkles,
-    href: "/reprogramacao?openEuSuperior=1", hideOnPrefix: ["/reprogramacao"], usedFlag: "" },
+  { id: "ia", label: "Assistente Pessoal", shortLabel: "Tempo", icon: Clock,
+    href: "/alta-performance?openAi=1", hideOnPrefix: ["/alta-performance"], usedFlag: "" },
+  { id: "eu-superior", label: "Eu Superior", shortLabel: "Eu+", icon: Crown,
+    href: "/metas?tab=manifestacao&openEuSuperior=1", hideOnPrefix: [], usedFlag: "" },
   { id: "financeira", label: "IA Financeira", shortLabel: "$", icon: Wallet,
     href: "/financas?openAi=1", hideOnPrefix: ["/financas"], usedFlag: "" },
 ];
