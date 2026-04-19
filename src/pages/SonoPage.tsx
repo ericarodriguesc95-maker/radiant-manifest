@@ -287,24 +287,71 @@ export default function SonoPage() {
             </Card>
 
             {/* Quick history preview */}
-            {history.length > 1 && (
+            {history.length > 1 && (() => {
+              const toMin = (t: string) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+              const diffMin = (s: string, e: string) => { let d = toMin(e) - toMin(s); if (d <= 0) d += 1440; return d; };
+              const chartData = [...history].reverse().map((h, i) => {
+                const tst = diffMin(h.sleep_time, h.wake_time);
+                const tib = diffMin(h.bed_time, h.wake_time);
+                const eff = tib > 0 ? Math.round((tst / tib) * 100) : 0;
+                return { idx: i + 1, eff, date: format(new Date(h.created_at), "dd/MM", { locale: ptBR }) };
+              });
+              const avg = Math.round(chartData.reduce((s, d) => s + d.eff, 0) / chartData.length);
+              const last = chartData[chartData.length - 1].eff;
+              const trend = last - chartData[0].eff;
+              return (
               <Card className="border-gold/20 bg-card/40">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm text-gold flex items-center gap-2">
                     <Sparkles className="h-4 w-4" /> Sua Evolução
                   </CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-xs text-foreground/60 mb-2">
-                    Você já fez <span className="text-gold font-bold">{history.length} diagnósticos</span>. 
-                    Continue acompanhando para ver sua evolução circadiana.
+                <CardContent className="space-y-3">
+                  <p className="text-xs text-foreground/60">
+                    Você já fez <span className="text-gold font-bold">{history.length} diagnósticos</span>.
+                    Acompanhe a evolução da sua eficiência do sono.
                   </p>
+
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="p-2 rounded-lg bg-card/60 border border-gold/15 text-center">
+                      <p className="text-[9px] uppercase tracking-wider text-gold/70">Atual</p>
+                      <p className="text-base font-bold text-foreground">{last}%</p>
+                    </div>
+                    <div className="p-2 rounded-lg bg-card/60 border border-gold/15 text-center">
+                      <p className="text-[9px] uppercase tracking-wider text-gold/70">Média</p>
+                      <p className="text-base font-bold text-foreground">{avg}%</p>
+                    </div>
+                    <div className="p-2 rounded-lg bg-card/60 border border-gold/15 text-center">
+                      <p className="text-[9px] uppercase tracking-wider text-gold/70">Tendência</p>
+                      <p className={`text-base font-bold ${trend > 0 ? "text-emerald-400" : trend < 0 ? "text-red-400" : "text-foreground"}`}>
+                        {trend > 0 ? "+" : ""}{trend}%
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="h-32 -mx-2">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={chartData} margin={{ top: 8, right: 12, left: 0, bottom: 0 }}>
+                        <XAxis dataKey="date" stroke="hsl(var(--foreground) / 0.4)" fontSize={9} tickLine={false} axisLine={false} />
+                        <YAxis domain={[0, 100]} stroke="hsl(var(--foreground) / 0.4)" fontSize={9} tickLine={false} axisLine={false} width={28} ticks={[0, 50, 85, 100]} />
+                        <ReferenceLine y={85} stroke="hsl(var(--gold) / 0.4)" strokeDasharray="3 3" />
+                        <RTooltip
+                          contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--gold) / 0.3)", borderRadius: 8, fontSize: 11 }}
+                          labelStyle={{ color: "hsl(var(--gold))" }}
+                          formatter={(v: any) => [`${v}%`, "Eficiência"]}
+                        />
+                        <Line type="monotone" dataKey="eff" stroke="hsl(var(--gold))" strokeWidth={2} dot={{ r: 3, fill: "hsl(var(--gold))" }} activeDot={{ r: 5 }} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+
                   <Button variant="ghost" size="sm" onClick={() => setShowHistory(true)} className="text-gold hover:bg-gold/10 p-0 h-auto">
                     Ver histórico completo →
                   </Button>
                 </CardContent>
               </Card>
-            )}
+              );
+            })()}
           </>
         )}
 
