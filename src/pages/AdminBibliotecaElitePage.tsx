@@ -7,7 +7,7 @@ import { VIDEO_TRACKS } from "@/data/eliteJourneyData";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-type OverrideMap = Record<string, { youtube_id: string; youtube_url?: string | null; title_override?: string | null }>;
+type OverrideMap = Record<string, { youtube_id: string; youtube_url?: string | null; title_override?: string | null; duration_override?: string | null }>;
 
 // Extracts a YouTube video ID from any common URL format or returns the input if it already looks like an ID
 function extractYouTubeId(input: string): string | null {
@@ -36,6 +36,8 @@ function extractYouTubeId(input: string): string | null {
 
 // In-memory cache for YouTube oEmbed lookups (titles)
 const ytTitleCache = new Map<string, string>();
+// In-memory cache for YouTube duration lookups (formatted as mm:ss or h:mm:ss)
+const ytDurationCache = new Map<string, string>();
 
 async function fetchYouTubeTitle(ytId: string): Promise<string | null> {
   if (ytTitleCache.has(ytId)) return ytTitleCache.get(ytId)!;
@@ -52,6 +54,35 @@ async function fetchYouTubeTitle(ytId: string): Promise<string | null> {
   return null;
 }
 
+// Format ISO 8601 duration (PT#H#M#S) to human readable (h:mm:ss or mm:ss)
+function formatIsoDuration(iso: string): string | null {
+  const m = iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/);
+  if (!m) return null;
+  const h = parseInt(m[1] || "0", 10);
+  const min = parseInt(m[2] || "0", 10);
+  const s = parseInt(m[3] || "0", 10);
+  if (h > 0) return `${h}:${String(min).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  return `${min}:${String(s).padStart(2, "0")}`;
+}
+
+async function fetchYouTubeDuration(ytId: string): Promise<string | null> {
+  if (ytDurationCache.has(ytId)) return ytDurationCache.get(ytId)!;
+  try {
+    // yt.lemnoslife.com — public CORS-friendly YouTube API (no key required)
+    const res = await fetch(`https://yt.lemnoslife.com/videos?part=contentDetails&id=${ytId}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    const iso = data?.items?.[0]?.contentDetails?.duration;
+    if (!iso) return null;
+    const formatted = formatIsoDuration(iso);
+    if (formatted) {
+      ytDurationCache.set(ytId, formatted);
+      return formatted;
+    }
+  } catch {}
+  return null;
+}
+
 export default function AdminBibliotecaElitePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -63,6 +94,8 @@ export default function AdminBibliotecaElitePage() {
   const [search, setSearch] = useState("");
   // Real YouTube titles fetched via oEmbed, keyed by videoId (our internal id)
   const [realTitles, setRealTitles] = useState<Record<string, string>>({});
+  // Real YouTube durations fetched via public API, keyed by videoId
+  const [realDurations, setRealDurations] = useState<Record<string, string>>({});
 
   // Check admin role
   useEffect(() => {
@@ -83,11 +116,11 @@ export default function AdminBibliotecaElitePage() {
     (async () => {
       const { data } = await supabase
         .from("elite_video_overrides" as any)
-        .select("video_id, youtube_id, youtube_url, title_override");
+        .select("video_id, youtube_id, youtube_url, title_override, duration_override");
       const map: OverrideMap = {};
       const draftMap: Record<string, string> = {};
       (data as any[])?.forEach((r) => {
-        map[r.video_id] = { youtube_id: r.youtube_id, youtube_url: r.youtube_url, title_override: r.title_override };
+        map[r.video_id] = { youtube_id: r.youtube_id, youtube_url: r.youtube_url, title_override: r.title_override, duration_override: r.duration_override };
         draftMap[r.video_id] = r.youtube_url || r.youtube_id;
       });
       setOverrides(map);
@@ -95,17 +128,24 @@ export default function AdminBibliotecaElitePage() {
     })();
   }, []);
 
-  // Auto-fetch real YouTube titles for any video that has a draft/override link
+  // Auto-fetch real YouTube titles + durations for any video that has a draft/override link
   useEffect(() => {
     const allVideos = VIDEO_TRACKS.flatMap((t) => t.videos);
     allVideos.forEach((v) => {
       const ytId = extractYouTubeId(drafts[v.id] || "") || overrides[v.id]?.youtube_id;
-      if (!ytId || realTitles[v.id]) return;
-      fetchYouTubeTitle(ytId).then((title) => {
-        if (title) setRealTitles((prev) => ({ ...prev, [v.id]: title }));
-      });
+      if (!ytId) return;
+      if (!realTitles[v.id]) {
+        fetchYouTubeTitle(ytId).then((title) => {
+          if (title) setRealTitles((prev) => ({ ...prev, [v.id]: title }));
+        });
+      }
+      if (!realDurations[v.id]) {
+        fetchYouTubeDuration(ytId).then((dur) => {
+          if (dur) setRealDurations((prev) => ({ ...prev, [v.id]: dur }));
+        });
+      }
     });
-  }, [drafts, overrides, realTitles]);
+  }, [drafts, overrides, realTitles, realDurations]);
 
   const saveOverride = async (trackId: string, videoId: string, customTitle?: string | null) => {
     if (!user) return;

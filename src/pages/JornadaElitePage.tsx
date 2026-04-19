@@ -28,6 +28,7 @@ export default function JornadaElitePage() {
   const [activeVideo, setActiveVideo] = useState<{ id: string; title: string; mentor: string } | null>(null);
   const [overrides, setOverrides] = useState<Record<string, string>>({}); // video_id -> youtube_id
   const [titleOverrides, setTitleOverrides] = useState<Record<string, string>>({}); // video_id -> custom title
+  const [durationOverrides, setDurationOverrides] = useState<Record<string, string>>({}); // video_id -> custom duration
 
   const openYouTubeExternal = (title: string, mentor: string, ytId?: string) => {
     const url = ytId
