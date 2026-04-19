@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Moon, Brain, Sparkles, Clock, History, Trash2, Loader2, Send, MessageCircle, Calendar } from "lucide-react";
+import { ArrowLeft, Moon, Brain, Sparkles, Clock, History, Trash2, Loader2, Send, MessageCircle, Calendar, Info } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ReactMarkdown from "react-markdown";
 import { PlanSections } from "@/components/sono/PlanSections";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
