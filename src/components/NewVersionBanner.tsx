@@ -49,6 +49,44 @@ export default function NewVersionBanner() {
     return () => window.removeEventListener("glowup:new-version", handler);
   }, [setNeedRefresh]);
 
+  // Subtle notification sound + vibration when banner first appears
+  useEffect(() => {
+    if (skip || !needRefresh || dismissed) return;
+
+    // Vibrate (mobile only, no-op on desktop / unsupported)
+    try {
+      navigator.vibrate?.([60, 40, 60]);
+    } catch {}
+
+    // Soft two-note chime via Web Audio (no asset needed)
+    try {
+      const AudioCtx =
+        window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const now = ctx.currentTime;
+
+      const playTone = (freq: number, start: number, duration = 0.18) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, now + start);
+        gain.gain.linearRampToValueAtTime(0.08, now + start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + start + duration);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now + start);
+        osc.stop(now + start + duration + 0.05);
+      };
+
+      // Gentle gold-themed chime: E5 → A5
+      playTone(659.25, 0);
+      playTone(880, 0.14);
+
+      setTimeout(() => ctx.close().catch(() => {}), 800);
+    } catch {}
+  }, [skip, needRefresh, dismissed]);
+
   if (skip || !needRefresh || dismissed) return null;
 
   const handleUpdate = async () => {
