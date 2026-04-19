@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { X, Send, Sparkles, Calendar, Trash2, Mic, Volume2, VolumeX } from "lucide-react";
+import { X, Send, Sparkles, Calendar, Trash2, Mic, Volume2, VolumeX, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
