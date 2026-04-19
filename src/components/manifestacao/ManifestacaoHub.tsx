@@ -7,7 +7,7 @@ import FrequenciasCura from "./FrequenciasCura";
 import TermometroVibracional from "./TermometroVibracional";
 import ManifestacaoEscrita from "./ManifestacaoEscrita";
 import QuadroDosSonhos from "./QuadroDosSonhos";
-import { dailyQuotes } from "./dailyQuotes";
+import { getInitialQuote, getNextAlternatingQuote } from "./dailyQuotes";
 import { speakWithPauses } from "@/lib/voiceUtils";
 
 type View = "hub" | "ritual" | "eu-superior" | "frequencias" | "termometro" | "manifestacao-escrita" | "quadro-sonhos";
@@ -33,19 +33,15 @@ export default function ManifestacaoHub() {
       try { localStorage.setItem("eu-superior-used", "1"); } catch {}
     }
   }, []);
-  const [quoteIndex, setQuoteIndex] = useState(() => {
-    const start = new Date(2024, 0, 1).getTime();
-    const today = new Date().setHours(0, 0, 0, 0);
-    return Math.floor((today - start) / 86400000) % dailyQuotes.length;
-  });
+  const [quoteState, setQuoteState] = useState(() => getInitialQuote());
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [cancelSpeech, setCancelSpeech] = useState<(() => void) | null>(null);
 
-  const todayQuote = dailyQuotes[quoteIndex];
+  const todayQuote = quoteState.quote;
 
   const handleNextQuote = () => {
     if (cancelSpeech) { cancelSpeech(); setCancelSpeech(null); setIsSpeaking(false); }
-    setQuoteIndex((prev) => (prev + 1) % dailyQuotes.length);
+    setQuoteState((prev) => getNextAlternatingQuote(prev.author, prev.seed));
   };
 
   const handleSpeakQuote = useCallback(() => {

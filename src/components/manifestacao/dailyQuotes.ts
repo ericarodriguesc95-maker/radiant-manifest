@@ -367,3 +367,37 @@ export const dailyQuotes: string[] = [
   "Deus não promete dias fáceis, mas promete estar presente em todos eles. — Joyce Meyer",
   "Respire fundo. Deus está no controle. — Joyce Meyer",
 ];
+
+/**
+ * Frases separadas por autora — para alternar uma a uma:
+ * Louise Hay → Joyce Meyer → Louise Hay → ...
+ */
+export const louiseHayQuotes: string[] = dailyQuotes.filter((q) => q.includes("Louise Hay"));
+export const joyceMeyerQuotes: string[] = dailyQuotes.filter((q) => q.includes("Joyce Meyer"));
+
+/**
+ * Retorna a próxima frase alternando autoras.
+ * @param currentAuthor "louise" ou "joyce" — autora da frase atual
+ * @param currentSeed   índice de iteração (acumula)
+ */
+export function getNextAlternatingQuote(
+  currentAuthor: "louise" | "joyce",
+  currentSeed: number
+): { quote: string; author: "louise" | "joyce"; seed: number } {
+  const nextAuthor: "louise" | "joyce" = currentAuthor === "louise" ? "joyce" : "louise";
+  const pool = nextAuthor === "louise" ? louiseHayQuotes : joyceMeyerQuotes;
+  const nextSeed = currentSeed + 1;
+  const idx = nextSeed % pool.length;
+  return { quote: pool[idx], author: nextAuthor, seed: nextSeed };
+}
+
+/** Frase inicial do dia: usa Louise Hay (par) ou Joyce Meyer (ímpar) baseado no dia do ano. */
+export function getInitialQuote(): { quote: string; author: "louise" | "joyce"; seed: number } {
+  const start = new Date(2024, 0, 1).getTime();
+  const today = new Date().setHours(0, 0, 0, 0);
+  const dayOfYear = Math.floor((today - start) / 86400000);
+  const author: "louise" | "joyce" = dayOfYear % 2 === 0 ? "louise" : "joyce";
+  const pool = author === "louise" ? louiseHayQuotes : joyceMeyerQuotes;
+  const idx = dayOfYear % pool.length;
+  return { quote: pool[idx], author, seed: dayOfYear };
+}
