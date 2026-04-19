@@ -376,41 +376,68 @@ export default function SonoPage() {
         {/* RESULT */}
         {step === "result" && currentDiagnostic && (
           <>
-            <Card className="border-gold/30 bg-gradient-to-br from-card to-background">
-              <CardHeader>
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <CardTitle className="text-gold font-serif text-2xl flex items-center gap-2">
-                    <Brain className="h-6 w-6" /> Seu Plano Neuro-Circadiano
-                  </CardTitle>
-                  <span className="text-xs px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-gold font-medium">
-                    Cronotipo: {currentDiagnostic.chronotype}
+            {/* Hero header card */}
+            <div className="relative rounded-2xl overflow-hidden border border-gold/30 bg-gradient-to-br from-card via-background to-card">
+              <div className="absolute top-0 right-0 h-48 w-48 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
+              <div className="absolute bottom-0 left-0 h-32 w-32 rounded-full bg-gold/5 blur-2xl pointer-events-none" />
+
+              <div className="relative p-6 sm:p-8">
+                <div className="flex items-start justify-between flex-wrap gap-4 mb-5">
+                  <div className="flex items-center gap-3">
+                    <div className="h-14 w-14 rounded-2xl bg-gold/10 border border-gold/30 flex items-center justify-center">
+                      <Brain className="h-7 w-7 text-gold" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.25em] text-gold/60 font-medium mb-1">Plano Personalizado</p>
+                      <h2 className="font-serif text-2xl sm:text-3xl text-gold leading-tight">Seu Plano Neuro-Circadiano</h2>
+                    </div>
+                  </div>
+                  <span className="text-xs px-3 py-1.5 rounded-full bg-gold text-background font-bold shadow-gold">
+                    {currentDiagnostic.chronotype}
                   </span>
                 </div>
-                {/* Registration date badge */}
-                <div className="flex items-center gap-2 mt-3 p-2 rounded-lg bg-gold/5 border border-gold/20">
-                  <Calendar className="h-4 w-4 text-gold" />
-                  <p className="text-sm text-foreground/80">
-                    Plano gerado em <span className="text-gold font-semibold">
-                      {format(new Date(currentDiagnostic.created_at), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", { locale: ptBR })}
-                    </span>
-                  </p>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                  <div className="p-3 rounded-xl bg-card/60 border border-gold/15 backdrop-blur">
+                    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold/70 mb-1">
+                      <Calendar className="h-3 w-3" /> Gerado em
+                    </div>
+                    <p className="text-sm font-semibold text-foreground">
+                      {format(new Date(currentDiagnostic.created_at), "dd MMM yyyy", { locale: ptBR })}
+                    </p>
+                    <p className="text-[10px] text-foreground/50">
+                      {format(new Date(currentDiagnostic.created_at), "HH:mm", { locale: ptBR })}
+                    </p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-card/60 border border-gold/15 backdrop-blur">
+                    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold/70 mb-1">
+                      <Moon className="h-3 w-3" /> Dorme
+                    </div>
+                    <p className="text-sm font-semibold text-foreground">{currentDiagnostic.bed_time}</p>
+                    <p className="text-[10px] text-foreground/50">Cama</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-card/60 border border-gold/15 backdrop-blur">
+                    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold/70 mb-1">
+                      <Sparkles className="h-3 w-3" /> Acorda
+                    </div>
+                    <p className="text-sm font-semibold text-foreground">{currentDiagnostic.wake_time}</p>
+                    <p className="text-[10px] text-foreground/50">Despertar</p>
+                  </div>
+                  <div className="p-3 rounded-xl bg-card/60 border border-gold/15 backdrop-blur">
+                    <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold/70 mb-1">
+                      <Brain className="h-3 w-3" /> Energia
+                    </div>
+                    <p className="text-sm font-semibold text-foreground">
+                      {currentDiagnostic.energy_morning}/{currentDiagnostic.energy_afternoon}
+                    </p>
+                    <p className="text-[10px] text-foreground/50">Manhã/Tarde</p>
+                  </div>
                 </div>
-              </CardHeader>
-              <CardContent>
-                <div className="prose prose-invert prose-sm sm:prose-base max-w-none
-                  prose-headings:text-gold prose-headings:font-serif
-                  prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4 prose-h2:border-b prose-h2:border-gold/20 prose-h2:pb-2
-                  prose-h3:text-xl prose-h3:mt-6 prose-h3:text-gold/90
-                  prose-p:text-foreground/90 prose-p:leading-relaxed
-                  prose-strong:text-gold prose-strong:font-semibold
-                  prose-ul:text-foreground/90 prose-li:my-1
-                  prose-table:border prose-table:border-gold/20
-                  prose-th:bg-gold/10 prose-th:text-gold prose-th:border-gold/20
-                  prose-td:border-gold/10 prose-td:text-foreground/90">
-                  <ReactMarkdown>{currentDiagnostic.ai_plan}</ReactMarkdown>
-                </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
+
+            {/* Plan content split into themed sections */}
+            <PlanSections plan={currentDiagnostic.ai_plan} />
 
             {/* AI CHAT — Specialist follow-up */}
             <Card className="border-gold/30 bg-card/60 backdrop-blur">
