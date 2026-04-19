@@ -35,12 +35,13 @@ const BUBBLES: BubbleDef[] = [
     href: "/comunidade?openDms=1", hideOnPrefix: ["/comunidade"], usedFlag: "dm-used" },
   { id: "salas", label: "Salas de chat", shortLabel: "Salas", icon: Hash,
     href: "/comunidade?openRooms=1", hideOnPrefix: ["/comunidade"], usedFlag: "chatrooms-used" },
+  // IAs: SEMPRE visíveis (não exigem uso prévio) — usedFlag vazio funciona como "sempre liberado"
   { id: "ia", label: "Assistente IA", shortLabel: "IA", icon: Bot,
-    href: "/alta-performance?openAi=1", hideOnPrefix: [], usedFlag: "ai-assistant-used" },
+    href: "/alta-performance?openAi=1", hideOnPrefix: [], usedFlag: "" },
   { id: "eu-superior", label: "Eu Superior", shortLabel: "Eu+", icon: Sparkles,
-    href: "/reprogramacao?openEuSuperior=1", hideOnPrefix: ["/reprogramacao"], usedFlag: "eu-superior-used" },
+    href: "/reprogramacao?openEuSuperior=1", hideOnPrefix: ["/reprogramacao"], usedFlag: "" },
   { id: "financeira", label: "IA Financeira", shortLabel: "$", icon: Wallet,
-    href: "/financas?openAi=1", hideOnPrefix: ["/financas"], usedFlag: "ai-finance-used" },
+    href: "/financas?openAi=1", hideOnPrefix: ["/financas"], usedFlag: "" },
 ];
 
 const HIDDEN_GLOBAL_PREFIXES = ["/login", "/signup", "/forgot-password", "/reset-password"];
@@ -76,7 +77,8 @@ export default function FloatingBubblesDock() {
   const refreshFromStorage = useCallback(() => {
     try {
       const flags: Record<string, boolean> = {};
-      BUBBLES.forEach((b) => { flags[b.id] = localStorage.getItem(b.usedFlag) === "1"; });
+      // Bubbles sem usedFlag (IAs) ficam SEMPRE visíveis
+      BUBBLES.forEach((b) => { flags[b.id] = !b.usedFlag || localStorage.getItem(b.usedFlag) === "1"; });
       setUsedFlags(flags);
       if (hiddenKey) {
         const h = safeJsonParse<Record<BubbleId, boolean>>(localStorage.getItem(hiddenKey));
