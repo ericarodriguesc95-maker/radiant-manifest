@@ -360,8 +360,8 @@ export default function JornadaElitePage() {
               <p className="text-xs text-muted-foreground">{completedVideos.size} aulas concluídas</p>
             </div>
 
-            {/* Track tabs */}
-            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+            {/* Track tabs — wrap em 2 linhas para que TODAS apareçam (incl. Inteligência Emocional) */}
+            <div className="flex flex-wrap gap-2 -mx-1 px-1">
               {VIDEO_TRACKS.map((track) => (
                 <button
                   key={track.id}

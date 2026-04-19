@@ -34,6 +34,24 @@ function extractYouTubeId(input: string): string | null {
   return null;
 }
 
+// In-memory cache for YouTube oEmbed lookups (titles)
+const ytTitleCache = new Map<string, string>();
+
+async function fetchYouTubeTitle(ytId: string): Promise<string | null> {
+  if (ytTitleCache.has(ytId)) return ytTitleCache.get(ytId)!;
+  try {
+    // noembed.com is a public CORS-friendly oEmbed proxy
+    const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${ytId}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data?.title) {
+      ytTitleCache.set(ytId, data.title);
+      return data.title as string;
+    }
+  } catch {}
+  return null;
+}
+
 export default function AdminBibliotecaElitePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -43,6 +61,8 @@ export default function AdminBibliotecaElitePage() {
   const [savingId, setSavingId] = useState<string | null>(null);
   const [activeTrack, setActiveTrack] = useState<string>(VIDEO_TRACKS[0].id);
   const [search, setSearch] = useState("");
+  // Real YouTube titles fetched via oEmbed, keyed by videoId (our internal id)
+  const [realTitles, setRealTitles] = useState<Record<string, string>>({});
 
   // Check admin role
   useEffect(() => {
@@ -74,6 +94,18 @@ export default function AdminBibliotecaElitePage() {
       setDrafts(draftMap);
     })();
   }, []);
+
+  // Auto-fetch real YouTube titles for any video that has a draft/override link
+  useEffect(() => {
+    const allVideos = VIDEO_TRACKS.flatMap((t) => t.videos);
+    allVideos.forEach((v) => {
+      const ytId = extractYouTubeId(drafts[v.id] || "") || overrides[v.id]?.youtube_id;
+      if (!ytId || realTitles[v.id]) return;
+      fetchYouTubeTitle(ytId).then((title) => {
+        if (title) setRealTitles((prev) => ({ ...prev, [v.id]: title }));
+      });
+    });
+  }, [drafts, overrides, realTitles]);
 
   const saveOverride = async (trackId: string, videoId: string) => {
     if (!user) return;
@@ -203,8 +235,8 @@ export default function AdminBibliotecaElitePage() {
           </ul>
         </div>
 
-        {/* Track tabs */}
-        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+        {/* Track tabs — wrap em 2 linhas para todas aparecerem */}
+        <div className="flex flex-wrap gap-2">
           {VIDEO_TRACKS.map((t) => {
             const trackOverrides = t.videos.filter((v) => overrides[v.id]).length;
             return (
@@ -295,12 +327,19 @@ export default function AdminBibliotecaElitePage() {
                   maxLength={500}
                 />
 
-                {/* Live preview player */}
+                {/* Live preview player + título real do YouTube */}
                 {previewId && (
                   <div className="space-y-1.5">
-                    <p className="text-[10px] font-body uppercase tracking-[0.2em] text-gold/70">
-                      Prévia ({extractYouTubeId(draft) ? "novo link" : "vídeo salvo"})
-                    </p>
+                    <div className="flex items-baseline justify-between gap-2">
+                      <p className="text-[10px] font-body uppercase tracking-[0.2em] text-gold/70">
+                        Prévia ({extractYouTubeId(draft) ? "novo link" : "vídeo salvo"})
+                      </p>
+                      {realTitles[v.id] && (
+                        <p className="text-[10px] text-emerald-400 truncate max-w-[60%]" title={realTitles[v.id]}>
+                          ✓ Título real: {realTitles[v.id]}
+                        </p>
+                      )}
+                    </div>
                     <div className="relative aspect-video rounded-lg overflow-hidden bg-black border border-gold/20">
                       <iframe
                         key={previewId}
@@ -312,6 +351,11 @@ export default function AdminBibliotecaElitePage() {
                         loading="lazy"
                       />
                     </div>
+                    {realTitles[v.id] && realTitles[v.id] !== v.title && (
+                      <p className="text-[10px] text-amber-400/90 italic">
+                        💡 O título cadastrado é "<span className="text-foreground">{v.title}</span>". O vídeo real é "<span className="text-emerald-400">{realTitles[v.id]}</span>". Confirme se é o vídeo certo antes de salvar.
+                      </p>
+                    )}
                   </div>
                 )}
 
