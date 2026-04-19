@@ -696,6 +696,7 @@ export type Database = {
       elite_video_overrides: {
         Row: {
           created_at: string
+          duration_override: string | null
           id: string
           title_override: string | null
           track_id: string
@@ -707,6 +708,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          duration_override?: string | null
           id?: string
           title_override?: string | null
           track_id: string
@@ -718,6 +720,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          duration_override?: string | null
           id?: string
           title_override?: string | null
           track_id?: string
