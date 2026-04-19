@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Moon, Brain, Sparkles, Clock, History, Trash2, Loader2 } from "lucide-react";
+import { ArrowLeft, Moon, Brain, Sparkles, Clock, History, Trash2, Loader2, Send, MessageCircle, Calendar } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,8 @@ interface SleepDiagnostic {
   created_at: string;
 }
 
+interface ChatMsg { role: "user" | "assistant"; content: string }
+
 export default function SonoPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -38,11 +40,25 @@ export default function SonoPage() {
   const [energyMorning, setEnergyMorning] = useState([6]);
   const [energyAfternoon, setEnergyAfternoon] = useState([5]);
   const [caffeineAlcohol, setCaffeineAlcohol] = useState("");
-  const [currentPlan, setCurrentPlan] = useState<{ plan: string; chronotype: string } | null>(null);
+  const [currentDiagnostic, setCurrentDiagnostic] = useState<SleepDiagnostic | null>(null);
   const [history, setHistory] = useState<SleepDiagnostic[]>([]);
   const [showHistory, setShowHistory] = useState(false);
 
+  // Chat state
+  const [chatMessages, setChatMessages] = useState<ChatMsg[]>([]);
+  const [chatInput, setChatInput] = useState("");
+  const [chatLoading, setChatLoading] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => { if (user) loadHistory(); }, [user]);
+  useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: "smooth" }); }, [chatMessages]);
+
+  // Load most recent plan automatically when arriving with no current selection
+  useEffect(() => {
+    if (history.length > 0 && step === "intro" && !currentDiagnostic) {
+      // Don't auto-jump, but make it available in history. User can choose.
+    }
+  }, [history, step, currentDiagnostic]);
 
   const loadHistory = async () => {
     if (!user) return;
@@ -73,20 +89,27 @@ export default function SonoPage() {
       if (data?.error) throw new Error(data.error);
 
       const { plan, chronotype } = data;
-      setCurrentPlan({ plan, chronotype });
 
-      await supabase.from("sleep_diagnostics").insert({
-        user_id: user.id,
-        bed_time: bedTime,
-        sleep_time: sleepTime,
-        wake_time: wakeTime,
-        energy_morning: energyMorning[0],
-        energy_afternoon: energyAfternoon[0],
-        caffeine_alcohol: caffeineAlcohol || null,
-        chronotype,
-        ai_plan: plan,
-      });
+      const { data: inserted, error: insertError } = await supabase
+        .from("sleep_diagnostics")
+        .insert({
+          user_id: user.id,
+          bed_time: bedTime,
+          sleep_time: sleepTime,
+          wake_time: wakeTime,
+          energy_morning: energyMorning[0],
+          energy_afternoon: energyAfternoon[0],
+          caffeine_alcohol: caffeineAlcohol || null,
+          chronotype,
+          ai_plan: plan,
+        })
+        .select()
+        .single();
 
+      if (insertError) throw insertError;
+
+      setCurrentDiagnostic(inserted as SleepDiagnostic);
+      setChatMessages([]);
       await loadHistory();
       setStep("result");
       toast.success("Plano neuro-circadiano gerado!", { description: `Cronotipo identificado: ${chronotype}` });
@@ -101,20 +124,66 @@ export default function SonoPage() {
     const { error } = await supabase.from("sleep_diagnostics").delete().eq("id", id);
     if (error) return toast.error("Erro ao remover");
     toast.success("Diagnóstico removido");
+    if (currentDiagnostic?.id === id) {
+      setCurrentDiagnostic(null);
+      setStep("intro");
+    }
     loadHistory();
   };
 
   const viewHistoryItem = (item: SleepDiagnostic) => {
-    setCurrentPlan({ plan: item.ai_plan, chronotype: item.chronotype || "Intermediário" });
+    setCurrentDiagnostic(item);
     setBedTime(item.bed_time);
     setSleepTime(item.sleep_time);
     setWakeTime(item.wake_time);
     setEnergyMorning([item.energy_morning]);
     setEnergyAfternoon([item.energy_afternoon]);
     setCaffeineAlcohol(item.caffeine_alcohol || "");
+    setChatMessages([]);
     setStep("result");
     setShowHistory(false);
   };
+
+  const sendChatMessage = async () => {
+    if (!chatInput.trim() || !currentDiagnostic || chatLoading) return;
+    const userMsg: ChatMsg = { role: "user", content: chatInput.trim() };
+    const newMessages = [...chatMessages, userMsg];
+    setChatMessages(newMessages);
+    setChatInput("");
+    setChatLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("sleep-chat", {
+        body: {
+          messages: newMessages,
+          plan_context: currentDiagnostic.ai_plan,
+          chronotype: currentDiagnostic.chronotype,
+          diagnostic: {
+            bed_time: currentDiagnostic.bed_time,
+            sleep_time: currentDiagnostic.sleep_time,
+            wake_time: currentDiagnostic.wake_time,
+            energy_morning: currentDiagnostic.energy_morning,
+            energy_afternoon: currentDiagnostic.energy_afternoon,
+          },
+        },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      setChatMessages([...newMessages, { role: "assistant", content: data.reply }]);
+    } catch (e: any) {
+      console.error(e);
+      toast.error(e?.message || "Erro no chat");
+      setChatMessages(chatMessages); // rollback
+    } finally {
+      setChatLoading(false);
+    }
+  };
+
+  const suggestedQuestions = [
+    "Por que devo evitar luz azul à noite?",
+    "Como melhorar minha eficiência do sono?",
+    "O que é jetlag social?",
+    "Como o café afeta meu sono?",
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-card pb-24">
@@ -128,8 +197,13 @@ export default function SonoPage() {
             <Moon className="h-5 w-5 text-gold" />
             <h1 className="font-serif text-xl text-gold">Regulador do Sono</h1>
           </div>
-          <Button variant="ghost" size="sm" onClick={() => setShowHistory(!showHistory)} className="text-foreground/80 hover:text-gold">
+          <Button variant="ghost" size="sm" onClick={() => setShowHistory(!showHistory)} className="text-foreground/80 hover:text-gold relative">
             <History className="h-5 w-5" />
+            {history.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-gold text-background text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center">
+                {history.length}
+              </span>
+            )}
           </Button>
         </div>
       </div>
@@ -139,17 +213,25 @@ export default function SonoPage() {
         {showHistory && (
           <Card className="border-gold/30 bg-card/60 backdrop-blur">
             <CardHeader>
-              <CardTitle className="text-gold flex items-center gap-2"><History className="h-5 w-5" /> Histórico</CardTitle>
+              <CardTitle className="text-gold flex items-center gap-2 text-lg">
+                <History className="h-5 w-5" /> Sua Evolução ({history.length})
+              </CardTitle>
+              <CardDescription>Acompanhe seus diagnósticos ao longo do tempo</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               {history.length === 0 && <p className="text-sm text-muted-foreground">Nenhum diagnóstico ainda.</p>}
-              {history.map((h) => (
-                <div key={h.id} className="flex items-center justify-between p-3 rounded-lg border border-gold/10 hover:border-gold/40 transition">
+              {history.map((h, idx) => (
+                <div key={h.id} className={`flex items-center justify-between p-3 rounded-lg border transition ${currentDiagnostic?.id === h.id ? "border-gold bg-gold/5" : "border-gold/10 hover:border-gold/40"}`}>
                   <button className="text-left flex-1" onClick={() => viewHistoryItem(h)}>
-                    <p className="text-sm font-medium text-foreground">
-                      {format(new Date(h.created_at), "dd MMM yyyy 'às' HH:mm", { locale: ptBR })}
+                    <div className="flex items-center gap-2 mb-1">
+                      {idx === 0 && <span className="text-[10px] px-2 py-0.5 rounded-full bg-gold text-background font-bold">MAIS RECENTE</span>}
+                      <p className="text-sm font-semibold text-foreground">
+                        {format(new Date(h.created_at), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+                      </p>
+                    </div>
+                    <p className="text-xs text-foreground/60">
+                      {format(new Date(h.created_at), "HH:mm", { locale: ptBR })} • {h.chronotype} • Energia manhã: {h.energy_morning}/10
                     </p>
-                    <p className="text-xs text-gold">{h.chronotype} • Dorme: {h.bed_time} → Acorda: {h.wake_time}</p>
                   </button>
                   <Button variant="ghost" size="sm" onClick={() => deleteDiagnostic(h.id)} className="text-destructive hover:text-destructive">
                     <Trash2 className="h-4 w-4" />
@@ -162,38 +244,65 @@ export default function SonoPage() {
 
         {/* INTRO */}
         {step === "intro" && (
-          <Card className="border-gold/30 bg-gradient-to-br from-card to-background overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent pointer-events-none" />
-            <CardHeader className="text-center pt-10">
-              <div className="mx-auto h-16 w-16 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center mb-4">
-                <Brain className="h-8 w-8 text-gold" />
-              </div>
-              <CardTitle className="font-serif text-3xl text-gold">Regulador Inteligente do Sono</CardTitle>
-              <CardDescription className="text-base text-foreground/70 max-w-xl mx-auto mt-2">
-                Um neurocientista especializado em medicina do sono e ritmos circadianos
-                irá analisar seu padrão atual e criar um plano personalizado de otimização cerebral.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4 pb-10">
-              <div className="grid sm:grid-cols-3 gap-3">
-                <div className="p-4 rounded-lg border border-gold/20 bg-card/50 text-center">
-                  <Clock className="h-5 w-5 text-gold mx-auto mb-2" />
-                  <p className="text-xs text-foreground/70">4 perguntas rápidas</p>
+          <>
+            <Card className="border-gold/30 bg-gradient-to-br from-card to-background overflow-hidden relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent pointer-events-none" />
+              <CardHeader className="text-center pt-10">
+                <div className="mx-auto h-16 w-16 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center mb-4">
+                  <Brain className="h-8 w-8 text-gold" />
                 </div>
-                <div className="p-4 rounded-lg border border-gold/20 bg-card/50 text-center">
-                  <Brain className="h-5 w-5 text-gold mx-auto mb-2" />
-                  <p className="text-xs text-foreground/70">Análise neurocientífica</p>
+                <CardTitle className="font-serif text-3xl text-gold">Regulador Inteligente do Sono</CardTitle>
+                <CardDescription className="text-base text-foreground/70 max-w-xl mx-auto mt-2">
+                  Uma neurocientista especializada em medicina do sono e ritmos circadianos
+                  irá analisar seu padrão atual e criar um plano personalizado de otimização cerebral.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4 pb-10">
+                <div className="grid sm:grid-cols-3 gap-3">
+                  <div className="p-4 rounded-lg border border-gold/20 bg-card/50 text-center">
+                    <Clock className="h-5 w-5 text-gold mx-auto mb-2" />
+                    <p className="text-xs text-foreground/70">4 perguntas rápidas</p>
+                  </div>
+                  <div className="p-4 rounded-lg border border-gold/20 bg-card/50 text-center">
+                    <Brain className="h-5 w-5 text-gold mx-auto mb-2" />
+                    <p className="text-xs text-foreground/70">Análise neurocientífica</p>
+                  </div>
+                  <div className="p-4 rounded-lg border border-gold/20 bg-card/50 text-center">
+                    <MessageCircle className="h-5 w-5 text-gold mx-auto mb-2" />
+                    <p className="text-xs text-foreground/70">Chat com especialista</p>
+                  </div>
                 </div>
-                <div className="p-4 rounded-lg border border-gold/20 bg-card/50 text-center">
-                  <Sparkles className="h-5 w-5 text-gold mx-auto mb-2" />
-                  <p className="text-xs text-foreground/70">Plano personalizado</p>
-                </div>
-              </div>
-              <Button onClick={() => setStep("form")} className="w-full bg-gold text-background hover:bg-gold/90 h-12 text-base font-semibold">
-                Iniciar Diagnóstico Circadiano
-              </Button>
-            </CardContent>
-          </Card>
+                <Button onClick={() => setStep("form")} className="w-full bg-gold text-background hover:bg-gold/90 h-12 text-base font-semibold">
+                  {history.length > 0 ? "Fazer Novo Diagnóstico" : "Iniciar Diagnóstico Circadiano"}
+                </Button>
+                {history.length > 0 && (
+                  <Button variant="outline" onClick={() => viewHistoryItem(history[0])} className="w-full border-gold/30 text-gold hover:bg-gold/10">
+                    <Calendar className="mr-2 h-4 w-4" /> Ver Último Plano ({format(new Date(history[0].created_at), "dd/MM", { locale: ptBR })})
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Quick history preview */}
+            {history.length > 1 && (
+              <Card className="border-gold/20 bg-card/40">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm text-gold flex items-center gap-2">
+                    <Sparkles className="h-4 w-4" /> Sua Evolução
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-foreground/60 mb-2">
+                    Você já fez <span className="text-gold font-bold">{history.length} diagnósticos</span>. 
+                    Continue acompanhando para ver sua evolução circadiana.
+                  </p>
+                  <Button variant="ghost" size="sm" onClick={() => setShowHistory(true)} className="text-gold hover:bg-gold/10 p-0 h-auto">
+                    Ver histórico completo →
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+          </>
         )}
 
         {/* FORM */}
@@ -257,14 +366,14 @@ export default function SonoPage() {
               <Loader2 className="h-12 w-12 text-gold mx-auto animate-spin" />
               <h3 className="font-serif text-xl text-gold">Analisando seu ritmo circadiano...</h3>
               <p className="text-sm text-foreground/70 max-w-md mx-auto">
-                O neurocientista está calculando sua eficiência do sono, cronotipo e construindo um plano personalizado de otimização cerebral.
+                A neurocientista está calculando sua eficiência do sono, cronotipo e construindo um plano personalizado de otimização cerebral.
               </p>
             </CardContent>
           </Card>
         )}
 
         {/* RESULT */}
-        {step === "result" && currentPlan && (
+        {step === "result" && currentDiagnostic && (
           <>
             <Card className="border-gold/30 bg-gradient-to-br from-card to-background">
               <CardHeader>
@@ -273,8 +382,17 @@ export default function SonoPage() {
                     <Brain className="h-6 w-6" /> Seu Plano Neuro-Circadiano
                   </CardTitle>
                   <span className="text-xs px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-gold font-medium">
-                    Cronotipo: {currentPlan.chronotype}
+                    Cronotipo: {currentDiagnostic.chronotype}
                   </span>
+                </div>
+                {/* Registration date badge */}
+                <div className="flex items-center gap-2 mt-3 p-2 rounded-lg bg-gold/5 border border-gold/20">
+                  <Calendar className="h-4 w-4 text-gold" />
+                  <p className="text-sm text-foreground/80">
+                    Plano gerado em <span className="text-gold font-semibold">
+                      {format(new Date(currentDiagnostic.created_at), "dd 'de' MMMM 'de' yyyy 'às' HH:mm", { locale: ptBR })}
+                    </span>
+                  </p>
                 </div>
               </CardHeader>
               <CardContent>
@@ -288,14 +406,95 @@ export default function SonoPage() {
                   prose-table:border prose-table:border-gold/20
                   prose-th:bg-gold/10 prose-th:text-gold prose-th:border-gold/20
                   prose-td:border-gold/10 prose-td:text-foreground/90">
-                  <ReactMarkdown>{currentPlan.plan}</ReactMarkdown>
+                  <ReactMarkdown>{currentDiagnostic.ai_plan}</ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* AI CHAT — Specialist follow-up */}
+            <Card className="border-gold/30 bg-card/60 backdrop-blur">
+              <CardHeader>
+                <CardTitle className="text-gold font-serif text-xl flex items-center gap-2">
+                  <MessageCircle className="h-5 w-5" /> Tire suas dúvidas com a Especialista
+                </CardTitle>
+                <CardDescription>
+                  Converse com a neurocientista do sono sobre seu plano. Ela conhece seus dados e pode aprofundar qualquer ponto.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Suggested questions (only if no chat yet) */}
+                {chatMessages.length === 0 && (
+                  <div className="space-y-2">
+                    <p className="text-xs text-foreground/60 uppercase tracking-wide">Sugestões para começar:</p>
+                    <div className="grid sm:grid-cols-2 gap-2">
+                      {suggestedQuestions.map((q) => (
+                        <button
+                          key={q}
+                          onClick={() => setChatInput(q)}
+                          className="text-left text-xs p-3 rounded-lg border border-gold/20 bg-card/40 hover:border-gold/50 hover:bg-gold/5 transition text-foreground/80"
+                        >
+                          {q}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Chat messages */}
+                {chatMessages.length > 0 && (
+                  <div className="space-y-3 max-h-[400px] overflow-y-auto p-1">
+                    {chatMessages.map((msg, i) => (
+                      <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                        <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 ${
+                          msg.role === "user"
+                            ? "bg-gold text-background"
+                            : "bg-card border border-gold/20 text-foreground/90"
+                        }`}>
+                          <div className="prose prose-invert prose-sm max-w-none prose-p:my-1 prose-strong:text-gold prose-ul:my-1">
+                            <ReactMarkdown>{msg.content}</ReactMarkdown>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {chatLoading && (
+                      <div className="flex justify-start">
+                        <div className="bg-card border border-gold/20 rounded-2xl px-4 py-2.5">
+                          <Loader2 className="h-4 w-4 text-gold animate-spin" />
+                        </div>
+                      </div>
+                    )}
+                    <div ref={chatEndRef} />
+                  </div>
+                )}
+
+                {/* Chat input */}
+                <div className="flex gap-2">
+                  <Input
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendChatMessage(); } }}
+                    placeholder="Pergunte sobre seu plano..."
+                    disabled={chatLoading}
+                    className="bg-background border-gold/30"
+                  />
+                  <Button
+                    onClick={sendChatMessage}
+                    disabled={chatLoading || !chatInput.trim()}
+                    className="bg-gold text-background hover:bg-gold/90"
+                    size="icon"
+                  >
+                    <Send className="h-4 w-4" />
+                  </Button>
                 </div>
               </CardContent>
             </Card>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <Button variant="outline" onClick={() => { setStep("form"); setCurrentPlan(null); }} className="flex-1 border-gold/30">
+              <Button variant="outline" onClick={() => { setStep("form"); setCurrentDiagnostic(null); setChatMessages([]); }} className="flex-1 border-gold/30">
                 Refazer Diagnóstico
+              </Button>
+              <Button onClick={() => setShowHistory(true)} variant="outline" className="flex-1 border-gold/30 text-gold">
+                <History className="mr-2 h-4 w-4" /> Ver Evolução
               </Button>
               <Button onClick={() => setStep("intro")} className="flex-1 bg-gold text-background hover:bg-gold/90 font-semibold">
                 Concluir
