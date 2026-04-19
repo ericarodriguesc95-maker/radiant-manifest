@@ -147,7 +147,12 @@ export default function AdminBibliotecaElitePage() {
     });
   }, [drafts, overrides, realTitles, realDurations]);
 
-  const saveOverride = async (trackId: string, videoId: string, customTitle?: string | null) => {
+  const saveOverride = async (
+    trackId: string,
+    videoId: string,
+    customTitle?: string | null,
+    customDuration?: string | null
+  ) => {
     if (!user) return;
     const raw = (drafts[videoId] || "").trim();
     if (!raw) {
@@ -160,8 +165,9 @@ export default function AdminBibliotecaElitePage() {
       return;
     }
     setSavingId(videoId);
-    // Preserve existing title_override unless customTitle is explicitly passed
+    // Preserve existing values unless explicitly passed
     const titleToSave = customTitle !== undefined ? customTitle : overrides[videoId]?.title_override ?? null;
+    const durationToSave = customDuration !== undefined ? customDuration : overrides[videoId]?.duration_override ?? null;
     const { error } = await supabase
       .from("elite_video_overrides" as any)
       .upsert(
@@ -171,6 +177,7 @@ export default function AdminBibliotecaElitePage() {
           youtube_id: ytId,
           youtube_url: raw.startsWith("http") ? raw : null,
           title_override: titleToSave,
+          duration_override: durationToSave,
           updated_by: user.id,
         },
         { onConflict: "video_id" }
@@ -180,8 +187,23 @@ export default function AdminBibliotecaElitePage() {
       toast.error("Erro ao salvar: " + error.message);
       return;
     }
-    setOverrides({ ...overrides, [videoId]: { youtube_id: ytId, youtube_url: raw.startsWith("http") ? raw : null, title_override: titleToSave } });
-    toast.success(customTitle ? "Vídeo + título real salvos! 👑" : "Vídeo salvo! 👑");
+    setOverrides({
+      ...overrides,
+      [videoId]: {
+        youtube_id: ytId,
+        youtube_url: raw.startsWith("http") ? raw : null,
+        title_override: titleToSave,
+        duration_override: durationToSave,
+      },
+    });
+    const what = customTitle && customDuration
+      ? "Vídeo + título + duração reais salvos! 👑"
+      : customTitle
+        ? "Vídeo + título real salvos! 👑"
+        : customDuration
+          ? "Vídeo + duração real salvos! 👑"
+          : "Vídeo salvo! 👑";
+    toast.success(what);
   };
 
   const importRealTitle = async (trackId: string, videoId: string) => {
@@ -193,10 +215,35 @@ export default function AdminBibliotecaElitePage() {
     await saveOverride(trackId, videoId, realTitle);
   };
 
+  const importRealDuration = async (trackId: string, videoId: string) => {
+    const realDuration = realDurations[videoId];
+    if (!realDuration) {
+      toast.error("Aguarde a duração do YouTube carregar (ou cole um link válido).");
+      return;
+    }
+    await saveOverride(trackId, videoId, undefined, realDuration);
+  };
+
+  const importRealAll = async (trackId: string, videoId: string) => {
+    const realTitle = realTitles[videoId];
+    const realDuration = realDurations[videoId];
+    if (!realTitle && !realDuration) {
+      toast.error("Aguarde os dados do YouTube carregarem.");
+      return;
+    }
+    await saveOverride(trackId, videoId, realTitle ?? undefined, realDuration ?? undefined);
+  };
+
   const resetTitleToOriginal = async (trackId: string, videoId: string) => {
     if (!overrides[videoId]) return;
     await saveOverride(trackId, videoId, null);
     toast.success("Título voltou para o original.");
+  };
+
+  const resetDurationToOriginal = async (trackId: string, videoId: string) => {
+    if (!overrides[videoId]) return;
+    await saveOverride(trackId, videoId, undefined, null);
+    toast.success("Duração voltou para o original.");
   };
 
   const removeOverride = async (videoId: string) => {
