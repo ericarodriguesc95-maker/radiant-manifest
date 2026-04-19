@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Moon, Brain, Sparkles, Clock, History, Trash2, Loader2, Send, MessageCircle, Calendar } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { PlanSections } from "@/components/sono/PlanSections";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
