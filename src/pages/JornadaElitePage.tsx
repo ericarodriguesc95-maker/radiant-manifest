@@ -407,7 +407,7 @@ export default function JornadaElitePage() {
                         style={{ "--stagger": i } as React.CSSProperties}
                       >
                         <button
-                          onClick={() => setActiveVideo({ id: v.id, title: v.title, mentor: v.mentor })}
+                          onClick={() => setActiveVideo({ id: v.id, title: titleOverrides[v.id] || v.title, mentor: v.mentor })}
                           className="w-full flex items-center gap-3 text-left"
                         >
                           <div className="relative h-16 w-24 rounded-lg overflow-hidden bg-muted/30 shrink-0 flex items-center justify-center">
