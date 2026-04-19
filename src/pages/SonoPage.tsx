@@ -374,7 +374,16 @@ export default function SonoPage() {
         )}
 
         {/* RESULT */}
-        {step === "result" && currentDiagnostic && (
+        {step === "result" && currentDiagnostic && (() => {
+          const toMin = (t: string) => { const [h, m] = t.split(":").map(Number); return h * 60 + m; };
+          const diffMin = (start: string, end: string) => { let d = toMin(end) - toMin(start); if (d <= 0) d += 24 * 60; return d; };
+          const tst = diffMin(currentDiagnostic.sleep_time, currentDiagnostic.wake_time);
+          const tib = diffMin(currentDiagnostic.bed_time, currentDiagnostic.wake_time);
+          const efficiency = tib > 0 ? Math.round((tst / tib) * 100) : 0;
+          const effColor = efficiency >= 85 ? "text-emerald-400 border-emerald-400/40 bg-emerald-400/10" : efficiency >= 70 ? "text-amber-400 border-amber-400/40 bg-amber-400/10" : "text-red-400 border-red-400/40 bg-red-400/10";
+          const effLabel = efficiency >= 85 ? "Excelente" : efficiency >= 70 ? "Razoável" : "Baixa";
+          const effDot = efficiency >= 85 ? "bg-emerald-400" : efficiency >= 70 ? "bg-amber-400" : "bg-red-400";
+          return (
           <>
             {/* Hero header card */}
             <div className="relative rounded-2xl overflow-hidden border border-gold/30 bg-gradient-to-br from-card via-background to-card">
@@ -395,6 +404,24 @@ export default function SonoPage() {
                   <span className="text-xs px-3 py-1.5 rounded-full bg-gold text-background font-bold shadow-gold">
                     {currentDiagnostic.chronotype}
                   </span>
+                </div>
+
+                {/* Sleep Efficiency Highlight */}
+                <div className={`mb-4 p-4 rounded-xl border-2 ${effColor} backdrop-blur flex items-center justify-between gap-4 flex-wrap`}>
+                  <div className="flex items-center gap-3">
+                    <div className="relative flex h-3 w-3">
+                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${effDot} opacity-60`} />
+                      <span className={`relative inline-flex rounded-full h-3 w-3 ${effDot}`} />
+                    </div>
+                    <div>
+                      <p className="text-[10px] uppercase tracking-[0.25em] opacity-80 font-medium">Eficiência do Sono</p>
+                      <p className="text-[11px] opacity-70">TST {Math.floor(tst/60)}h{(tst%60).toString().padStart(2,"0")} / TIB {Math.floor(tib/60)}h{(tib%60).toString().padStart(2,"0")}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-serif text-3xl sm:text-4xl font-bold leading-none">{efficiency}<span className="text-lg">%</span></p>
+                    <p className="text-[10px] uppercase tracking-wider font-bold mt-1">{effLabel}</p>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
@@ -529,7 +556,8 @@ export default function SonoPage() {
               </Button>
             </div>
           </>
-        )}
+          );
+        })()}
       </div>
     </div>
   );
