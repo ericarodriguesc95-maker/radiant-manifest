@@ -324,11 +324,17 @@ export default function AdminBibliotecaElitePage() {
                     <Youtube className="relative h-6 w-6 text-gold drop-shadow" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-body font-semibold text-foreground line-clamp-2">{v.title}</p>
+                    <p className="text-sm font-body font-semibold text-foreground line-clamp-2">
+                      {ov?.title_override || v.title}
+                    </p>
+                    {ov?.title_override && ov.title_override !== v.title && (
+                      <p className="text-[10px] text-muted-foreground line-clamp-1 italic">Original: {v.title}</p>
+                    )}
                     <p className="text-[10px] text-muted-foreground mt-0.5">{v.mentor} · {v.duration}</p>
                     {hasOverride ? (
                       <p className="text-[10px] text-gold mt-1 flex items-center gap-1">
                         <CheckCircle2 className="h-3 w-3" /> Vídeo personalizado fixado
+                        {ov?.title_override && <span className="ml-1">· título real importado</span>}
                       </p>
                     ) : (
                       <p className="text-[10px] text-muted-foreground/70 mt-1 italic">Usando busca automática</p>
@@ -375,6 +381,29 @@ export default function AdminBibliotecaElitePage() {
                       </p>
                     )}
                   </div>
+                )}
+
+                {/* Importar título real do YouTube */}
+                {previewId && realTitles[v.id] && realTitles[v.id] !== (ov?.title_override || v.title) && (
+                  <button
+                    onClick={() => importRealTitle(track.id, v.id)}
+                    disabled={savingId === v.id || !draft.trim()}
+                    className="w-full py-2 rounded-lg text-[11px] font-body font-semibold bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 hover:bg-emerald-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    Importar título real do YouTube
+                  </button>
+                )}
+
+                {/* Reset title to original */}
+                {ov?.title_override && (
+                  <button
+                    onClick={() => resetTitleToOriginal(track.id, v.id)}
+                    disabled={savingId === v.id}
+                    className="w-full py-1.5 rounded-lg text-[10px] font-body font-semibold bg-muted/10 border border-gold/10 text-muted-foreground hover:text-foreground hover:border-gold/30 disabled:opacity-40 transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <RotateCcw className="h-3 w-3" /> Voltar ao título original
+                  </button>
                 )}
 
                 <div className="grid grid-cols-2 gap-2">
