@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { MessageCircle, Hash, Sparkles, Bot, Wallet, X, Plus } from "lucide-react";
+import { MessageCircle, Hash, Crown, Bot, Wallet, X, Plus, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
