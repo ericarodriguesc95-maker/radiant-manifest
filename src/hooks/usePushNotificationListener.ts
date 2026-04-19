@@ -67,16 +67,27 @@ export function usePushNotificationListener() {
 
           // In-app toast
           toast(`🎁 ${update.title}`, {
-            description: update.description,
-            duration: 8000,
+            description: `${update.description}\n\nAtualizando o app...`,
+            duration: 6000,
             action: {
-              label: "Ver",
+              label: "Ver agora",
               onClick: () => {
-                // Trigger updates modal via global event
                 window.dispatchEvent(new CustomEvent("glowup:show-updates"));
               },
             },
           });
+
+          // Auto-reload app after 6s so user sees the toast,
+          // then gets the freshest version with the new feature.
+          // Guard against multiple reloads in the same session.
+          const RELOAD_KEY = "glowup-last-auto-reload";
+          const lastReload = parseInt(sessionStorage.getItem(RELOAD_KEY) || "0");
+          if (Date.now() - lastReload > 30_000) {
+            sessionStorage.setItem(RELOAD_KEY, String(Date.now()));
+            setTimeout(() => {
+              window.location.reload();
+            }, 6000);
+          }
         }
       )
       .subscribe();
