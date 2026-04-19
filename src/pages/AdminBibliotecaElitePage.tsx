@@ -34,6 +34,24 @@ function extractYouTubeId(input: string): string | null {
   return null;
 }
 
+// In-memory cache for YouTube oEmbed lookups (titles)
+const ytTitleCache = new Map<string, string>();
+
+async function fetchYouTubeTitle(ytId: string): Promise<string | null> {
+  if (ytTitleCache.has(ytId)) return ytTitleCache.get(ytId)!;
+  try {
+    // noembed.com is a public CORS-friendly oEmbed proxy
+    const res = await fetch(`https://noembed.com/embed?url=https://www.youtube.com/watch?v=${ytId}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data?.title) {
+      ytTitleCache.set(ytId, data.title);
+      return data.title as string;
+    }
+  } catch {}
+  return null;
+}
+
 export default function AdminBibliotecaElitePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -43,6 +61,8 @@ export default function AdminBibliotecaElitePage() {
   const [savingId, setSavingId] = useState<string | null>(null);
   const [activeTrack, setActiveTrack] = useState<string>(VIDEO_TRACKS[0].id);
   const [search, setSearch] = useState("");
+  // Real YouTube titles fetched via oEmbed, keyed by videoId (our internal id)
+  const [realTitles, setRealTitles] = useState<Record<string, string>>({});
 
   // Check admin role
   useEffect(() => {
