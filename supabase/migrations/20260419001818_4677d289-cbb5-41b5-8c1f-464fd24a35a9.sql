@@ -1,0 +1,1 @@
+ALTER TABLE public.elite_video_overrides ADD COLUMN IF NOT EXISTS title_override TEXT;
