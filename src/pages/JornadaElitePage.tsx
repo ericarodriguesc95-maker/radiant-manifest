@@ -428,7 +428,7 @@ export default function JornadaElitePage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-body font-semibold text-foreground line-clamp-2">{titleOverrides[v.id] || v.title}</p>
-                            <p className="text-[10px] text-muted-foreground mt-0.5">{v.mentor} · {v.duration}</p>
+                            <p className="text-[10px] text-muted-foreground mt-0.5">{v.mentor} · {durationOverrides[v.id] || v.duration}</p>
                             <p className="text-[9px] text-gold/70 mt-0.5 font-body tracking-wider uppercase">▶ Assistir aqui</p>
                           </div>
                         </button>
