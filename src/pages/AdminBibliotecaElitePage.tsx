@@ -7,7 +7,7 @@ import { VIDEO_TRACKS } from "@/data/eliteJourneyData";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-type OverrideMap = Record<string, { youtube_id: string; youtube_url?: string | null }>;
+type OverrideMap = Record<string, { youtube_id: string; youtube_url?: string | null; title_override?: string | null }>;
 
 // Extracts a YouTube video ID from any common URL format or returns the input if it already looks like an ID
 function extractYouTubeId(input: string): string | null {
@@ -83,11 +83,11 @@ export default function AdminBibliotecaElitePage() {
     (async () => {
       const { data } = await supabase
         .from("elite_video_overrides" as any)
-        .select("video_id, youtube_id, youtube_url");
+        .select("video_id, youtube_id, youtube_url, title_override");
       const map: OverrideMap = {};
       const draftMap: Record<string, string> = {};
       (data as any[])?.forEach((r) => {
-        map[r.video_id] = { youtube_id: r.youtube_id, youtube_url: r.youtube_url };
+        map[r.video_id] = { youtube_id: r.youtube_id, youtube_url: r.youtube_url, title_override: r.title_override };
         draftMap[r.video_id] = r.youtube_url || r.youtube_id;
       });
       setOverrides(map);
@@ -107,7 +107,7 @@ export default function AdminBibliotecaElitePage() {
     });
   }, [drafts, overrides, realTitles]);
 
-  const saveOverride = async (trackId: string, videoId: string) => {
+  const saveOverride = async (trackId: string, videoId: string, customTitle?: string | null) => {
     if (!user) return;
     const raw = (drafts[videoId] || "").trim();
     if (!raw) {
@@ -120,6 +120,8 @@ export default function AdminBibliotecaElitePage() {
       return;
     }
     setSavingId(videoId);
+    // Preserve existing title_override unless customTitle is explicitly passed
+    const titleToSave = customTitle !== undefined ? customTitle : overrides[videoId]?.title_override ?? null;
     const { error } = await supabase
       .from("elite_video_overrides" as any)
       .upsert(
@@ -128,6 +130,7 @@ export default function AdminBibliotecaElitePage() {
           track_id: trackId,
           youtube_id: ytId,
           youtube_url: raw.startsWith("http") ? raw : null,
+          title_override: titleToSave,
           updated_by: user.id,
         },
         { onConflict: "video_id" }
@@ -137,8 +140,23 @@ export default function AdminBibliotecaElitePage() {
       toast.error("Erro ao salvar: " + error.message);
       return;
     }
-    setOverrides({ ...overrides, [videoId]: { youtube_id: ytId, youtube_url: raw.startsWith("http") ? raw : null } });
-    toast.success("Vídeo salvo! 👑");
+    setOverrides({ ...overrides, [videoId]: { youtube_id: ytId, youtube_url: raw.startsWith("http") ? raw : null, title_override: titleToSave } });
+    toast.success(customTitle ? "Vídeo + título real salvos! 👑" : "Vídeo salvo! 👑");
+  };
+
+  const importRealTitle = async (trackId: string, videoId: string) => {
+    const realTitle = realTitles[videoId];
+    if (!realTitle) {
+      toast.error("Aguarde o título do YouTube carregar (ou cole um link válido).");
+      return;
+    }
+    await saveOverride(trackId, videoId, realTitle);
+  };
+
+  const resetTitleToOriginal = async (trackId: string, videoId: string) => {
+    if (!overrides[videoId]) return;
+    await saveOverride(trackId, videoId, null);
+    toast.success("Título voltou para o original.");
   };
 
   const removeOverride = async (videoId: string) => {
