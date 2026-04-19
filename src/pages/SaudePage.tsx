@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
-import { ArrowLeft, Heart, Scale, Utensils, Dumbbell, Pill, Apple, Plus, Trash2, Edit2, Check, X, TrendingDown, TrendingUp, Camera, Calculator, Search, Syringe, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Heart, Scale, Utensils, Dumbbell, Pill, Apple, Plus, Trash2, Edit2, Check, X, TrendingDown, TrendingUp, Camera, Calculator, Search, Syringe, ShieldCheck, Moon, ChevronRight } from "lucide-react";
 
 const WorkoutOfTheDay = lazy(() => import("@/components/health/WorkoutOfTheDay"));
 const ActivityTracker = lazy(() => import("@/components/health/ActivityTracker"));
