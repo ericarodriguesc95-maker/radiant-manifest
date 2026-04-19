@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, Trash2, Youtube, CheckCircle2, AlertCircle, Search } from "lucide-react";
+import { ArrowLeft, Save, Trash2, Youtube, CheckCircle2, AlertCircle, Search, Download, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { VIDEO_TRACKS } from "@/data/eliteJourneyData";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-type OverrideMap = Record<string, { youtube_id: string; youtube_url?: string | null }>;
+type OverrideMap = Record<string, { youtube_id: string; youtube_url?: string | null; title_override?: string | null }>;
 
 // Extracts a YouTube video ID from any common URL format or returns the input if it already looks like an ID
 function extractYouTubeId(input: string): string | null {
@@ -83,11 +83,11 @@ export default function AdminBibliotecaElitePage() {
     (async () => {
       const { data } = await supabase
         .from("elite_video_overrides" as any)
-        .select("video_id, youtube_id, youtube_url");
+        .select("video_id, youtube_id, youtube_url, title_override");
       const map: OverrideMap = {};
       const draftMap: Record<string, string> = {};
       (data as any[])?.forEach((r) => {
-        map[r.video_id] = { youtube_id: r.youtube_id, youtube_url: r.youtube_url };
+        map[r.video_id] = { youtube_id: r.youtube_id, youtube_url: r.youtube_url, title_override: r.title_override };
         draftMap[r.video_id] = r.youtube_url || r.youtube_id;
       });
       setOverrides(map);
@@ -107,7 +107,7 @@ export default function AdminBibliotecaElitePage() {
     });
   }, [drafts, overrides, realTitles]);
 
-  const saveOverride = async (trackId: string, videoId: string) => {
+  const saveOverride = async (trackId: string, videoId: string, customTitle?: string | null) => {
     if (!user) return;
     const raw = (drafts[videoId] || "").trim();
     if (!raw) {
@@ -120,6 +120,8 @@ export default function AdminBibliotecaElitePage() {
       return;
     }
     setSavingId(videoId);
+    // Preserve existing title_override unless customTitle is explicitly passed
+    const titleToSave = customTitle !== undefined ? customTitle : overrides[videoId]?.title_override ?? null;
     const { error } = await supabase
       .from("elite_video_overrides" as any)
       .upsert(
@@ -128,6 +130,7 @@ export default function AdminBibliotecaElitePage() {
           track_id: trackId,
           youtube_id: ytId,
           youtube_url: raw.startsWith("http") ? raw : null,
+          title_override: titleToSave,
           updated_by: user.id,
         },
         { onConflict: "video_id" }
@@ -137,8 +140,23 @@ export default function AdminBibliotecaElitePage() {
       toast.error("Erro ao salvar: " + error.message);
       return;
     }
-    setOverrides({ ...overrides, [videoId]: { youtube_id: ytId, youtube_url: raw.startsWith("http") ? raw : null } });
-    toast.success("Vídeo salvo! 👑");
+    setOverrides({ ...overrides, [videoId]: { youtube_id: ytId, youtube_url: raw.startsWith("http") ? raw : null, title_override: titleToSave } });
+    toast.success(customTitle ? "Vídeo + título real salvos! 👑" : "Vídeo salvo! 👑");
+  };
+
+  const importRealTitle = async (trackId: string, videoId: string) => {
+    const realTitle = realTitles[videoId];
+    if (!realTitle) {
+      toast.error("Aguarde o título do YouTube carregar (ou cole um link válido).");
+      return;
+    }
+    await saveOverride(trackId, videoId, realTitle);
+  };
+
+  const resetTitleToOriginal = async (trackId: string, videoId: string) => {
+    if (!overrides[videoId]) return;
+    await saveOverride(trackId, videoId, null);
+    toast.success("Título voltou para o original.");
   };
 
   const removeOverride = async (videoId: string) => {
@@ -306,11 +324,17 @@ export default function AdminBibliotecaElitePage() {
                     <Youtube className="relative h-6 w-6 text-gold drop-shadow" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-body font-semibold text-foreground line-clamp-2">{v.title}</p>
+                    <p className="text-sm font-body font-semibold text-foreground line-clamp-2">
+                      {ov?.title_override || v.title}
+                    </p>
+                    {ov?.title_override && ov.title_override !== v.title && (
+                      <p className="text-[10px] text-muted-foreground line-clamp-1 italic">Original: {v.title}</p>
+                    )}
                     <p className="text-[10px] text-muted-foreground mt-0.5">{v.mentor} · {v.duration}</p>
                     {hasOverride ? (
                       <p className="text-[10px] text-gold mt-1 flex items-center gap-1">
                         <CheckCircle2 className="h-3 w-3" /> Vídeo personalizado fixado
+                        {ov?.title_override && <span className="ml-1">· título real importado</span>}
                       </p>
                     ) : (
                       <p className="text-[10px] text-muted-foreground/70 mt-1 italic">Usando busca automática</p>
@@ -357,6 +381,29 @@ export default function AdminBibliotecaElitePage() {
                       </p>
                     )}
                   </div>
+                )}
+
+                {/* Importar título real do YouTube */}
+                {previewId && realTitles[v.id] && realTitles[v.id] !== (ov?.title_override || v.title) && (
+                  <button
+                    onClick={() => importRealTitle(track.id, v.id)}
+                    disabled={savingId === v.id || !draft.trim()}
+                    className="w-full py-2 rounded-lg text-[11px] font-body font-semibold bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 hover:bg-emerald-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    Importar título real do YouTube
+                  </button>
+                )}
+
+                {/* Reset title to original */}
+                {ov?.title_override && (
+                  <button
+                    onClick={() => resetTitleToOriginal(track.id, v.id)}
+                    disabled={savingId === v.id}
+                    className="w-full py-1.5 rounded-lg text-[10px] font-body font-semibold bg-muted/10 border border-gold/10 text-muted-foreground hover:text-foreground hover:border-gold/30 disabled:opacity-40 transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <RotateCcw className="h-3 w-3" /> Voltar ao título original
+                  </button>
                 )}
 
                 <div className="grid grid-cols-2 gap-2">

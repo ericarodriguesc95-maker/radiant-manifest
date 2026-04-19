@@ -27,6 +27,7 @@ export default function JornadaElitePage() {
   const [completedVideos, setCompletedVideos] = useState<Set<string>>(new Set());
   const [activeVideo, setActiveVideo] = useState<{ id: string; title: string; mentor: string } | null>(null);
   const [overrides, setOverrides] = useState<Record<string, string>>({}); // video_id -> youtube_id
+  const [titleOverrides, setTitleOverrides] = useState<Record<string, string>>({}); // video_id -> custom title
 
   const openYouTubeExternal = (title: string, mentor: string, ytId?: string) => {
     const url = ytId
@@ -406,7 +407,7 @@ export default function JornadaElitePage() {
                         style={{ "--stagger": i } as React.CSSProperties}
                       >
                         <button
-                          onClick={() => setActiveVideo({ id: v.id, title: v.title, mentor: v.mentor })}
+                          onClick={() => setActiveVideo({ id: v.id, title: titleOverrides[v.id] || v.title, mentor: v.mentor })}
                           className="w-full flex items-center gap-3 text-left"
                         >
                           <div className="relative h-16 w-24 rounded-lg overflow-hidden bg-muted/30 shrink-0 flex items-center justify-center">
@@ -425,7 +426,7 @@ export default function JornadaElitePage() {
                             <Play className="relative h-6 w-6 text-gold fill-gold drop-shadow" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-body font-semibold text-foreground line-clamp-2">{v.title}</p>
+                            <p className="text-sm font-body font-semibold text-foreground line-clamp-2">{titleOverrides[v.id] || v.title}</p>
                             <p className="text-[10px] text-muted-foreground mt-0.5">{v.mentor} · {v.duration}</p>
                             <p className="text-[9px] text-gold/70 mt-0.5 font-body tracking-wider uppercase">▶ Assistir aqui</p>
                           </div>

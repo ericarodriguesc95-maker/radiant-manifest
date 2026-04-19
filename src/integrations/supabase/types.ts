@@ -697,6 +697,7 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          title_override: string | null
           track_id: string
           updated_at: string
           updated_by: string | null
@@ -707,6 +708,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          title_override?: string | null
           track_id: string
           updated_at?: string
           updated_by?: string | null
@@ -717,6 +719,7 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          title_override?: string | null
           track_id?: string
           updated_at?: string
           updated_by?: string | null
