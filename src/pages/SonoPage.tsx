@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Moon, Brain, Sparkles, Clock, History, Trash2, Loader2, Send, MessageCircle, Calendar, Info } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ReactMarkdown from "react-markdown";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { PlanSections } from "@/components/sono/PlanSections";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RTooltip, ReferenceLine } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
