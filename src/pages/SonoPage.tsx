@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Moon, Brain, Sparkles, Clock, History, Trash2, Loader2, Send, MessageCircle, Calendar, Info } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ReactMarkdown from "react-markdown";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { PlanSections } from "@/components/sono/PlanSections";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RTooltip, ReferenceLine } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -465,26 +466,24 @@ export default function SonoPage() {
                     <div>
                       <div className="flex items-center gap-1.5">
                         <p className="text-[10px] uppercase tracking-[0.25em] opacity-80 font-medium">Eficiência do Sono</p>
-                        <TooltipProvider delayDuration={150}>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <button type="button" aria-label="O que é TST e TIB?" className="opacity-70 hover:opacity-100 transition-opacity">
-                                <Info className="h-3 w-3" />
-                              </button>
-                            </TooltipTrigger>
-                            <TooltipContent side="bottom" sideOffset={8} className="z-[100] max-w-xs bg-card border border-gold/40 text-foreground shadow-2xl shadow-black/60">
-                              <p className="text-[11px] leading-relaxed">
-                                <strong className="text-gold">TST</strong> (Total Sleep Time): tempo real dormindo, da hora em que você pega no sono até acordar.
-                              </p>
-                              <p className="text-[11px] leading-relaxed mt-1.5">
-                                <strong className="text-gold">TIB</strong> (Time In Bed): tempo total na cama, desde que se deita até levantar.
-                              </p>
-                              <p className="text-[11px] leading-relaxed mt-1.5 text-foreground/70">
-                                Eficiência ideal: ≥ 85% (Excelente) · 70–84% (Razoável) · &lt; 70% (Baixa).
-                              </p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <button type="button" aria-label="O que é TST e TIB?" className="opacity-70 hover:opacity-100 transition-opacity">
+                              <Info className="h-3 w-3" />
+                            </button>
+                          </PopoverTrigger>
+                          <PopoverContent side="bottom" align="start" sideOffset={8} className="z-[100] w-72 bg-card border border-gold/40 text-foreground shadow-2xl shadow-black/60 p-3">
+                            <p className="text-[11px] leading-relaxed">
+                              <strong className="text-gold">TST</strong> (Total Sleep Time): tempo real dormindo, da hora em que você pega no sono até acordar.
+                            </p>
+                            <p className="text-[11px] leading-relaxed mt-1.5">
+                              <strong className="text-gold">TIB</strong> (Time In Bed): tempo total na cama, desde que se deita até levantar.
+                            </p>
+                            <p className="text-[11px] leading-relaxed mt-1.5 text-foreground/70">
+                              Eficiência ideal: ≥ 85% (Excelente) · 70–84% (Razoável) · &lt; 70% (Baixa).
+                            </p>
+                          </PopoverContent>
+                        </Popover>
                       </div>
                       <p className="text-[11px] opacity-70">TST {Math.floor(tst/60)}h{(tst%60).toString().padStart(2,"0")} / TIB {Math.floor(tib/60)}h{(tib%60).toString().padStart(2,"0")}</p>
                     </div>
