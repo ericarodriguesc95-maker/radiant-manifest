@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Save, Trash2, Youtube, CheckCircle2, AlertCircle, Search } from "lucide-react";
+import { ArrowLeft, Save, Trash2, Youtube, CheckCircle2, AlertCircle, Search, Download, RotateCcw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { VIDEO_TRACKS } from "@/data/eliteJourneyData";
