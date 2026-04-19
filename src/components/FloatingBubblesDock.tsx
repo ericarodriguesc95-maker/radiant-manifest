@@ -39,7 +39,7 @@ const BUBBLES: BubbleDef[] = [
   { id: "ia", label: "Assistente Pessoal", shortLabel: "Tempo", icon: Clock,
     href: "/alta-performance?openAi=1", hideOnPrefix: ["/alta-performance"], usedFlag: "" },
   { id: "eu-superior", label: "Eu Superior", shortLabel: "Eu+", icon: Crown,
-    href: "/metas?tab=manifestacao&openEuSuperior=1", hideOnPrefix: [], usedFlag: "" },
+    href: "/metas?tab=manifestacao&openEuSuperior=1", hideOnPrefix: ["/metas"], usedFlag: "" },
   { id: "financeira", label: "IA Financeira", shortLabel: "$", icon: Wallet,
     href: "/financas?openAi=1", hideOnPrefix: ["/financas"], usedFlag: "" },
 ];
