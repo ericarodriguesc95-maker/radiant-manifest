@@ -31,6 +31,7 @@ import AdminActivityPage from "@/pages/AdminActivityPage";
 import AdminContentPage from "@/pages/AdminContentPage";
 import AdminSubscriptionsPage from "@/pages/AdminSubscriptionsPage";
 import SaudePage from "@/pages/SaudePage";
+import SonoPage from "@/pages/SonoPage";
 import DesafiosPage from "@/pages/DesafiosPage";
 import RenovarBrilhoPage from "@/pages/RenovarBrilhoPage";
 import Biblia365Page from "@/pages/Biblia365Page";
@@ -106,6 +107,7 @@ const AppRoutes = () => (
       {/* Premium-locked routes (extra guard for clarity) */}
       <Route path="/comunidade" element={<ErrorBoundary><PremiumRoute><ComunidadePage /></PremiumRoute></ErrorBoundary>} />
       <Route path="/saude" element={<ErrorBoundary><PremiumRoute><SaudePage /></PremiumRoute></ErrorBoundary>} />
+      <Route path="/sono" element={<ErrorBoundary><PremiumRoute><SonoPage /></PremiumRoute></ErrorBoundary>} />
       <Route path="/desafios" element={<ErrorBoundary><PremiumRoute><DesafiosPage /></PremiumRoute></ErrorBoundary>} />
       <Route path="/biblia-365" element={<ErrorBoundary><Biblia365Page /></ErrorBoundary>} />
       <Route path="/testes" element={<ErrorBoundary><TestesPage /></ErrorBoundary>} />
