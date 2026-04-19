@@ -45,7 +45,7 @@ export default function JornadaElitePage() {
         supabase.from("elite_journey_progress" as any).select("*").eq("user_id", user.id),
         supabase.from("elite_diagnostic_results" as any).select("*").eq("user_id", user.id).maybeSingle(),
         supabase.from("elite_video_completions" as any).select("video_id").eq("user_id", user.id),
-        supabase.from("elite_video_overrides" as any).select("video_id, youtube_id"),
+        supabase.from("elite_video_overrides" as any).select("video_id, youtube_id, title_override, duration_override"),
       ]);
       const p: Record<number, any> = {};
       (progData as any[])?.forEach((r) => { p[r.level_id] = { completed_modules: r.completed_modules, is_completed: r.is_completed }; });
@@ -53,8 +53,16 @@ export default function JornadaElitePage() {
       if (diagData && (diagData as any).archetype) setPlan(ARCHETYPE_PLANS[(diagData as any).archetype]);
       setCompletedVideos(new Set((vidData as any[])?.map((v) => v.video_id) || []));
       const ovMap: Record<string, string> = {};
-      (ovData as any[])?.forEach((r) => { ovMap[r.video_id] = r.youtube_id; });
+      const titleMap: Record<string, string> = {};
+      const durMap: Record<string, string> = {};
+      (ovData as any[])?.forEach((r) => {
+        ovMap[r.video_id] = r.youtube_id;
+        if (r.title_override) titleMap[r.video_id] = r.title_override;
+        if (r.duration_override) durMap[r.video_id] = r.duration_override;
+      });
       setOverrides(ovMap);
+      setTitleOverrides(titleMap);
+      setDurationOverrides(durMap);
     })();
   }, [user]);
 
