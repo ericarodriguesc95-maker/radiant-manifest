@@ -537,14 +537,25 @@ export default function SonoPage() {
             <PlanSections plan={currentDiagnostic.ai_plan} />
 
             {/* AI CHAT — Specialist follow-up */}
-            <Card className="border-gold/30 bg-card/60 backdrop-blur">
-              <CardHeader>
-                <CardTitle className="text-gold font-serif text-xl flex items-center gap-2">
-                  <MessageCircle className="h-5 w-5" /> Tire suas dúvidas com a Especialista
-                </CardTitle>
-                <CardDescription>
-                  Converse com a neurocientista do sono sobre seu plano. Ela conhece seus dados e pode aprofundar qualquer ponto.
-                </CardDescription>
+            <Card className="border-gold/30 bg-card/60 backdrop-blur overflow-hidden relative">
+              <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
+              <CardHeader className="relative">
+                <div className="flex items-center gap-3">
+                  <div className="relative h-14 w-14 shrink-0">
+                    <span className="absolute inset-0 rounded-full bg-gold/40 blur-lg animate-pulse" />
+                    <div className="relative h-14 w-14 rounded-full bg-gradient-to-br from-gold via-amber-500 to-amber-700 flex items-center justify-center shadow-[0_0_25px_rgba(212,175,55,0.55)]">
+                      <Moon className="h-7 w-7 text-background" />
+                    </div>
+                    <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-emerald-400 border-2 border-card" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-[0.25em] text-gold/70 font-medium">Neurocientista do Sono</p>
+                    <CardTitle className="text-gold font-serif text-xl leading-tight">Especialista IA</CardTitle>
+                    <CardDescription className="text-[11px] mt-0.5">
+                      Conhece seus dados e aprofunda qualquer ponto do plano
+                    </CardDescription>
+                  </div>
+                </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 {/* Suggested questions (only if no chat yet) */}
