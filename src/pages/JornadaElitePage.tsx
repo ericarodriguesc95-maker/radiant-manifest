@@ -28,6 +28,7 @@ export default function JornadaElitePage() {
   const [activeVideo, setActiveVideo] = useState<{ id: string; title: string; mentor: string } | null>(null);
   const [overrides, setOverrides] = useState<Record<string, string>>({}); // video_id -> youtube_id
   const [titleOverrides, setTitleOverrides] = useState<Record<string, string>>({}); // video_id -> custom title
+  const [durationOverrides, setDurationOverrides] = useState<Record<string, string>>({}); // video_id -> custom duration
 
   const openYouTubeExternal = (title: string, mentor: string, ytId?: string) => {
     const url = ytId
@@ -427,7 +428,7 @@ export default function JornadaElitePage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-body font-semibold text-foreground line-clamp-2">{titleOverrides[v.id] || v.title}</p>
-                            <p className="text-[10px] text-muted-foreground mt-0.5">{v.mentor} · {v.duration}</p>
+                            <p className="text-[10px] text-muted-foreground mt-0.5">{v.mentor} · {durationOverrides[v.id] || v.duration}</p>
                             <p className="text-[9px] text-gold/70 mt-0.5 font-body tracking-wider uppercase">▶ Assistir aqui</p>
                           </div>
                         </button>

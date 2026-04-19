@@ -7,7 +7,7 @@ import { VIDEO_TRACKS } from "@/data/eliteJourneyData";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-type OverrideMap = Record<string, { youtube_id: string; youtube_url?: string | null; title_override?: string | null }>;
+type OverrideMap = Record<string, { youtube_id: string; youtube_url?: string | null; title_override?: string | null; duration_override?: string | null }>;
 
 // Extracts a YouTube video ID from any common URL format or returns the input if it already looks like an ID
 function extractYouTubeId(input: string): string | null {
@@ -36,6 +36,8 @@ function extractYouTubeId(input: string): string | null {
 
 // In-memory cache for YouTube oEmbed lookups (titles)
 const ytTitleCache = new Map<string, string>();
+// In-memory cache for YouTube duration lookups (formatted as mm:ss or h:mm:ss)
+const ytDurationCache = new Map<string, string>();
 
 async function fetchYouTubeTitle(ytId: string): Promise<string | null> {
   if (ytTitleCache.has(ytId)) return ytTitleCache.get(ytId)!;
@@ -52,6 +54,35 @@ async function fetchYouTubeTitle(ytId: string): Promise<string | null> {
   return null;
 }
 
+// Format ISO 8601 duration (PT#H#M#S) to human readable (h:mm:ss or mm:ss)
+function formatIsoDuration(iso: string): string | null {
+  const m = iso.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/);
+  if (!m) return null;
+  const h = parseInt(m[1] || "0", 10);
+  const min = parseInt(m[2] || "0", 10);
+  const s = parseInt(m[3] || "0", 10);
+  if (h > 0) return `${h}:${String(min).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+  return `${min}:${String(s).padStart(2, "0")}`;
+}
+
+async function fetchYouTubeDuration(ytId: string): Promise<string | null> {
+  if (ytDurationCache.has(ytId)) return ytDurationCache.get(ytId)!;
+  try {
+    // yt.lemnoslife.com — public CORS-friendly YouTube API (no key required)
+    const res = await fetch(`https://yt.lemnoslife.com/videos?part=contentDetails&id=${ytId}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    const iso = data?.items?.[0]?.contentDetails?.duration;
+    if (!iso) return null;
+    const formatted = formatIsoDuration(iso);
+    if (formatted) {
+      ytDurationCache.set(ytId, formatted);
+      return formatted;
+    }
+  } catch {}
+  return null;
+}
+
 export default function AdminBibliotecaElitePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -63,6 +94,8 @@ export default function AdminBibliotecaElitePage() {
   const [search, setSearch] = useState("");
   // Real YouTube titles fetched via oEmbed, keyed by videoId (our internal id)
   const [realTitles, setRealTitles] = useState<Record<string, string>>({});
+  // Real YouTube durations fetched via public API, keyed by videoId
+  const [realDurations, setRealDurations] = useState<Record<string, string>>({});
 
   // Check admin role
   useEffect(() => {
@@ -83,11 +116,11 @@ export default function AdminBibliotecaElitePage() {
     (async () => {
       const { data } = await supabase
         .from("elite_video_overrides" as any)
-        .select("video_id, youtube_id, youtube_url, title_override");
+        .select("video_id, youtube_id, youtube_url, title_override, duration_override");
       const map: OverrideMap = {};
       const draftMap: Record<string, string> = {};
       (data as any[])?.forEach((r) => {
-        map[r.video_id] = { youtube_id: r.youtube_id, youtube_url: r.youtube_url, title_override: r.title_override };
+        map[r.video_id] = { youtube_id: r.youtube_id, youtube_url: r.youtube_url, title_override: r.title_override, duration_override: r.duration_override };
         draftMap[r.video_id] = r.youtube_url || r.youtube_id;
       });
       setOverrides(map);
@@ -95,19 +128,31 @@ export default function AdminBibliotecaElitePage() {
     })();
   }, []);
 
-  // Auto-fetch real YouTube titles for any video that has a draft/override link
+  // Auto-fetch real YouTube titles + durations for any video that has a draft/override link
   useEffect(() => {
     const allVideos = VIDEO_TRACKS.flatMap((t) => t.videos);
     allVideos.forEach((v) => {
       const ytId = extractYouTubeId(drafts[v.id] || "") || overrides[v.id]?.youtube_id;
-      if (!ytId || realTitles[v.id]) return;
-      fetchYouTubeTitle(ytId).then((title) => {
-        if (title) setRealTitles((prev) => ({ ...prev, [v.id]: title }));
-      });
+      if (!ytId) return;
+      if (!realTitles[v.id]) {
+        fetchYouTubeTitle(ytId).then((title) => {
+          if (title) setRealTitles((prev) => ({ ...prev, [v.id]: title }));
+        });
+      }
+      if (!realDurations[v.id]) {
+        fetchYouTubeDuration(ytId).then((dur) => {
+          if (dur) setRealDurations((prev) => ({ ...prev, [v.id]: dur }));
+        });
+      }
     });
-  }, [drafts, overrides, realTitles]);
+  }, [drafts, overrides, realTitles, realDurations]);
 
-  const saveOverride = async (trackId: string, videoId: string, customTitle?: string | null) => {
+  const saveOverride = async (
+    trackId: string,
+    videoId: string,
+    customTitle?: string | null,
+    customDuration?: string | null
+  ) => {
     if (!user) return;
     const raw = (drafts[videoId] || "").trim();
     if (!raw) {
@@ -120,8 +165,9 @@ export default function AdminBibliotecaElitePage() {
       return;
     }
     setSavingId(videoId);
-    // Preserve existing title_override unless customTitle is explicitly passed
+    // Preserve existing values unless explicitly passed
     const titleToSave = customTitle !== undefined ? customTitle : overrides[videoId]?.title_override ?? null;
+    const durationToSave = customDuration !== undefined ? customDuration : overrides[videoId]?.duration_override ?? null;
     const { error } = await supabase
       .from("elite_video_overrides" as any)
       .upsert(
@@ -131,6 +177,7 @@ export default function AdminBibliotecaElitePage() {
           youtube_id: ytId,
           youtube_url: raw.startsWith("http") ? raw : null,
           title_override: titleToSave,
+          duration_override: durationToSave,
           updated_by: user.id,
         },
         { onConflict: "video_id" }
@@ -140,8 +187,23 @@ export default function AdminBibliotecaElitePage() {
       toast.error("Erro ao salvar: " + error.message);
       return;
     }
-    setOverrides({ ...overrides, [videoId]: { youtube_id: ytId, youtube_url: raw.startsWith("http") ? raw : null, title_override: titleToSave } });
-    toast.success(customTitle ? "Vídeo + título real salvos! 👑" : "Vídeo salvo! 👑");
+    setOverrides({
+      ...overrides,
+      [videoId]: {
+        youtube_id: ytId,
+        youtube_url: raw.startsWith("http") ? raw : null,
+        title_override: titleToSave,
+        duration_override: durationToSave,
+      },
+    });
+    const what = customTitle && customDuration
+      ? "Vídeo + título + duração reais salvos! 👑"
+      : customTitle
+        ? "Vídeo + título real salvos! 👑"
+        : customDuration
+          ? "Vídeo + duração real salvos! 👑"
+          : "Vídeo salvo! 👑";
+    toast.success(what);
   };
 
   const importRealTitle = async (trackId: string, videoId: string) => {
@@ -153,10 +215,35 @@ export default function AdminBibliotecaElitePage() {
     await saveOverride(trackId, videoId, realTitle);
   };
 
+  const importRealDuration = async (trackId: string, videoId: string) => {
+    const realDuration = realDurations[videoId];
+    if (!realDuration) {
+      toast.error("Aguarde a duração do YouTube carregar (ou cole um link válido).");
+      return;
+    }
+    await saveOverride(trackId, videoId, undefined, realDuration);
+  };
+
+  const importRealAll = async (trackId: string, videoId: string) => {
+    const realTitle = realTitles[videoId];
+    const realDuration = realDurations[videoId];
+    if (!realTitle && !realDuration) {
+      toast.error("Aguarde os dados do YouTube carregarem.");
+      return;
+    }
+    await saveOverride(trackId, videoId, realTitle ?? undefined, realDuration ?? undefined);
+  };
+
   const resetTitleToOriginal = async (trackId: string, videoId: string) => {
     if (!overrides[videoId]) return;
     await saveOverride(trackId, videoId, null);
     toast.success("Título voltou para o original.");
+  };
+
+  const resetDurationToOriginal = async (trackId: string, videoId: string) => {
+    if (!overrides[videoId]) return;
+    await saveOverride(trackId, videoId, undefined, null);
+    toast.success("Duração voltou para o original.");
   };
 
   const removeOverride = async (videoId: string) => {
@@ -330,11 +417,17 @@ export default function AdminBibliotecaElitePage() {
                     {ov?.title_override && ov.title_override !== v.title && (
                       <p className="text-[10px] text-muted-foreground line-clamp-1 italic">Original: {v.title}</p>
                     )}
-                    <p className="text-[10px] text-muted-foreground mt-0.5">{v.mentor} · {v.duration}</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                      {v.mentor} · {ov?.duration_override || v.duration}
+                      {ov?.duration_override && ov.duration_override !== v.duration && (
+                        <span className="text-muted-foreground/60"> (orig: {v.duration})</span>
+                      )}
+                    </p>
                     {hasOverride ? (
-                      <p className="text-[10px] text-gold mt-1 flex items-center gap-1">
+                      <p className="text-[10px] text-gold mt-1 flex items-center gap-1 flex-wrap">
                         <CheckCircle2 className="h-3 w-3" /> Vídeo personalizado fixado
-                        {ov?.title_override && <span className="ml-1">· título real importado</span>}
+                        {ov?.title_override && <span className="ml-1">· título real</span>}
+                        {ov?.duration_override && <span className="ml-1">· duração real</span>}
                       </p>
                     ) : (
                       <p className="text-[10px] text-muted-foreground/70 mt-1 italic">Usando busca automática</p>
@@ -358,11 +451,18 @@ export default function AdminBibliotecaElitePage() {
                       <p className="text-[10px] font-body uppercase tracking-[0.2em] text-gold/70">
                         Prévia ({extractYouTubeId(draft) ? "novo link" : "vídeo salvo"})
                       </p>
-                      {realTitles[v.id] && (
-                        <p className="text-[10px] text-emerald-400 truncate max-w-[60%]" title={realTitles[v.id]}>
-                          ✓ Título real: {realTitles[v.id]}
-                        </p>
-                      )}
+                      <div className="flex items-center gap-1.5 max-w-[60%]">
+                        {realDurations[v.id] && (
+                          <span className="text-[10px] text-emerald-400 shrink-0" title={`Duração real: ${realDurations[v.id]}`}>
+                            ⏱ {realDurations[v.id]}
+                          </span>
+                        )}
+                        {realTitles[v.id] && (
+                          <p className="text-[10px] text-emerald-400 truncate" title={realTitles[v.id]}>
+                            ✓ {realTitles[v.id]}
+                          </p>
+                        )}
+                      </div>
                     </div>
                     <div className="relative aspect-video rounded-lg overflow-hidden bg-black border border-gold/20">
                       <iframe
@@ -375,15 +475,29 @@ export default function AdminBibliotecaElitePage() {
                         loading="lazy"
                       />
                     </div>
-                    {realTitles[v.id] && realTitles[v.id] !== v.title && (
+                    {((realTitles[v.id] && realTitles[v.id] !== v.title) || (realDurations[v.id] && realDurations[v.id] !== v.duration)) && (
                       <p className="text-[10px] text-amber-400/90 italic">
-                        💡 O título cadastrado é "<span className="text-foreground">{v.title}</span>". O vídeo real é "<span className="text-emerald-400">{realTitles[v.id]}</span>". Confirme se é o vídeo certo antes de salvar.
+                        💡 Cadastrado: "<span className="text-foreground">{v.title}</span>" · {v.duration}. Real: "<span className="text-emerald-400">{realTitles[v.id] || "—"}</span>" · {realDurations[v.id] || "—"}.
                       </p>
                     )}
                   </div>
                 )}
 
-                {/* Importar título real do YouTube */}
+                {/* Importar título + duração reais (atalho) */}
+                {previewId && (realTitles[v.id] || realDurations[v.id]) &&
+                  ((realTitles[v.id] && realTitles[v.id] !== (ov?.title_override || v.title)) ||
+                   (realDurations[v.id] && realDurations[v.id] !== (ov?.duration_override || v.duration))) && (
+                  <button
+                    onClick={() => importRealAll(track.id, v.id)}
+                    disabled={savingId === v.id || !draft.trim()}
+                    className="w-full py-2 rounded-lg text-[11px] font-body font-semibold bg-gold/15 border border-gold/40 text-gold hover:bg-gold/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    Importar título + duração reais do YouTube
+                  </button>
+                )}
+
+                {/* Importar só título */}
                 {previewId && realTitles[v.id] && realTitles[v.id] !== (ov?.title_override || v.title) && (
                   <button
                     onClick={() => importRealTitle(track.id, v.id)}
@@ -391,7 +505,19 @@ export default function AdminBibliotecaElitePage() {
                     className="w-full py-2 rounded-lg text-[11px] font-body font-semibold bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 hover:bg-emerald-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-1.5"
                   >
                     <Download className="h-3.5 w-3.5" />
-                    Importar título real do YouTube
+                    Importar só título real
+                  </button>
+                )}
+
+                {/* Importar só duração */}
+                {previewId && realDurations[v.id] && realDurations[v.id] !== (ov?.duration_override || v.duration) && (
+                  <button
+                    onClick={() => importRealDuration(track.id, v.id)}
+                    disabled={savingId === v.id || !draft.trim()}
+                    className="w-full py-2 rounded-lg text-[11px] font-body font-semibold bg-emerald-500/15 border border-emerald-400/40 text-emerald-300 hover:bg-emerald-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    Importar só duração real ({realDurations[v.id]})
                   </button>
                 )}
 
@@ -403,6 +529,17 @@ export default function AdminBibliotecaElitePage() {
                     className="w-full py-1.5 rounded-lg text-[10px] font-body font-semibold bg-muted/10 border border-gold/10 text-muted-foreground hover:text-foreground hover:border-gold/30 disabled:opacity-40 transition-all flex items-center justify-center gap-1.5"
                   >
                     <RotateCcw className="h-3 w-3" /> Voltar ao título original
+                  </button>
+                )}
+
+                {/* Reset duration to original */}
+                {ov?.duration_override && (
+                  <button
+                    onClick={() => resetDurationToOriginal(track.id, v.id)}
+                    disabled={savingId === v.id}
+                    className="w-full py-1.5 rounded-lg text-[10px] font-body font-semibold bg-muted/10 border border-gold/10 text-muted-foreground hover:text-foreground hover:border-gold/30 disabled:opacity-40 transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <RotateCcw className="h-3 w-3" /> Voltar à duração original
                   </button>
                 )}
 
