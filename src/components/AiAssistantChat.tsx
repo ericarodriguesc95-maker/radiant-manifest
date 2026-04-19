@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
-import { X, Send, Sparkles, Calendar, Trash2, Mic, Volume2, VolumeX } from "lucide-react";
+import { X, Send, Sparkles, Calendar, Trash2, Mic, Volume2, VolumeX, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -340,32 +340,45 @@ export default function AiAssistantChat() {
         }
       `}</style>
 
-      {/* FAB */}
+      {/* FAB - Cinematic */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-24 right-4 z-50 h-14 w-14 rounded-full bg-gold text-primary-foreground shadow-gold flex items-center justify-center hover:opacity-90 transition-all active:scale-95"
+          className="group fixed bottom-24 right-4 z-50 h-16 w-16 rounded-full flex items-center justify-center transition-all active:scale-95"
           aria-label="Abrir assistente IA"
         >
-          <Sparkles className="h-6 w-6" />
+          {/* Glow rings */}
+          <span className="absolute inset-0 rounded-full bg-gold/30 blur-xl animate-pulse" />
+          <span className="absolute inset-0 rounded-full bg-gradient-to-br from-gold via-gold/80 to-amber-600 shadow-[0_0_30px_rgba(212,175,55,0.6)]" />
+          <span className="absolute inset-1 rounded-full bg-background/20 backdrop-blur" />
+          <Clock className="relative h-7 w-7 text-background drop-shadow-md group-hover:scale-110 transition-transform" />
+          <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-emerald-400 border-2 border-background animate-pulse" />
         </button>
       )}
 
       {/* Chat panel */}
       {open && (
         <div className="fixed inset-0 z-[60] flex flex-col bg-background">
-          {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-card shrink-0">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-gold/20 flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-gold" />
+          {/* Header - Cinematic */}
+          <div className="relative flex items-center justify-between px-4 py-3 border-b border-gold/20 bg-gradient-to-b from-card via-card to-background shrink-0 overflow-hidden">
+            <div className="absolute top-0 right-0 h-32 w-32 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
+            <div className="relative flex items-center gap-3">
+              <div className="relative h-11 w-11 shrink-0">
+                <span className="absolute inset-0 rounded-full bg-gold/40 blur-md animate-pulse" />
+                <div className="relative h-11 w-11 rounded-full bg-gradient-to-br from-gold via-amber-500 to-amber-700 flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.5)]">
+                  <Clock className="h-5 w-5 text-background" />
+                </div>
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 border-2 border-background" />
               </div>
               <div>
-                <p className="text-sm font-display font-semibold text-foreground">Assistente Glow Up ✨</p>
-                <p className="text-[10px] text-muted-foreground">Sua parceira de alta performance</p>
+                <p className="text-sm font-display font-semibold text-foreground flex items-center gap-1.5">
+                  Assistente Pessoal
+                  <Sparkles className="h-3 w-3 text-gold" />
+                </p>
+                <p className="text-[10px] text-gold/80 uppercase tracking-wider">Gestão de tempo · Online</p>
               </div>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="relative flex items-center gap-1">
               {/* TTS toggle */}
               <button
                 onClick={() => { setTtsEnabled(v => !v); stopSpeaking(); }}
@@ -397,15 +410,18 @@ export default function AiAssistantChat() {
           <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
             {messages.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
-                <div className="h-16 w-16 rounded-full bg-gold/10 flex items-center justify-center">
-                  <Calendar className="h-8 w-8 text-gold" />
+                <div className="relative h-20 w-20">
+                  <span className="absolute inset-0 rounded-full bg-gold/30 blur-xl animate-pulse" />
+                  <div className="relative h-20 w-20 rounded-full bg-gradient-to-br from-gold via-amber-500 to-amber-700 flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.6)]">
+                    <Clock className="h-10 w-10 text-background" />
+                  </div>
                 </div>
                 <div>
-                  <p className="text-sm font-display font-semibold text-foreground">
-                    Olá! Sou sua Assistente Glow Up ✨
+                  <p className="text-base font-display font-semibold text-foreground">
+                    Olá, rainha 👑
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Fale ou digite! Estou aqui para organizar sua rotina 🎤
+                  <p className="text-xs text-muted-foreground mt-1 max-w-xs">
+                    Sou sua Assistente Pessoal de gestão de tempo. Fale ou digite — eu organizo sua agenda 🎤
                   </p>
                 </div>
                 <div className="space-y-2 w-full max-w-xs">

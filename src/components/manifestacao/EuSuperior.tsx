@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { Sparkles, RefreshCw, Loader2 } from "lucide-react";
+import { Crown, Sparkles, RefreshCw, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 
@@ -55,13 +55,22 @@ export default function EuSuperior() {
 
   return (
     <div className="space-y-5 animate-fade-in">
-      <div className="text-center space-y-2">
-        <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mx-auto">
-          <Sparkles className="h-7 w-7 text-gold" />
+      {/* Cinematic header with animated avatar */}
+      <div className="relative text-center space-y-3 py-4">
+        <div className="absolute inset-0 bg-gradient-radial from-gold/15 via-transparent to-transparent blur-2xl pointer-events-none" />
+        <div className="relative mx-auto h-20 w-20">
+          <span className="absolute inset-0 rounded-full bg-gold/40 blur-xl animate-pulse" />
+          <span className="absolute inset-[-4px] rounded-full bg-gradient-to-br from-gold via-amber-500 to-amber-700 opacity-60 blur-md animate-pulse" />
+          <div className="relative h-20 w-20 rounded-full bg-gradient-to-br from-gold via-amber-500 to-amber-700 flex items-center justify-center shadow-[0_0_40px_rgba(212,175,55,0.6)]">
+            <Crown className="h-10 w-10 text-background drop-shadow" />
+          </div>
+          <Sparkles className="absolute -top-1 -right-1 h-4 w-4 text-gold animate-pulse" />
         </div>
-        <p className="text-[10px] font-body font-semibold text-gold uppercase tracking-widest">Conexão Interior</p>
-        <h3 className="text-lg font-display font-bold">Conversa com o Eu Superior</h3>
-        <p className="text-xs font-body text-muted-foreground">Um espaço de escuta e clareza</p>
+        <div className="relative">
+          <p className="text-[10px] font-body font-semibold text-gold uppercase tracking-[0.3em]">Conexão Interior</p>
+          <h3 className="text-xl font-display font-bold text-foreground mt-1">Eu Superior</h3>
+          <p className="text-xs font-body text-muted-foreground mt-1">Sua versão mais elevada está pronta para te escutar</p>
+        </div>
       </div>
 
       {/* Question */}

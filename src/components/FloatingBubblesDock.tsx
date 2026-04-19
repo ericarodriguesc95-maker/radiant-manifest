@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { MessageCircle, Hash, Sparkles, Bot, Wallet, X, Plus } from "lucide-react";
+import { MessageCircle, Hash, Crown, Bot, Wallet, X, Plus, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -36,10 +36,10 @@ const BUBBLES: BubbleDef[] = [
   { id: "salas", label: "Salas de chat", shortLabel: "Salas", icon: Hash,
     href: "/comunidade?openRooms=1", hideOnPrefix: ["/comunidade"], usedFlag: "chatrooms-used" },
   // IAs: SEMPRE visíveis (não exigem uso prévio) — usedFlag vazio funciona como "sempre liberado"
-  { id: "ia", label: "Assistente IA", shortLabel: "IA", icon: Bot,
-    href: "/alta-performance?openAi=1", hideOnPrefix: [], usedFlag: "" },
-  { id: "eu-superior", label: "Eu Superior", shortLabel: "Eu+", icon: Sparkles,
-    href: "/reprogramacao?openEuSuperior=1", hideOnPrefix: ["/reprogramacao"], usedFlag: "" },
+  { id: "ia", label: "Assistente Pessoal", shortLabel: "Tempo", icon: Clock,
+    href: "/alta-performance?openAi=1", hideOnPrefix: ["/alta-performance"], usedFlag: "" },
+  { id: "eu-superior", label: "Eu Superior", shortLabel: "Eu+", icon: Crown,
+    href: "/metas?tab=manifestacao&openEuSuperior=1", hideOnPrefix: ["/metas"], usedFlag: "" },
   { id: "financeira", label: "IA Financeira", shortLabel: "$", icon: Wallet,
     href: "/financas?openAi=1", hideOnPrefix: ["/financas"], usedFlag: "" },
 ];
