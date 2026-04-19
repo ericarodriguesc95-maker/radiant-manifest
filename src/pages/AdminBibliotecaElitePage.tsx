@@ -203,8 +203,8 @@ export default function AdminBibliotecaElitePage() {
           </ul>
         </div>
 
-        {/* Track tabs */}
-        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+        {/* Track tabs — wrap em 2 linhas para todas aparecerem */}
+        <div className="flex flex-wrap gap-2">
           {VIDEO_TRACKS.map((t) => {
             const trackOverrides = t.videos.filter((v) => overrides[v.id]).length;
             return (
