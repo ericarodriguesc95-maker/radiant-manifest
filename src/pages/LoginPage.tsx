@@ -88,29 +88,76 @@ export default function LoginPage() {
     <div className="min-h-screen relative overflow-hidden" style={{ background: "#0A0A0A" }}>
       {/* Ambient glow effects */}
       <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.3), transparent 70%)" }} />
-      <div className="absolute bottom-[-15%] right-[-10%] w-[400px] h-[400px] rounded-full opacity-15" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.2), transparent 70%)" }} />
+      <div className="absolute bottom-[-15%] right: "[-10%] w-[400px] h-[400px] rounded-full opacity-15" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.2), transparent 70%)" }} />
 
-      {/* Floating quotes - scattered around */}
+      {/* Pulsing dots */}
+      <style>{`
+        @keyframes pulse-glow {
+          0%, 100% { opacity: 0.3; transform: scale(1); }
+          50% { opacity: 0.8; transform: scale(1.5); }
+        }
+        @keyframes text-pulse {
+          0%, 100% { opacity: 0.25; text-shadow: 0 0 0px hsl(43 72% 52% / 0); }
+          50% { opacity: 0.6; text-shadow: 0 0 20px hsl(43 72% 52% / 0.3); }
+        }
+        .pulsing-dot {
+          animation: pulse-glow 2s ease-in-out infinite;
+        }
+        .pulsing-text {
+          animation: text-pulse 3s ease-in-out infinite;
+        }
+      `}</style>
+      
+      {/* Floating glowing dots */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {[
+          { top: "12%", left: "8%", delay: "0s" },
+          { top: "25%", right: "12%", delay: "0.5s" },
+          { top: "55%", left: "5%", delay: "1s" },
+          { bottom: "35%", right: "8%", delay: "1.5s" },
+          { bottom: "15%", left: "15%", delay: "0.3s" },
+          { top: "75%", right: "15%", delay: "0.8s" },
+          { top: "5%", right: "30%", delay: "1.2s" },
+          { bottom: "20%", left: "35%", delay: "0.6s" },
+        ].map((pos, i) => (
+          <div
+            key={i}
+            className="absolute pulsing-dot rounded-full"
+            style={{
+              width: "4px",
+              height: "4px",
+              background: "hsl(43 72% 52%)",
+              boxShadow: "0 0 10px hsl(43 72% 52% / 0.8), 0 0 20px hsl(43 72% 52% / 0.4)",
+              ...pos,
+              animationDelay: pos.delay,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Floating quotes - scattered around with pulse effect */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {eliteQuotes.slice(0, 6).map((quote, i) => {
           const positions = [
-            { top: "8%", left: "5%", maxW: "200px" },
-            { top: "15%", right: "4%", maxW: "180px" },
-            { top: "45%", left: "3%", maxW: "190px" },
-            { bottom: "25%", right: "3%", maxW: "200px" },
-            { bottom: "8%", left: "6%", maxW: "170px" },
-            { top: "70%", right: "5%", maxW: "185px" },
+            { top: "10%", left: "3%", maxW: "160px" },
+            { top: "20%", right: "5%", maxW: "150px" },
+            { top: "40%", left: "2%", maxW: "140px" },
+            { top: "60%", right: "3%", maxW: "155px" },
+            { top: "78%", left: "5%", maxW: "145px" },
+            { top: "85%", right: "8%", maxW: "150px" },
           ];
+          const delays = ["0s", "0.8s", "1.5s", "0.4s", "2s", "1.2s"];
           const pos = positions[i];
           return (
             <p
               key={i}
-              className="absolute text-[10px] sm:text-xs italic leading-relaxed hidden lg:block"
+              className="absolute text-[11px] italic leading-relaxed hidden lg:block pulsing-text"
               style={{
                 ...pos,
                 maxWidth: pos.maxW,
-                color: "hsl(43 50% 55% / 0.25)",
+                color: "hsl(43 60% 55%)",
                 fontFamily: "'Georgia', serif",
+                animationDelay: delays[i],
               }}
             >
               "{quote}"
@@ -269,7 +316,12 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Signup removed — access only via Google/Apple after purchase */}
+          {/* Parcelamento info */}
+          <div className="text-center pt-2">
+            <p className="text-[10px]" style={{ color: "hsl(43 60% 55% / 0.7)" }}>
+              ✦ Ainda não é membro? <Link to="/planos" className="underline hover:text-gold">Assine agora</Link> em até <strong style={{ color: "hsl(43 72% 52%)" }}>6x de R$ 5,24</strong>
+            </p>
+          </div>
         </div>
 
         {/* Bottom quote */}
