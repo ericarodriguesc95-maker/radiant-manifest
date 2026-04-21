@@ -269,13 +269,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Signup link */}
-          <p className="text-center text-sm" style={{ color: "rgba(255,255,255,0.35)" }}>
-            Primeira vez?{" "}
-            <Link to="/signup" className="font-semibold hover:underline" style={{ color: "hsl(43 72% 52% / 0.8)" }}>
-              Criar conta
-            </Link>
-          </p>
+          {/* Signup removed — access only via Google/Apple after purchase */}
         </div>
 
         {/* Bottom quote */}
