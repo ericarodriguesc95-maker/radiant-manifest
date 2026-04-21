@@ -72,7 +72,7 @@ export default function ChatRooms({ onClose }: { onClose: () => void }) {
       .from("profiles_public" as any)
       .select("user_id, display_name, avatar_url")
       .in("user_id", userIds.length > 0 ? userIds : ["00000000-0000-0000-0000-000000000000"]);
-    const profiles = (profilesData || []) as Array<{ user_id: string; display_name: string | null; avatar_url: string | null }>;
+    const profiles = ((profilesData || []) as unknown) as Array<{ user_id: string; display_name: string | null; avatar_url: string | null }>;
     const profileMap = new Map(profiles.map(p => [p.user_id, p]));
     setMessages(msgs.map(m => ({
       ...m,

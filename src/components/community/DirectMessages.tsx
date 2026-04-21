@@ -64,7 +64,7 @@ export default function DirectMessages({ onClose, openConversationUserId }: { on
       .from("profiles_public" as any)
       .select("user_id, display_name, avatar_url")
       .in("user_id", otherUserIds);
-    const profiles = (profilesData || []) as Array<{ user_id: string; display_name: string | null; avatar_url: string | null }>;
+    const profiles = ((profilesData || []) as unknown) as Array<{ user_id: string; display_name: string | null; avatar_url: string | null }>;
     const profileMap = new Map(profiles.map(p => [p.user_id, p]));
 
     const convs: Conversation[] = [];

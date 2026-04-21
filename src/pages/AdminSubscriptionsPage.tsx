@@ -97,7 +97,7 @@ export default function AdminSubscriptionsPage() {
         .ilike("display_name", `%${newEmail}%`)
         .limit(1)
         .maybeSingle();
-      const profile = profileData as { user_id: string } | null;
+      const profile = (profileData as unknown) as { user_id: string } | null;
 
       // Try to find by auth email - query subscriptions for existing
       const expiryDate =
