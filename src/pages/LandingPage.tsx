@@ -6,6 +6,18 @@ const KIWIFY_URL = "https://pay.kiwify.com.br/sjdEC0h";
 
 const modules = [
   {
+    icon: "🎯",
+    title: "Metas SMART",
+    desc: "Defina, decomponha e acompanhe suas metas com framework científico. Submetas, passos práticos, prazos e progresso em tempo real.",
+    tags: ["SMART", "Submetas", "Progresso"],
+  },
+  {
+    icon: "✨",
+    title: "Manifestação Diária",
+    desc: "Ritual matinal, conversa com o Eu Superior, frequências de cura, termômetro vibracional (Escala de Hawkins) e diário de manifestações escritas.",
+    tags: ["Ritual", "Frequências Hz", "Escala Hawkins"],
+  },
+  {
     icon: "🧠",
     title: "Reprogramação Mental",
     desc: "Meditações com frequências Hz, Ho'oponopono, PNL, neurociência, Lei da Atração com exercícios práticos.",
