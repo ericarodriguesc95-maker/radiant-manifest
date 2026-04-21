@@ -68,11 +68,12 @@ export default function ChatRooms({ onClose }: { onClose: () => void }) {
       .limit(200);
     if (!msgs) return;
     const userIds = [...new Set(msgs.map(m => m.user_id))];
-    const { data: profiles } = await supabase
-      .from("profiles")
+    const { data: profilesData } = await supabase
+      .from("profiles_public" as any)
       .select("user_id, display_name, avatar_url")
       .in("user_id", userIds.length > 0 ? userIds : ["00000000-0000-0000-0000-000000000000"]);
-    const profileMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
+    const profiles = ((profilesData || []) as unknown) as Array<{ user_id: string; display_name: string | null; avatar_url: string | null }>;
+    const profileMap = new Map(profiles.map(p => [p.user_id, p]));
     setMessages(msgs.map(m => ({
       ...m,
       display_name: profileMap.get(m.user_id)?.display_name || "Usuária",
