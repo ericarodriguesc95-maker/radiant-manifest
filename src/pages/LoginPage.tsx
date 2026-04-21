@@ -88,7 +88,7 @@ export default function LoginPage() {
     <div className="min-h-screen relative overflow-hidden" style={{ background: "#0A0A0A" }}>
       {/* Ambient glow effects */}
       <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-20" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.3), transparent 70%)" }} />
-      <div className="absolute bottom-[-15%] right: "[-10%] w-[400px] h-[400px] rounded-full opacity-15" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.2), transparent 70%)" }} />
+      <div className="absolute bottom-[-15%] right-[-10%] w-[400px] h-[400px] rounded-full opacity-15" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.2), transparent 70%)" }} />
 
       {/* Pulsing dots */}
       <style>{`
