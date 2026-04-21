@@ -334,7 +334,7 @@ export default function LandingPage() {
 
           <ul className="space-y-3 mb-10 max-w-md mx-auto">
             {[
-              "Acesso completo aos 9 módulos",
+              "Acesso completo aos 10+ módulos",
               "App no celular + site no computador",
               "Girls Community — rede privada",
               "IA Assistente, IA do Sono, IA do Eu Superior, IA de Finanças",
