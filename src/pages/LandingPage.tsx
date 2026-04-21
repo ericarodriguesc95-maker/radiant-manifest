@@ -211,7 +211,7 @@ export default function LandingPage() {
             O que você acessa
           </p>
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight">
-            9 módulos. Uma plataforma.
+            10+ módulos. Uma plataforma.
             <br />
             A mulher{" "}
             <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>
