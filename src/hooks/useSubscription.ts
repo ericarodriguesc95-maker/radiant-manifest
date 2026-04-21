@@ -25,13 +25,35 @@ export function useSubscription() {
     }
 
     const fetchSubscription = async () => {
-      const { data, error } = await supabase
+      let { data } = await supabase
         .from("subscriptions")
         .select("status, plan_type, expiry_date")
         .eq("user_id", user.id)
         .maybeSingle();
 
-      if (error || !data) {
+      // If no record by user_id, look up by email (pre-grant by admin) and link
+      if (!data && user.email) {
+        const { data: byEmail } = await supabase
+          .from("subscriptions")
+          .select("id, status, plan_type, expiry_date, user_id")
+          .ilike("email", user.email)
+          .maybeSingle();
+        if (byEmail) {
+          if (!byEmail.user_id) {
+            await supabase
+              .from("subscriptions")
+              .update({ user_id: user.id })
+              .eq("id", byEmail.id);
+          }
+          data = {
+            status: byEmail.status,
+            plan_type: byEmail.plan_type,
+            expiry_date: byEmail.expiry_date,
+          };
+        }
+      }
+
+      if (!data) {
         setSubscription({ status: "inactive", plan_type: null, expiry_date: null });
         return;
       }

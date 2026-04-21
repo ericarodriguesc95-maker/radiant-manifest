@@ -1469,7 +1469,7 @@ export type Database = {
           plan_type: string
           status: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -1479,7 +1479,7 @@ export type Database = {
           plan_type?: string
           status?: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -1489,7 +1489,7 @@ export type Database = {
           plan_type?: string
           status?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -1716,6 +1716,25 @@ export type Database = {
       }
     }
     Functions: {
+      admin_grant_access: {
+        Args: { _email: string; _plan_type: string; _status: string }
+        Returns: {
+          created_at: string
+          email: string
+          expiry_date: string | null
+          id: string
+          plan_type: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "subscriptions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       calculate_streak: { Args: { _user_id: string }; Returns: number }
       conversation_has_participants: {
         Args: { _conversation_id: string }

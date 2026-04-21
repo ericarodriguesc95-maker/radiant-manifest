@@ -87,40 +87,23 @@ export default function AdminSubscriptionsPage() {
     onError: () => toast.error("Erro ao atualizar"),
   });
 
-  // Add subscription
+  // Add subscription via admin RPC (handles user lookup by email)
   const addMutation = useMutation({
     mutationFn: async () => {
-      // Find user by email from profiles or just insert with a placeholder user_id
-      const { data: profileData } = await supabase
-        .from("profiles_public" as any)
-        .select("user_id")
-        .ilike("display_name", `%${newEmail}%`)
-        .limit(1)
-        .maybeSingle();
-      const profile = (profileData as unknown) as { user_id: string } | null;
-
-      // Try to find by auth email - query subscriptions for existing
-      const expiryDate =
-        newPlan === "lifetime"
-          ? null
-          : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
-
-      const { error } = await supabase.from("subscriptions").insert({
-        email: newEmail,
-        status: newStatus,
-        plan_type: newPlan,
-        expiry_date: expiryDate,
-        user_id: profile?.user_id || "00000000-0000-0000-0000-000000000000",
+      const { error } = await supabase.rpc("admin_grant_access" as any, {
+        _email: newEmail.trim(),
+        _plan_type: newPlan,
+        _status: newStatus,
       });
       if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-subscriptions"] });
-      toast.success("Assinatura adicionada!");
+      toast.success("Acesso concedido!");
       setAddOpen(false);
       setNewEmail("");
     },
-    onError: () => toast.error("Erro ao adicionar"),
+    onError: (e: any) => toast.error(e?.message || "Erro ao adicionar"),
   });
 
   if (adminLoading) return null;
