@@ -42,6 +42,7 @@ import ModuloElitePage from "@/pages/ModuloElitePage";
 import AdminBibliotecaElitePage from "@/pages/AdminBibliotecaElitePage";
 import SugestoesPage from "@/pages/SugestoesPage";
 import AdminSugestoesPage from "@/pages/AdminSugestoesPage";
+import LandingPage from "@/pages/LandingPage";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
@@ -76,6 +77,9 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
 
 const AppRoutes = () => (
   <Routes>
+    {/* Public landing page */}
+    <Route path="/planos" element={<LandingPage />} />
+
     {/* Public auth routes */}
     <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
     <Route path="/signup" element={<PublicRoute><SignupPage /></PublicRoute>} />
