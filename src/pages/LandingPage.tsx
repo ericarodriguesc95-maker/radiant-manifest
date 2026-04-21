@@ -109,7 +109,7 @@ export default function LandingPage() {
           className="rounded-full px-5 py-2.5 text-sm font-medium border transition-all hover:scale-105"
           style={{ borderColor: "hsl(43 72% 52% / 0.3)", color: "#F5F5F5" }}
         >
-          Quero acessar →
+          Já sou uma rainha do Gloow Up Club e quero fazer meu login ✦
         </Link>
       </header>
 
@@ -329,6 +329,9 @@ export default function LandingPage() {
             </p>
             <p className="mt-2 text-sm font-semibold" style={{ color: "hsl(43 72% 60%)" }}>
               ✦ Inclui todas as atualizações de conteúdos e ferramentas
+            </p>
+            <p className="mt-2 text-sm" style={{ color: "hsl(43 72% 52%)" }}>
+              ou em até <strong>6x de R$ 5,24</strong> no cartão
             </p>
           </div>
 
