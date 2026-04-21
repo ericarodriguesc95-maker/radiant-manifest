@@ -61,7 +61,7 @@ export default function DirectMessages({ onClose, openConversationUserId }: { on
 
     const otherUserIds = [...new Set(participants.map(p => p.user_id))];
     const { data: profiles } = await supabase
-      .from("profiles")
+      .from("profiles_public" as any)
       .select("user_id, display_name, avatar_url")
       .in("user_id", otherUserIds);
     const profileMap = new Map(profiles?.map(p => [p.user_id, p]) || []);

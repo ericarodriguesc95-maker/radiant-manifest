@@ -45,7 +45,7 @@ const StoryBar = () => {
 
     const userIds = [...new Set(stories.map((s: any) => s.user_id))];
     const { data: profiles } = await supabase
-      .from("profiles")
+      .from("profiles_public" as any)
       .select("user_id, display_name, avatar_url")
       .in("user_id", userIds.length > 0 ? userIds : ["00000000-0000-0000-0000-000000000000"]);
 
