@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
 
-const KIWIFY_URL = "https://pay.kiwify.com.br/sjdEC0h";
+const KIWIFY_URL = "https://pay.kiwify.com.br/b2qJYrZ";
 
 const modules = [
   {
@@ -211,7 +211,7 @@ export default function LandingPage() {
             O que você acessa
           </p>
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight">
-            9 módulos. Uma plataforma.
+            10+ módulos. Uma plataforma.
             <br />
             A mulher{" "}
             <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>
@@ -297,7 +297,7 @@ export default function LandingPage() {
             </span>
           </h3>
           <p className="mt-5 max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
-            Uma assinatura. Acesso completo aos 9 módulos — como app no celular e como site no computador.
+            Uma assinatura. Acesso completo aos 10+ módulos — como app no celular e como site no computador.
           </p>
         </div>
 
@@ -322,7 +322,7 @@ export default function LandingPage() {
             </p>
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-2xl font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>R$</span>
-              <span className="text-7xl md:text-8xl font-bold tracking-tight">19,90</span>
+              <span className="text-7xl md:text-8xl font-bold tracking-tight">27,90</span>
             </div>
             <p className="mt-3 text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
               pagamento único · 12 meses de acesso completo
@@ -334,7 +334,7 @@ export default function LandingPage() {
 
           <ul className="space-y-3 mb-10 max-w-md mx-auto">
             {[
-              "Acesso completo aos 9 módulos",
+              "Acesso completo aos 10+ módulos",
               "App no celular + site no computador",
               "Girls Community — rede privada",
               "IA Assistente, IA do Sono, IA do Eu Superior, IA de Finanças",
