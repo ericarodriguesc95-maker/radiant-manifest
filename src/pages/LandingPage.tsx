@@ -62,8 +62,8 @@ const modules = [
 ];
 
 const testimonials = [
-  { name: "Nayara Moraes", text: "Ameeei demais principalmente a parte de performance gostei muito da dica de cursos, links e livros." },
-  { name: "Simone Costa", text: "Mais um dia de hábitos saudáveis concluídos! 💪🔥 6/6 hábitos!" },
+  { name: "Membro da comunidade", text: "Ameeei demais principalmente a parte de performance gostei muito da dica de cursos, links e livros." },
+  { name: "Membro da comunidade", text: "Mais um dia de hábitos saudáveis concluídos! 💪🔥 6/6 hábitos!" },
   { name: "Membro da comunidade", text: "Muito shoooooow 💚 Legal mesmo, mente de milhões 💚" },
   { name: "Membro da comunidade", text: "Está muito legal 💚💚💚 Armei aquela parte das dicas do que assistir e de conteúdo. Muito show mesmo." },
 ];

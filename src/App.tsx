@@ -75,9 +75,23 @@ function PublicRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function RootRoute() {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="min-h-screen flex items-center justify-center"><FourPointStar size={40} animate="spin" className="text-gold" fill="hsl(43 72% 52%)" /></div>;
+  if (!user) return <LandingPage />;
+  return (
+    <SubscriptionGuard>
+      <AppLayout />
+    </SubscriptionGuard>
+  );
+}
+
 const AppRoutes = () => (
   <Routes>
-    {/* Public landing page */}
+    {/* Root: landing for logged-out, app for logged-in */}
+    <Route path="/" element={<RootRoute />}>
+      <Route index element={<ErrorBoundary><HomePage /></ErrorBoundary>} />
+    </Route>
     <Route path="/planos" element={<LandingPage />} />
 
     {/* Public auth routes */}
@@ -91,7 +105,6 @@ const AppRoutes = () => (
 
     {/* Protected + subscription required routes */}
     <Route element={<ProtectedRoute><SubscriptionGuard><AppLayout /></SubscriptionGuard></ProtectedRoute>}>
-      <Route path="/" element={<ErrorBoundary><HomePage /></ErrorBoundary>} />
       <Route path="/metas" element={<ErrorBoundary><MetasPage /></ErrorBoundary>} />
       <Route path="/financas" element={<ErrorBoundary><FinancasPage /></ErrorBoundary>} />
       <Route path="/vision-board" element={<ErrorBoundary><VisionBoardPage /></ErrorBoundary>} />
