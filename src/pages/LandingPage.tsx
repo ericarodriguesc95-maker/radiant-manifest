@@ -330,6 +330,9 @@ export default function LandingPage() {
             <p className="mt-2 text-sm font-semibold" style={{ color: "hsl(43 72% 60%)" }}>
               ✦ Inclui todas as atualizações de conteúdos e ferramentas
             </p>
+            <p className="mt-2 text-sm" style={{ color: "hsl(43 72% 52%)" }}>
+              ou em até <strong>6x de R$ 5,24</strong> no cartão
+            </p>
           </div>
 
           <ul className="space-y-3 mb-10 max-w-md mx-auto">
