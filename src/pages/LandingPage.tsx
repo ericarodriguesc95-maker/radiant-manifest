@@ -297,7 +297,7 @@ export default function LandingPage() {
             </span>
           </h3>
           <p className="mt-5 max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
-            Uma assinatura. Acesso completo aos 9 módulos — como app no celular e como site no computador.
+            Uma assinatura. Acesso completo aos 10+ módulos — como app no celular e como site no computador.
           </p>
         </div>
 
