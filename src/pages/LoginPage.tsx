@@ -121,29 +121,6 @@ export default function LoginPage() {
 
       {/* Main content */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-8">
-        
-        {/* TOP CTA - "Já possui plano?" */}
-        <a
-          href="https://planosdosite.lovable.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group w-full max-w-md mb-6 flex items-center justify-between rounded-2xl px-6 py-5 transition-all duration-300 hover:scale-[1.02]"
-          style={{
-            background: "linear-gradient(135deg, hsl(43 72% 52% / 0.15), hsl(43 72% 52% / 0.05))",
-            border: "1px solid hsl(43 72% 52% / 0.25)",
-            boxShadow: "0 0 30px -5px hsl(43 72% 52% / 0.15), inset 0 1px 0 hsl(43 72% 52% / 0.1)",
-          }}
-        >
-          <div className="space-y-1">
-            <p className="text-base font-bold tracking-wide" style={{ color: "hsl(43 72% 52%)" }}>
-              ✦ Ainda não tem um plano?
-            </p>
-            <p className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>
-              Desbloqueie a versão mais poderosa de você
-            </p>
-          </div>
-          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" style={{ color: "hsl(43 72% 52%)" }} />
-        </a>
 
         {/* Rotating quote */}
         <div className="mb-6 text-center max-w-sm px-4 h-14 flex items-center justify-center">
