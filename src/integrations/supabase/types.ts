@@ -982,6 +982,69 @@ export type Database = {
         }
         Relationships: []
       }
+      identidade_diagnosticos: {
+        Row: {
+          alma_score: number
+          corpo_score: number
+          created_at: string
+          espirito_score: number
+          id: string
+          pilar_foco: string
+          user_id: string
+        }
+        Insert: {
+          alma_score: number
+          corpo_score: number
+          created_at?: string
+          espirito_score: number
+          id?: string
+          pilar_foco: string
+          user_id: string
+        }
+        Update: {
+          alma_score?: number
+          corpo_score?: number
+          created_at?: string
+          espirito_score?: number
+          id?: string
+          pilar_foco?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      identidade_exercicios_log: {
+        Row: {
+          completed_at: string
+          exercicio_key: string
+          exercicio_titulo: string
+          id: string
+          nota: string | null
+          pilar: string
+          user_id: string
+          week_start: string
+        }
+        Insert: {
+          completed_at?: string
+          exercicio_key: string
+          exercicio_titulo: string
+          id?: string
+          nota?: string | null
+          pilar: string
+          user_id: string
+          week_start?: string
+        }
+        Update: {
+          completed_at?: string
+          exercicio_key?: string
+          exercicio_titulo?: string
+          id?: string
+          nota?: string | null
+          pilar?: string
+          user_id?: string
+          week_start?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           comment_text: string | null
