@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
 
-const KIWIFY_URL = "https://pay.kiwify.com.br/sjdEC0h";
+const KIWIFY_URL = "https://pay.kiwify.com.br/b2qJYrZ";
 
 const modules = [
   {
