@@ -91,12 +91,13 @@ export default function AdminSubscriptionsPage() {
   const addMutation = useMutation({
     mutationFn: async () => {
       // Find user by email from profiles or just insert with a placeholder user_id
-      const { data: profile } = await supabase
+      const { data: profileData } = await supabase
         .from("profiles_public" as any)
         .select("user_id")
         .ilike("display_name", `%${newEmail}%`)
         .limit(1)
         .maybeSingle();
+      const profile = profileData as { user_id: string } | null;
 
       // Try to find by auth email - query subscriptions for existing
       const expiryDate =

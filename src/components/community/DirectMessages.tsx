@@ -60,11 +60,12 @@ export default function DirectMessages({ onClose, openConversationUserId }: { on
     if (!participants?.length) { setConversations([]); setLoaded(true); return; }
 
     const otherUserIds = [...new Set(participants.map(p => p.user_id))];
-    const { data: profiles } = await supabase
+    const { data: profilesData } = await supabase
       .from("profiles_public" as any)
       .select("user_id, display_name, avatar_url")
       .in("user_id", otherUserIds);
-    const profileMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
+    const profiles = (profilesData || []) as Array<{ user_id: string; display_name: string | null; avatar_url: string | null }>;
+    const profileMap = new Map(profiles.map(p => [p.user_id, p]));
 
     const convs: Conversation[] = [];
     for (const p of participants) {
