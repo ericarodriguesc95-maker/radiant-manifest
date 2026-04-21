@@ -322,7 +322,7 @@ export default function LandingPage() {
             </p>
             <div className="flex items-baseline justify-center gap-2">
               <span className="text-2xl font-medium" style={{ color: "rgba(255,255,255,0.6)" }}>R$</span>
-              <span className="text-7xl md:text-8xl font-bold tracking-tight">19,90</span>
+              <span className="text-7xl md:text-8xl font-bold tracking-tight">27,90</span>
             </div>
             <p className="mt-3 text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
               pagamento único · 12 meses de acesso completo
