@@ -305,7 +305,7 @@ const Biblia365Page = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-32 relative">
+    <div className="min-h-screen bg-background pb-24 relative">
       {/* Golden sparkles celebration overlay */}
       {showSparkles && (
         <div className="fixed inset-0 pointer-events-none z-50 flex items-center justify-center">
