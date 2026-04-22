@@ -144,44 +144,67 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
 
       <div className="divide-y divide-border">
         {/* Social notifications */}
-        {notifications.map(n => (
-          <div key={n.id} className={`flex items-start gap-3 p-4 ${!n.read ? "bg-gold/5" : ""}`}>
-            <div className="relative flex-shrink-0">
-              {n.from_avatar ? (
-                <img src={n.from_avatar} alt="" className="h-8 w-8 rounded-full object-cover" />
-              ) : (
-                <div className="h-8 w-8 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">
-                  {getInitials(n.from_name)}
-                </div>
-              )}
-              <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-card flex items-center justify-center">
-                {n.type === "like" ? (
-                  <Heart className="h-2.5 w-2.5 fill-red-400 text-red-400" />
-                ) : n.type === "mention" ? (
-                  <AtSign className="h-2.5 w-2.5 text-gold" />
-                ) : n.type === "welcome" ? (
-                  <UserPlus className="h-2.5 w-2.5 text-gold" />
-                ) : n.type === "new_post" ? (
-                  <FileText className="h-2.5 w-2.5 text-gold" />
-                ) : n.type === "follow" ? (
-                  <UserPlus className="h-2.5 w-2.5 text-gold" />
+        {notifications.map(n => {
+          const isUpdate = n.type === "app_update";
+          return (
+            <div
+              key={n.id}
+              onClick={() => handleNotificationClick(n)}
+              className={`flex items-start gap-3 p-4 ${!n.read ? "bg-gold/5" : ""} ${isUpdate ? "cursor-pointer hover:bg-gold/10 transition-colors" : ""}`}
+            >
+              <div className="relative flex-shrink-0">
+                {isUpdate ? (
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-gold via-amber-400 to-amber-700 flex items-center justify-center shadow-[0_0_12px_hsl(43_72%_52%/0.4)]">
+                    <Gift className="h-4 w-4 text-primary-foreground" />
+                  </div>
+                ) : n.from_avatar ? (
+                  <img src={n.from_avatar} alt="" className="h-8 w-8 rounded-full object-cover" />
                 ) : (
-                  <MessageCircle className="h-2.5 w-2.5 text-gold" />
+                  <div className="h-8 w-8 rounded-full bg-gold/20 flex items-center justify-center text-xs font-bold text-gold">
+                    {getInitials(n.from_name)}
+                  </div>
+                )}
+                {!isUpdate && (
+                  <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full bg-card flex items-center justify-center">
+                    {n.type === "like" ? (
+                      <Heart className="h-2.5 w-2.5 fill-red-400 text-red-400" />
+                    ) : n.type === "mention" ? (
+                      <AtSign className="h-2.5 w-2.5 text-gold" />
+                    ) : n.type === "welcome" ? (
+                      <UserPlus className="h-2.5 w-2.5 text-gold" />
+                    ) : n.type === "new_post" ? (
+                      <FileText className="h-2.5 w-2.5 text-gold" />
+                    ) : n.type === "follow" ? (
+                      <UserPlus className="h-2.5 w-2.5 text-gold" />
+                    ) : (
+                      <MessageCircle className="h-2.5 w-2.5 text-gold" />
+                    )}
+                  </div>
                 )}
               </div>
+              <div className="flex-1 min-w-0">
+                {isUpdate ? (
+                  <>
+                    <p className="text-xs font-body font-semibold text-gold">Novidade no app</p>
+                    <p className="text-[11px] font-body text-foreground mt-0.5 leading-snug">{n.comment_text}</p>
+                    <p className="text-[10px] font-body text-muted-foreground mt-1">Tocar para ver o tour ✨</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-xs font-body">
+                      <span className="font-semibold">{n.from_name}</span>{" "}
+                      {n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : n.type === "follow" ? "começou a te seguir 👤" : "comentou no seu post"}
+                    </p>
+                    {n.comment_text && (
+                      <p className="text-[11px] font-body text-muted-foreground mt-0.5 truncate">"{n.comment_text}"</p>
+                    )}
+                  </>
+                )}
+              </div>
+              <span className="text-[10px] text-muted-foreground font-body flex-shrink-0">{formatTime(n.created_at)}</span>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-body">
-                <span className="font-semibold">{n.from_name}</span>{" "}
-                {n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : n.type === "follow" ? "começou a te seguir 👤" : "comentou no seu post"}
-              </p>
-              {n.comment_text && (
-                <p className="text-[11px] font-body text-muted-foreground mt-0.5 truncate">"{n.comment_text}"</p>
-              )}
-            </div>
-            <span className="text-[10px] text-muted-foreground font-body flex-shrink-0">{formatTime(n.created_at)}</span>
-          </div>
-        ))}
+          );
+        })}
 
         {notifications.length > 0 && (
           <div className="px-4 py-2">
