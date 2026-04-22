@@ -781,6 +781,37 @@ const Biblia365Page = () => {
           </div>
         </div>
       )}
+
+      {/* Botão flutuante: Mestra Bíblica IA */}
+      <button
+        onClick={() => setChatOpen(true)}
+        aria-label="Conversar com a Mestra Bíblica"
+        className="fixed right-4 z-40 group"
+        style={{ bottom: "calc(7.5rem + env(safe-area-inset-bottom, 0px))" }}
+      >
+        <div className="absolute inset-0 bg-gold/40 rounded-full blur-xl group-hover:bg-gold/60 transition-all" />
+        <div className="relative h-14 w-14 rounded-full bg-gradient-to-br from-gold via-amber-300 to-gold border-2 border-background shadow-2xl shadow-gold/40 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <Sparkles className="h-6 w-6 text-background absolute opacity-30 animate-pulse" />
+          <MessageCircle className="h-6 w-6 text-background relative z-10" strokeWidth={2.4} />
+        </div>
+        <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-emerald-400 border-2 border-background animate-pulse" />
+      </button>
+
+      {/* Sheet do chat */}
+      <BibleStudyChat
+        open={chatOpen}
+        onOpenChange={setChatOpen}
+        dayContext={{
+          day: selectedDay,
+          title: reading?.title,
+          passages: reading?.passages,
+          version,
+          text: versionText,
+          periodo: enrichment?.periodo,
+          regiao: enrichment?.regiao,
+          contextoHistorico: enrichment?.contextoHistorico,
+        }}
+      />
     </div>
   );
 };
