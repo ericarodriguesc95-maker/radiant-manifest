@@ -443,7 +443,7 @@ const Biblia365Page = () => {
       </header>
 
       <div className="px-5 pt-4">
-        <Tabs defaultValue="leitura" className="w-full">
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "leitura" | "historico")} className="w-full">
           <TabsList className="w-full bg-muted/30 rounded-2xl p-1 mb-4">
             <TabsTrigger
               value="leitura"
