@@ -191,6 +191,34 @@ const Biblia365Page = () => {
     }
   };
 
+  const handleRestart = async () => {
+    if (!user) return;
+    const today = new Date().toISOString().split("T")[0];
+    const { error } = await supabase
+      .from("bible_reading_progress" as any)
+      .update({
+        start_date: today,
+        completed_days: [],
+        updated_at: new Date().toISOString(),
+      } as any)
+      .eq("user_id", user.id);
+    if (error) {
+      toast({
+        title: "Erro ao reiniciar",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+    setStartDate(today);
+    setCompletedDays([]);
+    setSelectedDay(1);
+    toast({
+      title: "Jornada reiniciada ✨",
+      description: "Você está de volta ao Dia 1. Um novo começo te espera.",
+    });
+  };
+
   const reading = bibleReadingPlan[selectedDay - 1];
   const enrichment = reading
     ? getDayEnrichment(selectedDay, reading)
