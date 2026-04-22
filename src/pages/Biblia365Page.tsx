@@ -218,7 +218,7 @@ const Biblia365Page = () => {
     setSelectedDay(1);
     toast({
       title: "Jornada reiniciada ✨",
-      description: "Você está de volta ao Dia 1. Um novo começo te espera.",
+      description: "Você voltou ao Dia 1. Suas anotações do diário foram preservadas e continuam acessíveis em cada dia.",
     });
   };
 
