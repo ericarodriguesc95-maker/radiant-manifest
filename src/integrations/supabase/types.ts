@@ -142,11 +142,39 @@ export type Database = {
         }
         Relationships: []
       }
+      bible_journey_notes: {
+        Row: {
+          content: string
+          created_at: string
+          day: number
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          day: number
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          day?: number
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       bible_reading_progress: {
         Row: {
           completed_days: number[]
           created_at: string
           id: string
+          preferred_version: string
           start_date: string
           updated_at: string
           user_id: string
@@ -155,6 +183,7 @@ export type Database = {
           completed_days?: number[]
           created_at?: string
           id?: string
+          preferred_version?: string
           start_date?: string
           updated_at?: string
           user_id: string
@@ -163,6 +192,7 @@ export type Database = {
           completed_days?: number[]
           created_at?: string
           id?: string
+          preferred_version?: string
           start_date?: string
           updated_at?: string
           user_id?: string
