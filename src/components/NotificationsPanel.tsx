@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { X, Heart, MessageCircle, Droplets, Brain, Target, AtSign, UserPlus, FileText, Phone } from "lucide-react";
+import { X, Heart, MessageCircle, Droplets, Brain, Target, AtSign, UserPlus, FileText, Phone, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { format } from "date-fns";
@@ -7,7 +7,7 @@ import { ptBR } from "date-fns/locale";
 
 interface Notification {
   id: string;
-  type: "like" | "comment" | "mention" | "welcome" | "new_post" | "follow";
+  type: "like" | "comment" | "mention" | "welcome" | "new_post" | "follow" | "app_update";
   from_name: string;
   from_avatar: string | null;
   comment_text: string | null;
