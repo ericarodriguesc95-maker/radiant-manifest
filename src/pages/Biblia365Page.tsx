@@ -69,6 +69,9 @@ const Biblia365Page = () => {
   const [noteContent, setNoteContent] = useState("");
   const [savingNote, setSavingNote] = useState(false);
 
+  // Active tab (controls visibility of fixed footer nav)
+  const [activeTab, setActiveTab] = useState<"leitura" | "historico">("leitura");
+
   // Section refs for tab quick-jump
   const palavraRef = useRef<HTMLDivElement>(null);
   const menteRef = useRef<HTMLDivElement>(null);
