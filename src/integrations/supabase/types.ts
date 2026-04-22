@@ -199,6 +199,33 @@ export type Database = {
         }
         Relationships: []
       }
+      bible_study_chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          day: number
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          day: number
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          day?: number
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       calendar_events: {
         Row: {
           color: string

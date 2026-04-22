@@ -1,11 +1,24 @@
 import { useState, useRef, useEffect } from "react";
-import { Sparkles, Send, X, BookOpen, Loader2, MessageCircle } from "lucide-react";
+import { Sparkles, Send, BookOpen, Loader2, Trash2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -34,9 +47,11 @@ const SUGGESTIONS = [
 ];
 
 export default function BibleStudyChat({ open, onOpenChange, dayContext }: BibleStudyChatProps) {
+  const { user } = useAuth();
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(false);
   const { toast } = useToast();
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -45,12 +60,58 @@ export default function BibleStudyChat({ open, onOpenChange, dayContext }: Bible
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, isLoading]);
 
-  // Reset ao abrir uma nova passagem
+  // Carrega histórico do dia ao abrir / mudar de dia
   useEffect(() => {
-    if (!open) {
+    if (!open || !user) return;
+    let cancelled = false;
+    (async () => {
+      setLoadingHistory(true);
+      const { data, error } = await supabase
+        .from("bible_study_chat_messages" as any)
+        .select("role, content")
+        .eq("user_id", user.id)
+        .eq("day", dayContext.day)
+        .order("created_at", { ascending: true });
+      if (cancelled) return;
+      if (!error && data) {
+        setMessages(
+          (data as any[]).map((m) => ({ role: m.role as "user" | "assistant", content: m.content }))
+        );
+      } else {
+        setMessages([]);
+      }
+      setLoadingHistory(false);
+    })();
+    return () => {
+      cancelled = true;
       abortRef.current?.abort();
+    };
+  }, [open, user, dayContext.day]);
+
+  const persistMessage = async (role: "user" | "assistant", content: string) => {
+    if (!user || !content.trim()) return;
+    await supabase.from("bible_study_chat_messages" as any).insert({
+      user_id: user.id,
+      day: dayContext.day,
+      role,
+      content,
+    } as any);
+  };
+
+  const handleClearHistory = async () => {
+    if (!user) return;
+    const { error } = await supabase
+      .from("bible_study_chat_messages" as any)
+      .delete()
+      .eq("user_id", user.id)
+      .eq("day", dayContext.day);
+    if (error) {
+      toast({ title: "Erro ao limpar", description: error.message, variant: "destructive" });
+      return;
     }
-  }, [open]);
+    setMessages([]);
+    toast({ title: "Histórico limpo ✨", description: `Conversa do Dia ${dayContext.day} apagada.` });
+  };
 
   const send = async (text: string) => {
     const trimmed = text.trim();
@@ -61,6 +122,9 @@ export default function BibleStudyChat({ open, onOpenChange, dayContext }: Bible
     setMessages(newMessages);
     setInput("");
     setIsLoading(true);
+
+    // Persiste a mensagem da usuária
+    persistMessage("user", trimmed);
 
     const controller = new AbortController();
     abortRef.current = controller;
@@ -80,7 +144,6 @@ export default function BibleStudyChat({ open, onOpenChange, dayContext }: Bible
     };
 
     try {
-      const { supabase } = await import("@/integrations/supabase/client");
       const session = await supabase.auth.getSession();
       const token = session.data.session?.access_token;
 
@@ -175,6 +238,11 @@ export default function BibleStudyChat({ open, onOpenChange, dayContext }: Bible
           }
         }
       }
+
+      // Persiste a resposta completa da IA
+      if (assistantSoFar.trim()) {
+        persistMessage("assistant", assistantSoFar);
+      }
     } catch (err: any) {
       if (err?.name !== "AbortError") {
         console.error(err);
@@ -211,12 +279,48 @@ export default function BibleStudyChat({ open, onOpenChange, dayContext }: Bible
                 Dia {dayContext.day} • {dayContext.passages || "Estudo livre"}
               </p>
             </div>
+            {messages.length > 0 && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button
+                    className="p-2 rounded-lg hover:bg-coral/10 text-muted-foreground hover:text-coral transition-all"
+                    aria-label="Limpar histórico do dia"
+                    title="Limpar histórico"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-background border-gold/20">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="font-display text-foreground">
+                      Limpar conversa do Dia {dayContext.day}?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="font-body text-muted-foreground">
+                      Todas as mensagens trocadas com a Mestra Bíblica neste dia serão apagadas. Conversas de outros dias continuam salvas.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="rounded-xl">Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleClearHistory}
+                      className="rounded-xl bg-coral text-background hover:bg-coral/90"
+                    >
+                      Limpar
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
           </div>
         </SheetHeader>
 
         {/* Mensagens */}
         <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-          {messages.length === 0 && (
+          {loadingHistory ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-5 w-5 text-gold animate-spin" />
+            </div>
+          ) : messages.length === 0 ? (
             <div className="space-y-4 mt-2">
               <div className="rounded-2xl bg-gold/5 border border-gold/15 p-4 space-y-2">
                 <p className="text-sm font-body text-foreground/90 leading-relaxed">
@@ -224,7 +328,7 @@ export default function BibleStudyChat({ open, onOpenChange, dayContext }: Bible
                   Estou aqui para te ajudar a mergulhar fundo na <strong>{dayContext.title || "Palavra"}</strong> de hoje.
                 </p>
                 <p className="text-xs font-body text-muted-foreground leading-relaxed">
-                  Pergunte qualquer coisa: contexto histórico, hebraico/grego, aplicações para sua vida, oração baseada no texto…
+                  Pergunte qualquer coisa: contexto histórico, hebraico/grego, aplicações para sua vida, oração baseada no texto… <strong className="text-gold/80">Toda conversa fica salva por dia</strong>.
                 </p>
               </div>
               <div className="space-y-2">
@@ -243,34 +347,35 @@ export default function BibleStudyChat({ open, onOpenChange, dayContext }: Bible
                 ))}
               </div>
             </div>
-          )}
+          ) : null}
 
-          {messages.map((msg, i) => (
-            <div
-              key={i}
-              className={cn(
-                "flex",
-                msg.role === "user" ? "justify-end" : "justify-start"
-              )}
-            >
+          {!loadingHistory &&
+            messages.map((msg, i) => (
               <div
+                key={i}
                 className={cn(
-                  "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm font-body leading-relaxed",
-                  msg.role === "user"
-                    ? "bg-gold text-background rounded-br-md"
-                    : "bg-muted/40 border border-gold/10 text-foreground/90 rounded-bl-md"
+                  "flex",
+                  msg.role === "user" ? "justify-end" : "justify-start"
                 )}
               >
-                {msg.role === "assistant" ? (
-                  <div className="prose prose-sm prose-invert max-w-none prose-p:my-1.5 prose-headings:text-gold prose-strong:text-gold prose-blockquote:border-l-gold prose-blockquote:text-foreground/75 prose-blockquote:not-italic prose-ul:my-1.5 prose-li:my-0.5">
-                    <ReactMarkdown>{msg.content || "…"}</ReactMarkdown>
-                  </div>
-                ) : (
-                  msg.content
-                )}
+                <div
+                  className={cn(
+                    "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-sm font-body leading-relaxed",
+                    msg.role === "user"
+                      ? "bg-gold text-background rounded-br-md"
+                      : "bg-muted/40 border border-gold/10 text-foreground/90 rounded-bl-md"
+                  )}
+                >
+                  {msg.role === "assistant" ? (
+                    <div className="prose prose-sm prose-invert max-w-none prose-p:my-1.5 prose-headings:text-gold prose-strong:text-gold prose-blockquote:border-l-gold prose-blockquote:text-foreground/75 prose-blockquote:not-italic prose-ul:my-1.5 prose-li:my-0.5">
+                      <ReactMarkdown>{msg.content || "…"}</ReactMarkdown>
+                    </div>
+                  ) : (
+                    msg.content
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
           {isLoading && messages[messages.length - 1]?.role === "user" && (
             <div className="flex justify-start">
@@ -316,7 +421,7 @@ export default function BibleStudyChat({ open, onOpenChange, dayContext }: Bible
             </Button>
           </div>
           <p className="text-[9px] font-body text-muted-foreground/60 text-center mt-2 tracking-wide">
-            Mestra Bíblica • Estudo guiado por IA • Sempre confirme com sua Bíblia
+            Mestra Bíblica • Histórico salvo por dia • Sempre confirme com sua Bíblia
           </p>
         </div>
       </SheetContent>
