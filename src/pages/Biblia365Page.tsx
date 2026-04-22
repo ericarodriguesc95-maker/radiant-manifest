@@ -16,9 +16,10 @@ import {
   Clock,
   Languages,
   Save,
-  
+  MessageCircle,
   RotateCcw,
 } from "lucide-react";
+import BibleStudyChat from "@/components/bible/BibleStudyChat";
 import biblicalJourneyMap from "@/assets/biblical-journey-map.jpg";
 import {
   AlertDialog,
