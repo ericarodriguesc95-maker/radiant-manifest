@@ -16,7 +16,7 @@ import {
   Clock,
   Languages,
   Save,
-  Image as ImageIcon,
+  
   RotateCcw,
 } from "lucide-react";
 import biblicalJourneyMap from "@/assets/biblical-journey-map.jpg";
