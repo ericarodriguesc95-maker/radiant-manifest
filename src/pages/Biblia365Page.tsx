@@ -777,45 +777,12 @@ const Biblia365Page = () => {
         </Tabs>
       </div>
 
-      {/* Bottom navigation: pílula compacta centralizada (apenas na aba Leitura) */}
-      {activeTab === "leitura" && (
-        <div
-          className="fixed inset-x-0 z-40 flex justify-center pointer-events-none"
-          style={{ bottom: "calc(4.5rem + env(safe-area-inset-bottom, 0px))" }}
-        >
-          <div className="pointer-events-auto inline-flex items-center gap-1 bg-background/95 backdrop-blur-xl border border-gold/20 rounded-full px-1.5 py-1.5 shadow-2xl shadow-black/50">
-            <button
-              onClick={() => setSelectedDay((d) => Math.max(1, d - 1))}
-              disabled={selectedDay <= 1}
-              aria-label="Dia anterior"
-              className="inline-flex items-center gap-1 pl-2.5 pr-3 py-1.5 rounded-full text-[11px] font-body font-semibold text-foreground/80 hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-            >
-              <ChevronLeft className="h-3.5 w-3.5" />
-              Anterior
-            </button>
-            <div className="flex flex-col items-center px-2 border-x border-gold/15">
-              <span className="text-[8px] font-body tracking-widest uppercase text-gold/60 leading-none">Dia</span>
-              <span className="text-xs font-display font-bold text-gold leading-tight">{selectedDay}</span>
-            </div>
-            <button
-              onClick={() => setSelectedDay((d) => Math.min(currentDay, d + 1))}
-              disabled={selectedDay >= currentDay}
-              aria-label="Próximo dia"
-              className="inline-flex items-center gap-1 pl-3 pr-2.5 py-1.5 rounded-full text-[11px] font-body font-semibold text-gold hover:bg-gold/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-            >
-              Próximo
-              <ChevronRight className="h-3.5 w-3.5" />
-            </button>
-          </div>
-        </div>
-      )}
-
       {/* Botão flutuante: Mestra Bíblica IA */}
       <button
         onClick={() => setChatOpen(true)}
         aria-label="Conversar com a Mestra Bíblica"
         className="fixed right-4 z-40 group"
-        style={{ bottom: "calc(7.5rem + env(safe-area-inset-bottom, 0px))" }}
+        style={{ bottom: "calc(5.5rem + env(safe-area-inset-bottom, 0px))" }}
       >
         <div className="absolute inset-0 bg-gold/40 rounded-full blur-xl group-hover:bg-gold/60 transition-all" />
         <div className="relative h-14 w-14 rounded-full bg-gradient-to-br from-gold via-amber-300 to-gold border-2 border-background shadow-2xl shadow-gold/40 flex items-center justify-center group-hover:scale-110 transition-transform">
