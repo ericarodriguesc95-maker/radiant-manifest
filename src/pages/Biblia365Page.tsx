@@ -363,9 +363,44 @@ const Biblia365Page = () => {
             value={percentage}
             className="h-2 bg-muted/30 [&>div]:bg-gradient-to-r [&>div]:from-gold [&>div]:via-amber-300 [&>div]:to-gold"
           />
-          <div className="flex justify-between text-[10px] text-muted-foreground font-body">
+          <div className="flex justify-between items-center text-[10px] text-muted-foreground font-body">
             <span>{completedDays.length} de 365 leituras</span>
-            <span className="text-gold font-semibold">{percentage}% do ano</span>
+            <div className="flex items-center gap-2">
+              <span className="text-gold font-semibold">{percentage}% do ano</span>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button
+                    className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted/40 hover:bg-coral/10 hover:text-coral border border-gold/10 hover:border-coral/30 transition-all text-[10px] font-body"
+                    aria-label="Reiniciar jornada do Dia 1"
+                  >
+                    <RotateCcw className="h-3 w-3" />
+                    Reiniciar
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-background border-gold/20">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="font-display text-foreground flex items-center gap-2">
+                      <RotateCcw className="h-5 w-5 text-coral" />
+                      Reiniciar do Dia 1?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="font-body text-muted-foreground leading-relaxed">
+                      Sua jornada será zerada: todas as <strong className="text-foreground">{completedDays.length} leituras concluídas</strong> serão apagadas e você voltará ao <strong className="text-gold">Dia 1</strong>, com data de início hoje.
+                      <br /><br />
+                      Suas anotações no diário serão preservadas. Esta ação não pode ser desfeita.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="rounded-xl">Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleRestart}
+                      className="rounded-xl bg-coral text-background hover:bg-coral/90"
+                    >
+                      Sim, reiniciar
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           </div>
         </div>
 
