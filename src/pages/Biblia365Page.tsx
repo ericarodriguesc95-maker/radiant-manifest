@@ -386,10 +386,22 @@ const Biblia365Page = () => {
                       <RotateCcw className="h-5 w-5 text-coral" />
                       Reiniciar do Dia 1?
                     </AlertDialogTitle>
-                    <AlertDialogDescription className="font-body text-muted-foreground leading-relaxed">
-                      Sua jornada será zerada: todas as <strong className="text-foreground">{completedDays.length} leituras concluídas</strong> serão apagadas e você voltará ao <strong className="text-gold">Dia 1</strong>, com data de início hoje.
-                      <br /><br />
-                      Suas anotações no diário serão preservadas. Esta ação não pode ser desfeita.
+                    <AlertDialogDescription asChild>
+                      <div className="font-body text-muted-foreground leading-relaxed space-y-3">
+                        <p>
+                          Sua jornada será zerada: todas as <strong className="text-foreground">{completedDays.length} leituras concluídas</strong> serão apagadas e você voltará ao <strong className="text-gold">Dia 1</strong>, com data de início hoje.
+                        </p>
+                        <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 space-y-1.5">
+                          <p className="text-emerald-400 text-xs font-semibold flex items-center gap-1.5">
+                            <PenLine className="h-3.5 w-3.5" />
+                            Suas anotações ficam SEGURAS
+                          </p>
+                          <p className="text-xs text-foreground/70">
+                            Tudo que você escreveu na aba <strong className="text-gold">"Notas"</strong> de cada dia continua salvo no seu diário pessoal e poderá ser revisitado a qualquer momento na aba <strong className="text-gold">"Histórico"</strong> ao reabrir um dia já anotado.
+                          </p>
+                        </div>
+                        <p className="text-xs">Apenas o progresso das leituras será reiniciado. Esta ação não pode ser desfeita.</p>
+                      </div>
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
