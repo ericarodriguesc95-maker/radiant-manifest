@@ -745,7 +745,8 @@ const Biblia365Page = () => {
         </Tabs>
       </div>
 
-      {/* Bottom navigation: Anterior / Próximo */}
+      {/* Bottom navigation: Anterior / Próximo (apenas na aba Leitura) */}
+      {activeTab === "leitura" && (
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-xl border-t border-gold/15 px-4 py-4 pb-24">
         <div className="max-w-lg mx-auto flex items-center justify-between gap-4">
           {/* Botão Anterior */}
