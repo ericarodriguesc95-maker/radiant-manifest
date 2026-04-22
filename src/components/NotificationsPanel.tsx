@@ -107,8 +107,16 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
     name.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
 
   const getNotificationText = (n: Notification) => {
+    if (n.type === "app_update") return n.comment_text || "Nova atualização disponível 🎁";
     const action = n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : n.type === "follow" ? "começou a te seguir 👤" : "comentou no seu post";
     return `${n.from_name} ${action}${n.comment_text ? ` "${n.comment_text}"` : ""}`;
+  };
+
+  const handleNotificationClick = (n: Notification) => {
+    if (n.type === "app_update") {
+      window.dispatchEvent(new CustomEvent("glowup:show-updates"));
+      onClose();
+    }
   };
 
   const sendAllViaWhatsApp = () => {
