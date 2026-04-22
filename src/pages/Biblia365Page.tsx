@@ -69,6 +69,9 @@ const Biblia365Page = () => {
   const [noteContent, setNoteContent] = useState("");
   const [savingNote, setSavingNote] = useState(false);
 
+  // Active tab (controls visibility of fixed footer nav)
+  const [activeTab, setActiveTab] = useState<"leitura" | "historico">("leitura");
+
   // Section refs for tab quick-jump
   const palavraRef = useRef<HTMLDivElement>(null);
   const menteRef = useRef<HTMLDivElement>(null);
@@ -215,7 +218,7 @@ const Biblia365Page = () => {
     setSelectedDay(1);
     toast({
       title: "Jornada reiniciada ✨",
-      description: "Você está de volta ao Dia 1. Um novo começo te espera.",
+      description: "Você voltou ao Dia 1. Suas anotações do diário foram preservadas e continuam acessíveis em cada dia.",
     });
   };
 
@@ -383,10 +386,22 @@ const Biblia365Page = () => {
                       <RotateCcw className="h-5 w-5 text-coral" />
                       Reiniciar do Dia 1?
                     </AlertDialogTitle>
-                    <AlertDialogDescription className="font-body text-muted-foreground leading-relaxed">
-                      Sua jornada será zerada: todas as <strong className="text-foreground">{completedDays.length} leituras concluídas</strong> serão apagadas e você voltará ao <strong className="text-gold">Dia 1</strong>, com data de início hoje.
-                      <br /><br />
-                      Suas anotações no diário serão preservadas. Esta ação não pode ser desfeita.
+                    <AlertDialogDescription asChild>
+                      <div className="font-body text-muted-foreground leading-relaxed space-y-3">
+                        <p>
+                          Sua jornada será zerada: todas as <strong className="text-foreground">{completedDays.length} leituras concluídas</strong> serão apagadas e você voltará ao <strong className="text-gold">Dia 1</strong>, com data de início hoje.
+                        </p>
+                        <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-3 space-y-1.5">
+                          <p className="text-emerald-400 text-xs font-semibold flex items-center gap-1.5">
+                            <PenLine className="h-3.5 w-3.5" />
+                            Suas anotações ficam SEGURAS
+                          </p>
+                          <p className="text-xs text-foreground/70">
+                            Tudo que você escreveu na aba <strong className="text-gold">"Notas"</strong> de cada dia continua salvo no seu diário pessoal e poderá ser revisitado a qualquer momento na aba <strong className="text-gold">"Histórico"</strong> ao reabrir um dia já anotado.
+                          </p>
+                        </div>
+                        <p className="text-xs">Apenas o progresso das leituras será reiniciado. Esta ação não pode ser desfeita.</p>
+                      </div>
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -428,7 +443,7 @@ const Biblia365Page = () => {
       </header>
 
       <div className="px-5 pt-4">
-        <Tabs defaultValue="leitura" className="w-full">
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "leitura" | "historico")} className="w-full">
           <TabsList className="w-full bg-muted/30 rounded-2xl p-1 mb-4">
             <TabsTrigger
               value="leitura"
@@ -730,7 +745,8 @@ const Biblia365Page = () => {
         </Tabs>
       </div>
 
-      {/* Bottom navigation: Anterior / Próximo */}
+      {/* Bottom navigation: Anterior / Próximo (apenas na aba Leitura) */}
+      {activeTab === "leitura" && (
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-xl border-t border-gold/15 px-4 py-4 pb-24">
         <div className="max-w-lg mx-auto flex items-center justify-between gap-4">
           {/* Botão Anterior */}
@@ -762,6 +778,7 @@ const Biblia365Page = () => {
           </button>
         </div>
       </div>
+      )}
     </div>
   );
 };
