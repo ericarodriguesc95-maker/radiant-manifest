@@ -45,6 +45,11 @@
     --offwhite: 40 20% 92%;
     --charcoal: 0 0% 8%;
 
+    /* Secondary palette — Bíblia 365 sections */
+    --serene-blue: 210 65% 62%;
+    --olive: 75 28% 55%;
+    --coral: 8 75% 68%;
+
     --font-display: 'Playfair Display', serif;
     --font-body: 'Raleway', sans-serif;
 
