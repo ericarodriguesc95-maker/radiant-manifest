@@ -16,8 +16,21 @@ import {
   Clock,
   Languages,
   Save,
-  Image as ImageIcon,
+  
+  RotateCcw,
 } from "lucide-react";
+import biblicalJourneyMap from "@/assets/biblical-journey-map.jpg";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -178,6 +191,34 @@ const Biblia365Page = () => {
     }
   };
 
+  const handleRestart = async () => {
+    if (!user) return;
+    const today = new Date().toISOString().split("T")[0];
+    const { error } = await supabase
+      .from("bible_reading_progress" as any)
+      .update({
+        start_date: today,
+        completed_days: [],
+        updated_at: new Date().toISOString(),
+      } as any)
+      .eq("user_id", user.id);
+    if (error) {
+      toast({
+        title: "Erro ao reiniciar",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+    setStartDate(today);
+    setCompletedDays([]);
+    setSelectedDay(1);
+    toast({
+      title: "Jornada reiniciada ✨",
+      description: "Você está de volta ao Dia 1. Um novo começo te espera.",
+    });
+  };
+
   const reading = bibleReadingPlan[selectedDay - 1];
   const enrichment = reading
     ? getDayEnrichment(selectedDay, reading)
@@ -322,9 +363,44 @@ const Biblia365Page = () => {
             value={percentage}
             className="h-2 bg-muted/30 [&>div]:bg-gradient-to-r [&>div]:from-gold [&>div]:via-amber-300 [&>div]:to-gold"
           />
-          <div className="flex justify-between text-[10px] text-muted-foreground font-body">
+          <div className="flex justify-between items-center text-[10px] text-muted-foreground font-body">
             <span>{completedDays.length} de 365 leituras</span>
-            <span className="text-gold font-semibold">{percentage}% do ano</span>
+            <div className="flex items-center gap-2">
+              <span className="text-gold font-semibold">{percentage}% do ano</span>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button
+                    className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-muted/40 hover:bg-coral/10 hover:text-coral border border-gold/10 hover:border-coral/30 transition-all text-[10px] font-body"
+                    aria-label="Reiniciar jornada do Dia 1"
+                  >
+                    <RotateCcw className="h-3 w-3" />
+                    Reiniciar
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-background border-gold/20">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="font-display text-foreground flex items-center gap-2">
+                      <RotateCcw className="h-5 w-5 text-coral" />
+                      Reiniciar do Dia 1?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="font-body text-muted-foreground leading-relaxed">
+                      Sua jornada será zerada: todas as <strong className="text-foreground">{completedDays.length} leituras concluídas</strong> serão apagadas e você voltará ao <strong className="text-gold">Dia 1</strong>, com data de início hoje.
+                      <br /><br />
+                      Suas anotações no diário serão preservadas. Esta ação não pode ser desfeita.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className="rounded-xl">Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleRestart}
+                      className="rounded-xl bg-coral text-background hover:bg-coral/90"
+                    >
+                      Sim, reiniciar
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           </div>
         </div>
 
@@ -478,25 +554,23 @@ const Biblia365Page = () => {
                 </div>
 
                 {/* Image */}
-                {enrichment.imagemQuery && (
-                  <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-olive/20 bg-muted/30">
-                    <img
-                      src={`https://source.unsplash.com/featured/640x360/?${encodeURIComponent(enrichment.imagemQuery)}`}
-                      alt={`${reading?.title} — ${enrichment.regiao}`}
-                      loading="lazy"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).style.display = "none";
-                      }}
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background to-transparent p-3">
-                      <p className="text-[10px] font-body text-foreground/80 flex items-center gap-1.5">
-                        <ImageIcon className="h-3 w-3" />
-                        {enrichment.regiao}
-                      </p>
-                    </div>
+                <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-olive/20 bg-muted/30">
+                  <img
+                    src={biblicalJourneyMap}
+                    alt={`Mapa da jornada bíblica — ${enrichment.regiao}`}
+                    loading="lazy"
+                    width={1280}
+                    height={736}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <p className="text-[10px] font-body text-foreground/90 flex items-center gap-1.5 backdrop-blur-sm bg-background/40 rounded-md px-2 py-1 w-fit border border-olive/20">
+                      <MapPin className="h-3 w-3 text-olive" />
+                      {enrichment.regiao}
+                    </p>
                   </div>
-                )}
+                </div>
 
                 {/* Mental map flow */}
                 <div className="space-y-2">
