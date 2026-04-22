@@ -519,25 +519,23 @@ const Biblia365Page = () => {
                 </div>
 
                 {/* Image */}
-                {enrichment.imagemQuery && (
-                  <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-olive/20 bg-muted/30">
-                    <img
-                      src={`https://source.unsplash.com/featured/640x360/?${encodeURIComponent(enrichment.imagemQuery)}`}
-                      alt={`${reading?.title} — ${enrichment.regiao}`}
-                      loading="lazy"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).style.display = "none";
-                      }}
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-background to-transparent p-3">
-                      <p className="text-[10px] font-body text-foreground/80 flex items-center gap-1.5">
-                        <ImageIcon className="h-3 w-3" />
-                        {enrichment.regiao}
-                      </p>
-                    </div>
+                <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-olive/20 bg-muted/30">
+                  <img
+                    src={biblicalJourneyMap}
+                    alt={`Mapa da jornada bíblica — ${enrichment.regiao}`}
+                    loading="lazy"
+                    width={1280}
+                    height={736}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/10 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-3">
+                    <p className="text-[10px] font-body text-foreground/90 flex items-center gap-1.5 backdrop-blur-sm bg-background/40 rounded-md px-2 py-1 w-fit border border-olive/20">
+                      <MapPin className="h-3 w-3 text-olive" />
+                      {enrichment.regiao}
+                    </p>
                   </div>
-                )}
+                </div>
 
                 {/* Mental map flow */}
                 <div className="space-y-2">
