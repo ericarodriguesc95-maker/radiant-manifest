@@ -745,39 +745,32 @@ const Biblia365Page = () => {
         </Tabs>
       </div>
 
-      {/* Bottom navigation: Anterior / Próximo (apenas na aba Leitura) */}
+      {/* Bottom navigation: pílula compacta centralizada (apenas na aba Leitura) */}
       {activeTab === "leitura" && (
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-xl border-t border-gold/15 px-4 py-4 pb-24">
-        <div className="max-w-lg mx-auto flex items-center justify-between gap-4">
-          {/* Botão Anterior */}
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1 bg-background/95 backdrop-blur-xl border border-gold/20 rounded-full px-1.5 py-1.5 shadow-2xl shadow-black/50">
           <button
             onClick={() => setSelectedDay((d) => Math.max(1, d - 1))}
             disabled={selectedDay <= 1}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-sm font-body font-semibold text-foreground/90 bg-muted/40 hover:bg-muted/60 disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-gold/10"
+            aria-label="Dia anterior"
+            className="flex items-center gap-1 pl-2.5 pr-3 py-1.5 rounded-full text-[11px] font-body font-semibold text-foreground/80 hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
-            <ChevronLeft className="h-5 w-5" />
-            <span className="hidden sm:inline">Dia {Math.max(1, selectedDay - 1)}</span>
-            <span className="sm:hidden">Anterior</span>
+            <ChevronLeft className="h-3.5 w-3.5" />
+            Anterior
           </button>
-          
-          {/* Dia Atual Badge */}
-          <div className="flex-shrink-0 flex flex-col items-center px-4">
-            <span className="text-[10px] font-body tracking-widest uppercase text-gold/60">Dia Atual</span>
-            <span className="text-lg font-display font-bold text-gold">{selectedDay}</span>
+          <div className="flex flex-col items-center px-2 border-x border-gold/15">
+            <span className="text-[8px] font-body tracking-widest uppercase text-gold/60 leading-none">Dia</span>
+            <span className="text-xs font-display font-bold text-gold leading-tight">{selectedDay}</span>
           </div>
-          
-          {/* Botão Próximo */}
           <button
             onClick={() => setSelectedDay((d) => Math.min(currentDay, d + 1))}
             disabled={selectedDay >= currentDay}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl text-sm font-body font-semibold bg-gold text-background hover:bg-gold/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-lg shadow-gold/20"
+            aria-label="Próximo dia"
+            className="flex items-center gap-1 pl-3 pr-2.5 py-1.5 rounded-full text-[11px] font-body font-semibold text-gold hover:bg-gold/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
-            <span className="hidden sm:inline">Dia {Math.min(currentDay, selectedDay + 1)}</span>
-            <span className="sm:hidden">Próximo</span>
-            <ChevronRight className="h-5 w-5" />
+            Próximo
+            <ChevronRight className="h-3.5 w-3.5" />
           </button>
         </div>
-      </div>
       )}
     </div>
   );
