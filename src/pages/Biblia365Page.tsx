@@ -736,6 +736,34 @@ const Biblia365Page = () => {
                 ))}
               </div>
             </div>
+
+            {/* Navegação de dias — fixa ao final da aba, proporcional à largura do conteúdo */}
+            <div className="pt-2">
+              <div className="flex items-center justify-between gap-2 bg-background/95 backdrop-blur-xl border border-gold/20 rounded-full px-2 py-1.5 shadow-lg shadow-black/20">
+                <button
+                  onClick={() => setSelectedDay((d) => Math.max(1, d - 1))}
+                  disabled={selectedDay <= 1}
+                  aria-label="Dia anterior"
+                  className="inline-flex items-center gap-1 pl-2.5 pr-3 py-1.5 rounded-full text-[11px] font-body font-semibold text-foreground/80 hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                >
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                  Anterior
+                </button>
+                <div className="flex flex-col items-center px-2 border-x border-gold/15">
+                  <span className="text-[8px] font-body tracking-widest uppercase text-gold/60 leading-none">Dia</span>
+                  <span className="text-xs font-display font-bold text-gold leading-tight">{selectedDay}</span>
+                </div>
+                <button
+                  onClick={() => setSelectedDay((d) => Math.min(currentDay, d + 1))}
+                  disabled={selectedDay >= currentDay}
+                  aria-label="Próximo dia"
+                  className="inline-flex items-center gap-1 pl-3 pr-2.5 py-1.5 rounded-full text-[11px] font-body font-semibold text-gold hover:bg-gold/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                >
+                  Próximo
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="historico" className="mt-0">
