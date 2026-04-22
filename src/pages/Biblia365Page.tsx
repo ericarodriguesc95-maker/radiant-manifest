@@ -73,6 +73,9 @@ const Biblia365Page = () => {
   // Active tab (controls visibility of fixed footer nav)
   const [activeTab, setActiveTab] = useState<"leitura" | "historico">("leitura");
 
+  // AI study chat
+  const [chatOpen, setChatOpen] = useState(false);
+
   // Section refs for tab quick-jump
   const palavraRef = useRef<HTMLDivElement>(null);
   const menteRef = useRef<HTMLDivElement>(null);
