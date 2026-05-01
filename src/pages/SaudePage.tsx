@@ -1036,6 +1036,155 @@ export default function SaudePage() {
             </CardContent>
           </Card>
 
+          {/* Progresso do objetivo — Dashboard de peso */}
+          {profile.current_weight && profile.target_weight && weightProgress !== null && (() => {
+            const initialWeight = weightRecords.length > 0
+              ? weightRecords[weightRecords.length - 1].weight
+              : profile.current_weight;
+            const startDate = weightRecords.length > 0
+              ? weightRecords[weightRecords.length - 1].recorded_at
+              : null;
+            const latestWeight = weightRecords.length > 0
+              ? weightRecords[0].weight
+              : profile.current_weight;
+            const changeKg = latestWeight - initialWeight;
+            const objectiveDiff = profile.target_weight - initialWeight;
+            const pct = Math.max(0, Math.min(100, weightProgress));
+            // Semicircle math: arc length = π * r
+            const r = 80;
+            const circumference = Math.PI * r;
+            const dashOffset = circumference - (pct / 100) * circumference;
+            const formatDate = (iso: string) => {
+              try {
+                const d = new Date(iso);
+                return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
+              } catch { return "—"; }
+            };
+            return (
+              <>
+                {/* Gauge Card */}
+                <Card className="glass border-gold/30">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base flex items-center gap-2 text-gold">
+                      <Target className="h-4 w-4" /> Progresso do objetivo
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="relative flex flex-col items-center pt-2">
+                      <svg viewBox="0 0 200 110" className="w-full max-w-[280px] h-auto">
+                        <defs>
+                          <linearGradient id="gaugeGold" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.9" />
+                            <stop offset="100%" stopColor="#F4D77A" stopOpacity="1" />
+                          </linearGradient>
+                        </defs>
+                        {/* Track */}
+                        <path
+                          d={`M 20 100 A ${r} ${r} 0 0 1 180 100`}
+                          fill="none"
+                          stroke="hsl(var(--muted))"
+                          strokeWidth="14"
+                          strokeLinecap="round"
+                          opacity="0.3"
+                        />
+                        {/* Progress */}
+                        <path
+                          d={`M 20 100 A ${r} ${r} 0 0 1 180 100`}
+                          fill="none"
+                          stroke="url(#gaugeGold)"
+                          strokeWidth="14"
+                          strokeLinecap="round"
+                          strokeDasharray={circumference}
+                          strokeDashoffset={dashOffset}
+                          style={{ transition: "stroke-dashoffset 0.8s ease-out" }}
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-end pb-2 pointer-events-none">
+                        <Target className="h-5 w-5 text-gold/70 mb-1" />
+                        <p className="text-4xl font-display font-bold text-foreground">{pct}%</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between mt-2 px-2 text-xs text-muted-foreground">
+                      <span>{Number(initialWeight).toFixed(2)}Kg</span>
+                      <span>{Number(profile.target_weight).toFixed(2)}Kg</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Detalhes do objetivo */}
+                <Card className="glass border-gold/20">
+                  <CardContent className="p-0 divide-y divide-gold/10">
+                    <div className="flex items-center justify-between px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center">
+                          <ChevronsRight className="h-4 w-4 text-gold" />
+                        </div>
+                        <span className="text-sm font-medium text-foreground">Peso inicial</span>
+                      </div>
+                      <span className="text-sm font-semibold text-foreground">{Number(initialWeight).toFixed(2)}Kg</span>
+                    </div>
+                    <div className="flex items-center justify-between px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center">
+                          <Target className="h-4 w-4 text-gold" />
+                        </div>
+                        <span className="text-sm font-medium text-foreground">Peso objetivo</span>
+                      </div>
+                      <span className="text-sm font-semibold text-foreground">{Number(profile.target_weight).toFixed(2)}Kg</span>
+                    </div>
+                    {startDate && (
+                      <div className="flex items-center justify-between px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="h-9 w-9 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center">
+                            <CalendarIcon className="h-4 w-4 text-gold" />
+                          </div>
+                          <span className="text-sm font-medium text-foreground">Data de início</span>
+                        </div>
+                        <span className="text-sm font-semibold text-foreground">{formatDate(startDate)}</span>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card className="glass border-gold/20">
+                  <CardContent className="p-0 divide-y divide-gold/10">
+                    <div className="flex items-center justify-between px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center">
+                          <Scale className="h-4 w-4 text-gold" />
+                        </div>
+                        <span className="text-sm font-medium text-foreground">Peso mais recente</span>
+                      </div>
+                      <span className="text-sm font-semibold text-foreground">{Number(latestWeight).toFixed(2)}Kg</span>
+                    </div>
+                    <div className="flex items-center justify-between px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center">
+                          <TrendingDown className="h-4 w-4 text-amber-500" />
+                        </div>
+                        <span className="text-sm font-medium text-foreground">Durante a mudança</span>
+                      </div>
+                      <span className={`text-sm font-semibold ${changeKg < 0 ? "text-emerald-500" : changeKg > 0 ? "text-amber-500" : "text-foreground"}`}>
+                        {changeKg > 0 ? "+" : ""}{changeKg.toFixed(2)}Kg
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="h-9 w-9 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center">
+                          <ArrowDown className="h-4 w-4 text-emerald-500" />
+                        </div>
+                        <span className="text-sm font-medium text-foreground">Objetivo</span>
+                      </div>
+                      <span className="text-sm font-semibold text-emerald-500">
+                        {objectiveDiff > 0 ? "+" : ""}{objectiveDiff.toFixed(2)}Kg
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </>
+            );
+          })()}
+
           {tmb && dailyCalories && goalCalories && (
             <Card>
               <CardHeader><CardTitle className="text-base flex items-center gap-2"><Calculator className="h-4 w-4 text-primary" /> Calculadora TMB & Calorias</CardTitle></CardHeader>
