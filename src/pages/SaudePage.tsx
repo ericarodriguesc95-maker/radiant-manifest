@@ -27,6 +27,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import WeightEvolutionChart from "@/components/health/WeightEvolutionChart";
 
 // ============ TYPES ============
 interface HealthProfile {
@@ -1210,24 +1211,11 @@ export default function SaudePage() {
             </Card>
           )}
 
-          {chartData.length >= 2 && (
-            <Card>
-              <CardHeader><CardTitle className="text-base">📈 Evolução do Peso</CardTitle></CardHeader>
-              <CardContent>
-                <div className="h-48 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                      <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-                      <YAxis domain={["dataMin - 1", "dataMax + 1"]} tick={{ fontSize: 10 }} />
-                      <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid hsl(var(--border))", background: "hsl(var(--card))" }} />
-                      {profile.target_weight && <ReferenceLine y={profile.target_weight} stroke="hsl(var(--primary))" strokeDasharray="5 5" label={{ value: "Meta", fontSize: 10, fill: "hsl(var(--primary))" }} />}
-                      <Line type="monotone" dataKey="peso" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 3, fill: "hsl(var(--primary))" }} />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
+          {weightRecords.length >= 1 && (
+            <WeightEvolutionChart
+              records={weightRecords}
+              targetWeight={profile.target_weight ?? null}
+            />
           )}
 
           <Card>
