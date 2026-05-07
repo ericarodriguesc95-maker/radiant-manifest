@@ -50,6 +50,53 @@ export default function NotificationSettingsCard() {
     });
   };
 
+  const handleTestWebPush = async () => {
+    if (permStatus !== "granted") {
+      toast({ title: "Ative as notificações primeiro", variant: "destructive" });
+      return;
+    }
+    if (!user?.id) {
+      toast({ title: "Faça login primeiro", variant: "destructive" });
+      return;
+    }
+    setSendingPush(true);
+    try {
+      // Garante subscription registrada antes de enviar
+      await subscribeToPush(user.id);
+      const { data, error } = await supabase.functions.invoke("send-push", {
+        body: {
+          title: "👑 Teste de Web Push",
+          body: "Funcionou, rainha! Suas notificações estão ativas ✨",
+          tag: "test-" + Date.now(),
+          url: "/",
+          user_ids: [user.id],
+        },
+      });
+      if (error) throw error;
+      const sent = (data as any)?.sent ?? 0;
+      if (sent > 0) {
+        toast({
+          title: "Push enviado! 📨",
+          description: `Enviado para ${sent} dispositivo(s). Aguarde alguns segundos.`,
+        });
+      } else {
+        toast({
+          title: "Nenhum dispositivo registrado",
+          description: "Recarregue a página com permissão concedida e tente novamente.",
+          variant: "destructive",
+        });
+      }
+    } catch (e: any) {
+      toast({
+        title: "Erro ao enviar push",
+        description: e?.message ?? "Tente novamente",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingPush(false);
+    }
+  };
+
   const isGranted = permStatus === "granted";
 
   return (
