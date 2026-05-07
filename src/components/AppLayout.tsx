@@ -63,6 +63,7 @@ export default function AppLayout() {
       <NpsPopup />
       <SuggestionsFloatingButton />
       <FloatingBubblesDock />
+      <PushPermissionOnboarding />
     </div>
   );
 }
