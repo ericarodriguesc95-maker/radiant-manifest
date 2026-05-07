@@ -378,11 +378,17 @@ export default function AiAssistantChat() {
         }
       `}</style>
 
-      {/* FAB - Cinematic */}
+      {/* FAB - Cinematic (draggable) */}
       {!open && (
         <button
-          onClick={() => setOpen(true)}
-          className="group fixed bottom-24 right-4 z-50 h-16 w-16 rounded-full flex items-center justify-center transition-all active:scale-95"
+          onPointerDown={onFabPointerDown}
+          onPointerMove={onFabPointerMove}
+          onPointerUp={onFabPointerUp}
+          style={fabPos ? { left: fabPos.x, top: fabPos.y, right: "auto", bottom: "auto" } : undefined}
+          className={cn(
+            "group fixed z-50 h-16 w-16 rounded-full flex items-center justify-center transition-all active:scale-95 touch-none select-none cursor-grab active:cursor-grabbing",
+            !fabPos && "bottom-24 right-4"
+          )}
           aria-label="Abrir assistente IA"
         >
           {/* Glow rings */}
