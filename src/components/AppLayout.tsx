@@ -10,6 +10,7 @@ import WelcomeBackAlert from "./WelcomeBackAlert";
 import NpsPopup from "./NpsPopup";
 import SuggestionsFloatingButton from "./SuggestionsFloatingButton";
 import FloatingBubblesDock from "./FloatingBubblesDock";
+import PushPermissionOnboarding from "./PushPermissionOnboarding";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
 import { usePushNotificationListener } from "@/hooks/usePushNotificationListener";
 import { useCycleNotifications } from "@/hooks/useCycleNotifications";
@@ -62,6 +63,7 @@ export default function AppLayout() {
       <NpsPopup />
       <SuggestionsFloatingButton />
       <FloatingBubblesDock />
+      <PushPermissionOnboarding />
     </div>
   );
 }
