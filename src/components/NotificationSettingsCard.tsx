@@ -130,15 +130,29 @@ export default function NotificationSettingsCard() {
         )}
 
         {isGranted && (
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full gap-2"
-            onClick={handleTest}
-          >
-            <Send className="h-4 w-4" />
-            Enviar notificação de teste
-          </Button>
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full gap-2"
+              onClick={handleTest}
+            >
+              <Send className="h-4 w-4" />
+              Teste local (instantâneo)
+            </Button>
+            <Button
+              size="sm"
+              disabled={sendingPush}
+              className="w-full gap-2 bg-[#D4AF37] text-black hover:bg-[#b8941f] font-semibold"
+              onClick={handleTestWebPush}
+            >
+              <Cloud className="h-4 w-4" />
+              {sendingPush ? "Enviando..." : "Testar Web Push real (servidor)"}
+            </Button>
+            <p className="text-xs text-muted-foreground text-center">
+              O teste real envia push do servidor — funciona com app fechado.
+            </p>
+          </>
         )}
       </CardContent>
     </Card>
