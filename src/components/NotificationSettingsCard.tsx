@@ -14,6 +14,8 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function NotificationSettingsCard() {
   const [permStatus, setPermStatus] = useState(getPermissionStatus());
+  const [sendingPush, setSendingPush] = useState(false);
+  const { user } = useAuth();
 
   const handleEnable = async () => {
     const granted = await requestNotificationPermission();
