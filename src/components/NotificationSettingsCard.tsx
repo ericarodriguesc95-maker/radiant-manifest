@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Bell, BellOff, Send } from "lucide-react";
+import { useState } from "react";
+import { Bell, BellOff, Send, Cloud } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
@@ -7,7 +7,10 @@ import {
   requestNotificationPermission,
   getPermissionStatus,
   sendTestNotifications,
+  subscribeToPush,
 } from "@/lib/notifications";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function NotificationSettingsCard() {
   const [permStatus, setPermStatus] = useState(getPermissionStatus());
