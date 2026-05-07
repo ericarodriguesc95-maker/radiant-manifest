@@ -132,6 +132,44 @@ export default function AiAssistantChat() {
   const recognitionRef = useRef<any>(null);
   const { toast } = useToast();
 
+  // ─── Draggable FAB ──────────────────────────────────────────────────────
+  const FAB_POS_KEY = "ai-assistant-fab-pos";
+  const [fabPos, setFabPos] = useState<{ x: number; y: number } | null>(() => {
+    try {
+      const raw = localStorage.getItem(FAB_POS_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  });
+  const dragRef = useRef({ dragging: false, moved: false, offsetX: 0, offsetY: 0 });
+
+  const onFabPointerDown = (e: React.PointerEvent) => {
+    const target = e.currentTarget as HTMLButtonElement;
+    const rect = target.getBoundingClientRect();
+    dragRef.current = {
+      dragging: true, moved: false,
+      offsetX: e.clientX - rect.left, offsetY: e.clientY - rect.top,
+    };
+    target.setPointerCapture(e.pointerId);
+  };
+  const onFabPointerMove = (e: React.PointerEvent) => {
+    if (!dragRef.current.dragging) return;
+    if (Math.abs(e.movementX) > 1 || Math.abs(e.movementY) > 1) dragRef.current.moved = true;
+    const size = 64;
+    const x = Math.min(window.innerWidth - size - 8, Math.max(8, e.clientX - dragRef.current.offsetX));
+    const y = Math.min(window.innerHeight - size - 8, Math.max(8, e.clientY - dragRef.current.offsetY));
+    setFabPos({ x, y });
+  };
+  const onFabPointerUp = (e: React.PointerEvent) => {
+    const wasDrag = dragRef.current.moved;
+    dragRef.current.dragging = false;
+    try { (e.currentTarget as HTMLButtonElement).releasePointerCapture(e.pointerId); } catch {}
+    if (wasDrag && fabPos) {
+      try { localStorage.setItem(FAB_POS_KEY, JSON.stringify(fabPos)); } catch {}
+    } else {
+      setOpen(true);
+    }
+  };
+
   // Auto-open from floating bubble (?openAi=1)
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -340,11 +378,17 @@ export default function AiAssistantChat() {
         }
       `}</style>
 
-      {/* FAB - Cinematic */}
+      {/* FAB - Cinematic (draggable) */}
       {!open && (
         <button
-          onClick={() => setOpen(true)}
-          className="group fixed bottom-24 right-4 z-50 h-16 w-16 rounded-full flex items-center justify-center transition-all active:scale-95"
+          onPointerDown={onFabPointerDown}
+          onPointerMove={onFabPointerMove}
+          onPointerUp={onFabPointerUp}
+          style={fabPos ? { left: fabPos.x, top: fabPos.y, right: "auto", bottom: "auto" } : undefined}
+          className={cn(
+            "group fixed z-50 h-16 w-16 rounded-full flex items-center justify-center transition-all active:scale-95 touch-none select-none cursor-grab active:cursor-grabbing",
+            !fabPos && "bottom-24 right-4"
+          )}
           aria-label="Abrir assistente IA"
         >
           {/* Glow rings */}
