@@ -161,7 +161,7 @@ export default function LandingPage() {
                 boxShadow: "0 10px 40px -10px hsl(43 72% 52% / 0.5)",
               }}
             >
-              Quero meu ecossistema ✦
+              CHEGA DE DESCULPAS. QUERO MEU COMANDO. ✦
             </a>
             <a
               href="#modulos"
