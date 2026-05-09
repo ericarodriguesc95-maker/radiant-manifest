@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
-import { X, Download, Smartphone, ChevronDown, ChevronUp } from "lucide-react";
+import { X, Download, Smartphone, ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
+const APK_URL = "https://cf.admin.appmysite.com/786957/811978/android/builds/1.1.0/ams_android_811978_live.apk?_gl=1*v4elly*_gcl_au*NjE3NTE2NTMwLjE3Nzc4MjkxNzM.*_ga*NjkwMzY1MDc3LjE3Nzc4MjkxNzM.*_ga_BWZ5717E0Z*czE3NzgxOTQxMzEkbzIkZzEkdDE3NzgxOTYwNTYkajYwJGwwJGgw";
 
 const DISMISSED_KEY = "glowup-install-banner-dismissed";
 const DISMISS_DURATION = 3 * 24 * 60 * 60 * 1000; // 3 days
@@ -16,6 +19,18 @@ export default function InstallAppBanner() {
   const [show, setShow] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyApk = async () => {
+    try {
+      await navigator.clipboard.writeText(APK_URL);
+      setCopied(true);
+      toast.success("Link do APK copiado! ✨ Compartilhe com suas amigas, rainha 👑");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Não foi possível copiar. Tente novamente.");
+    }
+  };
 
   useEffect(() => {
     if (isStandalone()) return;
@@ -127,7 +142,7 @@ export default function InstallAppBanner() {
                 <Step n={2} text='Selecione "Instalar app" ou "Adicionar à tela inicial"' />
                 <Step n={3} text="Confirme e pronto! 🎉" />
                 <a
-                  href="https://cf.admin.appmysite.com/786957/811978/android/builds/1.1.0/ams_android_811978_live.apk?_gl=1*v4elly*_gcl_au*NjE3NTE2NTMwLjE3Nzc4MjkxNzM.*_ga*NjkwMzY1MDc3LjE3Nzc4MjkxNzM.*_ga_BWZ5717E0Z*czE3NzgxOTQxMzEkbzIkZzEkdDE3NzgxOTYwNTYkajYwJGwwJGgw"
+                  href={APK_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block"
@@ -137,8 +152,26 @@ export default function InstallAppBanner() {
                     Baixar APK direto (Android)
                   </Button>
                 </a>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleCopyApk}
+                  className="w-full text-xs h-9 gap-1.5 border-gold/30 text-gold hover:bg-gold/10"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="h-3.5 w-3.5" />
+                      Link copiado!
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-3.5 w-3.5" />
+                      Copiar link do APK p/ compartilhar
+                    </>
+                  )}
+                </Button>
                 <p className="text-[10px] text-muted-foreground text-center">
-                  Clique aqui para baixar o app em APK no seu celular
+                  Compartilhe o link com suas amigas para baixar o app
                 </p>
               </>
             ) : (
