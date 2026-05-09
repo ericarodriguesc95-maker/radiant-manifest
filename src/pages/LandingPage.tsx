@@ -390,6 +390,79 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section id="faq" className="relative z-10 max-w-3xl mx-auto px-6 py-24">
+        <div className="text-center mb-12">
+          <p className="text-xs tracking-[0.3em] uppercase mb-4" style={{ color: "hsl(43 72% 52%)" }}>
+            Perguntas Frequentes
+          </p>
+          <h3 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Tire suas{" "}
+            <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>
+              dúvidas.
+            </span>
+          </h3>
+        </div>
+
+        <div className="space-y-3">
+          {[
+            { q: "O que são as Metas SMART e como funcionam aqui?", a: "Você define metas Específicas, Mensuráveis, Atingíveis, Relevantes e Temporais. Cada meta vira submetas e tarefas com progresso automático e dopamina a cada conquista." },
+            { q: "O que é a Reprogramação Mental?", a: "Mais de 60 exercícios baseados em PNL, neurociência, Lei da Atração, Ho'oponopono, meditações guiadas e frequências (432Hz, 528Hz) para silenciar a síndrome da impostora e instalar crenças de elite." },
+            { q: "Como funciona a Girls Community?", a: "Rede privada só para mulheres com feed estilo Instagram, salas temáticas, mensagens diretas, stories de 24h, comentários, curtidas e ranking de hábitos. Conexões reais e seguras." },
+            { q: "O que tem na Alta Performance?", a: "Pomodoro, técnica Feynman, podcasts e cursos curados, biblioteca elite e jornadas estruturadas para gestão de carreira de quem quer crescer rápido." },
+            { q: "Tem rastreador de Saúde e Fitness?", a: "Sim. Calculadora de proteína e água, registro de dieta com calorias, peso e evolução, exercícios, e o ciclo menstrual com previsões hormonais." },
+            { q: "Como funciona o módulo de Finanças?", a: "Quiz comportamental que identifica seu arquétipo financeiro, IA Financeira pessoal, controle de receitas/despesas por mês e plano de prosperidade." },
+            { q: "Funciona como app no celular?", a: "Sim. É um PWA (instala no iPhone e Android) e também temos o APK Android. No computador, abre como site completo." },
+            { q: "Tem assistente de IA?", a: "Quatro: IA Assistente Pessoal (alta performance), IA do Eu Superior (manifestação), IA do Sono e IA Financeira. Todas em português, com voz e texto." },
+            { q: "O que são os Desafios Progressivos?", a: "Jornadas de 7, 14, 30, 60 e 90 dias com check-ins diários, contador de participantes e medalhas. Hábito vira identidade." },
+            { q: "Tem leitura da Bíblia?", a: "Plano Bíblia 365 personalizado por dia, com estudo guiado por IA, anotações pessoais e histórico — combina espiritualidade com neurociência." },
+            { q: "Como recebo notificações?", a: "Push notifications no navegador e celular para devocional do dia, lembretes de hábitos, ciclo menstrual, mensagens diretas e novos conteúdos." },
+            { q: "Quanto custa e como pago?", a: "R$ 27,90 anual (ou 6x de R$ 5,24 no cartão). Pagamento único via Kiwify, acesso liberado em até 5 minutos. Inclui todas as atualizações de conteúdo." },
+            { q: "Posso cancelar?", a: "Sim, a qualquer momento. O acesso permanece ativo até o fim do período pago e você pode pedir reembolso em até 7 dias após a compra." },
+            { q: "Recebo atualizações sem pagar mais?", a: "Sim. Toda nova ferramenta, módulo ou conteúdo lançado durante seu plano anual já vem incluso, sem custo adicional." },
+          ].map((item, i) => (
+            <details
+              key={i}
+              className="group rounded-2xl border px-5 py-4 transition-all open:shadow-lg"
+              style={{
+                background: "linear-gradient(145deg, rgba(20,20,20,0.6), rgba(12,12,12,0.85))",
+                borderColor: "rgba(255,255,255,0.07)",
+              }}
+            >
+              <summary className="flex items-center justify-between cursor-pointer list-none">
+                <span className="font-semibold text-base pr-4" style={{ color: "rgba(255,255,255,0.92)" }}>
+                  {item.q}
+                </span>
+                <span
+                  className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-lg leading-none transition-transform group-open:rotate-45"
+                  style={{ background: "hsl(43 72% 52% / 0.15)", color: "hsl(43 72% 60%)" }}
+                  aria-hidden
+                >
+                  +
+                </span>
+              </summary>
+              <p className="mt-3 text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.65)" }}>
+                {item.a}
+              </p>
+            </details>
+          ))}
+        </div>
+
+        <div className="mt-10 text-center">
+          <a
+            href="#planos"
+            className="inline-block rounded-full px-7 py-3.5 text-sm font-semibold transition-all hover:scale-105"
+            style={{
+              background: "hsl(43 72% 52%)",
+              color: "#0A0A0A",
+              boxShadow: "0 10px 30px -10px hsl(43 72% 52% / 0.5)",
+            }}
+          >
+            Quero garantir meu acesso ✦
+          </a>
+        </div>
+      </section>
+
       {/* FOOTER */}
       <footer className="relative z-10 border-t mt-10" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
         <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
