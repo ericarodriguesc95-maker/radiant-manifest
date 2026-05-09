@@ -130,16 +130,24 @@ export default function LandingPage() {
               sistema operacional.
             </span>
           </h2>
-          <p className="mt-6 text-lg italic" style={{ color: "rgba(255,255,255,0.55)", fontFamily: "Georgia, serif" }}>
-            Para a mulher que faz tudo — e quer fazer ainda melhor.
+          <p className="mt-6 text-lg italic" style={{ color: "rgba(255,255,255,0.7)", fontFamily: "Georgia, serif" }}>
+            Cansada de carregar o mundo nas costas e sentir que sua rotina é um caos silencioso?
           </p>
-          <p className="mt-6 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
-            CLT no corporativo, PJ ou empreendedora. Você já tem potencial. O que faltava era uma plataforma que cuidasse de tudo —{" "}
-            <strong className="text-white">rotina, mente, carreira, saúde, finanças e networking</strong> — em um único ecossistema.
+          <p className="mt-6 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
+            Você não precisa de mais uma lista de tarefas. Você precisa de <strong className="text-white">ordem</strong>. O Gloow Up Club é o fim da fragmentação mental: o ecossistema que transforma sua sobrecarga em uma <strong className="text-white">execução de elite</strong>.
           </p>
-          <p className="mt-3 text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
-            Acesse como app no celular ou como site no computador.
+          <p className="mt-6 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.65)" }}>
+            O mundo exige que você seja uma líder impecável, mantenha o corpo dos sonhos e a mente inabalável. Mas a verdade? Sem um sistema, você está apenas gastando energia. Onde estão seus planos de 5 anos? Sua saúde mental está em segundo plano?
           </p>
+          <p className="mt-6 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
+            Nós blindamos sua jornada com o que há de mais avançado em comportamento humano:
+          </p>
+          <ul className="mt-4 space-y-3 text-base" style={{ color: "rgba(255,255,255,0.75)" }}>
+            <li><span style={{ color: "hsl(43 72% 60%)" }}>✦</span> <strong className="text-white">Metas SMART:</strong> Saia do "vou tentar" para o "está feito" com submetas que geram dopamina real.</li>
+            <li><span style={{ color: "hsl(43 72% 60%)" }}>✦</span> <strong className="text-white">Reprogramação Mental:</strong> Use PNL e Neurociência para silenciar a síndrome da impostora.</li>
+            <li><span style={{ color: "hsl(43 72% 60%)" }}>✦</span> <strong className="text-white">Alta Performance:</strong> Otimize sua carreira com técnicas de gestão que os grandes players usam.</li>
+            <li><span style={{ color: "hsl(43 72% 60%)" }}>✦</span> <strong className="text-white">Girls Community:</strong> Pare de caminhar sozinha. Conecte-se com mulheres que falam a língua do sucesso.</li>
+          </ul>
 
           <div className="mt-10 flex flex-wrap gap-4">
             <a
