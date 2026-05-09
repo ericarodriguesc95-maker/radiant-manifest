@@ -156,8 +156,14 @@ export default function FloatingBubblesDock() {
 
   // Drag refs
   const dragRefs = useRef<Record<string, { dragging: boolean; moved: boolean; offsetX: number; offsetY: number }>>({});
+  const latestPositionsRef = useRef<Record<string, { x: number; y: number }>>({});
+
+  useEffect(() => {
+    latestPositionsRef.current = positions;
+  }, [positions]);
 
   const onPointerDown = (e: React.PointerEvent, id: BubbleId) => {
+    e.preventDefault();
     const target = e.currentTarget as HTMLButtonElement;
     const rect = target.getBoundingClientRect();
     dragRefs.current[id] = {
@@ -169,18 +175,21 @@ export default function FloatingBubblesDock() {
   const onPointerMove = (e: React.PointerEvent, id: BubbleId) => {
     const info = dragRefs.current[id];
     if (!info?.dragging) return;
+    e.preventDefault();
     if (Math.abs(e.movementX) > 1 || Math.abs(e.movementY) > 1) info.moved = true;
-    const size = 56;
+    const size = window.innerWidth >= 768 ? 56 : 48;
     const x = Math.min(window.innerWidth - size - 8, Math.max(8, e.clientX - info.offsetX));
     const y = Math.min(window.innerHeight - size - 8, Math.max(8, e.clientY - info.offsetY));
-    setPositions((prev) => ({ ...prev, [id]: { x, y } }));
+    const next = { ...latestPositionsRef.current, [id]: { x, y } };
+    latestPositionsRef.current = next;
+    setPositions(next);
   };
   const onPointerUp = (e: React.PointerEvent, id: BubbleId, href: string) => {
     const info = dragRefs.current[id];
     const wasDrag = !!info?.moved;
     if (info) info.dragging = false;
     try { (e.currentTarget as HTMLButtonElement).releasePointerCapture(e.pointerId); } catch {}
-    persistPositions({ ...positions });
+    if (wasDrag) persistPositions({ ...latestPositionsRef.current });
     if (!wasDrag) navigate(href);
   };
 
