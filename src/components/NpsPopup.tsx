@@ -103,8 +103,21 @@ export default function NpsPopup() {
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose("dismiss"); }}>
-      <DialogContent className="max-w-md bg-background border-gold/30">
-        <DialogHeader>
+      <DialogContent
+        className="max-w-md bg-background border-gold/30"
+        style={{ transform: `translate(calc(-50% + ${offset.x}px), calc(-50% + ${offset.y}px))` }}
+      >
+        <div
+          onPointerDown={onDragDown}
+          onPointerMove={onDragMove}
+          onPointerUp={onDragUp}
+          className="absolute top-2 left-1/2 -translate-x-1/2 cursor-grab active:cursor-grabbing touch-none px-3 py-1 rounded-full bg-gold/10 hover:bg-gold/20 transition-colors"
+          title="Arraste para mover"
+          aria-label="Arrastar"
+        >
+          <GripHorizontal className="h-4 w-4 text-gold/70" />
+        </div>
+        <DialogHeader className="pt-4">
           <DialogTitle className="flex items-center gap-2 text-gold">
             <Sparkles className="h-5 w-5" />
             Como está sua experiência?
