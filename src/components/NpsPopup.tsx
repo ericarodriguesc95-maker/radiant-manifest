@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { GripHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/AuthContext";
@@ -30,6 +31,26 @@ export default function NpsPopup() {
   const [score, setScore] = useState<number | null>(null);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const dragRef = useRef<{ dragging: boolean; startX: number; startY: number; baseX: number; baseY: number }>({
+    dragging: false, startX: 0, startY: 0, baseX: 0, baseY: 0,
+  });
+
+  const onDragDown = (e: React.PointerEvent) => {
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    dragRef.current = { dragging: true, startX: e.clientX, startY: e.clientY, baseX: offset.x, baseY: offset.y };
+  };
+  const onDragMove = (e: React.PointerEvent) => {
+    if (!dragRef.current.dragging) return;
+    setOffset({
+      x: dragRef.current.baseX + (e.clientX - dragRef.current.startX),
+      y: dragRef.current.baseY + (e.clientY - dragRef.current.startY),
+    });
+  };
+  const onDragUp = (e: React.PointerEvent) => {
+    dragRef.current.dragging = false;
+    try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch {}
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -82,8 +103,21 @@ export default function NpsPopup() {
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose("dismiss"); }}>
-      <DialogContent className="max-w-md bg-background border-gold/30">
-        <DialogHeader>
+      <DialogContent
+        className="max-w-md bg-background border-gold/30"
+        style={{ transform: `translate(calc(-50% + ${offset.x}px), calc(-50% + ${offset.y}px))` }}
+      >
+        <div
+          onPointerDown={onDragDown}
+          onPointerMove={onDragMove}
+          onPointerUp={onDragUp}
+          className="absolute top-2 left-1/2 -translate-x-1/2 cursor-grab active:cursor-grabbing touch-none px-3 py-1 rounded-full bg-gold/10 hover:bg-gold/20 transition-colors"
+          title="Arraste para mover"
+          aria-label="Arrastar"
+        >
+          <GripHorizontal className="h-4 w-4 text-gold/70" />
+        </div>
+        <DialogHeader className="pt-4">
           <DialogTitle className="flex items-center gap-2 text-gold">
             <Sparkles className="h-5 w-5" />
             Como está sua experiência?
