@@ -126,6 +126,20 @@ export default function InstallAppBanner() {
                 <Step n={1} text='Toque no menu (⋮) do navegador' />
                 <Step n={2} text='Selecione "Instalar app" ou "Adicionar à tela inicial"' />
                 <Step n={3} text="Confirme e pronto! 🎉" />
+                <a
+                  href="https://cf.admin.appmysite.com/786957/811978/android/builds/1.1.0/ams_android_811978_live.apk?_gl=1*v4elly*_gcl_au*NjE3NTE2NTMwLjE3Nzc4MjkxNzM.*_ga*NjkwMzY1MDc3LjE3Nzc4MjkxNzM.*_ga_BWZ5717E0Z*czE3NzgxOTQxMzEkbzIkZzEkdDE3NzgxOTYwNTYkajYwJGwwJGgw"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <Button variant="gold" size="sm" className="w-full text-xs h-9 gap-1.5">
+                    <Download className="h-3.5 w-3.5" />
+                    Baixar APK direto (Android)
+                  </Button>
+                </a>
+                <p className="text-[10px] text-muted-foreground text-center">
+                  Clique aqui para baixar o app em APK no seu celular
+                </p>
               </>
             ) : (
               <>
