@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
-import { X, Download, Smartphone, ChevronDown, ChevronUp } from "lucide-react";
+import { X, Download, Smartphone, ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
+const APK_URL = "https://cf.admin.appmysite.com/786957/811978/android/builds/1.1.0/ams_android_811978_live.apk?_gl=1*v4elly*_gcl_au*NjE3NTE2NTMwLjE3Nzc4MjkxNzM.*_ga*NjkwMzY1MDc3LjE3Nzc4MjkxNzM.*_ga_BWZ5717E0Z*czE3NzgxOTQxMzEkbzIkZzEkdDE3NzgxOTYwNTYkajYwJGwwJGgw";
 
 const DISMISSED_KEY = "glowup-install-banner-dismissed";
 const DISMISS_DURATION = 3 * 24 * 60 * 60 * 1000; // 3 days
