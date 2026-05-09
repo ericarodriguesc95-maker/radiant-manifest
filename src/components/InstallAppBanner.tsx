@@ -19,6 +19,18 @@ export default function InstallAppBanner() {
   const [show, setShow] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyApk = async () => {
+    try {
+      await navigator.clipboard.writeText(APK_URL);
+      setCopied(true);
+      toast.success("Link do APK copiado! ✨ Compartilhe com suas amigas, rainha 👑");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("Não foi possível copiar. Tente novamente.");
+    }
+  };
 
   useEffect(() => {
     if (isStandalone()) return;
