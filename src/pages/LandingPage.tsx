@@ -80,7 +80,263 @@ const testimonials = [
   { name: "Membro da comunidade", text: "Está muito legal 💚💚💚 Armei aquela parte das dicas do que assistir e de conteúdo. Muito show mesmo." },
 ];
 
-export default function LandingPage() {
+type PreviewKey = "home" | "metas" | "habitos" | "manifestacao" | "financas" | "saude" | "ciclo" | "biblia" | "comunidade" | "ia";
+
+const previews: { key: PreviewKey; tab: string; icon: string; title: string; subtitle: string; render: () => JSX.Element }[] = [
+  {
+    key: "home",
+    tab: "Home",
+    icon: "👑",
+    title: "Sua manhã começa em modo rainha",
+    subtitle: "Saudação personalizada, palavra do dia, afirmação, devocional e seu progresso visível.",
+    render: () => (
+      <div className="space-y-3">
+        <div className="rounded-xl p-4" style={{ background: "linear-gradient(145deg, hsl(43 72% 52% / 0.12), rgba(0,0,0,0.4))", border: "1px solid hsl(43 72% 52% / 0.25)" }}>
+          <p className="text-[10px] tracking-[0.3em] uppercase mb-2" style={{ color: "hsl(43 72% 52%)" }}>Bom dia, rainha ✦</p>
+          <p className="text-base font-semibold">Hoje é dia de executar — não de tentar.</p>
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          {[{l:"Streak",v:"42d",c:"🔥"},{l:"Hábitos",v:"5/6",c:"✅"},{l:"Metas",v:"73%",c:"🎯"}].map((s)=>(
+            <div key={s.l} className="rounded-lg p-2.5 text-center" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="text-base">{s.c}</div>
+              <div className="text-sm font-bold mt-0.5">{s.v}</div>
+              <div className="text-[9px] uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.5)" }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+        <div className="rounded-lg p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <p className="text-[10px] uppercase tracking-wider mb-1" style={{ color: "hsl(43 60% 65%)" }}>Palavra do dia</p>
+          <p className="text-sm font-semibold">Soberania</p>
+          <p className="text-[11px] mt-1" style={{ color: "rgba(255,255,255,0.55)" }}>Afirmação: Eu comando minha rotina com clareza e disciplina.</p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "metas",
+    tab: "Metas",
+    icon: "🎯",
+    title: "Metas SMART com submetas que dão dopamina",
+    subtitle: "Decomponha objetivos grandes em passos executáveis — e veja o progresso subir.",
+    render: () => (
+      <div className="space-y-2.5">
+        {[
+          { t: "Investir R$ 10.000 até dez/2026", p: 64, sub: ["Aporte mensal R$ 800 ✓", "Estudar Tesouro Direto ✓", "Abrir conta corretora"] },
+          { t: "Inglês fluente em 6 meses", p: 38, sub: ["30min/dia ✓", "1 livro/mês", "Conversation club"] },
+        ].map((g)=>(
+          <div key={g.t} className="rounded-lg p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="flex justify-between items-center mb-2">
+              <p className="text-sm font-semibold">{g.t}</p>
+              <span className="text-xs font-bold" style={{ color: "hsl(43 72% 52%)" }}>{g.p}%</span>
+            </div>
+            <div className="h-1.5 rounded-full mb-2.5" style={{ background: "rgba(255,255,255,0.08)" }}>
+              <div className="h-full rounded-full" style={{ width: `${g.p}%`, background: "hsl(43 72% 52%)" }} />
+            </div>
+            <div className="space-y-1">
+              {g.sub.map((s)=>(<p key={s} className="text-[11px]" style={{ color: "rgba(255,255,255,0.6)" }}>• {s}</p>))}
+            </div>
+          </div>
+        ))}
+      </div>
+    ),
+  },
+  {
+    key: "habitos",
+    tab: "Hábitos",
+    icon: "✅",
+    title: "Hábitos customizáveis + heat map de 30 dias",
+    subtitle: "Crie seus próprios hábitos, marque diariamente e veja a constância pintar a tela.",
+    render: () => (
+      <div className="space-y-3">
+        <div className="space-y-1.5">
+          {[{n:"💧 2L de água",d:true},{n:"🏋️ Treino",d:true},{n:"📖 Leitura 30min",d:true},{n:"🧘 Meditação",d:false},{n:"📝 Diário noturno",d:false}].map((h)=>(
+            <div key={h.n} className="flex items-center justify-between rounded-lg px-3 py-2" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <span className={`text-xs ${h.d?"line-through":""}`} style={{ color: h.d?"rgba(255,255,255,0.4)":"rgba(255,255,255,0.85)" }}>{h.n}</span>
+              <div className="h-4 w-4 rounded" style={{ background: h.d?"hsl(142 71% 45%)":"transparent", border: "1px solid rgba(255,255,255,0.2)" }}>{h.d && <Check className="h-3 w-3 text-black m-0.5"/>}</div>
+            </div>
+          ))}
+        </div>
+        <div>
+          <p className="text-[10px] uppercase tracking-wider mb-1.5" style={{ color: "rgba(255,255,255,0.5)" }}>Últimos 30 dias</p>
+          <div className="grid grid-cols-15 gap-1" style={{ gridTemplateColumns: "repeat(15, 1fr)" }}>
+            {Array.from({length:30}).map((_,i)=>{
+              const lvl = [0,0.15,0.3,0.6,0.9][Math.floor(Math.random()*5)];
+              return <div key={i} className="aspect-square rounded-sm" style={{ background: lvl===0?"rgba(255,255,255,0.05)":`hsl(43 72% 52% / ${lvl})` }} />;
+            })}
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "manifestacao",
+    tab: "Manifestação",
+    icon: "✨",
+    title: "Termômetro vibracional & Frequências de cura",
+    subtitle: "Escala de Hawkins, ritual matinal, conversa com o Eu Superior e diário de manifestações.",
+    render: () => (
+      <div className="space-y-3">
+        <div className="rounded-xl p-4 text-center" style={{ background: "linear-gradient(145deg, hsl(280 60% 30% / 0.3), hsl(43 72% 52% / 0.1))", border: "1px solid hsl(43 72% 52% / 0.2)" }}>
+          <p className="text-[10px] uppercase tracking-[0.25em] mb-2" style={{ color: "hsl(43 60% 65%)" }}>Vibração agora</p>
+          <p className="text-3xl font-bold" style={{ color: "hsl(43 72% 52%)" }}>540 Hz</p>
+          <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.7)" }}>Amor incondicional</p>
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          {[{f:"432Hz",l:"Calma"},{f:"528Hz",l:"DNA"},{f:"963Hz",l:"Conexão"}].map((x)=>(
+            <button key={x.f} className="rounded-lg py-2.5 text-center" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid hsl(43 72% 52% / 0.15)" }}>
+              <p className="text-xs font-bold" style={{ color: "hsl(43 72% 52%)" }}>▶ {x.f}</p>
+              <p className="text-[10px]" style={{ color: "rgba(255,255,255,0.55)" }}>{x.l}</p>
+            </button>
+          ))}
+        </div>
+        <p className="text-[11px] italic" style={{ color: "rgba(255,255,255,0.55)" }}>"Eu sou o canal pelo qual a abundância flui." — diário de hoje</p>
+      </div>
+    ),
+  },
+  {
+    key: "financas",
+    tab: "Finanças",
+    icon: "💰",
+    title: "Controle financeiro + Consultora IA comportamental",
+    subtitle: "Renda, despesas fixas, variáveis, cartão e poupança. Com IA que entende psicologia do dinheiro.",
+    render: () => (
+      <div className="space-y-2.5">
+        <div className="grid grid-cols-2 gap-2">
+          {[{l:"Renda",v:"R$ 8.500",c:"hsl(142 71% 45%)"},{l:"Saldo",v:"R$ 2.140",c:"hsl(43 72% 52%)"},{l:"Cartão",v:"R$ 1.820",c:"hsl(280 60% 60%)"},{l:"Poupança",v:"R$ 1.200",c:"hsl(210 80% 60%)"}].map((s)=>(
+            <div key={s.l} className="rounded-lg p-2.5" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <p className="text-[10px] uppercase tracking-wider" style={{ color: "rgba(255,255,255,0.5)" }}>{s.l}</p>
+              <p className="text-sm font-bold mt-0.5" style={{ color: s.c }}>{s.v}</p>
+            </div>
+          ))}
+        </div>
+        <div className="rounded-lg p-3" style={{ background: "hsl(43 72% 52% / 0.08)", border: "1px solid hsl(43 72% 52% / 0.2)" }}>
+          <p className="text-[10px] uppercase tracking-wider mb-1" style={{ color: "hsl(43 72% 52%)" }}>🤖 Consultora IA</p>
+          <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.75)" }}>"Identifiquei R$ 480 em compras impulsivas no mercado. Quer um plano de 7 dias para reduzir 30%?"</p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "saude",
+    tab: "Saúde",
+    icon: "🏃‍♀️",
+    title: "Calculadoras de proteína, água e evolução",
+    subtitle: "Treinos do dia, dieta, peso ao longo do tempo e integração com smartwatch.",
+    render: () => (
+      <div className="space-y-2.5">
+        <div className="grid grid-cols-2 gap-2">
+          <div className="rounded-lg p-2.5 text-center" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <p className="text-[10px] uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>Proteína</p>
+            <p className="text-sm font-bold" style={{ color: "hsl(43 72% 52%)" }}>112g / 130g</p>
+          </div>
+          <div className="rounded-lg p-2.5 text-center" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <p className="text-[10px] uppercase" style={{ color: "rgba(255,255,255,0.5)" }}>Água</p>
+            <p className="text-sm font-bold" style={{ color: "hsl(210 80% 60%)" }}>1.8L / 2.5L</p>
+          </div>
+        </div>
+        <div className="rounded-lg p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <p className="text-[10px] uppercase tracking-wider mb-2" style={{ color: "rgba(255,255,255,0.5)" }}>Evolução do peso (90d)</p>
+          <div className="flex items-end gap-1 h-12">
+            {[60,58,57,56,55,54,53,52,51,50].map((v,i)=>(<div key={i} className="flex-1 rounded-sm" style={{ height: `${v}%`, background: "hsl(43 72% 52% / 0.6)" }} />))}
+          </div>
+        </div>
+        <div className="rounded-lg p-2.5" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <p className="text-[11px]"><span style={{color:"hsl(43 60% 65%)"}}>Treino do dia:</span> Inferiores + glúteo • 45min</p>
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "ciclo",
+    tab: "Ciclo",
+    icon: "🌸",
+    title: "Mapa do ciclo menstrual com previsão hormonal",
+    subtitle: "Fases, sintomas, fertilidade e histórico de até 8 ciclos para entender seu corpo.",
+    render: () => (
+      <div className="space-y-3">
+        <div className="rounded-xl p-4 text-center" style={{ background: "linear-gradient(145deg, hsl(340 70% 30% / 0.3), hsl(43 72% 52% / 0.08))", border: "1px solid hsl(340 60% 50% / 0.2)" }}>
+          <p className="text-[10px] uppercase tracking-[0.25em] mb-2" style={{ color: "hsl(340 60% 75%)" }}>Fase atual</p>
+          <p className="text-2xl font-bold">🌷 Folicular</p>
+          <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.65)" }}>Dia 8 do ciclo · Energia alta — bom para criar e socializar</p>
+        </div>
+        <div className="grid grid-cols-4 gap-1.5">
+          {[{n:"Mens.",a:false},{n:"Folic.",a:true},{n:"Ovul.",a:false},{n:"Lútea",a:false}].map((p)=>(
+            <div key={p.n} className="rounded-lg py-2 text-center text-[10px] font-semibold" style={{ background: p.a?"hsl(340 60% 50% / 0.25)":"rgba(255,255,255,0.03)", border: `1px solid ${p.a?"hsl(340 60% 50% / 0.4)":"rgba(255,255,255,0.06)"}`, color: p.a?"hsl(340 60% 80%)":"rgba(255,255,255,0.5)" }}>{p.n}</div>
+          ))}
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "biblia",
+    tab: "Bíblia 365",
+    icon: "📖",
+    title: "Plano de leitura de 365 dias com Visão de Neurociência",
+    subtitle: "Devocional do dia, estudo guiado por IA e calendário do que você já leu.",
+    render: () => (
+      <div className="space-y-2.5">
+        <div className="rounded-xl p-4" style={{ background: "linear-gradient(145deg, hsl(43 72% 52% / 0.12), rgba(0,0,0,0.4))", border: "1px solid hsl(43 72% 52% / 0.2)" }}>
+          <p className="text-[10px] uppercase tracking-[0.25em] mb-1" style={{ color: "hsl(43 72% 52%)" }}>Dia 73 / 365</p>
+          <p className="text-sm font-semibold mb-1">Filipenses 4:13</p>
+          <p className="text-[11px] italic" style={{ color: "rgba(255,255,255,0.7)" }}>"Posso todas as coisas naquele que me fortalece."</p>
+        </div>
+        <div className="rounded-lg p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <p className="text-[10px] uppercase tracking-wider mb-1" style={{ color: "hsl(43 60% 65%)" }}>🧠 Visão neurocientífica</p>
+          <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.7)" }}>Afirmações de capacidade ativam o córtex pré-frontal e reduzem cortisol em 23%.</p>
+        </div>
+        <div className="flex justify-between text-[10px]" style={{ color: "rgba(255,255,255,0.5)" }}>
+          <span>Streak de leitura: 19 dias 🔥</span><span style={{ color: "hsl(43 72% 52%)" }}>20% completo</span>
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "comunidade",
+    tab: "Comunidade",
+    icon: "💬",
+    title: "Feed Elite + Stories + Direct Messages",
+    subtitle: "Conecte-se com mulheres que falam a língua do sucesso. Sem julgamento.",
+    render: () => (
+      <div className="space-y-2.5">
+        <div className="flex gap-2 overflow-hidden">
+          {["A","M","C","J","R"].map((n,i)=>(
+            <div key={i} className="flex-shrink-0 h-12 w-12 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: "linear-gradient(135deg, hsl(43 72% 52%), hsl(340 60% 50%))", color: "#0A0A0A" }}>{n}</div>
+          ))}
+        </div>
+        <div className="rounded-lg p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="h-7 w-7 rounded-full" style={{ background: "hsl(43 72% 52%)" }} />
+            <div><p className="text-xs font-semibold">Marina S.</p><p className="text-[9px]" style={{ color: "rgba(255,255,255,0.4)" }}>há 2h • 👑 Streak 90d</p></div>
+          </div>
+          <p className="text-[11px]" style={{ color: "rgba(255,255,255,0.8)" }}>Bati minha meta de poupança trimestral hoje! 6 meses atrás eu era a mulher das compras impulsivas. ✦</p>
+          <div className="flex gap-3 mt-2 text-[10px]" style={{ color: "rgba(255,255,255,0.5)" }}>♥ 47 · 💬 12 · 👁 312</div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    key: "ia",
+    tab: "Assistente IA",
+    icon: "🤖",
+    title: "Sua mentora 24/7 — voz e texto em pt-BR",
+    subtitle: "Pergunte sobre carreira, finanças, saúde, espiritualidade. Resposta personalizada.",
+    render: () => (
+      <div className="space-y-2">
+        <div className="rounded-2xl rounded-bl-sm px-3 py-2 text-[11px] max-w-[85%]" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
+          Olá rainha ✦ Sobre o que você quer conversar hoje?
+        </div>
+        <div className="rounded-2xl rounded-br-sm px-3 py-2 text-[11px] max-w-[85%] ml-auto" style={{ background: "hsl(43 72% 52%)", color: "#0A0A0A" }}>
+          Como negociar um aumento sem parecer arrogante?
+        </div>
+        <div className="rounded-2xl rounded-bl-sm px-3 py-2 text-[11px] max-w-[90%]" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
+          Ótima pergunta. <strong>Negociação não é confronto, é apresentação de valor.</strong> Liste 3 entregas mensuráveis dos últimos 6 meses, traga benchmarks de mercado e abra com dados — não com pedido. Quer que eu monte o roteiro?
+        </div>
+      </div>
+    ),
+  },
+];
+
+
   useEffect(() => {
     document.title = "Gloow Up Club ✦ Ecossistema Feminino de Alta Performance";
     const meta = document.querySelector('meta[name="description"]');
