@@ -533,7 +533,7 @@ const FinancasPage = () => {
                 <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Descrição" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" autoFocus />
                 <input value={newAmount} onChange={e => setNewAmount(e.target.value)} placeholder="Valor (R$)" type="number" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" />
                 <div className="flex gap-2 flex-wrap">
-                  {(["renda", "fixa", "variavel"] as EntryType[]).map(t => (
+                  {(["renda", "fixa", "variavel", "cartao", "poupanca"] as EntryType[]).map(t => (
                     <button key={t} onClick={() => setNewType(t)} className={cn("px-3 py-1 rounded-full text-[10px] font-body font-medium transition-all", newType === t ? "bg-gold/20 text-gold ring-1 ring-gold/30" : "bg-muted text-muted-foreground")}>
                       {typeIcons[t]} {typeLabels[t]}
                     </button>
