@@ -336,6 +336,8 @@ const previews: { key: PreviewKey; tab: string; icon: string; title: string; sub
   },
 ];
 
+export default function LandingPage() {
+  const [activePreview, setActivePreview] = useState<PreviewKey>("home");
 
   useEffect(() => {
     document.title = "Gloow Up Club ✦ Ecossistema Feminino de Alta Performance";
