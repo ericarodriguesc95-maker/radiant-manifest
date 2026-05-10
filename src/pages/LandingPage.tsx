@@ -550,6 +550,89 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* INSIDE THE APP — INTERACTIVE PREVIEW */}
+      <section id="por-dentro" className="relative z-10 max-w-7xl mx-auto px-6 py-20">
+        <div className="text-center mb-12">
+          <p className="text-xs tracking-[0.3em] uppercase mb-4" style={{ color: "hsl(43 72% 52%)" }}>
+            Veja por dentro
+          </p>
+          <h3 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Cada aba é um pedaço da sua{" "}
+            <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>
+              vida sob comando.
+            </span>
+          </h3>
+          <p className="mt-5 max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
+            Toque em uma aba abaixo e veja exatamente como cada área do app funciona — sem precisar criar conta.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-2 mb-8">
+          {previews.map((p) => (
+            <button
+              key={p.key}
+              onClick={() => setActivePreview(p.key)}
+              className="rounded-full px-4 py-2 text-xs font-medium transition-all"
+              style={{
+                background: activePreview === p.key ? "hsl(43 72% 52%)" : "rgba(255,255,255,0.04)",
+                color: activePreview === p.key ? "#0A0A0A" : "rgba(255,255,255,0.7)",
+                border: `1px solid ${activePreview === p.key ? "hsl(43 72% 52%)" : "rgba(255,255,255,0.08)"}`,
+              }}
+            >
+              <span className="mr-1.5">{p.icon}</span>{p.tab}
+            </button>
+          ))}
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 items-center max-w-5xl mx-auto">
+          <div className="order-2 md:order-1">
+            {previews.filter(p => p.key === activePreview).map(p => (
+              <div key={p.key}>
+                <div className="text-5xl mb-4">{p.icon}</div>
+                <h4 className="text-2xl md:text-3xl font-bold mb-3 leading-tight">{p.title}</h4>
+                <p className="text-base leading-relaxed mb-5" style={{ color: "rgba(255,255,255,0.6)" }}>
+                  {p.subtitle}
+                </p>
+                <a
+                  href={KIWIFY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-semibold"
+                  style={{ color: "hsl(43 72% 52%)" }}
+                >
+                  Quero acessar essa aba <ArrowRight className="h-4 w-4" />
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <div className="order-1 md:order-2 flex justify-center">
+            <div
+              className="relative rounded-[2.5rem] p-3 w-full max-w-[320px]"
+              style={{
+                background: "linear-gradient(145deg, #1a1a1a, #0a0a0a)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                boxShadow: "0 30px 80px -20px hsl(43 72% 52% / 0.25), 0 0 0 1px rgba(255,255,255,0.04)",
+              }}
+            >
+              <div
+                className="rounded-[2rem] p-4 min-h-[440px]"
+                style={{ background: "#0D0D0D", border: "1px solid rgba(255,255,255,0.04)" }}
+              >
+                <div className="flex justify-between items-center mb-4 text-[10px]" style={{ color: "rgba(255,255,255,0.4)" }}>
+                  <span>9:41</span>
+                  <span>👑 Gloow Up</span>
+                  <span>100%</span>
+                </div>
+                {previews.filter(p => p.key === activePreview).map(p => (
+                  <div key={p.key}>{p.render()}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* PRICING - SINGLE PLAN */}
       <section id="planos" className="relative z-10 max-w-4xl mx-auto px-6 py-24">
         <div className="text-center mb-14">
