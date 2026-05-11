@@ -72,6 +72,67 @@ function SectionCard({ id, icon, title, subtitle, children }: { id?: string; ico
 
 export default function Protocolo145Page() {
   const navigate = useNavigate();
+  const [progress, setProgress] = useState<Progress>(() => loadProgress());
+  const [resumed, setResumed] = useState(false);
+
+  // Persist on change
+  useEffect(() => { saveProgress(progress); }, [progress]);
+
+  // Observe sections to update lastSection
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) {
+          const id = (visible.target as HTMLElement).dataset.section as SectionId | undefined;
+          if (id && SECTION_IDS.includes(id)) {
+            setProgress((p) => (p.lastSection === id ? p : { ...p, lastSection: id, updatedAt: new Date().toISOString() }));
+          }
+        }
+      },
+      { rootMargin: "-30% 0px -50% 0px", threshold: [0, 0.25, 0.5, 1] }
+    );
+    SECTION_IDS.forEach((id) => {
+      const el = document.querySelector(`[data-section="${id}"]`);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  // Offer to resume to last section on first mount
+  useEffect(() => {
+    if (resumed) return;
+    const saved = loadProgress();
+    if (saved.lastSection && saved.lastSection !== "tese") {
+      const el = document.querySelector(`[data-section="${saved.lastSection}"]`);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          toast.info("Retomando de onde você parou ✦", { duration: 2200 });
+        }, 250);
+      }
+    }
+    setResumed(true);
+  }, [resumed]);
+
+  const completedCount = progress.days.filter(Boolean).length;
+  const percent = Math.round((completedCount / 5) * 100);
+
+  const toggleDay = (i: number) => {
+    setProgress((p) => {
+      const days = [...p.days];
+      days[i] = !days[i];
+      const now = new Date().toISOString();
+      if (days[i]) toast.success(`Dia ${i + 1} concluído ✓`, { description: "Reset registrado." });
+      else toast(`Dia ${i + 1} desmarcado`);
+      return { ...p, days, updatedAt: now };
+    });
+  };
+
+  const resetProgress = () => {
+    setProgress({ days: [false, false, false, false, false], lastSection: "tese", updatedAt: new Date().toISOString() });
+    toast("Progresso reiniciado", { description: "Pronta para um novo ciclo." });
+  };
 
   return (
     <div className="min-h-screen pb-24 pt-6 px-4 max-w-2xl mx-auto">
@@ -80,7 +141,7 @@ export default function Protocolo145Page() {
       </button>
 
       {/* HERO */}
-      <div className="relative overflow-hidden rounded-2xl border border-gold/30 bg-gradient-to-br from-black via-zinc-950 to-black p-6 mb-6">
+      <div className="relative overflow-hidden rounded-2xl border border-gold/30 bg-gradient-to-br from-black via-zinc-950 to-black p-6 mb-4">
         <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-gold/10 blur-3xl" aria-hidden />
         <div className="relative">
           <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.2em] text-gold border border-gold/40 rounded-full px-2.5 py-1 mb-3">
@@ -91,6 +152,23 @@ export default function Protocolo145Page() {
           </h1>
           <p className="text-sm text-muted-foreground mt-1">Reset Bio-Hacker · Guia Oficial Glow Up Club</p>
           <p className="text-xs text-foreground/80 mt-4 italic">"O corpo é hardware. A mente é software. Reescreva o código."</p>
+        </div>
+      </div>
+
+      {/* PROGRESSO */}
+      <div className="rounded-2xl border border-gold/30 bg-background/60 backdrop-blur p-4 mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs uppercase tracking-[0.18em] text-gold font-semibold">Seu progresso · 5 dias</p>
+          <button onClick={resetProgress} className="text-[10px] uppercase tracking-wider text-muted-foreground hover:text-foreground flex items-center gap-1">
+            <RotateCcw className="h-3 w-3" /> Reiniciar
+          </button>
+        </div>
+        <div className="h-2 w-full rounded-full bg-muted/40 overflow-hidden mb-3">
+          <div className="h-full bg-gold transition-all duration-500" style={{ width: `${percent}%` }} />
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-muted-foreground">{completedCount}/5 dias · {percent}%</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Salvo localmente</p>
         </div>
       </div>
 
