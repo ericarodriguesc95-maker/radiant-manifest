@@ -49,9 +49,9 @@ const fiveDays = [
   { day: "Sexta", title: "Soberania Operacional", body: "Você opera em estado de fluxo prolongado. Identidade de alta performance instalada. O protocolo virou padrão." },
 ];
 
-function SectionCard({ icon, title, subtitle, children }: { icon: React.ReactNode; title: string; subtitle?: string; children: React.ReactNode }) {
+function SectionCard({ id, icon, title, subtitle, children }: { id?: string; icon: React.ReactNode; title: string; subtitle?: string; children: React.ReactNode }) {
   return (
-    <Card className="border-gold/20 bg-gradient-to-br from-background to-background/60 backdrop-blur">
+    <Card id={id} data-section={id} className="border-gold/20 bg-gradient-to-br from-background to-background/60 backdrop-blur scroll-mt-24">
       <CardHeader className="pb-3">
         <div className="flex items-center gap-2">
           <div className="h-9 w-9 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">
