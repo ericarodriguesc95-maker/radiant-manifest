@@ -1,7 +1,28 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Zap, Clock, Sunrise, ShieldOff, TrendingUp, Moon, CalendarDays, Flame, Brain, Target } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowLeft, Zap, Clock, Sunrise, ShieldOff, TrendingUp, Moon, CalendarDays, Flame, Brain, Target, Check, RotateCcw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
+const STORAGE_KEY = "protocolo-14-5:progress";
+const SECTION_IDS = ["tese", "codigo", "firewall", "hawkins", "subliminal", "execucao", "cta"] as const;
+type SectionId = typeof SECTION_IDS[number];
+type Progress = { days: boolean[]; lastSection: SectionId; updatedAt: string };
+
+function loadProgress(): Progress {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const p = JSON.parse(raw);
+      if (Array.isArray(p.days) && p.days.length === 5) return p;
+    }
+  } catch {}
+  return { days: [false, false, false, false, false], lastSection: "tese", updatedAt: new Date().toISOString() };
+}
+function saveProgress(p: Progress) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch {}
+}
 
 const hawkinsLevels = [
   { range: "700+", name: "Iluminação", color: "from-gold to-yellow-200", low: false },
