@@ -174,14 +174,14 @@ export default function Protocolo145Page() {
 
       <div className="space-y-5">
         {/* 1 — TESE */}
-        <SectionCard icon={<Brain className="h-4 w-4" />} title="1. A Tese do Bio-Hack" subtitle="O corpo é um sistema otimizável">
+        <SectionCard id="tese" icon={<Brain className="h-4 w-4" />} title="1. A Tese do Bio-Hack" subtitle="O corpo é um sistema otimizável">
           <p>Seu organismo não é frágil — é <span className="text-foreground font-semibold">programável</span>. Cada caloria vazia, cada scroll infinito, cada estímulo de dopamina barata acumula <span className="text-foreground font-semibold">lixo sistêmico</span> que consome largura de banda do córtex pré-frontal.</p>
           <p>O Protocolo 14.5 não é dieta nem rotina motivacional. É uma <span className="text-foreground font-semibold">desfragmentação operacional</span>: remover o ruído metabólico e digital para liberar o processamento cerebral que sustenta foco, clareza e decisão estratégica.</p>
           <p className="text-xs text-foreground/70">Resultado mensurável: ↑ BDNF · ↑ sensibilidade à dopamina · ↓ inflamação sistêmica · ↑ tempo em estado de fluxo.</p>
         </SectionCard>
 
         {/* 2 — CÓDIGO 14.5 */}
-        <SectionCard icon={<Target className="h-4 w-4" />} title="2. O Código 14.5" subtitle="As duas variáveis fundadoras">
+        <SectionCard id="codigo" icon={<Target className="h-4 w-4" />} title="2. O Código 14.5" subtitle="As duas variáveis fundadoras">
           <div className="rounded-xl border border-gold/20 bg-gold/5 p-4 space-y-1">
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-gold" />
@@ -199,14 +199,14 @@ export default function Protocolo145Page() {
         </SectionCard>
 
         {/* 3 — FIREWALL */}
-        <SectionCard icon={<ShieldOff className="h-4 w-4" />} title="3. O Firewall de Atenção" subtitle="Bloqueio total · Instagram · TikTok · Facebook">
+        <SectionCard id="firewall" icon={<ShieldOff className="h-4 w-4" />} title="3. O Firewall de Atenção" subtitle="Bloqueio total · Instagram · TikTok · Facebook">
           <p>Redes sociais são <span className="text-foreground font-semibold">máquinas de regulação negativa</span> de receptores D2. Cada deslize é uma microdose de dopamina que rebaixa o limiar — tarefas reais passam a parecer entediantes.</p>
           <p>Ao cortar o estímulo por <span className="text-foreground font-semibold">5 dias completos</span>, o cérebro ressensibiliza os receptores. A procrastinação não é fraqueza de caráter: é química. Remova o input, e a vontade de executar volta sozinha.</p>
           <p className="text-xs text-foreground/70">Tática: desinstale os apps do celular. Use bloqueador (One Sec, Opal, Screen Zen). Sem exceção, sem "só 5 minutos".</p>
         </SectionCard>
 
         {/* 4 — HAWKINS */}
-        <SectionCard icon={<TrendingUp className="h-4 w-4" />} title="4. A Escala de Ascensão" subtitle="Mapa de Consciência · Dr. David R. Hawkins">
+        <SectionCard id="hawkins" icon={<TrendingUp className="h-4 w-4" />} title="4. A Escala de Ascensão" subtitle="Mapa de Consciência · Dr. David R. Hawkins">
           <p className="mb-3">O protocolo move sua frequência operacional do território da <span className="text-foreground font-semibold">Prostração e Desejo</span> (abaixo de 200 — o homem-massa) para o nível da <span className="text-gold font-semibold">Razão e Inteligência Estratégica</span> (400+).</p>
           <div className="rounded-xl border border-gold/20 overflow-hidden">
             {hawkinsLevels.map((l) => (
@@ -227,7 +227,7 @@ export default function Protocolo145Page() {
         </SectionCard>
 
         {/* 5 — HACK SUBLIMINAL */}
-        <SectionCard icon={<Moon className="h-4 w-4" />} title="5. Hack Subliminal" subtitle="Reprogramação durante o sono · ondas Delta/Teta">
+        <SectionCard id="subliminal" icon={<Moon className="h-4 w-4" />} title="5. Hack Subliminal" subtitle="Reprogramação durante o sono · ondas Delta/Teta">
           <p>Entre 22:00 e 02:00 o cérebro entra em <span className="text-foreground font-semibold">ondas Delta</span> (deep sleep) — janela natural de consolidação de memória implícita. Antes de dormir, sintonize ondas <span className="text-foreground font-semibold">Teta (4–8 Hz)</span> por 20 min para induzir hipnagogia.</p>
           <p>Execução:</p>
           <ul className="list-disc list-inside space-y-1 text-xs">
@@ -239,17 +239,32 @@ export default function Protocolo145Page() {
         </SectionCard>
 
         {/* 6 — 5 DIAS */}
-        <SectionCard icon={<CalendarDays className="h-4 w-4" />} title="6. Guia de Execução · 5 Dias" subtitle="Segunda a Sexta — desinflamação + acuidade">
+        <SectionCard id="execucao" icon={<CalendarDays className="h-4 w-4" />} title="6. Guia de Execução · 5 Dias" subtitle="Segunda a Sexta — desinflamação + acuidade">
           <div className="space-y-2">
-            {fiveDays.map((d, i) => (
-              <div key={d.day} className="rounded-lg border border-border bg-muted/30 p-3">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="h-6 w-6 rounded-full bg-gold text-black text-xs font-bold flex items-center justify-center">{i + 1}</span>
-                  <p className="text-sm font-semibold text-foreground">{d.day} · {d.title}</p>
+            {fiveDays.map((d, i) => {
+              const done = progress.days[i];
+              return (
+                <div key={d.day} className={`rounded-lg border p-3 transition-colors ${done ? "border-gold/60 bg-gold/10" : "border-border bg-muted/30"}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={`h-6 w-6 rounded-full text-xs font-bold flex items-center justify-center ${done ? "bg-gold text-black" : "bg-muted text-foreground"}`}>
+                      {done ? <Check className="h-3.5 w-3.5" /> : i + 1}
+                    </span>
+                    <p className={`text-sm font-semibold ${done ? "text-gold" : "text-foreground"}`}>{d.day} · {d.title}</p>
+                  </div>
+                  <p className="text-xs mb-3">{d.body}</p>
+                  <Button
+                    size="sm"
+                    variant={done ? "outline" : "default"}
+                    onClick={() => toggleDay(i)}
+                    className={done
+                      ? "w-full border-gold/60 text-gold hover:bg-gold/10"
+                      : "w-full bg-gold hover:bg-gold/90 text-black font-semibold"}
+                  >
+                    {done ? "✓ Dia concluído · desfazer" : "Marcar dia concluído"}
+                  </Button>
                 </div>
-                <p className="text-xs">{d.body}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </SectionCard>
 
