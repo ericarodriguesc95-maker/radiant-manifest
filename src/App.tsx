@@ -42,6 +42,7 @@ import ModuloElitePage from "@/pages/ModuloElitePage";
 import AdminBibliotecaElitePage from "@/pages/AdminBibliotecaElitePage";
 import SugestoesPage from "@/pages/SugestoesPage";
 import IdentidadeInabalavelPage from "@/pages/IdentidadeInabalavelPage";
+import Protocolo145Page from "@/pages/Protocolo145Page";
 import AdminSugestoesPage from "@/pages/AdminSugestoesPage";
 import LandingPage from "@/pages/LandingPage";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -133,6 +134,7 @@ const AppRoutes = () => (
       <Route path="/jornada-elite" element={<ErrorBoundary><JornadaElitePage /></ErrorBoundary>} />
       <Route path="/jornada-elite/modulo/:levelId/:moduleId" element={<ErrorBoundary><ModuloElitePage /></ErrorBoundary>} />
       <Route path="/identidade-inabalavel" element={<ErrorBoundary><IdentidadeInabalavelPage /></ErrorBoundary>} />
+      <Route path="/protocolo-14-5" element={<ErrorBoundary><Protocolo145Page /></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>
