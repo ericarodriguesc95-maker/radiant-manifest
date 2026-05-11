@@ -1,7 +1,28 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Zap, Clock, Sunrise, ShieldOff, TrendingUp, Moon, CalendarDays, Flame, Brain, Target } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowLeft, Zap, Clock, Sunrise, ShieldOff, TrendingUp, Moon, CalendarDays, Flame, Brain, Target, Check, RotateCcw } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
+const STORAGE_KEY = "protocolo-14-5:progress";
+const SECTION_IDS = ["tese", "codigo", "firewall", "hawkins", "subliminal", "execucao", "cta"] as const;
+type SectionId = typeof SECTION_IDS[number];
+type Progress = { days: boolean[]; lastSection: SectionId; updatedAt: string };
+
+function loadProgress(): Progress {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const p = JSON.parse(raw);
+      if (Array.isArray(p.days) && p.days.length === 5) return p;
+    }
+  } catch {}
+  return { days: [false, false, false, false, false], lastSection: "tese", updatedAt: new Date().toISOString() };
+}
+function saveProgress(p: Progress) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch {}
+}
 
 const hawkinsLevels = [
   { range: "700+", name: "Iluminação", color: "from-gold to-yellow-200", low: false },
@@ -28,9 +49,9 @@ const fiveDays = [
   { day: "Sexta", title: "Soberania Operacional", body: "Você opera em estado de fluxo prolongado. Identidade de alta performance instalada. O protocolo virou padrão." },
 ];
 
-function SectionCard({ icon, title, subtitle, children }: { icon: React.ReactNode; title: string; subtitle?: string; children: React.ReactNode }) {
+function SectionCard({ id, icon, title, subtitle, children }: { id?: string; icon: React.ReactNode; title: string; subtitle?: string; children: React.ReactNode }) {
   return (
-    <Card className="border-gold/20 bg-gradient-to-br from-background to-background/60 backdrop-blur">
+    <Card id={id} data-section={id} className="border-gold/20 bg-gradient-to-br from-background to-background/60 backdrop-blur scroll-mt-24">
       <CardHeader className="pb-3">
         <div className="flex items-center gap-2">
           <div className="h-9 w-9 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center text-gold">
@@ -51,6 +72,67 @@ function SectionCard({ icon, title, subtitle, children }: { icon: React.ReactNod
 
 export default function Protocolo145Page() {
   const navigate = useNavigate();
+  const [progress, setProgress] = useState<Progress>(() => loadProgress());
+  const [resumed, setResumed] = useState(false);
+
+  // Persist on change
+  useEffect(() => { saveProgress(progress); }, [progress]);
+
+  // Observe sections to update lastSection
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) {
+          const id = (visible.target as HTMLElement).dataset.section as SectionId | undefined;
+          if (id && SECTION_IDS.includes(id)) {
+            setProgress((p) => (p.lastSection === id ? p : { ...p, lastSection: id, updatedAt: new Date().toISOString() }));
+          }
+        }
+      },
+      { rootMargin: "-30% 0px -50% 0px", threshold: [0, 0.25, 0.5, 1] }
+    );
+    SECTION_IDS.forEach((id) => {
+      const el = document.querySelector(`[data-section="${id}"]`);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  // Offer to resume to last section on first mount
+  useEffect(() => {
+    if (resumed) return;
+    const saved = loadProgress();
+    if (saved.lastSection && saved.lastSection !== "tese") {
+      const el = document.querySelector(`[data-section="${saved.lastSection}"]`);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          toast.info("Retomando de onde você parou ✦", { duration: 2200 });
+        }, 250);
+      }
+    }
+    setResumed(true);
+  }, [resumed]);
+
+  const completedCount = progress.days.filter(Boolean).length;
+  const percent = Math.round((completedCount / 5) * 100);
+
+  const toggleDay = (i: number) => {
+    setProgress((p) => {
+      const days = [...p.days];
+      days[i] = !days[i];
+      const now = new Date().toISOString();
+      if (days[i]) toast.success(`Dia ${i + 1} concluído ✓`, { description: "Reset registrado." });
+      else toast(`Dia ${i + 1} desmarcado`);
+      return { ...p, days, updatedAt: now };
+    });
+  };
+
+  const resetProgress = () => {
+    setProgress({ days: [false, false, false, false, false], lastSection: "tese", updatedAt: new Date().toISOString() });
+    toast("Progresso reiniciado", { description: "Pronta para um novo ciclo." });
+  };
 
   return (
     <div className="min-h-screen pb-24 pt-6 px-4 max-w-2xl mx-auto">
@@ -59,7 +141,7 @@ export default function Protocolo145Page() {
       </button>
 
       {/* HERO */}
-      <div className="relative overflow-hidden rounded-2xl border border-gold/30 bg-gradient-to-br from-black via-zinc-950 to-black p-6 mb-6">
+      <div className="relative overflow-hidden rounded-2xl border border-gold/30 bg-gradient-to-br from-black via-zinc-950 to-black p-6 mb-4">
         <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-gold/10 blur-3xl" aria-hidden />
         <div className="relative">
           <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.2em] text-gold border border-gold/40 rounded-full px-2.5 py-1 mb-3">
@@ -73,16 +155,33 @@ export default function Protocolo145Page() {
         </div>
       </div>
 
+      {/* PROGRESSO */}
+      <div className="rounded-2xl border border-gold/30 bg-background/60 backdrop-blur p-4 mb-6">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs uppercase tracking-[0.18em] text-gold font-semibold">Seu progresso · 5 dias</p>
+          <button onClick={resetProgress} className="text-[10px] uppercase tracking-wider text-muted-foreground hover:text-foreground flex items-center gap-1">
+            <RotateCcw className="h-3 w-3" /> Reiniciar
+          </button>
+        </div>
+        <div className="h-2 w-full rounded-full bg-muted/40 overflow-hidden mb-3">
+          <div className="h-full bg-gold transition-all duration-500" style={{ width: `${percent}%` }} />
+        </div>
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-muted-foreground">{completedCount}/5 dias · {percent}%</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Salvo localmente</p>
+        </div>
+      </div>
+
       <div className="space-y-5">
         {/* 1 — TESE */}
-        <SectionCard icon={<Brain className="h-4 w-4" />} title="1. A Tese do Bio-Hack" subtitle="O corpo é um sistema otimizável">
+        <SectionCard id="tese" icon={<Brain className="h-4 w-4" />} title="1. A Tese do Bio-Hack" subtitle="O corpo é um sistema otimizável">
           <p>Seu organismo não é frágil — é <span className="text-foreground font-semibold">programável</span>. Cada caloria vazia, cada scroll infinito, cada estímulo de dopamina barata acumula <span className="text-foreground font-semibold">lixo sistêmico</span> que consome largura de banda do córtex pré-frontal.</p>
           <p>O Protocolo 14.5 não é dieta nem rotina motivacional. É uma <span className="text-foreground font-semibold">desfragmentação operacional</span>: remover o ruído metabólico e digital para liberar o processamento cerebral que sustenta foco, clareza e decisão estratégica.</p>
           <p className="text-xs text-foreground/70">Resultado mensurável: ↑ BDNF · ↑ sensibilidade à dopamina · ↓ inflamação sistêmica · ↑ tempo em estado de fluxo.</p>
         </SectionCard>
 
         {/* 2 — CÓDIGO 14.5 */}
-        <SectionCard icon={<Target className="h-4 w-4" />} title="2. O Código 14.5" subtitle="As duas variáveis fundadoras">
+        <SectionCard id="codigo" icon={<Target className="h-4 w-4" />} title="2. O Código 14.5" subtitle="As duas variáveis fundadoras">
           <div className="rounded-xl border border-gold/20 bg-gold/5 p-4 space-y-1">
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-gold" />
@@ -100,14 +199,14 @@ export default function Protocolo145Page() {
         </SectionCard>
 
         {/* 3 — FIREWALL */}
-        <SectionCard icon={<ShieldOff className="h-4 w-4" />} title="3. O Firewall de Atenção" subtitle="Bloqueio total · Instagram · TikTok · Facebook">
+        <SectionCard id="firewall" icon={<ShieldOff className="h-4 w-4" />} title="3. O Firewall de Atenção" subtitle="Bloqueio total · Instagram · TikTok · Facebook">
           <p>Redes sociais são <span className="text-foreground font-semibold">máquinas de regulação negativa</span> de receptores D2. Cada deslize é uma microdose de dopamina que rebaixa o limiar — tarefas reais passam a parecer entediantes.</p>
           <p>Ao cortar o estímulo por <span className="text-foreground font-semibold">5 dias completos</span>, o cérebro ressensibiliza os receptores. A procrastinação não é fraqueza de caráter: é química. Remova o input, e a vontade de executar volta sozinha.</p>
           <p className="text-xs text-foreground/70">Tática: desinstale os apps do celular. Use bloqueador (One Sec, Opal, Screen Zen). Sem exceção, sem "só 5 minutos".</p>
         </SectionCard>
 
         {/* 4 — HAWKINS */}
-        <SectionCard icon={<TrendingUp className="h-4 w-4" />} title="4. A Escala de Ascensão" subtitle="Mapa de Consciência · Dr. David R. Hawkins">
+        <SectionCard id="hawkins" icon={<TrendingUp className="h-4 w-4" />} title="4. A Escala de Ascensão" subtitle="Mapa de Consciência · Dr. David R. Hawkins">
           <p className="mb-3">O protocolo move sua frequência operacional do território da <span className="text-foreground font-semibold">Prostração e Desejo</span> (abaixo de 200 — o homem-massa) para o nível da <span className="text-gold font-semibold">Razão e Inteligência Estratégica</span> (400+).</p>
           <div className="rounded-xl border border-gold/20 overflow-hidden">
             {hawkinsLevels.map((l) => (
@@ -128,7 +227,7 @@ export default function Protocolo145Page() {
         </SectionCard>
 
         {/* 5 — HACK SUBLIMINAL */}
-        <SectionCard icon={<Moon className="h-4 w-4" />} title="5. Hack Subliminal" subtitle="Reprogramação durante o sono · ondas Delta/Teta">
+        <SectionCard id="subliminal" icon={<Moon className="h-4 w-4" />} title="5. Hack Subliminal" subtitle="Reprogramação durante o sono · ondas Delta/Teta">
           <p>Entre 22:00 e 02:00 o cérebro entra em <span className="text-foreground font-semibold">ondas Delta</span> (deep sleep) — janela natural de consolidação de memória implícita. Antes de dormir, sintonize ondas <span className="text-foreground font-semibold">Teta (4–8 Hz)</span> por 20 min para induzir hipnagogia.</p>
           <p>Execução:</p>
           <ul className="list-disc list-inside space-y-1 text-xs">
@@ -140,17 +239,32 @@ export default function Protocolo145Page() {
         </SectionCard>
 
         {/* 6 — 5 DIAS */}
-        <SectionCard icon={<CalendarDays className="h-4 w-4" />} title="6. Guia de Execução · 5 Dias" subtitle="Segunda a Sexta — desinflamação + acuidade">
+        <SectionCard id="execucao" icon={<CalendarDays className="h-4 w-4" />} title="6. Guia de Execução · 5 Dias" subtitle="Segunda a Sexta — desinflamação + acuidade">
           <div className="space-y-2">
-            {fiveDays.map((d, i) => (
-              <div key={d.day} className="rounded-lg border border-border bg-muted/30 p-3">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="h-6 w-6 rounded-full bg-gold text-black text-xs font-bold flex items-center justify-center">{i + 1}</span>
-                  <p className="text-sm font-semibold text-foreground">{d.day} · {d.title}</p>
+            {fiveDays.map((d, i) => {
+              const done = progress.days[i];
+              return (
+                <div key={d.day} className={`rounded-lg border p-3 transition-colors ${done ? "border-gold/60 bg-gold/10" : "border-border bg-muted/30"}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={`h-6 w-6 rounded-full text-xs font-bold flex items-center justify-center ${done ? "bg-gold text-black" : "bg-muted text-foreground"}`}>
+                      {done ? <Check className="h-3.5 w-3.5" /> : i + 1}
+                    </span>
+                    <p className={`text-sm font-semibold ${done ? "text-gold" : "text-foreground"}`}>{d.day} · {d.title}</p>
+                  </div>
+                  <p className="text-xs mb-3">{d.body}</p>
+                  <Button
+                    size="sm"
+                    variant={done ? "outline" : "default"}
+                    onClick={() => toggleDay(i)}
+                    className={done
+                      ? "w-full border-gold/60 text-gold hover:bg-gold/10"
+                      : "w-full bg-gold hover:bg-gold/90 text-black font-semibold"}
+                  >
+                    {done ? "✓ Dia concluído · desfazer" : "Marcar dia concluído"}
+                  </Button>
                 </div>
-                <p className="text-xs">{d.body}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </SectionCard>
 
