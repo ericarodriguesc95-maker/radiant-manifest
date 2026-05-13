@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.send-scheduled-push]
 verify_jwt = false
+
+[functions.protocolo-145-ai]
+verify_jwt = false

@@ -77,24 +77,7 @@ export default function AltaPerformancePage() {
       </div>
 
       <div className="space-y-6">
-        {/* Protocolo 14.5 — destaque */}
-        <button
-          onClick={() => navigate("/protocolo-14-5")}
-          className="w-full text-left relative overflow-hidden rounded-2xl border border-gold/40 bg-gradient-to-br from-black via-zinc-950 to-black p-5 hover:border-gold transition-colors group"
-        >
-          <div className="absolute -top-8 -right-8 h-32 w-32 rounded-full bg-gold/15 blur-3xl" aria-hidden />
-          <div className="relative flex items-center gap-4">
-            <div className="h-12 w-12 rounded-xl bg-gold/15 border border-gold/40 flex items-center justify-center">
-              <Zap className="h-6 w-6 text-gold" />
-            </div>
-            <div className="flex-1">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-gold mb-0.5">Novo · Biohacking</p>
-              <p className="font-display font-bold text-foreground">Protocolo 14.5 — Reset Bio-Hacker</p>
-              <p className="text-xs text-muted-foreground">5 dias para sair da dopamina barata e operar acima de 400.</p>
-            </div>
-            <ExternalLink className="h-4 w-4 text-gold opacity-70 group-hover:opacity-100" />
-          </div>
-        </button>
+        {/* Protocolo 14.5 movido para a Home */}
 
         {/* Admin-added content */}
         {groupedAdmin.map(([category, items]) => (
