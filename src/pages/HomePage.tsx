@@ -96,6 +96,7 @@ const HomePage = () => {
     { icon: Target, label: "Metas &\nManifestação", to: "/metas", gradient: "from-rose-900/40 to-rose-800/20" },
     { icon: Heart, label: "Destravar\nFeminino", to: "/jornada", gradient: "from-emerald-900/40 to-emerald-800/20" },
     { icon: Crown, label: "Identidade\nInabalável", to: "/identidade-inabalavel", gradient: "from-gold/30 to-amber-900/20" },
+    { icon: Flame, label: "Protocolo\n14.5 · Reset", to: "/protocolo-14-5", gradient: "from-zinc-900/60 to-amber-950/30" },
   ];
 
   return (
