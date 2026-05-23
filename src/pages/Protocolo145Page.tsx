@@ -115,6 +115,67 @@ const jejunsTipos = [
   { h: "24h", nome: "OMAD / 24h", uso: "Reset metabólico mensal. Apenas com base sólida e eletrólitos.", cor: "border-zinc-600 bg-zinc-900/40" },
 ];
 
+const fastingMeta: Record<FastingWindow, {
+  label: string;
+  short: string;
+  jejumTask: string;
+  pitch: string;
+  tips: string[]; // dia 1..5
+}> = {
+  "14h": {
+    label: "14h · Janela Glow Up",
+    short: "14h",
+    jejumTask: "Janela 14h fechada (ex.: 18:40 → 08:40)",
+    pitch: "Base do protocolo. Estabiliza insulina e ativa autofagia leve.",
+    tips: [
+      "Hoje o foco é só fechar a janela. Não force, hidrate (3L + sal rosa).",
+      "Quebre o jejum com proteína + gordura boa — evita pico de fome às 11h.",
+      "Janela 14h + café preto pela manhã = clareza extra para o deep work.",
+      "Repita a mesma janela. Constância > intensidade nesta fase.",
+      "Mantenha 14h durante o fim de semana — não perca o platô conquistado.",
+    ],
+  },
+  "16h": {
+    label: "16h · 16:8 clássico",
+    short: "16h",
+    jejumTask: "Janela 16h fechada (ex.: 20:00 → 12:00)",
+    pitch: "Autofagia consistente, queima de gordura visceral.",
+    tips: [
+      "Adiar 2h o café da manhã. Beba água com limão e sal — corta fissura.",
+      "Treino em jejum leve (caminhada/força) acelera lipólise nesta janela.",
+      "Comer dentro de 8h: 2 refeições densas com 30–40g proteína cada.",
+      "Cuidado com o pico de fome falsa às 11h: é hábito, não fome real.",
+      "16:8 já é hábito ao final da semana — você acabou de subir um nível.",
+    ],
+  },
+  "18h": {
+    label: "18h · Avançado",
+    short: "18h",
+    jejumTask: "Janela 18h fechada (ex.: 20:00 → 14:00)",
+    pitch: "Cetose leve, picos de BDNF, foco intenso para execução.",
+    tips: [
+      "Sintoma comum: névoa leve nas primeiras 24h. Eletrólitos resolvem.",
+      "Pico de BDNF entre 16–18h de jejum: agende deep work mais difícil aí.",
+      "Quebre o jejum com proteína primeiro, carbo só depois — evita sonolência.",
+      "Magnésio 400mg + potássio antes de dormir = sono profundo mesmo em jejum.",
+      "Mantenha 18h só nos dias de alta demanda cognitiva. Não é diário.",
+    ],
+  },
+  "24h": {
+    label: "24h · OMAD / Reset",
+    short: "24h",
+    jejumTask: "Janela 24h fechada (OMAD · 1 refeição no dia)",
+    pitch: "Reset metabólico avançado. Só com base sólida e eletrólitos.",
+    tips: [
+      "Dia mais duro. Hidratação + sal rosa a cada 3h. Sem treino pesado.",
+      "Autofagia em pico: o corpo limpa células danificadas. Foco mental sobe.",
+      "Refeição única densa: 600–800 kcal · proteína alta · vegetais · gordura boa.",
+      "Não estenda além de 24h sem orientação. Voltar para 16h amanhã.",
+      "Sente energia limpa? É o reset funcionando. Documente no diário.",
+    ],
+  },
+};
+
 type DayTask = { id: string; label: string };
 const fiveDays: { day: string; title: string; body: string; tasks: DayTask[] }[] = [
   {
