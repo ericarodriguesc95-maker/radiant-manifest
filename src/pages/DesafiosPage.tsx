@@ -621,15 +621,12 @@ async function fetchParticipantCount(challengeId: string): Promise<number> {
 }
 
 async function fetchAllParticipantCounts(challengeIds: string[]): Promise<Record<string, number>> {
-  const { data, error } = await supabase
-    .from("challenge_participants")
-    .select("challenge_id");
-  if (error || !data) return {};
+  const { data, error } = await (supabase as any).rpc("get_challenge_participant_counts");
   const counts: Record<string, number> = {};
   challengeIds.forEach(id => { counts[id] = 0; });
-  data.forEach(row => {
-    const id = row.challenge_id;
-    counts[id] = (counts[id] || 0) + 1;
+  if (error || !data) return counts;
+  (data as Array<{ challenge_id: string; count: number }>).forEach(row => {
+    counts[row.challenge_id] = Number(row.count) || 0;
   });
   return counts;
 }
