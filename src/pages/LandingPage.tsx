@@ -8,76 +8,76 @@ const modules = [
   {
     icon: "🎯",
     title: "Metas SMART",
-    desc: "Defina, decomponha e acompanhe suas metas com framework científico. Submetas, passos práticos, prazos e progresso em tempo real.",
+    desc: "Saia do 'vou tentar' para o 'está feito'. Defina, decomponha e acompanhe suas metas com framework científico. Submetas com prazo, progresso em tempo real e a dopamina real de cada conquista marcada. Porque meta sem método é só desejo.",
     tags: ["SMART", "Submetas", "Progresso"],
   },
   {
     icon: "✨",
     title: "Manifestação Diária",
-    desc: "Ritual matinal, conversa com o Eu Superior, frequências de cura, termômetro vibracional (Escala de Hawkins) e diário de manifestações escritas.",
+    desc: "Sua manhã nunca mais começa no automático. Ritual matinal estruturado, conversa com o Eu Superior, frequências de cura e termômetro vibracional pela Escala Hawkins. O dia que começa com intenção termina com resultado.",
     tags: ["Ritual", "Frequências Hz", "Escala Hawkins"],
   },
   {
     icon: "🧠",
     title: "Reprogramação Mental",
-    desc: "Meditações com frequências Hz, Ho'oponopono, PNL, neurociência, Lei da Atração com exercícios práticos.",
+    desc: "Silencia a síndrome da impostora de uma vez. Meditações com frequências Hz, PNL, neurociência e Lei da Atração com exercícios práticos. Porque o maior obstáculo entre você e seus objetivos mora na sua própria cabeça.",
     tags: ["PNL", "Neurociência", "Meditação Hz"],
   },
   {
     icon: "⚡",
     title: "Alta Performance",
-    desc: "Podcasts curados, canais YouTube de alta densidade, técnicas de estudo (Pomodoro, Feynman, Active Recall), cursos e hobbies de elite.",
+    desc: "Otimize como os grandes players fazem. Podcasts curados, canais YouTube de alta densidade, técnicas de estudo como Pomodoro, Feynman e Active Recall, cursos e hobbies de elite. Seu desenvolvimento intelectual em curadoria de quem já chegou lá.",
     tags: ["Podcasts", "Técnicas", "Cursos"],
   },
   {
     icon: "🤖",
     title: "IA Assistente Pessoal",
-    desc: "Sua parceira de gestão de tempo. Organiza sua agenda, cria rotinas e te lembra do que importa — por texto ou por voz.",
+    desc: "Sua parceira de gestão de tempo, disponível 24h. Organiza sua agenda, cria rotinas personalizadas e te lembra do que importa, por texto ou por voz. Não é um chatbot genérico. É uma assistente treinada para a sua rotina.",
     tags: ["Agenda", "Voz", "Rotinas"],
   },
   {
     icon: "🏆",
     title: "Desafios Progressivos",
-    desc: "De 7 a 90 dias. Despertar Mental, Corpo em Movimento, Elite Performance, Jornada Platina. Cada tarefa tem fundamentação científica.",
+    desc: "De 7 a 90 dias, com fundamentação científica em cada tarefa. Despertar Mental, Corpo em Movimento, Elite Performance, Jornada Platina. Cada desafio foi desenhado para criar momentum real, não motivação passageira.",
     tags: ["7 dias", "30 dias", "90 dias"],
   },
   {
     icon: "❤️",
     title: "Saúde & Fitness",
-    desc: "Perfil de saúde, gráfico de evolução de peso, dieta, treino, suplementos e medicações. Seu corpo como ativo.",
+    desc: "Seu corpo é seu ativo mais valioso. Perfil de saúde completo, gráfico de evolução, dieta, treino, suplementos e medicações integrados. Porque corpo bem cuidado é mente em alta performance.",
     tags: ["Gráficos", "Dieta", "Treino"],
   },
   {
     icon: "💰",
     title: "Gestão Financeira",
-    desc: "Controle de renda, despesas fixas e variáveis, saldo em tempo real e espaço para insights financeiros. Dinheiro que para de sumir.",
+    desc: "Dinheiro que para de sumir. Controle de renda, despesas fixas e variáveis, saldo em tempo real e espaço para insights financeiros. Porque prosperidade não é sorte, é gestão.",
     tags: ["Renda", "Despesas", "Metas"],
   },
   {
     icon: "👑",
-    title: "Girls Community — Rede Social Privada",
-    desc: "O diferencial que nenhum app tem. Uma rede social completa — posts, stories, @menções — exclusiva para mulheres dentro do ecossistema. Networking feminino real, ranking de streak, e um ambiente onde crescer juntas é o padrão.",
+    title: "Girls Community, Rede Social Privada",
+    desc: "O diferencial que nenhum app tem. Uma rede social completa (posts, stories, @menções) exclusiva para mulheres dentro do ecossistema. Networking feminino real, ranking de streak e um ambiente onde crescer juntas é o padrão. Você não precisa mais caminhar sozinha.",
     tags: ["Rede privada", "Ranking streak", "Networking", "Posts & Stories"],
   },
   {
     icon: "🌙",
     title: "IA do Sono & Eu Superior",
-    desc: "IA reguladora do sono com plano personalizado, IA do Eu Superior para conexão espiritual e IA de Finanças para decisões inteligentes.",
+    desc: "Recupere sua energia onde ela começa a se perder. IA reguladora do sono com plano personalizado, IA do Eu Superior para conexão espiritual e IA de Finanças para decisões inteligentes. Porque performance começa no descanso.",
     tags: ["Sono", "Eu Superior", "Finanças"],
   },
   {
     icon: "📖",
     title: "Bíblia em 365 Dias & Diário",
-    desc: "Cronograma personalizado de leitura bíblica em 1 ano + diário pessoal para insights, listas e reflexões com cores customizáveis.",
+    desc: "Nutra sua alma com a mesma intencionalidade que nutre seu corpo. Cronograma personalizado de leitura bíblica em 1 ano, diário pessoal para insights, listas e reflexões com cores customizáveis. Sua vida interior merece estrutura também.",
     tags: ["Bíblia", "Diário", "Espiritualidade"],
   },
 ];
 
 const testimonials = [
-  { name: "Membro da comunidade", text: "Ameeei demais principalmente a parte de performance gostei muito da dica de cursos, links e livros." },
-  { name: "Membro da comunidade", text: "Mais um dia de hábitos saudáveis concluídos! 💪🔥 6/6 hábitos!" },
-  { name: "Membro da comunidade", text: "Muito shoooooow 💚 Legal mesmo, mente de milhões 💚" },
-  { name: "Membro da comunidade", text: "Está muito legal 💚💚💚 Armei aquela parte das dicas do que assistir e de conteúdo. Muito show mesmo." },
+  { name: "Membro da Comunidade", text: "Amei demais, principalmente a parte de performance. As dicas de cursos, links e livros são ouro. Finalmente um lugar que cuida da minha mente e da minha carreira ao mesmo tempo." },
+  { name: "Membro da Comunidade", text: "Mais um dia de hábitos saudáveis concluídos! 6/6 hábitos! Nunca tinha conseguido isso antes de entrar no sistema." },
+  { name: "Membro da Comunidade", text: "Muito show. Legal mesmo. Mente de milhões, e agora eu sei o que isso significa na prática." },
+  { name: "Membro da Comunidade", text: "Armei aquela parte das dicas do que assistir e de conteúdo. Muito show mesmo. Parece que alguém finalmente entendeu o que eu precisava." },
 ];
 
 type PreviewKey = "home" | "metas" | "habitos" | "manifestacao" | "financas" | "saude" | "ciclo" | "biblia" | "comunidade" | "ia";
@@ -88,12 +88,12 @@ const previews: { key: PreviewKey; tab: string; icon: string; title: string; sub
     tab: "Home",
     icon: "👑",
     title: "Sua manhã começa em modo rainha",
-    subtitle: "Saudação personalizada, palavra do dia, afirmação, devocional e seu progresso visível.",
+    subtitle: "Saudação personalizada, palavra do dia, afirmação, devocional e seu progresso visível. Streak, hábitos e metas em uma tela só, porque você precisa ver o quanto já avançou para continuar avançando.",
     render: () => (
       <div className="space-y-3">
         <div className="rounded-xl p-4" style={{ background: "linear-gradient(145deg, hsl(43 72% 52% / 0.12), rgba(0,0,0,0.4))", border: "1px solid hsl(43 72% 52% / 0.25)" }}>
           <p className="text-[10px] tracking-[0.3em] uppercase mb-2" style={{ color: "hsl(43 72% 52%)" }}>Bom dia, rainha ✦</p>
-          <p className="text-base font-semibold">Hoje é dia de executar — não de tentar.</p>
+          <p className="text-base font-semibold">Hoje é dia de executar, não de tentar.</p>
         </div>
         <div className="grid grid-cols-3 gap-2">
           {[{l:"Streak",v:"42d",c:"🔥"},{l:"Hábitos",v:"5/6",c:"✅"},{l:"Metas",v:"73%",c:"🎯"}].map((s)=>(
@@ -117,7 +117,7 @@ const previews: { key: PreviewKey; tab: string; icon: string; title: string; sub
     tab: "Metas",
     icon: "🎯",
     title: "Metas SMART com submetas que dão dopamina",
-    subtitle: "Decomponha objetivos grandes em passos executáveis — e veja o progresso subir.",
+    subtitle: "Decomponha objetivos grandes em passos executáveis e veja o progresso subir.",
     render: () => (
       <div className="space-y-2.5">
         {[
@@ -144,7 +144,7 @@ const previews: { key: PreviewKey; tab: string; icon: string; title: string; sub
     key: "habitos",
     tab: "Hábitos",
     icon: "✅",
-    title: "Hábitos customizáveis + heat map de 30 dias",
+    title: "Hábitos customizáveis com heat map de 30 dias",
     subtitle: "Crie seus próprios hábitos, marque diariamente e veja a constância pintar a tela.",
     render: () => (
       <div className="space-y-3">
@@ -189,7 +189,7 @@ const previews: { key: PreviewKey; tab: string; icon: string; title: string; sub
             </button>
           ))}
         </div>
-        <p className="text-[11px] italic" style={{ color: "rgba(255,255,255,0.55)" }}>"Eu sou o canal pelo qual a abundância flui." — diário de hoje</p>
+        <p className="text-[11px] italic" style={{ color: "rgba(255,255,255,0.55)" }}>"Eu sou o canal pelo qual a abundância flui." (diário de hoje)</p>
       </div>
     ),
   },
@@ -197,7 +197,7 @@ const previews: { key: PreviewKey; tab: string; icon: string; title: string; sub
     key: "financas",
     tab: "Finanças",
     icon: "💰",
-    title: "Controle financeiro + Consultora IA comportamental",
+    title: "Controle financeiro com Consultora IA comportamental",
     subtitle: "Renda, despesas fixas, variáveis, cartão e poupança. Com IA que entende psicologia do dinheiro.",
     render: () => (
       <div className="space-y-2.5">
@@ -257,7 +257,7 @@ const previews: { key: PreviewKey; tab: string; icon: string; title: string; sub
         <div className="rounded-xl p-4 text-center" style={{ background: "linear-gradient(145deg, hsl(340 70% 30% / 0.3), hsl(43 72% 52% / 0.08))", border: "1px solid hsl(340 60% 50% / 0.2)" }}>
           <p className="text-[10px] uppercase tracking-[0.25em] mb-2" style={{ color: "hsl(340 60% 75%)" }}>Fase atual</p>
           <p className="text-2xl font-bold">🌷 Folicular</p>
-          <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.65)" }}>Dia 8 do ciclo · Energia alta — bom para criar e socializar</p>
+          <p className="text-xs mt-1" style={{ color: "rgba(255,255,255,0.65)" }}>Dia 8 do ciclo · Energia alta, bom para criar e socializar</p>
         </div>
         <div className="grid grid-cols-4 gap-1.5">
           {[{n:"Mens.",a:false},{n:"Folic.",a:true},{n:"Ovul.",a:false},{n:"Lútea",a:false}].map((p)=>(
@@ -294,7 +294,7 @@ const previews: { key: PreviewKey; tab: string; icon: string; title: string; sub
     key: "comunidade",
     tab: "Comunidade",
     icon: "💬",
-    title: "Feed Elite + Stories + Direct Messages",
+    title: "Feed Elite com Stories e Direct Messages",
     subtitle: "Conecte-se com mulheres que falam a língua do sucesso. Sem julgamento.",
     render: () => (
       <div className="space-y-2.5">
@@ -318,7 +318,7 @@ const previews: { key: PreviewKey; tab: string; icon: string; title: string; sub
     key: "ia",
     tab: "Assistente IA",
     icon: "🤖",
-    title: "Sua mentora 24/7 — voz e texto em pt-BR",
+    title: "Sua mentora 24/7 em voz e texto em pt-BR",
     subtitle: "Pergunte sobre carreira, finanças, saúde, espiritualidade. Resposta personalizada.",
     render: () => (
       <div className="space-y-2">
@@ -329,11 +329,26 @@ const previews: { key: PreviewKey; tab: string; icon: string; title: string; sub
           Como negociar um aumento sem parecer arrogante?
         </div>
         <div className="rounded-2xl rounded-bl-sm px-3 py-2 text-[11px] max-w-[90%]" style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
-          Ótima pergunta. <strong>Negociação não é confronto, é apresentação de valor.</strong> Liste 3 entregas mensuráveis dos últimos 6 meses, traga benchmarks de mercado e abra com dados — não com pedido. Quer que eu monte o roteiro?
+          Ótima pergunta. <strong>Negociação não é confronto, é apresentação de valor.</strong> Liste 3 entregas mensuráveis dos últimos 6 meses, traga benchmarks de mercado e abra com dados, não com pedido. Quer que eu monte o roteiro?
         </div>
       </div>
     ),
   },
+];
+
+const faqItems = [
+  { q: "O que são as Metas SMART e como funcionam aqui?", a: "Metas SMART é um framework científico que transforma objetivos vagos em planos executáveis: Específico, Mensurável, Atingível, Relevante e Temporal. Dentro do Gloow Up Club, você define sua meta, cria submetas com prazos, acompanha o progresso visualmente e recebe lembretes. É o fim do 'vou tentar'." },
+  { q: "O que é a Reprogramação Mental?", a: "É o módulo que trabalha o que nenhum planner resolve: sua mente. Com meditações guiadas em frequências Hz, técnicas de PNL, neurociência aplicada e exercícios da Lei da Atração, você desmonta padrões que te sabotam e instala novos programas mentais, de forma prática, não teórica." },
+  { q: "Como funciona a Girls Community?", a: "É uma rede social privada dentro do ecossistema, exclusiva para membros. Você posta, vê stories, faz @menções, compartilha conquistas e se conecta com mulheres que falam a sua língua. Não é um grupo de WhatsApp. É um espaço estruturado para networking feminino real." },
+  { q: "O que tem na Alta Performance?", a: "Podcasts curados por tema, canais YouTube de alta densidade de valor, técnicas de estudo como Pomodoro, Método Feynman e Active Recall, cursos e hobbies selecionados. Tudo que os grandes players usam para continuar crescendo, em um lugar só." },
+  { q: "Funciona como app no celular?", a: "Sim. Você instala como PWA (Progressive Web App) direto no celular, sem precisar da App Store ou Google Play. Acessa como site no computador e como app no celular, com a mesma conta." },
+  { q: "Tem assistente de IA?", a: "Sim, são múltiplos assistentes especializados: IA Assistente Pessoal para agenda e rotina, IA do Sono para regulação do descanso, IA do Eu Superior para conexão espiritual e IA de Finanças para decisões financeiras inteligentes. Cada um com foco e contexto específico." },
+  { q: "O que são os Desafios Progressivos?", a: "São jornadas estruturadas de 7, 30 ou 90 dias com tarefas diárias fundamentadas em ciência. Os programas disponíveis são: Despertar Mental, Corpo em Movimento, Elite Performance e Jornada Platina. Cada tarefa tem o 'porquê' científico explicado, porque entender o mecanismo aumenta a adesão." },
+  { q: "Tem leitura da Bíblia?", a: "Sim. O módulo Bíblia em 365 Dias oferece um cronograma personalizado de leitura completa em um ano, com diário integrado para insights, listas e reflexões com cores customizáveis." },
+  { q: "Como recebo notificações?", a: "Após instalar o app no celular, você habilita as notificações push e recebe lembretes personalizados conforme seus hábitos, desafios e agenda configurada." },
+  { q: "Quanto custa e como pago?", a: "R$ 27,90 em pagamento único, 12 meses de acesso completo. Você também pode parcelar em até 6x de R$ 5,24 no cartão. Pagamento seguro via Kiwify." },
+  { q: "Posso cancelar?", a: "Como o plano é anual com pagamento único, o acesso fica garantido pelos 12 meses contratados. Não há cobrança recorrente." },
+  { q: "Recebo atualizações sem pagar mais?", a: "Sim. Todas as atualizações de conteúdo e novas ferramentas lançadas durante o seu período de acesso estão incluídas sem custo adicional. É um dos maiores diferenciais do plano." },
 ];
 
 export default function LandingPage() {
@@ -342,7 +357,7 @@ export default function LandingPage() {
   useEffect(() => {
     document.title = "Gloow Up Club ✦ Ecossistema Feminino de Alta Performance";
     const meta = document.querySelector('meta[name="description"]');
-    const content = "Não é um app. É o seu sistema operacional. Para a mulher que faz tudo — e quer fazer ainda melhor. Plano anual com atualizações constantes.";
+    const content = "Você não tem falta de motivação. Você tem falta de sistema. O ecossistema feminino de alta performance que transforma intenção em execução.";
     if (meta) meta.setAttribute("content", content);
     else {
       const m = document.createElement("meta");
@@ -367,7 +382,7 @@ export default function LandingPage() {
           className="rounded-full px-5 py-2.5 text-sm font-medium border transition-all hover:scale-105"
           style={{ borderColor: "hsl(43 72% 52% / 0.3)", color: "#F5F5F5" }}
         >
-          Já sou uma rainha do Gloow Up Club e quero fazer meu login ✦
+          Já sou rainha do Gloow Up Club ✦
         </Link>
       </header>
 
@@ -381,31 +396,25 @@ export default function LandingPage() {
             </span>
           </div>
           <h2 className="text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight">
-            Não é um app.
+            Você não tem falta de motivação.
             <br />
-            É o seu{" "}
+            Você tem falta de{" "}
             <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>
-              sistema operacional.
+              sistema.
             </span>
           </h2>
           <p className="mt-6 text-lg italic" style={{ color: "rgba(255,255,255,0.7)", fontFamily: "Georgia, serif" }}>
-            Cansada de carregar o mundo nas costas e sentir que sua rotina é um caos silencioso?
+            Enquanto você tenta se organizar sozinha, outra mulher com os mesmos objetivos que os seus já está executando. A diferença não é talento. É estrutura.
           </p>
           <p className="mt-6 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
-            Você não precisa de mais uma lista de tarefas. Você precisa de <strong className="text-white">ordem</strong>. O Gloow Up Club é o fim da fragmentação mental: o ecossistema que transforma sua sobrecarga em uma <strong className="text-white">execução de elite</strong>.
+            Você já sabe o que quer. Já tentou mil métodos, comprou planner, instalou app de hábitos, assistiu talk motivacional às 23h. E na segunda-feira seguinte, estava no mesmo lugar.
           </p>
-          <p className="mt-6 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.65)" }}>
-            O mundo exige que você seja uma líder impecável, mantenha o corpo dos sonhos e a mente inabalável. Mas a verdade? Sem um sistema, você está apenas gastando energia. Onde estão seus planos de 5 anos? Sua saúde mental está em segundo plano?
+          <p className="mt-4 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.65)" }}>
+            Não é culpa sua. O problema nunca foi sua disciplina. Foi a ausência de um sistema que trabalha por você enquanto você vive.
           </p>
-          <p className="mt-6 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
-            Nós blindamos sua jornada com o que há de mais avançado em comportamento humano:
+          <p className="mt-4 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.85)" }}>
+            O Gloow Up Club é esse sistema.
           </p>
-          <ul className="mt-4 space-y-3 text-base" style={{ color: "rgba(255,255,255,0.75)" }}>
-            <li><span style={{ color: "hsl(43 72% 60%)" }}>✦</span> <strong className="text-white">Metas SMART:</strong> Saia do "vou tentar" para o "está feito" com submetas que geram dopamina real.</li>
-            <li><span style={{ color: "hsl(43 72% 60%)" }}>✦</span> <strong className="text-white">Reprogramação Mental:</strong> Use PNL e Neurociência para silenciar a síndrome da impostora.</li>
-            <li><span style={{ color: "hsl(43 72% 60%)" }}>✦</span> <strong className="text-white">Alta Performance:</strong> Otimize sua carreira com técnicas de gestão que os grandes players usam.</li>
-            <li><span style={{ color: "hsl(43 72% 60%)" }}>✦</span> <strong className="text-white">Girls Community:</strong> Pare de caminhar sozinha. Conecte-se com mulheres que falam a língua do sucesso.</li>
-          </ul>
 
           <div className="mt-10 flex flex-wrap gap-4">
             <a
@@ -419,7 +428,7 @@ export default function LandingPage() {
                 boxShadow: "0 10px 40px -10px hsl(43 72% 52% / 0.5)",
               }}
             >
-              CHEGA DE DESCULPAS. QUERO MEU COMANDO. ✦
+              QUERO MEU SISTEMA AGORA ✦
             </a>
             <a
               href="#modulos"
@@ -470,6 +479,101 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* AGITAÇÃO DA DOR */}
+      <section className="relative z-10 max-w-4xl mx-auto px-6 py-20">
+        <div className="text-center mb-12">
+          <p className="text-xs tracking-[0.3em] uppercase mb-4" style={{ color: "hsl(43 72% 52%)" }}>
+            Pare e respire
+          </p>
+          <h3 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Você reconhece esse{" "}
+            <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>
+              ciclo?
+            </span>
+          </h3>
+        </div>
+
+        <div className="space-y-6 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
+          <p>
+            Segunda-feira com energia total. Você planeja, anota, define metas. Quinta-feira o dia virou e nada saiu do papel. Domingo com aquela sensação de que a semana foi intensa, mas nada de importante avançou.
+          </p>
+          <p>
+            Seu potencial existe. Sua intenção é real. Mas sem estrutura, intenção vira culpa.
+          </p>
+
+          <div className="rounded-2xl p-6 border" style={{ background: "linear-gradient(145deg, rgba(30,22,8,0.5), rgba(12,12,12,0.6))", borderColor: "hsl(43 72% 52% / 0.2)" }}>
+            <p className="text-sm uppercase tracking-widest mb-3" style={{ color: "hsl(43 72% 52%)" }}>
+              As perguntas que você evita responder
+            </p>
+            <p style={{ color: "rgba(255,255,255,0.85)" }}>
+              Onde estão seus planos de 5 anos? Sua saúde mental está em primeiro lugar, ou sobra pra depois? Você está crescendo ou apenas sobrevivendo cada semana?
+            </p>
+          </div>
+
+          <div>
+            <p className="text-sm uppercase tracking-widest mb-3" style={{ color: "hsl(43 72% 52%)" }}>
+              O custo invisível da desorganização
+            </p>
+            <p>
+              Cada dia sem sistema é um dia que você gasta energia sem acumular resultado. Isso tem um preço. Não em dinheiro, mas em tempo. E tempo é a única coisa que você não recupera.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* SOLUÇÃO */}
+      <section className="relative z-10 max-w-5xl mx-auto px-6 py-20">
+        <div className="text-center mb-12">
+          <p className="text-xs tracking-[0.3em] uppercase mb-4" style={{ color: "hsl(43 72% 52%)" }}>
+            A solução
+          </p>
+          <h3 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Não é mais um app.
+            <br />
+            É o seu{" "}
+            <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>
+              sistema operacional pessoal.
+            </span>
+          </h3>
+          <p className="mt-6 text-lg italic max-w-3xl mx-auto" style={{ color: "rgba(255,255,255,0.65)", fontFamily: "Georgia, serif" }}>
+            Enquanto outros apps resolvem uma coisa, o Gloow Up Club cuida de tudo que importa: integrado, conectado e disponível onde você estiver.
+          </p>
+        </div>
+
+        <div className="max-w-3xl mx-auto space-y-6 text-base leading-relaxed mb-12" style={{ color: "rgba(255,255,255,0.75)" }}>
+          <p>
+            Sua vida não funciona em compartimentos. Sua saúde afeta sua produtividade. Sua mente afeta suas finanças. Seus hábitos noturnos determinam sua manhã. Tudo está conectado, e seu sistema também precisa ser.
+          </p>
+          <p>
+            O Gloow Up Club une o que os grandes players separam: neurociência aplicada, gestão de metas, saúde, finanças, espiritualidade e comunidade real, numa única plataforma construída para a mulher inteira.
+          </p>
+        </div>
+
+        {/* Comparison table */}
+        <div className="rounded-3xl p-6 md:p-8 border overflow-hidden" style={{ background: "linear-gradient(145deg, rgba(20,20,20,0.6), rgba(12,12,12,0.8))", borderColor: "rgba(255,255,255,0.07)" }}>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-widest mb-4" style={{ color: "rgba(255,255,255,0.4)" }}>App comum</p>
+              <ul className="space-y-3 text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
+                <li>Rastreia um hábito</li>
+                <li>Te lembra de tarefas</li>
+                <li>Você usa sozinha</li>
+                <li>Motiva por 3 dias</li>
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-widest mb-4" style={{ color: "hsl(43 72% 52%)" }}>Gloow Up Club</p>
+              <ul className="space-y-3 text-sm font-semibold" style={{ color: "rgba(255,255,255,0.95)" }}>
+                <li>Transforma sua rotina completa</li>
+                <li>Organiza sua agenda com IA</li>
+                <li>Você cresce em comunidade</li>
+                <li>Cria sistema para o ano inteiro</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* MODULES */}
       <section id="modulos" className="relative z-10 max-w-7xl mx-auto px-6 py-20">
         <div className="text-center mb-14">
@@ -485,7 +589,7 @@ export default function LandingPage() {
             </span>
           </h3>
           <p className="mt-5 max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
-            Enquanto outros apps resolvem uma coisa, o Gloow Up Club cuida de tudo que importa — integrado, conectado e disponível onde você estiver.
+            Cada aba é uma área da sua vida sob seu comando.
           </p>
         </div>
 
@@ -543,14 +647,26 @@ export default function LandingPage() {
                 "{t.text}"
               </p>
               <p className="text-xs uppercase tracking-widest" style={{ color: "hsl(43 72% 52%)" }}>
-                — {t.name}
+                {t.name}
               </p>
             </div>
           ))}
         </div>
+
+        <div className="mt-14 text-center max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl font-semibold leading-snug" style={{ color: "rgba(255,255,255,0.9)" }}>
+            Elas não tinham mais tempo, mais dinheiro ou mais talento.
+            <br />
+            Tinham o{" "}
+            <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>
+              mesmo sistema
+            </span>{" "}
+            que você está prestes a ter.
+          </p>
+        </div>
       </section>
 
-      {/* INSIDE THE APP — INTERACTIVE PREVIEW */}
+      {/* INSIDE THE APP, INTERACTIVE PREVIEW */}
       <section id="por-dentro" className="relative z-10 max-w-7xl mx-auto px-6 py-20">
         <div className="text-center mb-12">
           <p className="text-xs tracking-[0.3em] uppercase mb-4" style={{ color: "hsl(43 72% 52%)" }}>
@@ -559,11 +675,11 @@ export default function LandingPage() {
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight">
             Cada aba é um pedaço da sua{" "}
             <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>
-              vida sob comando.
+              vida sob seu comando.
             </span>
           </h3>
           <p className="mt-5 max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
-            Toque em uma aba abaixo e veja exatamente como cada área do app funciona — sem precisar criar conta.
+            Explore como cada área do app funciona, sem precisar criar conta.
           </p>
         </div>
 
@@ -633,7 +749,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* PRICING - SINGLE PLAN */}
+      {/* PRICING */}
       <section id="planos" className="relative z-10 max-w-4xl mx-auto px-6 py-24">
         <div className="text-center mb-14">
           <p className="text-xs tracking-[0.3em] uppercase mb-4" style={{ color: "hsl(43 72% 52%)" }}>
@@ -646,7 +762,20 @@ export default function LandingPage() {
             </span>
           </h3>
           <p className="mt-5 max-w-xl mx-auto" style={{ color: "rgba(255,255,255,0.55)" }}>
-            Uma assinatura. Acesso completo aos 10+ módulos — como app no celular e como site no computador.
+            Uma assinatura. Acesso completo aos 10+ módulos, como app no celular e como site no computador.
+          </p>
+        </div>
+
+        {/* Ancoragem */}
+        <div className="mb-10 rounded-3xl p-7 border" style={{ background: "linear-gradient(145deg, rgba(20,20,20,0.6), rgba(12,12,12,0.8))", borderColor: "rgba(255,255,255,0.07)" }}>
+          <p className="text-xs uppercase tracking-widest mb-4" style={{ color: "hsl(43 72% 52%)" }}>
+            Pense bem
+          </p>
+          <p className="text-base leading-relaxed mb-4" style={{ color: "rgba(255,255,255,0.75)" }}>
+            Uma sessão de coaching custa R$ 300. Um planner premium custa R$ 150. Um app de meditação custa R$ 40 por mês. Um curso de finanças pessoais custa R$ 200.
+          </p>
+          <p className="text-base leading-relaxed font-semibold" style={{ color: "rgba(255,255,255,0.95)" }}>
+            O Gloow Up Club entrega tudo isso: integrado, atualizado e disponível onde você estiver.
           </p>
         </div>
 
@@ -682,18 +811,21 @@ export default function LandingPage() {
             <p className="mt-2 text-sm" style={{ color: "hsl(43 72% 52%)" }}>
               ou em até <strong>6x de R$ 5,24</strong> no cartão
             </p>
+            <p className="mt-4 text-sm italic" style={{ color: "rgba(255,255,255,0.7)" }}>
+              Menos de R$ 2,33 por mês para ter um sistema completo de alta performance.
+            </p>
           </div>
 
           <ul className="space-y-3 mb-10 max-w-md mx-auto">
             {[
               "Acesso completo aos 10+ módulos",
               "App no celular + site no computador",
-              "Girls Community — rede privada",
+              "Girls Community (rede privada exclusiva)",
               "IA Assistente, IA do Sono, IA do Eu Superior, IA de Finanças",
               "Reprogramação Mental + Alta Performance",
               "Desafios progressivos de 7 a 90 dias",
               "Saúde, Finanças, Bíblia 365 e Diário",
-              "Atualizações constantes — novos conteúdos e ferramentas",
+              "Atualizações constantes (novos conteúdos e ferramentas sem custo adicional)",
             ].map((item) => (
               <li key={item} className="flex items-start gap-3">
                 <Check className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: "hsl(43 72% 52%)" }} />
@@ -718,6 +850,13 @@ export default function LandingPage() {
 
           <p className="mt-6 text-center text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
             Pagamento seguro via Kiwify · Acesso liberado em até 5 minutos
+          </p>
+        </div>
+
+        {/* Urgência */}
+        <div className="mt-8 rounded-2xl p-5 border text-center" style={{ background: "hsl(43 72% 52% / 0.06)", borderColor: "hsl(43 72% 52% / 0.25)" }}>
+          <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.8)" }}>
+            O preço atual é de lançamento. Quando os próximos módulos forem lançados, o valor será reajustado. Quem entrar agora garante o acesso às atualizações sem pagar mais.
           </p>
         </div>
 
@@ -746,22 +885,7 @@ export default function LandingPage() {
         </div>
 
         <div className="space-y-3">
-          {[
-            { q: "O que são as Metas SMART e como funcionam aqui?", a: "Você define metas Específicas, Mensuráveis, Atingíveis, Relevantes e Temporais. Cada meta vira submetas e tarefas com progresso automático e dopamina a cada conquista." },
-            { q: "O que é a Reprogramação Mental?", a: "Mais de 60 exercícios baseados em PNL, neurociência, Lei da Atração, Ho'oponopono, meditações guiadas e frequências (432Hz, 528Hz) para silenciar a síndrome da impostora e instalar crenças de elite." },
-            { q: "Como funciona a Girls Community?", a: "Rede privada só para mulheres com feed estilo Instagram, salas temáticas, mensagens diretas, stories de 24h, comentários, curtidas e ranking de hábitos. Conexões reais e seguras." },
-            { q: "O que tem na Alta Performance?", a: "Pomodoro, técnica Feynman, podcasts e cursos curados, biblioteca elite e jornadas estruturadas para gestão de carreira de quem quer crescer rápido." },
-            { q: "Tem rastreador de Saúde e Fitness?", a: "Sim. Calculadora de proteína e água, registro de dieta com calorias, peso e evolução, exercícios, e o ciclo menstrual com previsões hormonais." },
-            { q: "Como funciona o módulo de Finanças?", a: "Quiz comportamental que identifica seu arquétipo financeiro, IA Financeira pessoal, controle de receitas/despesas por mês e plano de prosperidade." },
-            { q: "Funciona como app no celular?", a: "Sim. É um PWA (instala no iPhone e Android) e também temos o APK Android. No computador, abre como site completo." },
-            { q: "Tem assistente de IA?", a: "Quatro: IA Assistente Pessoal (alta performance), IA do Eu Superior (manifestação), IA do Sono e IA Financeira. Todas em português, com voz e texto." },
-            { q: "O que são os Desafios Progressivos?", a: "Jornadas de 7, 14, 30, 60 e 90 dias com check-ins diários, contador de participantes e medalhas. Hábito vira identidade." },
-            { q: "Tem leitura da Bíblia?", a: "Plano Bíblia 365 personalizado por dia, com estudo guiado por IA, anotações pessoais e histórico — combina espiritualidade com neurociência." },
-            { q: "Como recebo notificações?", a: "Push notifications no navegador e celular para devocional do dia, lembretes de hábitos, ciclo menstrual, mensagens diretas e novos conteúdos." },
-            { q: "Quanto custa e como pago?", a: "R$ 27,90 anual (ou 6x de R$ 5,24 no cartão). Pagamento único via Kiwify, acesso liberado em até 5 minutos. Inclui todas as atualizações de conteúdo." },
-            { q: "Posso cancelar?", a: "Sim, a qualquer momento. O acesso permanece ativo até o fim do período pago e você pode pedir reembolso em até 7 dias após a compra." },
-            { q: "Recebo atualizações sem pagar mais?", a: "Sim. Toda nova ferramenta, módulo ou conteúdo lançado durante seu plano anual já vem incluso, sem custo adicional." },
-          ].map((item, i) => (
+          {faqItems.map((item, i) => (
             <details
               key={i}
               className="group rounded-2xl border px-5 py-4 transition-all open:shadow-lg"
@@ -788,19 +912,51 @@ export default function LandingPage() {
             </details>
           ))}
         </div>
+      </section>
 
-        <div className="mt-10 text-center">
+      {/* CTA FINAL POR IDENTIDADE */}
+      <section className="relative z-10 max-w-4xl mx-auto px-6 py-24 text-center">
+        <h3 className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.1]">
+          Você é o tipo de mulher que vai continuar tentando,
+          <br />
+          ou que vai{" "}
+          <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>
+            começar a executar?
+          </span>
+        </h3>
+
+        <div className="mt-10 max-w-2xl mx-auto space-y-5 text-base leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
+          <p>
+            Existe uma versão sua que acorda com clareza, sabe exatamente o que está perseguindo, cuida do corpo com a mesma atenção que cuida da carreira, tem uma comunidade que cresce junto, e chega no fim do ano sabendo exatamente o quanto avançou.
+          </p>
+          <p className="font-semibold" style={{ color: "rgba(255,255,255,0.9)" }}>
+            Essa versão não aparece com mais força de vontade.
+          </p>
+          <p className="text-lg italic" style={{ color: "hsl(43 72% 60%)", fontFamily: "Georgia, serif" }}>
+            Ela aparece com o sistema certo.
+          </p>
+        </div>
+
+        <div className="mt-12">
           <a
-            href="#planos"
-            className="inline-block rounded-full px-7 py-3.5 text-sm font-semibold transition-all hover:scale-105"
+            href={KIWIFY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block rounded-full px-10 py-5 text-base font-bold uppercase tracking-wider transition-all hover:scale-105"
             style={{
-              background: "hsl(43 72% 52%)",
+              background: "linear-gradient(135deg, hsl(43 72% 60%), hsl(43 72% 45%))",
               color: "#0A0A0A",
-              boxShadow: "0 10px 30px -10px hsl(43 72% 52% / 0.5)",
+              boxShadow: "0 10px 40px -10px hsl(43 72% 52% / 0.6)",
             }}
           >
             Quero garantir meu acesso ✦
           </a>
+          <p className="mt-6 text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
+            Já é membro?{" "}
+            <Link to="/login" className="font-semibold hover:underline" style={{ color: "hsl(43 72% 60%)" }}>
+              Faça login →
+            </Link>
+          </p>
         </div>
       </section>
 
