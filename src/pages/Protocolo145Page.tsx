@@ -13,6 +13,40 @@ import Protocolo145Chat from "@/components/Protocolo145Chat";
 
 const STORAGE_KEY = "protocolo-14-5:progress:v3";
 const HISTORY_KEY = "protocolo-14-5:history:v1";
+const STREAK_KEY = "protocolo-14-5:streak:v1";
+
+type Streak = { current: number; best: number; lastActiveDate: string | null; bestScore: number };
+function loadStreak(): Streak {
+  try {
+    const raw = localStorage.getItem(STREAK_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      return {
+        current: Number(s.current) || 0,
+        best: Number(s.best) || 0,
+        lastActiveDate: s.lastActiveDate || null,
+        bestScore: Number(s.bestScore) || 0,
+      };
+    }
+  } catch {}
+  return { current: 0, best: 0, lastActiveDate: null, bestScore: 0 };
+}
+function saveStreak(s: Streak) {
+  try { localStorage.setItem(STREAK_KEY, JSON.stringify(s)); } catch {}
+}
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+function daysBetween(a: string, b: string) {
+  const da = new Date(a + "T00:00:00").getTime();
+  const db = new Date(b + "T00:00:00").getTime();
+  return Math.round((db - da) / 86_400_000);
+}
+function computeScore(daysDone: number, tasksDone: number) {
+  // 100 pts por dia concluído + 15 pts por hábito + bônus 250 ao fechar os 5 dias
+  return daysDone * 100 + tasksDone * 15 + (daysDone === 5 ? 250 : 0);
+}
 const SECTION_IDS = [
   "tese", "neurociencia", "codigo", "jejuns", "firewall",
   "hawkins", "maslow", "subliminal", "execucao", "diario", "historico", "ia"
