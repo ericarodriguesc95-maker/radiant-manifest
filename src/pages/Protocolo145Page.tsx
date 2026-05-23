@@ -13,6 +13,40 @@ import Protocolo145Chat from "@/components/Protocolo145Chat";
 
 const STORAGE_KEY = "protocolo-14-5:progress:v3";
 const HISTORY_KEY = "protocolo-14-5:history:v1";
+const STREAK_KEY = "protocolo-14-5:streak:v1";
+
+type Streak = { current: number; best: number; lastActiveDate: string | null; bestScore: number };
+function loadStreak(): Streak {
+  try {
+    const raw = localStorage.getItem(STREAK_KEY);
+    if (raw) {
+      const s = JSON.parse(raw);
+      return {
+        current: Number(s.current) || 0,
+        best: Number(s.best) || 0,
+        lastActiveDate: s.lastActiveDate || null,
+        bestScore: Number(s.bestScore) || 0,
+      };
+    }
+  } catch {}
+  return { current: 0, best: 0, lastActiveDate: null, bestScore: 0 };
+}
+function saveStreak(s: Streak) {
+  try { localStorage.setItem(STREAK_KEY, JSON.stringify(s)); } catch {}
+}
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+function daysBetween(a: string, b: string) {
+  const da = new Date(a + "T00:00:00").getTime();
+  const db = new Date(b + "T00:00:00").getTime();
+  return Math.round((db - da) / 86_400_000);
+}
+function computeScore(daysDone: number, tasksDone: number) {
+  // 100 pts por dia concluído + 15 pts por hábito + bônus 250 ao fechar os 5 dias
+  return daysDone * 100 + tasksDone * 15 + (daysDone === 5 ? 250 : 0);
+}
 const SECTION_IDS = [
   "tese", "neurociencia", "codigo", "jejuns", "firewall",
   "hawkins", "maslow", "subliminal", "execucao", "diario", "historico", "ia"
@@ -37,6 +71,7 @@ type HistoryRun = {
   completedAt: string;
   daysCompleted: number;
   totalTasksDone: number;
+  score?: number;
   notes: DayNotes;
   dayTasks: DayTasks;
   fastingWindow?: FastingWindow;
@@ -348,6 +383,7 @@ export default function Protocolo145Page() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState<Progress>(() => loadProgress());
   const [history, setHistory] = useState<HistoryRun[]>(() => loadHistory());
+  const [streak, setStreak] = useState<Streak>(() => loadStreak());
   const [resumed, setResumed] = useState(false);
   const [celebrated, setCelebrated] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -355,6 +391,25 @@ export default function Protocolo145Page() {
 
   useEffect(() => { saveProgress(progress); }, [progress]);
   useEffect(() => { saveHistory(history); }, [history]);
+  useEffect(() => { saveStreak(streak); }, [streak]);
+
+  // Marca atividade do dia → atualiza streak diário (consecutivo por dias do calendário)
+  const bumpStreak = () => {
+    setStreak((s) => {
+      const today = todayKey();
+      if (s.lastActiveDate === today) return s;
+      let nextCurrent = 1;
+      if (s.lastActiveDate) {
+        const diff = daysBetween(s.lastActiveDate, today);
+        if (diff === 1) nextCurrent = s.current + 1;
+        else if (diff === 0) return s;
+      }
+      const nextBest = Math.max(s.best, nextCurrent);
+      if (nextCurrent > 1) toast.success(`🔥 ${nextCurrent} dias seguidos no protocolo`);
+      return { ...s, current: nextCurrent, best: nextBest, lastActiveDate: today };
+    });
+  };
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -396,6 +451,14 @@ export default function Protocolo145Page() {
   const totalTasksDone = Object.values(progress.dayTasks).reduce(
     (acc, t) => acc + Object.values(t).filter(Boolean).length, 0
   );
+  const score = computeScore(completedCount, totalTasksDone);
+
+  // Atualiza recorde de pontuação do ciclo
+  useEffect(() => {
+    if (score > streak.bestScore) {
+      setStreak((s) => ({ ...s, bestScore: score }));
+    }
+  }, [score, streak.bestScore]);
 
   // Trigger celebration once all 5 days are completed
   useEffect(() => {
@@ -417,6 +480,7 @@ export default function Protocolo145Page() {
       else toast(`Dia ${i + 1} desmarcado`);
       return { ...p, days, updatedAt: now };
     });
+    bumpStreak();
   };
 
   const toggleTask = (dayIdx: number, taskId: string) => {
@@ -427,7 +491,9 @@ export default function Protocolo145Page() {
       dayTasks[dayIdx] = cur;
       return { ...p, dayTasks, updatedAt: new Date().toISOString() };
     });
+    bumpStreak();
   };
+
 
   const updateNote = (dayIdx: number, value: string) => {
     setProgress((p) => ({
@@ -455,6 +521,7 @@ export default function Protocolo145Page() {
       completedAt: new Date().toISOString(),
       daysCompleted: progress.days.filter(Boolean).length,
       totalTasksDone,
+      score,
       notes: progress.notes,
       dayTasks: progress.dayTasks,
       fastingWindow: progress.fastingWindow,
@@ -537,6 +604,24 @@ export default function Protocolo145Page() {
         <div className="flex items-center justify-between">
           <p className="text-xs text-muted-foreground">{completedCount}/5 dias · {percent}% · {totalTasksDone} hábitos</p>
           <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Início: {formatDate(progress.startedAt)}</p>
+        </div>
+
+        {/* STREAK + SCORE */}
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <div className="rounded-xl border border-gold/20 bg-black/40 p-3">
+            <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold/80">
+              <Flame className="h-3 w-3" /> Streak
+            </div>
+            <p className="mt-1 text-2xl font-display font-bold text-gold leading-none">{streak.current}<span className="text-xs text-muted-foreground font-normal ml-1">dias</span></p>
+            <p className="text-[10px] text-muted-foreground mt-1">Recorde: {streak.best} dias</p>
+          </div>
+          <div className="rounded-xl border border-gold/20 bg-black/40 p-3">
+            <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold/80">
+              <Trophy className="h-3 w-3" /> Pontuação do ciclo
+            </div>
+            <p className="mt-1 text-2xl font-display font-bold text-gold leading-none">{score}<span className="text-xs text-muted-foreground font-normal ml-1">pts</span></p>
+            <p className="text-[10px] text-muted-foreground mt-1">Recorde: {streak.bestScore} pts</p>
+          </div>
         </div>
       </div>
 
@@ -807,6 +892,7 @@ export default function Protocolo145Page() {
                           </p>
                           <p className="text-[10px] text-muted-foreground">
                             {run.daysCompleted}/5 dias · {run.totalTasksDone} hábitos
+                            {typeof run.score === "number" && <span className="ml-1.5 text-gold font-semibold">· {run.score} pts</span>}
                             {run.daysCompleted === 5 && <span className="ml-1.5 text-gold">· Completo ✦</span>}
                           </p>
                         </div>
