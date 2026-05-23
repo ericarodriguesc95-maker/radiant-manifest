@@ -315,7 +315,7 @@ export default function MentePoderosaPage() {
           </Button>
           <div className="flex-1">
             <h1 className="text-base font-display font-bold text-foreground flex items-center gap-2">
-              <Brain className="h-4 w-4 text-gold" /> Mente Poderosa
+              <Brain className="h-4 w-4 text-gold" /> Mente Infalível
             </h1>
             <p className="text-[10px] tracking-[0.2em] uppercase text-gold/70">
               IE · Psicologia · Neurociência · Neuromarketing
