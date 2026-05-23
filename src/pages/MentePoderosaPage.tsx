@@ -295,7 +295,7 @@ export default function MentePoderosaPage() {
   };
 
   const resetAll = () => {
-    if (!confirm("Apagar todo o progresso e histórico de Mente Poderosa?")) return;
+    if (!confirm("Apagar todo o progresso e histórico de Mente Infalível?")) return;
     setProgress({ completed: {}, xp: 0 });
     setHistory([]);
     try {
