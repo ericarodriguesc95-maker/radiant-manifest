@@ -429,8 +429,7 @@ export default function StepTracker() {
           </div>
         </CardContent>
       </Card>
-
-
+      <Card>
         <CardHeader>
           <CardTitle className="text-base">Últimos 7 dias</CardTitle>
           <CardDescription>Média: {weekAvg.toLocaleString("pt-BR")} passos/dia • Total: {weekTotal.toLocaleString("pt-BR")}</CardDescription>
