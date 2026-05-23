@@ -3,15 +3,17 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { Footprints, Plus, Minus, Play, Pause, Target, Flame, MapPin, Trash2 } from "lucide-react";
+import { Footprints, Plus, Minus, Play, Pause, Target, Flame, MapPin, Trash2, Upload, Watch, Bell, Timer, Apple, Activity } from "lucide-react";
 import { toast } from "sonner";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import { format, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { unzip, strFromU8 } from "fflate";
 
 const STORAGE_KEY = "saude:steps:v1";
 const GOAL_KEY = "saude:steps:goal:v1";
 const STRIDE_KEY = "saude:steps:stride:v1"; // cm
+const TIMER_KEY = "saude:steps:timer:v1";
 
 type StepHistory = Record<string, number>; // yyyy-MM-dd -> steps
 
