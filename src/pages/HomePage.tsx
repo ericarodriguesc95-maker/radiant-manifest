@@ -240,6 +240,27 @@ const HomePage = () => {
         </div>
 
         {/* ═══════════════════════════════════════════ */}
+        {/* MENTE PODEROSA — IE + Psicologia + Neuro + Neuromarketing */}
+        {/* ═══════════════════════════════════════════ */}
+        <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
+          <button
+            onClick={() => navigate("/mente-poderosa")}
+            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-900/30 via-amber-800/15 to-amber-700/5" />
+            <div className="absolute inset-0 glass-gold" />
+            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
+              <Brain className="h-6 w-6 text-gold" />
+            </div>
+            <div className="relative z-10 flex-1 text-left">
+              <p className="text-sm font-display font-bold text-foreground">Mente Poderosa</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Inteligência emocional · Psicologia · Neurociência · Neuromarketing</p>
+            </div>
+            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
+          </button>
+        </div>
+
+        {/* ═══════════════════════════════════════════ */}
         {/* CHAVES DO SUCESSO — 3 cards de mentalidade */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4">
