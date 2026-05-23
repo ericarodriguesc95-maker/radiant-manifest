@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Brain, Heart, Eye, Sparkles, Trophy, Flame, CheckCircle2,
-  Circle, Target, History, BookOpen, Zap, Award,
+  Circle, Target, History, BookOpen, Zap, Award, Mic, MessageCircle, ShieldAlert,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -18,7 +18,7 @@ type Task = { id: string; title: string; desc: string; xp: number };
 type ModuleDef = {
   id: string;
   title: string;
-  area: "IE" | "PSI" | "NEURO" | "MKT";
+  area: "IE" | "PSI" | "NEURO" | "MKT" | "COM" | "PER" | "CRI";
   icon: typeof Brain;
   tagline: string;
   tasks: Task[];
@@ -177,6 +177,123 @@ const MODULES: ModuleDef[] = [
         id: "m5",
         title: "Atualize sua bio com prova social (5 min)",
         desc: "O que é: princípio da Conformidade (Solomon Asch) — o cérebro confia em quem outros já validaram. Por quê: bio genérica = você é uma entre milhões. Bio com prova social = autoridade percebida. Como fazer: edite sua bio do Instagram/LinkedIn agora incluindo 3 elementos — 1 número (clientes atendidas, anos de mercado), 1 conquista (prêmio, formação, certificação) e 1 nome reconhecido (marca/cliente/mentor). Iniciante: se ainda não tem números, use depoimento curto.",
+        xp: 30,
+      },
+    ],
+  },
+  {
+    id: "com-oratoria",
+    title: "Comunicação & Oratória — Voz que Comanda Atenção",
+    area: "COM",
+    icon: Mic,
+    tagline: "Postura, voz, ritmo e presença para falar com autoridade",
+    tasks: [
+      {
+        id: "c1",
+        title: "Aquecimento vocal de 90 segundos",
+        desc: "O que é: preparar voz, mandíbula e diafragma antes de falar em público, gravar story, fazer pitch ou ligação importante. Por quê: voz aquecida = grave mais profundo, menos 'quebras' e mais autoridade percebida. Como fazer: 30s soltando 'brrr' com os lábios (motorboat) + 30s mastigando o ar exagerando a boca + 30s contando de 1 a 10 alternando volume baixo/alto. Empreendedora: faça no banho ou no carro antes de reuniões.",
+        xp: 20,
+      },
+      {
+        id: "c2",
+        title: "Regra da pausa: 2 segundos entre frases (treino de 5 min)",
+        desc: "O que é: substituir o 'éééé', 'tipo', 'né' por silêncio breve. Por quê: pausa = sinal de quem domina o assunto. Falar rápido = sinal de insegurança. Como fazer: grave 1 minuto seu falando sobre seu trabalho. Reescute marcando cada vício de linguagem. Regrave forçando pausa de 2s onde antes vinha o 'éééé'. Iniciante: comece nas suas próprias mensagens de áudio.",
+        xp: 25,
+      },
+      {
+        id: "c3",
+        title: "Postura de poder antes de falar (2 min)",
+        desc: "O que é: estudo de Amy Cuddy (Harvard) — postura aberta por 2 min antes de uma exposição reduz cortisol em 25% e aumenta testosterona em 20%. Por quê: o corpo ensina o cérebro a se sentir no controle. Como fazer: vá ao banheiro, em pé, mãos na cintura, queixo levemente erguido, ombros para trás. Respire fundo 4 vezes. Saia e fale. Use antes de: reunião, gravação, palestra, conversa difícil.",
+        xp: 20,
+      },
+      {
+        id: "c4",
+        title: "Estrutura PREP para qualquer resposta (3 min de treino)",
+        desc: "O que é: técnica de oratória executiva — Ponto, Razão, Exemplo, Ponto. Por quê: respostas estruturadas soam 10x mais inteligentes que respostas longas e enroladas. Como fazer: pergunta 'o que você acha disso?' → P: 'Acredito que sim.' R: 'Porque os dados mostram X.' E: 'Por exemplo, semana passada vivi Y.' P: 'Por isso, defendo essa direção.' Treine respondendo 1 pergunta por dia no espelho ou no WhatsApp em áudio.",
+        xp: 30,
+      },
+      {
+        id: "c5",
+        title: "Grave 1 story falando direto para a câmera (5 min)",
+        desc: "O que é: exposição controlada ao desconforto de se ouvir e se ver. Por quê: quem não treina a própria imagem trava em momentos decisivos. Como fazer: grave 30s respondendo 'qual o maior aprendizado da minha semana?'. Veja sem julgar. Regrave 1 vez aplicando: olhar fixo na lente, 1 pausa proposital, sorriso no final. Publique ou apague — o ganho é o treino. Iniciante: comece com câmera selfie sem publicar.",
+        xp: 25,
+      },
+    ],
+  },
+  {
+    id: "per-persuasao",
+    title: "Comunicação Persuasiva — Palavras que Movem Pessoas",
+    area: "PER",
+    icon: MessageCircle,
+    tagline: "Gatilhos linguísticos, espiral SCQA e o poder da pergunta certa",
+    tasks: [
+      {
+        id: "p1",
+        title: "Substitua 'mas' por 'e' por 24 horas",
+        desc: "O que é: PNL aplicada — a palavra 'mas' apaga tudo que veio antes ('gostei, mas…' = não gostei). 'E' soma. Por quê: muda a percepção de quem te ouve sem mudar o conteúdo. Como fazer: hoje, em mensagens, e-mails e conversas, monitore cada 'mas' e troque por 'e' ou 'ao mesmo tempo'. Exemplo: 'amei sua proposta, E gostaria de ajustar o prazo'. Iniciante: deixe um post-it com o lembrete na tela.",
+        xp: 25,
+      },
+      {
+        id: "p2",
+        title: "Use a fórmula SCQA em uma mensagem importante (5 min)",
+        desc: "O que é: estrutura de persuasão da consultoria McKinsey — Situação, Complicação, Questão, Resposta. Por quê: prende a atenção em 3 segundos e entrega solução de forma irresistível. Como aplicar: 'Hoje fazemos X (Situação). Só que enfrentamos Y (Complicação). Como resolver isso? (Questão). Proponho Z (Resposta).' Use em pitch, proposta comercial, conversa com sócio. Empreendedora: aplique no próximo e-mail de venda.",
+        xp: 30,
+      },
+      {
+        id: "p3",
+        title: "Pergunta aberta no lugar de afirmação (3 min)",
+        desc: "O que é: método socrático — quem pergunta conduz. Por quê: pessoas resistem a afirmações alheias e aceitam conclusões próprias. Como fazer: em vez de 'você precisa investir nisso', pergunte 'o que aconteceria se você investisse nisso por 3 meses?'. Treine reescrevendo 3 afirmações suas em perguntas abertas começando com Como, O que, Qual, Quando.",
+        xp: 25,
+      },
+      {
+        id: "p4",
+        title: "Aplique o efeito 'porque' (1 min)",
+        desc: "O que é: estudo clássico de Ellen Langer (Harvard) — incluir a palavra 'porque' aumenta em 34% a taxa de aceitação, mesmo quando o motivo é óbvio. Por quê: o cérebro humano associa 'porque' a justificativa válida quase no automático. Como fazer: na próxima solicitação que você fizer hoje, inclua 'porque ___' (mesmo um motivo simples). Ex: 'posso te ligar agora, porque tenho 10 min livres?'.",
+        xp: 20,
+      },
+      {
+        id: "p5",
+        title: "Espelhamento (mirroring) em 1 conversa hoje",
+        desc: "O que é: técnica de Chris Voss (ex-FBI) — repetir as 3 últimas palavras da pessoa com tom de pergunta. Por quê: ativa rapport profundo e faz a outra parte se abrir e dar mais informação. Como fazer: cliente diz 'tá fora do meu orçamento agora'. Você responde: '…fora do seu orçamento agora?'. Espere o silêncio. Ela vai explicar. Use em vendas, negociação salarial, conversas com parceiro.",
+        xp: 30,
+      },
+    ],
+  },
+  {
+    id: "cri-crise",
+    title: "Gestão de Crise para Mulheres — Liderar no Caos",
+    area: "CRI",
+    icon: ShieldAlert,
+    tagline: "Plano de 5 minutos para quando tudo desaba (financeiro, profissional, emocional)",
+    tasks: [
+      {
+        id: "k1",
+        title: "Protocolo STOP em momento de pânico (1 min)",
+        desc: "O que é: técnica usada por bombeiros e profissionais de emergência. S = Stop (pare físico), T = Take a breath (respire fundo 3x), O = Observe (o que está acontecendo, o que sinto), P = Proceed (próximo passo MENOR possível). Por quê: tira do modo reativo e devolve o comando ao córtex pré-frontal em 60 segundos. Como fazer: salve a sigla STOP no papel de parede do celular. Use no próximo aperto.",
+        xp: 25,
+      },
+      {
+        id: "k2",
+        title: "Mapa da crise em 1 folha (10 min)",
+        desc: "O que é: escrever para sair da mente caótica. Por quê: o cérebro só resolve o que consegue VER fora dele. Como fazer: divida 1 folha em 4 quadrados. Q1 'O que aconteceu (fatos sem drama)'. Q2 'O que está sob meu controle'. Q3 'O que NÃO está sob meu controle (eu solto)'. Q4 'Próximas 3 ações de até 1 hora cada'. Empreendedora: revisite essa folha em toda crise — 80% do peso some.",
+        xp: 35,
+      },
+      {
+        id: "k3",
+        title: "Pré-defina sua 'Comissão de Crise' (5 min)",
+        desc: "O que é: lista das 3 pessoas que você liga em pânico — uma para a parte emocional, uma para a estratégica, uma para a prática. Por quê: em crise você não tem clareza para escolher quem ligar. Decida ANTES. Como fazer: salve 3 contatos no celular com tag CRISE: COLO, CRISE: CABEÇA, CRISE: AÇÃO. Avise as 3 pessoas que elas estão nessa lista. Iniciante: se ainda não tem as 3, identifique pelo menos 1 hoje.",
+        xp: 25,
+      },
+      {
+        id: "k4",
+        title: "Reserva mínima de emergência (15 min de planejamento)",
+        desc: "O que é: criar um colchão financeiro de 3 a 6 meses dos seus custos fixos. Por quê: dinheiro guardado compra tempo, e tempo é a matéria-prima das boas decisões em crise. Como fazer: 1) calcule seu custo fixo mensal real. 2) multiplique por 3. 3) abra uma conta SÓ para isso (CDB liquidez diária ou Tesouro Selic). 4) automatize transferência mensal de 5-15% da renda. Iniciante: comece com R$ 100 esta semana. Empreendedora: separe da conta do negócio.",
+        xp: 40,
+      },
+      {
+        id: "k5",
+        title: "Mensagem-padrão para comunicar uma crise (10 min)",
+        desc: "O que é: roteiro pronto para avisar cliente, equipe ou família sobre um problema sem se descontrolar. Por quê: na crise, você não tem energia para 'inventar tom'. Estrutura: 1) Reconheço (o problema), 2) Assumo (responsabilidade pela minha parte), 3) Plano (próximos passos com data), 4) Peço (o que preciso da outra parte). Como fazer: escreva agora 1 versão genérica em um bloco de notas. Quando precisar, é só adaptar. Empreendedora: salve como template no e-mail.",
         xp: 30,
       },
     ],
