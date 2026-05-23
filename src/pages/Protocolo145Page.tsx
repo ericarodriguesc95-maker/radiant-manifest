@@ -457,6 +457,7 @@ export default function Protocolo145Page() {
       totalTasksDone,
       notes: progress.notes,
       dayTasks: progress.dayTasks,
+      fastingWindow: progress.fastingWindow,
     };
     setHistory((h) => [run, ...h].slice(0, 30));
     toast.success(reason === "completed" ? "Ciclo arquivado no seu histórico ✓" : "Ciclo anterior salvo no histórico");
