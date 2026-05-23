@@ -36,70 +36,18 @@ export default function Leaderboard() {
     if (!user) return;
 
     const fetchLeaderboard = async () => {
-      // Get all users who have completions
-      const { data: completions } = await supabase
-        .from("daily_completions" as any)
-        .select("user_id, completion_date, all_completed")
-        .eq("all_completed", true)
-        .order("completion_date", { ascending: false });
+      const { data: rows } = await supabase.rpc("get_leaderboard_streaks" as any);
 
-      if (!completions) { setLoading(false); return; }
+      const leaderEntries: LeaderEntry[] = ((rows as any[]) || [])
+        .map((r: any, i: number) => ({
+          rank: i + 1,
+          name: r.user_id === user.id ? "Você" : (r.display_name || "Usuária"),
+          avatar: r.avatar_url ? "👤" : "💎",
+          streak: r.streak,
+          medals: [7, 14, 30, 60, 90].filter(m => r.streak >= m).length,
+          isUser: r.user_id === user.id,
+        }));
 
-      // Group by user and calculate streaks
-      const userDates: Record<string, string[]> = {};
-      (completions as any[]).forEach((c: any) => {
-        if (!userDates[c.user_id]) userDates[c.user_id] = [];
-        userDates[c.user_id].push(c.completion_date);
-      });
-
-      // Calculate streak for each user
-      const userStreaks: { userId: string; streak: number }[] = [];
-      for (const [userId, dates] of Object.entries(userDates)) {
-        const sorted = dates.sort((a, b) => b.localeCompare(a)); // newest first
-        let streak = 0;
-        const today = new Date().toISOString().split("T")[0];
-        let checkDate = new Date(today);
-
-        for (let i = 0; i < 365; i++) {
-          const dateStr = checkDate.toISOString().split("T")[0];
-          if (sorted.includes(dateStr)) {
-            streak++;
-            checkDate.setDate(checkDate.getDate() - 1);
-          } else if (dateStr === today) {
-            // Today might not be completed yet, skip
-            checkDate.setDate(checkDate.getDate() - 1);
-          } else {
-            break;
-          }
-        }
-        if (streak > 0) userStreaks.push({ userId, streak });
-      }
-
-      // Get profiles
-      const userIds = userStreaks.map(u => u.userId);
-      const { data: profiles } = await supabase
-        .from("profiles_public" as any)
-        .select("user_id, display_name, avatar_url")
-        .in("user_id", userIds.length > 0 ? userIds : ["none"]);
-
-      const profileMap: Record<string, any> = {};
-      (profiles || []).forEach((p: any) => { profileMap[p.user_id] = p; });
-
-      const leaderEntries: LeaderEntry[] = userStreaks
-        .sort((a, b) => b.streak - a.streak)
-        .map((u, i) => {
-          const profile = profileMap[u.userId];
-          return {
-            rank: i + 1,
-            name: u.userId === user.id ? "Você" : (profile?.display_name || "Usuária"),
-            avatar: profile?.avatar_url ? "👤" : "💎",
-            streak: u.streak,
-            medals: [7, 14, 30, 60, 90].filter(m => u.streak >= m).length,
-            isUser: u.userId === user.id,
-          };
-        });
-
-      // If current user not in list, add with 0 streak
       if (!leaderEntries.find(e => e.isUser)) {
         leaderEntries.push({
           rank: leaderEntries.length + 1,
