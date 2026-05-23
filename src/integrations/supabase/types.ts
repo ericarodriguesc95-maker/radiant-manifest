@@ -1860,6 +1860,13 @@ export type Database = {
         Args: { _conversation_id: string }
         Returns: boolean
       }
+      get_challenge_participant_counts: {
+        Args: never
+        Returns: {
+          challenge_id: string
+          count: number
+        }[]
+      }
       get_public_profiles: {
         Args: never
         Returns: {
