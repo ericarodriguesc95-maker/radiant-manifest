@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {
   ArrowLeft, Zap, Clock, Sunrise, ShieldOff, TrendingUp, Moon, CalendarDays,
   Flame, Brain, Target, Check, RotateCcw, Activity, Layers, Droplet,
-  Snowflake, Eye, Star, History, Trophy, Sparkles, NotebookPen, ChevronDown, ChevronUp, X
+  Snowflake, Eye, Star, History, Trophy, Sparkles, NotebookPen, ChevronDown, ChevronUp, X, Lightbulb
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ type SectionId = typeof SECTION_IDS[number];
 
 type DayTasks = Record<number, Record<string, boolean>>;
 type DayNotes = Record<number, string>;
+type FastingWindow = "14h" | "16h" | "18h" | "24h";
 type Progress = {
   days: boolean[];
   dayTasks: DayTasks;
@@ -28,6 +29,7 @@ type Progress = {
   lastSection: SectionId;
   startedAt: string;
   updatedAt: string;
+  fastingWindow: FastingWindow;
 };
 type HistoryRun = {
   id: string;
@@ -37,6 +39,7 @@ type HistoryRun = {
   totalTasksDone: number;
   notes: DayNotes;
   dayTasks: DayTasks;
+  fastingWindow?: FastingWindow;
 };
 
 function emptyProgress(): Progress {
@@ -48,6 +51,7 @@ function emptyProgress(): Progress {
     lastSection: "tese",
     startedAt: now,
     updatedAt: now,
+    fastingWindow: "14h",
   };
 }
 function loadProgress(): Progress {
@@ -110,6 +114,67 @@ const jejunsTipos = [
   { h: "18h", nome: "Avançado", uso: "Cetose leve, picos de BDNF, foco intenso para semanas de execução.", cor: "border-amber-600/30 bg-amber-700/5" },
   { h: "24h", nome: "OMAD / 24h", uso: "Reset metabólico mensal. Apenas com base sólida e eletrólitos.", cor: "border-zinc-600 bg-zinc-900/40" },
 ];
+
+const fastingMeta: Record<FastingWindow, {
+  label: string;
+  short: string;
+  jejumTask: string;
+  pitch: string;
+  tips: string[]; // dia 1..5
+}> = {
+  "14h": {
+    label: "14h · Janela Glow Up",
+    short: "14h",
+    jejumTask: "Janela 14h fechada (ex.: 18:40 → 08:40)",
+    pitch: "Base do protocolo. Estabiliza insulina e ativa autofagia leve.",
+    tips: [
+      "Hoje o foco é só fechar a janela. Não force, hidrate (3L + sal rosa).",
+      "Quebre o jejum com proteína + gordura boa — evita pico de fome às 11h.",
+      "Janela 14h + café preto pela manhã = clareza extra para o deep work.",
+      "Repita a mesma janela. Constância > intensidade nesta fase.",
+      "Mantenha 14h durante o fim de semana — não perca o platô conquistado.",
+    ],
+  },
+  "16h": {
+    label: "16h · 16:8 clássico",
+    short: "16h",
+    jejumTask: "Janela 16h fechada (ex.: 20:00 → 12:00)",
+    pitch: "Autofagia consistente, queima de gordura visceral.",
+    tips: [
+      "Adiar 2h o café da manhã. Beba água com limão e sal — corta fissura.",
+      "Treino em jejum leve (caminhada/força) acelera lipólise nesta janela.",
+      "Comer dentro de 8h: 2 refeições densas com 30–40g proteína cada.",
+      "Cuidado com o pico de fome falsa às 11h: é hábito, não fome real.",
+      "16:8 já é hábito ao final da semana — você acabou de subir um nível.",
+    ],
+  },
+  "18h": {
+    label: "18h · Avançado",
+    short: "18h",
+    jejumTask: "Janela 18h fechada (ex.: 20:00 → 14:00)",
+    pitch: "Cetose leve, picos de BDNF, foco intenso para execução.",
+    tips: [
+      "Sintoma comum: névoa leve nas primeiras 24h. Eletrólitos resolvem.",
+      "Pico de BDNF entre 16–18h de jejum: agende deep work mais difícil aí.",
+      "Quebre o jejum com proteína primeiro, carbo só depois — evita sonolência.",
+      "Magnésio 400mg + potássio antes de dormir = sono profundo mesmo em jejum.",
+      "Mantenha 18h só nos dias de alta demanda cognitiva. Não é diário.",
+    ],
+  },
+  "24h": {
+    label: "24h · OMAD / Reset",
+    short: "24h",
+    jejumTask: "Janela 24h fechada (OMAD · 1 refeição no dia)",
+    pitch: "Reset metabólico avançado. Só com base sólida e eletrólitos.",
+    tips: [
+      "Dia mais duro. Hidratação + sal rosa a cada 3h. Sem treino pesado.",
+      "Autofagia em pico: o corpo limpa células danificadas. Foco mental sobe.",
+      "Refeição única densa: 600–800 kcal · proteína alta · vegetais · gordura boa.",
+      "Não estenda além de 24h sem orientação. Voltar para 16h amanhã.",
+      "Sente energia limpa? É o reset funcionando. Documente no diário.",
+    ],
+  },
+};
 
 type DayTask = { id: string; label: string };
 const fiveDays: { day: string; title: string; body: string; tasks: DayTask[] }[] = [
@@ -392,6 +457,7 @@ export default function Protocolo145Page() {
       totalTasksDone,
       notes: progress.notes,
       dayTasks: progress.dayTasks,
+      fastingWindow: progress.fastingWindow,
     };
     setHistory((h) => [run, ...h].slice(0, 30));
     toast.success(reason === "completed" ? "Ciclo arquivado no seu histórico ✓" : "Ciclo anterior salvo no histórico");
@@ -420,6 +486,13 @@ export default function Protocolo145Page() {
     setHistory((h) => h.filter((r) => r.id !== id));
     toast("Registro removido");
   };
+
+  const setFastingWindow = (w: FastingWindow) => {
+    setProgress((p) => ({ ...p, fastingWindow: w, updatedAt: new Date().toISOString() }));
+    toast.success(`Janela ajustada para ${w}`, { description: fastingMeta[w].pitch });
+  };
+
+  const currentMeta = fastingMeta[progress.fastingWindow];
 
   return (
     <div className="min-h-screen pb-24 pt-6 px-4 max-w-2xl mx-auto">
@@ -451,7 +524,7 @@ export default function Protocolo145Page() {
       </div>
 
       {/* PROGRESSO */}
-      <div className="rounded-2xl border border-gold/30 bg-background/60 backdrop-blur p-4 mb-6">
+      <div className="rounded-2xl border border-gold/30 bg-background/60 backdrop-blur p-4 mb-4">
         <div className="flex items-center justify-between mb-2">
           <p className="text-xs uppercase tracking-[0.18em] text-gold font-semibold">Ciclo atual · 5 dias</p>
           <button onClick={resetProgress} className="text-[10px] uppercase tracking-wider text-muted-foreground hover:text-foreground flex items-center gap-1">
@@ -464,6 +537,36 @@ export default function Protocolo145Page() {
         <div className="flex items-center justify-between">
           <p className="text-xs text-muted-foreground">{completedCount}/5 dias · {percent}% · {totalTasksDone} hábitos</p>
           <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Início: {formatDate(progress.startedAt)}</p>
+        </div>
+      </div>
+
+      {/* SELETOR DE JANELA DE JEJUM */}
+      <div className="rounded-2xl border border-gold/30 bg-background/60 backdrop-blur p-4 mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <Clock className="h-4 w-4 text-gold" />
+          <p className="text-xs uppercase tracking-[0.18em] text-gold font-semibold">Sua janela de jejum</p>
+        </div>
+        <p className="text-[11px] text-muted-foreground mb-3">Escolha sua janela — os hábitos e dicas de cada dia se ajustam automaticamente.</p>
+        <div className="grid grid-cols-4 gap-1.5">
+          {(["14h", "16h", "18h", "24h"] as FastingWindow[]).map((w) => {
+            const active = progress.fastingWindow === w;
+            return (
+              <button
+                key={w}
+                onClick={() => setFastingWindow(w)}
+                className={`rounded-lg border px-2 py-2 text-center transition-all ${
+                  active
+                    ? "border-gold bg-gold text-black font-bold shadow-[0_0_18px_-4px_hsl(var(--gold)/0.6)]"
+                    : "border-border bg-background/40 text-muted-foreground hover:border-gold/40 hover:text-foreground"
+                }`}
+              >
+                <p className="text-sm font-display font-bold">{w}</p>
+              </button>
+            );
+          })}
+        </div>
+        <div className="mt-3 rounded-lg border border-gold/20 bg-gold/5 p-2.5">
+          <p className="text-[11px] text-foreground"><span className="text-gold font-semibold">{currentMeta.label}</span> — {currentMeta.pitch}</p>
         </div>
       </div>
 
@@ -608,9 +711,18 @@ export default function Protocolo145Page() {
                     <div className="h-full bg-gold transition-all duration-500" style={{ width: `${dp.pct}%` }} />
                   </div>
 
+                  {/* Dica adaptada à janela de jejum */}
+                  <div className="mb-3 rounded-lg border border-gold/20 bg-gold/5 p-2.5 flex items-start gap-2">
+                    <Lightbulb className="h-3.5 w-3.5 text-gold mt-0.5 flex-shrink-0" />
+                    <p className="text-[11px] text-foreground leading-snug">
+                      <span className="text-gold font-semibold">Janela {currentMeta.short}:</span> {currentMeta.tips[i]}
+                    </p>
+                  </div>
+
                   <div className="space-y-1.5 mb-3">
                     {d.tasks.map((t) => {
                       const checked = !!progress.dayTasks?.[i]?.[t.id];
+                      const label = t.id === "jejum" ? currentMeta.jejumTask : t.label;
                       return (
                         <button
                           key={t.id}
@@ -624,7 +736,7 @@ export default function Protocolo145Page() {
                           <span className={`h-4 w-4 rounded border flex items-center justify-center flex-shrink-0 ${checked ? "bg-gold border-gold" : "border-muted-foreground/40"}`}>
                             {checked && <Check className="h-3 w-3 text-black" />}
                           </span>
-                          <span className={checked ? "line-through opacity-80" : ""}>{t.label}</span>
+                          <span className={checked ? "line-through opacity-80" : ""}>{label}</span>
                         </button>
                       );
                     })}
