@@ -2,48 +2,81 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import {
   ArrowLeft, Zap, Clock, Sunrise, ShieldOff, TrendingUp, Moon, CalendarDays,
-  Flame, Brain, Target, Check, RotateCcw, Activity, Layers, Droplet, Dumbbell,
-  Snowflake, Eye, Heart, Star
+  Flame, Brain, Target, Check, RotateCcw, Activity, Layers, Droplet,
+  Snowflake, Eye, Star, History, Trophy, Sparkles, NotebookPen, ChevronDown, ChevronUp, X
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import Protocolo145Chat from "@/components/Protocolo145Chat";
 
-const STORAGE_KEY = "protocolo-14-5:progress:v2";
+const STORAGE_KEY = "protocolo-14-5:progress:v3";
+const HISTORY_KEY = "protocolo-14-5:history:v1";
 const SECTION_IDS = [
   "tese", "neurociencia", "codigo", "jejuns", "firewall",
-  "hawkins", "maslow", "subliminal", "execucao", "ia"
+  "hawkins", "maslow", "subliminal", "execucao", "diario", "historico", "ia"
 ] as const;
 type SectionId = typeof SECTION_IDS[number];
 
 type DayTasks = Record<number, Record<string, boolean>>;
+type DayNotes = Record<number, string>;
 type Progress = {
   days: boolean[];
   dayTasks: DayTasks;
+  notes: DayNotes;
   lastSection: SectionId;
+  startedAt: string;
   updatedAt: string;
 };
+type HistoryRun = {
+  id: string;
+  startedAt: string;
+  completedAt: string;
+  daysCompleted: number;
+  totalTasksDone: number;
+  notes: DayNotes;
+  dayTasks: DayTasks;
+};
 
+function emptyProgress(): Progress {
+  const now = new Date().toISOString();
+  return {
+    days: [false, false, false, false, false],
+    dayTasks: {},
+    notes: {},
+    lastSection: "tese",
+    startedAt: now,
+    updatedAt: now,
+  };
+}
 function loadProgress(): Progress {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const p = JSON.parse(raw);
       if (Array.isArray(p.days) && p.days.length === 5) {
-        return { ...p, dayTasks: p.dayTasks || {} };
+        return { ...emptyProgress(), ...p, dayTasks: p.dayTasks || {}, notes: p.notes || {} };
       }
     }
   } catch {}
-  return {
-    days: [false, false, false, false, false],
-    dayTasks: {},
-    lastSection: "tese",
-    updatedAt: new Date().toISOString(),
-  };
+  return emptyProgress();
 }
 function saveProgress(p: Progress) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); } catch {}
+}
+function loadHistory(): HistoryRun[] {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    if (raw) {
+      const h = JSON.parse(raw);
+      if (Array.isArray(h)) return h;
+    }
+  } catch {}
+  return [];
+}
+function saveHistory(h: HistoryRun[]) {
+  try { localStorage.setItem(HISTORY_KEY, JSON.stringify(h)); } catch {}
 }
 
 const hawkinsLevels = [
@@ -63,7 +96,6 @@ const hawkinsLevels = [
   { range: "20", name: "Vergonha", color: "from-black to-red-950", low: true },
 ];
 
-// Pirâmide de Maslow — base larga até o topo estreito
 const maslowLevels = [
   { name: "Autorrealização", desc: "Propósito · criatividade · operação no nível 400+ de Hawkins", width: "w-[40%]", color: "bg-gold", text: "text-black" },
   { name: "Estima", desc: "Confiança · respeito próprio · disciplina (Variável 5)", width: "w-[55%]", color: "bg-amber-500/80", text: "text-black" },
@@ -159,12 +191,105 @@ function SectionCard({ id, icon, title, subtitle, children }: { id?: string; ico
   );
 }
 
+function formatDate(iso: string) {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" });
+  } catch { return iso; }
+}
+
+const celebrationMessages = [
+  "Você acaba de reescrever seu código operacional. Razão 400+ instalada.",
+  "Cinco dias. Cinco vitórias químicas. Sua dopamina agora trabalha para você.",
+  "Linha 200 atravessada. De agora em diante, você gera energia — não a drena.",
+  "Identidade de alta performance: salva no sistema 1. Bem-vinda à soberania.",
+];
+
+function CelebrationOverlay({ onClose, onArchive, runStats }: {
+  onClose: () => void;
+  onArchive: () => void;
+  runStats: { days: number; tasks: number };
+}) {
+  const msg = celebrationMessages[Math.floor(Math.random() * celebrationMessages.length)];
+  return (
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in p-4">
+      {/* Confetti-like sparkles */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        {Array.from({ length: 18 }).map((_, i) => (
+          <span
+            key={i}
+            className="absolute block h-2 w-2 rounded-full bg-gold animate-ping"
+            style={{
+              top: `${Math.random() * 90}%`,
+              left: `${Math.random() * 95}%`,
+              animationDelay: `${Math.random() * 1.5}s`,
+              animationDuration: `${1.5 + Math.random() * 2}s`,
+              opacity: 0.7,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative max-w-md w-full rounded-3xl border border-gold/50 bg-gradient-to-br from-black via-zinc-950 to-black p-7 text-center animate-scale-in shadow-[0_0_60px_-10px_hsl(var(--gold)/0.5)]">
+        <button onClick={onClose} className="absolute top-3 right-3 h-8 w-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-muted-foreground">
+          <X className="h-4 w-4" />
+        </button>
+
+        <div className="relative mx-auto h-20 w-20 mb-4">
+          <div className="absolute inset-0 rounded-full bg-gold/20 animate-ping" />
+          <div className="relative h-full w-full rounded-full bg-gradient-to-br from-gold to-amber-500 flex items-center justify-center">
+            <Trophy className="h-10 w-10 text-black" />
+          </div>
+        </div>
+
+        <p className="text-[10px] uppercase tracking-[0.3em] text-gold mb-2">Protocolo Concluído</p>
+        <h2 className="text-2xl font-display font-bold text-foreground leading-tight">
+          Reset <span className="text-gold">14.5</span> completo
+        </h2>
+        <p className="text-sm text-muted-foreground mt-3 italic leading-relaxed">"{msg}"</p>
+
+        <div className="grid grid-cols-2 gap-3 mt-5">
+          <div className="rounded-xl border border-gold/30 bg-gold/5 p-3">
+            <p className="text-2xl font-display font-bold text-gold">{runStats.days}/5</p>
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">Dias</p>
+          </div>
+          <div className="rounded-xl border border-gold/30 bg-gold/5 p-3">
+            <p className="text-2xl font-display font-bold text-gold">{runStats.tasks}</p>
+            <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1">Hábitos</p>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center gap-1 mt-5">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Sparkles key={i} className="h-4 w-4 text-gold animate-pulse" style={{ animationDelay: `${i * 0.15}s` }} />
+          ))}
+        </div>
+
+        <Button
+          onClick={onArchive}
+          className="w-full mt-6 bg-gold hover:bg-gold/90 text-black font-bold tracking-wide uppercase"
+        >
+          Arquivar ciclo e iniciar novo
+        </Button>
+        <button onClick={onClose} className="text-xs text-muted-foreground hover:text-foreground mt-3 uppercase tracking-wider">
+          Continuar revisando este ciclo
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function Protocolo145Page() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState<Progress>(() => loadProgress());
+  const [history, setHistory] = useState<HistoryRun[]>(() => loadHistory());
   const [resumed, setResumed] = useState(false);
+  const [celebrated, setCelebrated] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [expandedRun, setExpandedRun] = useState<string | null>(null);
 
   useEffect(() => { saveProgress(progress); }, [progress]);
+  useEffect(() => { saveHistory(history); }, [history]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -203,6 +328,20 @@ export default function Protocolo145Page() {
 
   const completedCount = progress.days.filter(Boolean).length;
   const percent = Math.round((completedCount / 5) * 100);
+  const totalTasksDone = Object.values(progress.dayTasks).reduce(
+    (acc, t) => acc + Object.values(t).filter(Boolean).length, 0
+  );
+
+  // Trigger celebration once all 5 days are completed
+  useEffect(() => {
+    if (completedCount === 5 && !celebrated) {
+      setShowCelebration(true);
+      setCelebrated(true);
+    }
+    if (completedCount < 5 && celebrated) {
+      setCelebrated(false);
+    }
+  }, [completedCount, celebrated]);
 
   const toggleDay = (i: number) => {
     setProgress((p) => {
@@ -225,24 +364,73 @@ export default function Protocolo145Page() {
     });
   };
 
+  const updateNote = (dayIdx: number, value: string) => {
+    setProgress((p) => ({
+      ...p,
+      notes: { ...p.notes, [dayIdx]: value },
+      updatedAt: new Date().toISOString(),
+    }));
+  };
+
   const dayProgress = (i: number) => {
     const total = fiveDays[i].tasks.length;
     const done = Object.values(progress.dayTasks?.[i] || {}).filter(Boolean).length;
     return { done, total, pct: Math.round((done / total) * 100) };
   };
 
+  const archiveCurrentRun = (reason: "completed" | "reset") => {
+    const hasAnyProgress =
+      progress.days.some(Boolean) ||
+      Object.keys(progress.dayTasks).length > 0 ||
+      Object.values(progress.notes).some((n) => n && n.trim().length > 0);
+    if (!hasAnyProgress) return false;
+    const run: HistoryRun = {
+      id: `${Date.now()}`,
+      startedAt: progress.startedAt,
+      completedAt: new Date().toISOString(),
+      daysCompleted: progress.days.filter(Boolean).length,
+      totalTasksDone,
+      notes: progress.notes,
+      dayTasks: progress.dayTasks,
+    };
+    setHistory((h) => [run, ...h].slice(0, 30));
+    toast.success(reason === "completed" ? "Ciclo arquivado no seu histórico ✓" : "Ciclo anterior salvo no histórico");
+    return true;
+  };
+
   const resetProgress = () => {
-    setProgress({
-      days: [false, false, false, false, false],
-      dayTasks: {},
-      lastSection: "tese",
-      updatedAt: new Date().toISOString(),
-    });
-    toast("Progresso reiniciado", { description: "Pronta para um novo ciclo." });
+    archiveCurrentRun("reset");
+    setProgress(emptyProgress());
+    setCelebrated(false);
+    toast("Novo ciclo iniciado", { description: "Pronta para reescrever o código." });
+  };
+
+  const handleCelebrationArchive = () => {
+    archiveCurrentRun("completed");
+    setProgress(emptyProgress());
+    setCelebrated(false);
+    setShowCelebration(false);
+    setTimeout(() => {
+      const el = document.querySelector(`[data-section="historico"]`);
+      el?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 200);
+  };
+
+  const deleteRun = (id: string) => {
+    setHistory((h) => h.filter((r) => r.id !== id));
+    toast("Registro removido");
   };
 
   return (
     <div className="min-h-screen pb-24 pt-6 px-4 max-w-2xl mx-auto">
+      {showCelebration && (
+        <CelebrationOverlay
+          onClose={() => setShowCelebration(false)}
+          onArchive={handleCelebrationArchive}
+          runStats={{ days: completedCount, tasks: totalTasksDone }}
+        />
+      )}
+
       <button onClick={() => navigate(-1)} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4">
         <ArrowLeft className="h-4 w-4" /> Voltar
       </button>
@@ -265,17 +453,17 @@ export default function Protocolo145Page() {
       {/* PROGRESSO */}
       <div className="rounded-2xl border border-gold/30 bg-background/60 backdrop-blur p-4 mb-6">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-xs uppercase tracking-[0.18em] text-gold font-semibold">Seu progresso · 5 dias</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-gold font-semibold">Ciclo atual · 5 dias</p>
           <button onClick={resetProgress} className="text-[10px] uppercase tracking-wider text-muted-foreground hover:text-foreground flex items-center gap-1">
-            <RotateCcw className="h-3 w-3" /> Reiniciar
+            <RotateCcw className="h-3 w-3" /> Novo ciclo
           </button>
         </div>
         <div className="h-2 w-full rounded-full bg-muted/40 overflow-hidden mb-3">
           <div className="h-full bg-gold transition-all duration-500" style={{ width: `${percent}%` }} />
         </div>
         <div className="flex items-center justify-between">
-          <p className="text-xs text-muted-foreground">{completedCount}/5 dias · {percent}%</p>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Salvo localmente</p>
+          <p className="text-xs text-muted-foreground">{completedCount}/5 dias · {percent}% · {totalTasksDone} hábitos</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Início: {formatDate(progress.startedAt)}</p>
         </div>
       </div>
 
@@ -397,11 +585,12 @@ export default function Protocolo145Page() {
         </SectionCard>
 
         {/* 9 — 5 DIAS DINÂMICO */}
-        <SectionCard id="execucao" icon={<CalendarDays className="h-4 w-4" />} title="9. Execução Dinâmica · 5 Dias" subtitle="Marque cada hábito conforme realiza">
+        <SectionCard id="execucao" icon={<CalendarDays className="h-4 w-4" />} title="9. Execução Dinâmica · 5 Dias" subtitle="Marque hábitos e registre como foi cada dia">
           <div className="space-y-3">
             {fiveDays.map((d, i) => {
               const done = progress.days[i];
               const dp = dayProgress(i);
+              const note = progress.notes[i] || "";
               return (
                 <div key={d.day} className={`rounded-xl border p-3 transition-colors ${done ? "border-gold/60 bg-gold/10" : "border-border bg-muted/30"}`}>
                   <div className="flex items-center gap-2 mb-2">
@@ -415,12 +604,10 @@ export default function Protocolo145Page() {
                   </div>
                   <p className="text-xs mb-2 text-muted-foreground">{d.body}</p>
 
-                  {/* Mini progress bar */}
                   <div className="h-1.5 w-full rounded-full bg-muted/40 overflow-hidden mb-3">
                     <div className="h-full bg-gold transition-all duration-500" style={{ width: `${dp.pct}%` }} />
                   </div>
 
-                  {/* Tasks checklist */}
                   <div className="space-y-1.5 mb-3">
                     {d.tasks.map((t) => {
                       const checked = !!progress.dayTasks?.[i]?.[t.id];
@@ -443,6 +630,23 @@ export default function Protocolo145Page() {
                     })}
                   </div>
 
+                  {/* Diário do dia */}
+                  <div className="mb-3">
+                    <div className="flex items-center gap-1.5 mb-1.5">
+                      <NotebookPen className="h-3.5 w-3.5 text-gold" />
+                      <p className="text-[10px] uppercase tracking-wider text-gold font-semibold">Como foi este dia?</p>
+                    </div>
+                    <Textarea
+                      value={note}
+                      onChange={(e) => updateNote(i, e.target.value)}
+                      placeholder="Sensações, sintomas, vitórias, o que mudou… Tudo isso vai para o seu histórico."
+                      className="text-xs min-h-[68px] bg-background/40 border-gold/20 focus-visible:ring-gold/40 resize-none"
+                    />
+                    {note.length > 0 && (
+                      <p className="text-[10px] text-muted-foreground mt-1 text-right">{note.length} caracteres salvos</p>
+                    )}
+                  </div>
+
                   <Button
                     size="sm"
                     variant={done ? "outline" : "default"}
@@ -459,7 +663,80 @@ export default function Protocolo145Page() {
           </div>
         </SectionCard>
 
-        {/* 10 — IA */}
+        {/* 10 — DIÁRIO (atalho explicativo) */}
+        <SectionCard id="diario" icon={<NotebookPen className="h-4 w-4" />} title="10. Seu Diário do Protocolo" subtitle="Tudo que você escrever em cada dia fica salvo aqui">
+          <p>Cada anotação é gravada no seu dispositivo e arquivada quando o ciclo termina. Daqui a semanas, ao refazer o 14.5, você compara sintomas, vitórias e níveis de energia — e enxerga a evolução real entre os ciclos.</p>
+          <p className="text-xs text-foreground/70">Dica de mentora: escreva 2–3 linhas por dia. O cérebro consolida o aprendizado quando vê o padrão repetido nos próprios ciclos.</p>
+        </SectionCard>
+
+        {/* 11 — HISTÓRICO */}
+        <SectionCard id="historico" icon={<History className="h-4 w-4" />} title="11. Histórico de Ciclos" subtitle={`${history.length} ciclo${history.length === 1 ? "" : "s"} arquivado${history.length === 1 ? "" : "s"}`}>
+          {history.length === 0 ? (
+            <div className="rounded-lg border border-dashed border-gold/30 bg-muted/10 p-4 text-center">
+              <p className="text-xs">Nenhum ciclo arquivado ainda. Conclua os 5 dias e seu primeiro registro aparece aqui.</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {history.map((run, idx) => {
+                const expanded = expandedRun === run.id;
+                return (
+                  <div key={run.id} className="rounded-xl border border-gold/20 bg-background/40 overflow-hidden">
+                    <button
+                      onClick={() => setExpandedRun(expanded ? null : run.id)}
+                      className="w-full flex items-center justify-between p-3 text-left hover:bg-gold/5 transition-colors"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-9 w-9 rounded-lg bg-gold/10 border border-gold/30 flex items-center justify-center">
+                          <span className="text-xs font-display font-bold text-gold">#{history.length - idx}</span>
+                        </div>
+                        <div>
+                          <p className="text-xs font-semibold text-foreground">
+                            {formatDate(run.startedAt)} → {formatDate(run.completedAt)}
+                          </p>
+                          <p className="text-[10px] text-muted-foreground">
+                            {run.daysCompleted}/5 dias · {run.totalTasksDone} hábitos
+                            {run.daysCompleted === 5 && <span className="ml-1.5 text-gold">· Completo ✦</span>}
+                          </p>
+                        </div>
+                      </div>
+                      {expanded ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
+                    </button>
+
+                    {expanded && (
+                      <div className="border-t border-gold/15 p-3 space-y-2 animate-fade-in">
+                        {fiveDays.map((d, i) => {
+                          const noteTxt = run.notes?.[i];
+                          const taskCount = Object.values(run.dayTasks?.[i] || {}).filter(Boolean).length;
+                          if (!noteTxt && taskCount === 0) return null;
+                          return (
+                            <div key={d.day} className="rounded-lg border border-border bg-muted/20 p-2.5">
+                              <div className="flex items-center justify-between mb-1">
+                                <p className="text-[11px] font-semibold text-foreground">{d.day} · {d.title}</p>
+                                <p className="text-[10px] text-muted-foreground">{taskCount}/{d.tasks.length}</p>
+                              </div>
+                              {noteTxt && <p className="text-[11px] text-muted-foreground italic leading-relaxed whitespace-pre-wrap">"{noteTxt}"</p>}
+                            </div>
+                          );
+                        })}
+                        {!fiveDays.some((_, i) => run.notes?.[i] || Object.values(run.dayTasks?.[i] || {}).some(Boolean)) && (
+                          <p className="text-[11px] text-muted-foreground italic">Sem anotações registradas neste ciclo.</p>
+                        )}
+                        <button
+                          onClick={() => deleteRun(run.id)}
+                          className="text-[10px] uppercase tracking-wider text-muted-foreground hover:text-destructive flex items-center gap-1 pt-1"
+                        >
+                          <X className="h-3 w-3" /> Remover registro
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </SectionCard>
+
+        {/* 12 — IA */}
         <div data-section="ia" id="ia" className="scroll-mt-24">
           <Protocolo145Chat />
         </div>
