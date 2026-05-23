@@ -71,6 +71,7 @@ type HistoryRun = {
   completedAt: string;
   daysCompleted: number;
   totalTasksDone: number;
+  score?: number;
   notes: DayNotes;
   dayTasks: DayTasks;
   fastingWindow?: FastingWindow;
