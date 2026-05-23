@@ -605,6 +605,24 @@ export default function Protocolo145Page() {
           <p className="text-xs text-muted-foreground">{completedCount}/5 dias · {percent}% · {totalTasksDone} hábitos</p>
           <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Início: {formatDate(progress.startedAt)}</p>
         </div>
+
+        {/* STREAK + SCORE */}
+        <div className="mt-3 grid grid-cols-2 gap-2">
+          <div className="rounded-xl border border-gold/20 bg-black/40 p-3">
+            <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold/80">
+              <Flame className="h-3 w-3" /> Streak
+            </div>
+            <p className="mt-1 text-2xl font-display font-bold text-gold leading-none">{streak.current}<span className="text-xs text-muted-foreground font-normal ml-1">dias</span></p>
+            <p className="text-[10px] text-muted-foreground mt-1">Recorde: {streak.best} dias</p>
+          </div>
+          <div className="rounded-xl border border-gold/20 bg-black/40 p-3">
+            <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold/80">
+              <Trophy className="h-3 w-3" /> Pontuação do ciclo
+            </div>
+            <p className="mt-1 text-2xl font-display font-bold text-gold leading-none">{score}<span className="text-xs text-muted-foreground font-normal ml-1">pts</span></p>
+            <p className="text-[10px] text-muted-foreground mt-1">Recorde: {streak.bestScore} pts</p>
+          </div>
+        </div>
       </div>
 
       {/* SELETOR DE JANELA DE JEJUM */}
