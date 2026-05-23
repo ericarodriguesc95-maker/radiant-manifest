@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.protocolo-145-ai]
 verify_jwt = false
+
+[functions.mente-poderosa-ai]
+verify_jwt = false
