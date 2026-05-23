@@ -486,6 +486,13 @@ export default function Protocolo145Page() {
     toast("Registro removido");
   };
 
+  const setFastingWindow = (w: FastingWindow) => {
+    setProgress((p) => ({ ...p, fastingWindow: w, updatedAt: new Date().toISOString() }));
+    toast.success(`Janela ajustada para ${w}`, { description: fastingMeta[w].pitch });
+  };
+
+  const currentMeta = fastingMeta[progress.fastingWindow];
+
   return (
     <div className="min-h-screen pb-24 pt-6 px-4 max-w-2xl mx-auto">
       {showCelebration && (
