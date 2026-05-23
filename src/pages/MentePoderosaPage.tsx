@@ -32,11 +32,36 @@ const MODULES: ModuleDef[] = [
     icon: Heart,
     tagline: "Autoconsciência → Autorregulação → Motivação → Empatia → Habilidade Social",
     tasks: [
-      { id: "ie1", title: "Nomeie 3 emoções do seu dia", desc: "Pesquisa de Lisa Feldman Barrett: granularidade emocional reduz a ativação da amígdala. Nomeie com precisão — não 'mal', mas 'frustrada', 'ressentida', 'ansiosa'.", xp: 20 },
-      { id: "ie2", title: "Pratique a pausa de 6 segundos", desc: "Entre o gatilho e a reação, conte 6s respirando. É o tempo neural para o córtex pré-frontal assumir o controle da amígdala.", xp: 25 },
-      { id: "ie3", title: "Escreva uma carta de empatia", desc: "Para alguém que te irritou esta semana, escreva 3 razões plausíveis pelo comportamento dela. Aumenta empatia cognitiva (Hojat).", xp: 30 },
-      { id: "ie4", title: "Identifique seu gatilho-mestre", desc: "Qual situação repetidamente te tira do eixo? Mapeie: gatilho → emoção → pensamento → comportamento.", xp: 25 },
-      { id: "ie5", title: "Respiração 4-7-8 antes de decidir", desc: "Ative o nervo vago. Inspire 4s, segure 7s, expire 8s. Faça 4 ciclos antes de qualquer decisão importante hoje.", xp: 20 },
+      {
+        id: "ie1",
+        title: "Nomeie 3 emoções do seu dia (2 min)",
+        desc: "O que é: dar nome exato ao que você sente. Por quê: a neurocientista Lisa Feldman Barrett mostrou que quanto mais preciso o nome, menos a amígdala dispara — você sai do 'tô mal' e volta ao controle. Como fazer agora: pegue o celular, abra as Notas e escreva 3 frases curtas no formato 'Senti ___ quando ___'. Evite palavras genéricas (mal, estranha); use frustrada, ressentida, ansiosa, orgulhosa, aliviada. Para empreendedora com tempo curto: faça no banho ou no Uber.",
+        xp: 20,
+      },
+      {
+        id: "ie2",
+        title: "Pausa de 6 segundos antes de reagir (1 min na hora)",
+        desc: "O que é: criar um intervalo entre o estímulo (e-mail que te irritou, comentário do cliente, fala do parceiro) e a sua resposta. Por quê: 6 segundos é o tempo médio que o córtex pré-frontal leva para 'desligar' o piloto automático da amígdala. Como fazer: ao sentir o gatilho, feche a boca, inspire pelo nariz contando até 3, expire pela boca contando até 3. Só depois fale, responda ou clique em enviar. Dica empreendedora: deixe esse hábito atrelado ao gesto de 'tirar a mão do teclado'.",
+        xp: 25,
+      },
+      {
+        id: "ie3",
+        title: "Carta de empatia para alguém que te irritou (5 min)",
+        desc: "O que é: um exercício escrito que treina ver o mundo pelos olhos do outro (empatia cognitiva — Hojat). Por quê: reduz ruminação mental e devolve seu poder de decisão. Como fazer: escreva 1 parágrafo curto listando 3 motivos plausíveis pelos quais a pessoa agiu assim (cansaço, medo, história pessoal). Você NÃO precisa enviar. O ganho é interno: você para de gastar energia com a cena. Iniciante: comece pelo episódio mais leve da semana.",
+        xp: 30,
+      },
+      {
+        id: "ie4",
+        title: "Mapeie seu gatilho-mestre (3 min)",
+        desc: "O que é: identificar a situação que repetidamente tira você do eixo (ser interrompida, crítica pública, atraso, silêncio). Por quê: o que está consciente, você controla; o que está inconsciente, te controla. Como fazer: escreva nas Notas em 4 linhas — Gatilho: ___ / Emoção: ___ / Pensamento automático: ___ / O que costumo fazer: ___. Empreendedora: revise essa nota antes de reuniões difíceis.",
+        xp: 25,
+      },
+      {
+        id: "ie5",
+        title: "Respiração 4-7-8 antes de decidir (2 min)",
+        desc: "O que é: técnica de respiração do Dr. Andrew Weil que ativa o nervo vago e desliga o modo 'luta ou fuga'. Por quê: decisão tomada em ansiedade quase sempre é decisão ruim. Como fazer: inspire pelo nariz contando 4 → segure o ar contando 7 → expire bem devagar pela boca contando 8. Repita 4 vezes. Use antes de: responder cliente difícil, enviar proposta, ter conversa séria.",
+        xp: 20,
+      },
     ],
   },
   {
@@ -46,11 +71,36 @@ const MODULES: ModuleDef[] = [
     icon: Eye,
     tagline: "Jung, Bowlby e o que sua mente esconde de você mesma",
     tasks: [
-      { id: "psi1", title: "Mapeie sua sombra (Jung)", desc: "Liste 3 traços que você mais critica nas outras mulheres. Geralmente é projeção do que você reprime em si.", xp: 30 },
-      { id: "psi2", title: "Identifique seu estilo de apego", desc: "Seguro, ansioso, evitativo ou desorganizado? Observe como você reage quando alguém demora a responder.", xp: 25 },
-      { id: "psi3", title: "Qual arquétipo feminino te governa?", desc: "Donzela, Mãe, Sábia, Guerreira, Sedutora, Mística. Reconheça e escolha conscientemente qual ativar.", xp: 25 },
-      { id: "psi4", title: "Liste 3 distorções cognitivas suas", desc: "Catastrofização, leitura de mente, tudo ou nada, personalização… Identifique as suas (TCC — Beck).", xp: 30 },
-      { id: "psi5", title: "Reframe um pensamento automático", desc: "Pegue um pensamento negativo recorrente e reescreva em 3 versões mais funcionais. Modelo ABC de Ellis.", xp: 30 },
+      {
+        id: "psi1",
+        title: "Mapeie sua sombra — método Jung (5 min)",
+        desc: "O que é 'sombra': tudo que existe em você mas você reprime porque julgou 'feio' (raiva, ambição, vaidade, vulnerabilidade). Por quê: o que você esconde de si, você projeta nos outros e fica refém. Como fazer: liste 3 traços que mais te incomodam em outras mulheres (ex: 'ela é interesseira', 'ela é exibida'). Depois pergunte: onde, em pequena dose, isso também existe em mim? Iniciante: não julgue a resposta, só observe. É libertador.",
+        xp: 30,
+      },
+      {
+        id: "psi2",
+        title: "Descubra seu estilo de apego (4 min)",
+        desc: "O que é: padrão de como você se vincula (teoria de Bowlby e Ainsworth). Os 4 estilos: Seguro (confia e dá espaço), Ansioso (precisa de confirmação constante), Evitativo (foge da intimidade), Desorganizado (oscila entre os dois). Por quê: explica 80% dos seus conflitos amorosos e profissionais. Como fazer: pense na última vez que alguém demorou para responder uma mensagem importante. O que você sentiu e fez? Anote — esse é seu padrão dominante.",
+        xp: 25,
+      },
+      {
+        id: "psi3",
+        title: "Escolha o arquétipo feminino do seu dia (3 min)",
+        desc: "O que é: arquétipos (Jung + Jean Bolen) são energias internas — Donzela (leveza), Mãe (cuidado), Sábia (estratégia), Guerreira (ação), Sedutora (presença magnética), Mística (intuição). Por quê: em vez de reagir no automático, você ESCOLHE qual energia ativar para a situação do dia. Como fazer: olhe sua agenda, escolha 1 arquétipo que serve melhor ao compromisso mais importante e aja a partir dele. Empreendedora: Guerreira para vendas, Sábia para negociação, Sedutora para pitch.",
+        xp: 25,
+      },
+      {
+        id: "psi4",
+        title: "Identifique suas 3 distorções cognitivas (5 min)",
+        desc: "O que é: 'óculos tortos' que o cérebro usa sem você perceber (TCC — Aaron Beck). As principais: Catastrofização ('vai dar tudo errado'), Leitura de mente ('ela me odeia'), Tudo-ou-nada ('ou sou perfeita ou sou fracassada'), Personalização ('é culpa minha'), Filtro mental (só vê o ruim). Como fazer: relembre 3 pensamentos negativos da semana e classifique cada um. Só nomear já tira metade da força.",
+        xp: 30,
+      },
+      {
+        id: "psi5",
+        title: "Reescreva 1 pensamento negativo — modelo ABC (4 min)",
+        desc: "O que é: modelo ABC do psicólogo Albert Ellis. A = situação, B = crença/pensamento, C = consequência emocional. O segredo: trocar o B muda o C. Como fazer: escolha 1 pensamento que te machuca ('não sou boa o suficiente'). Escreva 3 versões mais realistas e funcionais ('estou aprendendo', 'já entreguei X e Y', 'o que falta posso pedir ajuda'). Releia em voz alta. Iniciante: faça uma vez por dia durante 1 semana.",
+        xp: 30,
+      },
     ],
   },
   {
@@ -60,11 +110,36 @@ const MODULES: ModuleDef[] = [
     icon: Brain,
     tagline: "Amígdala, córtex pré-frontal, dopamina, nervo vago",
     tasks: [
-      { id: "n1", title: "Tom vagal: cante 2 minutos", desc: "Cantar/cantarolar estimula o nervo vago via cordas vocais — reduz cortisol em até 23% (Porges).", xp: 20 },
-      { id: "n2", title: "Exposição ao frio 30s", desc: "Final do banho em água fria por 30s. Aumenta noradrenalina em 530% e treina resiliência neural.", xp: 25 },
-      { id: "n3", title: "Caminhada bilateral 15 min", desc: "Caminhar ativa coordenação interhemisférica — mesmo efeito do EMDR para regulação emocional.", xp: 25 },
-      { id: "n4", title: "Estudo: leia sobre neuroplasticidade", desc: "Hebb: 'neurônios que disparam juntos, se conectam'. Por isso repetir hábitos por 21–66 dias rewire o cérebro.", xp: 30 },
-      { id: "n5", title: "Dieta dopaminérgica 24h", desc: "Sem redes sociais, sem açúcar, sem notificações por 24h. Ressensibiliza receptores D2 (Lembke).", xp: 40 },
+      {
+        id: "n1",
+        title: "Tom vagal: cante ou cantarole 2 minutos",
+        desc: "O que é: ativar o nervo vago (o principal regulador da calma) através das cordas vocais. Por quê: pesquisas de Stephen Porges mostram que cantar reduz cortisol em até 23% e desacelera os batimentos. Como fazer: escolha 1 música que você ama e cantarole no banho, no carro ou cozinhando. Não precisa ser afinada — precisa ser sentida. Empreendedora: faça antes da primeira reunião do dia.",
+        xp: 20,
+      },
+      {
+        id: "n2",
+        title: "Banho frio 30 segundos no final (1 min)",
+        desc: "O que é: terminar o banho com 30s de água fria do pescoço para baixo. Por quê: aumenta noradrenalina em até 530% (estudo Šrámek et al.) — efeito 'café natural' por horas, fortalece sistema imune e treina sua mente a tolerar desconforto. Como começar: semana 1, só 10 segundos. Semana 2, 20s. Semana 3, 30s. Iniciante: respire fundo antes; o desconforto passa em segundos.",
+        xp: 25,
+      },
+      {
+        id: "n3",
+        title: "Caminhada bilateral de 15 minutos",
+        desc: "O que é: caminhar em ritmo confortável movimentando braços alternados. Por quê: a estimulação bilateral ativa os dois hemisférios do cérebro — mesmo princípio do EMDR usado em terapia para regular emoções. Como fazer: 15 min sem celular na mão (pode ouvir música instrumental). Use para 'digerir' uma reunião difícil ou destravar uma ideia. Empreendedora: vire ligações de áudio em caminhadas.",
+        xp: 25,
+      },
+      {
+        id: "n4",
+        title: "Estude 5 min sobre neuroplasticidade",
+        desc: "O que é: a capacidade do cérebro de criar novas conexões a vida inteira. Princípio de Hebb: 'neurônios que disparam juntos, se conectam'. Por quê: entender isso destrói a desculpa 'eu sou assim mesmo'. Como fazer: leia o resumo abaixo e anote 1 frase que te marcou. Resumo: todo hábito repetido por 21–66 dias literalmente reorganiza sua massa cinzenta. Você não está presa à sua versão antiga.",
+        xp: 30,
+      },
+      {
+        id: "n5",
+        title: "Dieta dopaminérgica de 24h (1 dia)",
+        desc: "O que é: 24h sem as fontes de prazer barato que viciam o cérebro — redes sociais, açúcar, notificações, séries em maratona. Por quê: a psiquiatra Anna Lembke (Stanford) mostra que isso ressensibiliza os receptores D2 e devolve prazer às coisas simples (um café, uma conversa, um livro). Como fazer: escolha um sábado, avise a família, desative notificações no celular, troque doce por fruta. Iniciante: comece com 12h se 24h parecer demais.",
+        xp: 40,
+      },
     ],
   },
   {
@@ -74,11 +149,36 @@ const MODULES: ModuleDef[] = [
     icon: Sparkles,
     tagline: "Cialdini + Kahneman aplicados à sua presença e narrativa",
     tasks: [
-      { id: "m1", title: "Escassez na sua agenda", desc: "Pare de estar 100% disponível. Escassez aumenta valor percebido (Cialdini). Diga 'tenho uma janela quinta às 16h'.", xp: 25 },
-      { id: "m2", title: "Ancoragem em uma negociação", desc: "Sempre lance o primeiro número alto. O cérebro ancora ali (Tversky & Kahneman) e ajusta pouco a partir do âncora.", xp: 30 },
-      { id: "m3", title: "Storytelling: 1 história sua hoje", desc: "Narrativas ativam córtex sensorial — fixam 22x mais que dados (Bruner). Conte uma história, não dê uma palestra.", xp: 25 },
-      { id: "m4", title: "Reciprocidade estratégica", desc: "Dê algo de valor inesperado a alguém-chave. Ativa o gatilho mais antigo do cérebro social (Cialdini).", xp: 25 },
-      { id: "m5", title: "Prova social na sua bio", desc: "Atualize sua bio com 1 número, 1 conquista, 1 nome reconhecido. O cérebro confia em prova social (Asch).", xp: 30 },
+      {
+        id: "m1",
+        title: "Aplique escassez na sua agenda (3 min)",
+        desc: "O que é: princípio de Cialdini — o que é raro é percebido como mais valioso. Por quê: estar 100% disponível desvaloriza seu tempo e sua entrega. Como fazer: na próxima vez que alguém pedir uma reunião, em vez de 'pode ser quando quiser', responda 'tenho uma janela quinta às 16h ou sexta às 10h, qual prefere?'. Você oferece 2 opções fechadas. Empreendedora: aplique também em propostas comerciais com prazo de validade.",
+        xp: 25,
+      },
+      {
+        id: "m2",
+        title: "Use ancoragem na próxima negociação (2 min de preparo)",
+        desc: "O que é: efeito descoberto por Tversky & Kahneman — o primeiro número mencionado 'ancora' toda a negociação. Por quê: quem ancora primeiro define o teto. Como fazer: antes da conversa, defina o valor IDEAL (não o mínimo) e seja você a falar primeiro. Ex: cliente pergunta 'quanto custa?' → você responde com o valor cheio, sem desconto antecipado. Iniciante: treine em voz alta no espelho antes.",
+        xp: 30,
+      },
+      {
+        id: "m3",
+        title: "Conte 1 história sua hoje (3 min)",
+        desc: "O que é: substituir dados/listas por uma narrativa pessoal curta. Por quê: estudos de Jerome Bruner mostram que histórias fixam até 22x mais que fatos isolados — ativam córtex sensorial, emoção e memória. Como fazer: em vez de 'meu serviço é bom', conte: 'semana passada uma cliente chegou assim ___, fizemos ___ e o resultado foi ___'. Use em stories, conversa, pitch. Estrutura: situação → desafio → virada → resultado.",
+        xp: 25,
+      },
+      {
+        id: "m4",
+        title: "Reciprocidade estratégica com 1 pessoa-chave (5 min)",
+        desc: "O que é: outro princípio de Cialdini — quando recebemos algo de valor inesperado, sentimos impulso de retribuir. Por quê: é o gatilho social mais antigo do cérebro humano. Como fazer: escolha 1 pessoa importante para a sua carreira/negócio e ofereça algo útil sem pedir nada em troca (uma indicação, um conteúdo relevante, uma apresentação). Empreendedora: faça isso 1x por semana — em 3 meses sua rede muda.",
+        xp: 25,
+      },
+      {
+        id: "m5",
+        title: "Atualize sua bio com prova social (5 min)",
+        desc: "O que é: princípio da Conformidade (Solomon Asch) — o cérebro confia em quem outros já validaram. Por quê: bio genérica = você é uma entre milhões. Bio com prova social = autoridade percebida. Como fazer: edite sua bio do Instagram/LinkedIn agora incluindo 3 elementos — 1 número (clientes atendidas, anos de mercado), 1 conquista (prêmio, formação, certificação) e 1 nome reconhecido (marca/cliente/mentor). Iniciante: se ainda não tem números, use depoimento curto.",
+        xp: 30,
+      },
     ],
   },
 ];
@@ -195,7 +295,7 @@ export default function MentePoderosaPage() {
   };
 
   const resetAll = () => {
-    if (!confirm("Apagar todo o progresso e histórico de Mente Poderosa?")) return;
+    if (!confirm("Apagar todo o progresso e histórico de Mente Infalível?")) return;
     setProgress({ completed: {}, xp: 0 });
     setHistory([]);
     try {
@@ -215,7 +315,7 @@ export default function MentePoderosaPage() {
           </Button>
           <div className="flex-1">
             <h1 className="text-base font-display font-bold text-foreground flex items-center gap-2">
-              <Brain className="h-4 w-4 text-gold" /> Mente Poderosa
+              <Brain className="h-4 w-4 text-gold" /> Mente Infalível
             </h1>
             <p className="text-[10px] tracking-[0.2em] uppercase text-gold/70">
               IE · Psicologia · Neurociência · Neuromarketing

@@ -131,7 +131,7 @@ export default function MentePoderosaChat() {
         </div>
         <div className="flex-1">
           <p className="text-sm font-display font-bold text-foreground flex items-center gap-1.5">
-            Mentora Mente Poderosa IA
+            Mentora Mente Infalível IA
             <Sparkles className="h-3.5 w-3.5 text-gold" />
           </p>
           <p className="text-[11px] text-muted-foreground">
