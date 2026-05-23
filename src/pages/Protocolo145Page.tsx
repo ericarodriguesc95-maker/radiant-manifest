@@ -874,6 +874,7 @@ export default function Protocolo145Page() {
                           </p>
                           <p className="text-[10px] text-muted-foreground">
                             {run.daysCompleted}/5 dias · {run.totalTasksDone} hábitos
+                            {typeof run.score === "number" && <span className="ml-1.5 text-gold font-semibold">· {run.score} pts</span>}
                             {run.daysCompleted === 5 && <span className="ml-1.5 text-gold">· Completo ✦</span>}
                           </p>
                         </div>
