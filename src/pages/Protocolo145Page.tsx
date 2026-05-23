@@ -450,6 +450,14 @@ export default function Protocolo145Page() {
   const totalTasksDone = Object.values(progress.dayTasks).reduce(
     (acc, t) => acc + Object.values(t).filter(Boolean).length, 0
   );
+  const score = computeScore(completedCount, totalTasksDone);
+
+  // Atualiza recorde de pontuação do ciclo
+  useEffect(() => {
+    if (score > streak.bestScore) {
+      setStreak((s) => ({ ...s, bestScore: score }));
+    }
+  }, [score, streak.bestScore]);
 
   // Trigger celebration once all 5 days are completed
   useEffect(() => {
@@ -471,6 +479,7 @@ export default function Protocolo145Page() {
       else toast(`Dia ${i + 1} desmarcado`);
       return { ...p, days, updatedAt: now };
     });
+    bumpStreak();
   };
 
   const toggleTask = (dayIdx: number, taskId: string) => {
@@ -481,7 +490,9 @@ export default function Protocolo145Page() {
       dayTasks[dayIdx] = cur;
       return { ...p, dayTasks, updatedAt: new Date().toISOString() };
     });
+    bumpStreak();
   };
+
 
   const updateNote = (dayIdx: number, value: string) => {
     setProgress((p) => ({
