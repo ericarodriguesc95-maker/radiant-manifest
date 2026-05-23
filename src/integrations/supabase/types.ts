@@ -1867,6 +1867,15 @@ export type Database = {
           count: number
         }[]
       }
+      get_leaderboard_streaks: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          display_name: string
+          streak: number
+          user_id: string
+        }[]
+      }
       get_public_profiles: {
         Args: never
         Returns: {
