@@ -521,6 +521,7 @@ export default function Protocolo145Page() {
       completedAt: new Date().toISOString(),
       daysCompleted: progress.days.filter(Boolean).length,
       totalTasksDone,
+      score,
       notes: progress.notes,
       dayTasks: progress.dayTasks,
       fastingWindow: progress.fastingWindow,
