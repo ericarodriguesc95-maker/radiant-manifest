@@ -523,7 +523,7 @@ export default function Protocolo145Page() {
       </div>
 
       {/* PROGRESSO */}
-      <div className="rounded-2xl border border-gold/30 bg-background/60 backdrop-blur p-4 mb-6">
+      <div className="rounded-2xl border border-gold/30 bg-background/60 backdrop-blur p-4 mb-4">
         <div className="flex items-center justify-between mb-2">
           <p className="text-xs uppercase tracking-[0.18em] text-gold font-semibold">Ciclo atual · 5 dias</p>
           <button onClick={resetProgress} className="text-[10px] uppercase tracking-wider text-muted-foreground hover:text-foreground flex items-center gap-1">
@@ -536,6 +536,36 @@ export default function Protocolo145Page() {
         <div className="flex items-center justify-between">
           <p className="text-xs text-muted-foreground">{completedCount}/5 dias · {percent}% · {totalTasksDone} hábitos</p>
           <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Início: {formatDate(progress.startedAt)}</p>
+        </div>
+      </div>
+
+      {/* SELETOR DE JANELA DE JEJUM */}
+      <div className="rounded-2xl border border-gold/30 bg-background/60 backdrop-blur p-4 mb-6">
+        <div className="flex items-center gap-2 mb-2">
+          <Clock className="h-4 w-4 text-gold" />
+          <p className="text-xs uppercase tracking-[0.18em] text-gold font-semibold">Sua janela de jejum</p>
+        </div>
+        <p className="text-[11px] text-muted-foreground mb-3">Escolha sua janela — os hábitos e dicas de cada dia se ajustam automaticamente.</p>
+        <div className="grid grid-cols-4 gap-1.5">
+          {(["14h", "16h", "18h", "24h"] as FastingWindow[]).map((w) => {
+            const active = progress.fastingWindow === w;
+            return (
+              <button
+                key={w}
+                onClick={() => setFastingWindow(w)}
+                className={`rounded-lg border px-2 py-2 text-center transition-all ${
+                  active
+                    ? "border-gold bg-gold text-black font-bold shadow-[0_0_18px_-4px_hsl(var(--gold)/0.6)]"
+                    : "border-border bg-background/40 text-muted-foreground hover:border-gold/40 hover:text-foreground"
+                }`}
+              >
+                <p className="text-sm font-display font-bold">{w}</p>
+              </button>
+            );
+          })}
+        </div>
+        <div className="mt-3 rounded-lg border border-gold/20 bg-gold/5 p-2.5">
+          <p className="text-[11px] text-foreground"><span className="text-gold font-semibold">{currentMeta.label}</span> — {currentMeta.pitch}</p>
         </div>
       </div>
 
