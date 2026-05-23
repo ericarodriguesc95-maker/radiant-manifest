@@ -710,9 +710,18 @@ export default function Protocolo145Page() {
                     <div className="h-full bg-gold transition-all duration-500" style={{ width: `${dp.pct}%` }} />
                   </div>
 
+                  {/* Dica adaptada à janela de jejum */}
+                  <div className="mb-3 rounded-lg border border-gold/20 bg-gold/5 p-2.5 flex items-start gap-2">
+                    <Lightbulb className="h-3.5 w-3.5 text-gold mt-0.5 flex-shrink-0" />
+                    <p className="text-[11px] text-foreground leading-snug">
+                      <span className="text-gold font-semibold">Janela {currentMeta.short}:</span> {currentMeta.tips[i]}
+                    </p>
+                  </div>
+
                   <div className="space-y-1.5 mb-3">
                     {d.tasks.map((t) => {
                       const checked = !!progress.dayTasks?.[i]?.[t.id];
+                      const label = t.id === "jejum" ? currentMeta.jejumTask : t.label;
                       return (
                         <button
                           key={t.id}
@@ -726,7 +735,7 @@ export default function Protocolo145Page() {
                           <span className={`h-4 w-4 rounded border flex items-center justify-center flex-shrink-0 ${checked ? "bg-gold border-gold" : "border-muted-foreground/40"}`}>
                             {checked && <Check className="h-3 w-3 text-black" />}
                           </span>
-                          <span className={checked ? "line-through opacity-80" : ""}>{t.label}</span>
+                          <span className={checked ? "line-through opacity-80" : ""}>{label}</span>
                         </button>
                       );
                     })}
