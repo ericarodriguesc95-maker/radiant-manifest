@@ -21,6 +21,7 @@ type SectionId = typeof SECTION_IDS[number];
 
 type DayTasks = Record<number, Record<string, boolean>>;
 type DayNotes = Record<number, string>;
+type FastingWindow = "14h" | "16h" | "18h" | "24h";
 type Progress = {
   days: boolean[];
   dayTasks: DayTasks;
@@ -28,6 +29,7 @@ type Progress = {
   lastSection: SectionId;
   startedAt: string;
   updatedAt: string;
+  fastingWindow: FastingWindow;
 };
 type HistoryRun = {
   id: string;
@@ -37,6 +39,7 @@ type HistoryRun = {
   totalTasksDone: number;
   notes: DayNotes;
   dayTasks: DayTasks;
+  fastingWindow?: FastingWindow;
 };
 
 function emptyProgress(): Progress {
@@ -48,6 +51,7 @@ function emptyProgress(): Progress {
     lastSection: "tese",
     startedAt: now,
     updatedAt: now,
+    fastingWindow: "14h",
   };
 }
 function loadProgress(): Progress {
