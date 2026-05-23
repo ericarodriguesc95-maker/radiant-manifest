@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Brain, Heart, Eye, Sparkles, Trophy, Flame, CheckCircle2,
-  Circle, Target, History, BookOpen, Zap, Award,
+  Circle, Target, History, BookOpen, Zap, Award, Mic, MessageCircle, ShieldAlert,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
