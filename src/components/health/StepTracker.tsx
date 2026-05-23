@@ -343,7 +343,94 @@ export default function StepTracker() {
         </CardContent>
       </Card>
 
-      <Card>
+      {/* Cronômetro de caminhada */}
+      <Card className="border-primary/30">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Timer className="h-5 w-5 text-primary" /> Cronômetro de caminhada
+          </CardTitle>
+          <CardDescription>
+            Roda em segundo plano e aparece na barra de notificações do celular (Android). No iOS web a notificação é limitada — para barra fixa, use o app nativo.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="text-center">
+            <div className="text-4xl font-mono font-bold text-primary tracking-wider">{chronoText}</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              {chronoStart ? "🟢 Em andamento" : "⏸️ Parado"} • {sessionSteps} passos nesta sessão
+            </div>
+          </div>
+          {chronoStart == null ? (
+            <Button className="w-full" onClick={startChrono}>
+              <Play className="h-4 w-4 mr-2" /> Iniciar caminhada
+            </Button>
+          ) : (
+            <Button className="w-full" variant="destructive" onClick={stopChrono}>
+              <Pause className="h-4 w-4 mr-2" /> Parar caminhada
+            </Button>
+          )}
+          <p className="text-[10px] text-muted-foreground text-center flex items-center justify-center gap-1">
+            <Bell className="h-3 w-3" /> Permita notificações para ver o cronômetro na barra do celular.
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* Importar histórico */}
+      <Card className="border-primary/30">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <Upload className="h-5 w-5 text-primary" /> Importar do Apple Health / Google Fit / Smartwatch
+          </CardTitle>
+          <CardDescription>
+            Atualiza seu histórico automaticamente com os dados do app de saúde do seu celular ou relógio.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="rounded-lg border border-primary/20 bg-background/60 p-3 space-y-2">
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Apple className="h-4 w-4" /> Apple Health (iPhone)
+            </div>
+            <ol className="text-[11px] text-muted-foreground list-decimal pl-4 space-y-0.5">
+              <li>Abra o app <b>Saúde</b> no iPhone</li>
+              <li>Toque na foto de perfil → <b>Exportar Dados de Saúde</b></li>
+              <li>Salve o arquivo <b>.zip</b> e selecione abaixo</li>
+            </ol>
+            <Input
+              type="file"
+              accept=".zip,.xml"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) importAppleHealth(f); e.currentTarget.value = ""; }}
+            />
+          </div>
+
+          <div className="rounded-lg border border-primary/20 bg-background/60 p-3 space-y-2">
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Activity className="h-4 w-4" /> Google Fit / Mi Fit / Samsung Health / Garmin (CSV)
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              Exporte um CSV no formato <code>data,passos</code> (ex: <code>2026-05-22,8421</code>). A maioria dos apps de relógio permite exportar.
+            </p>
+            <Input
+              type="file"
+              accept=".csv,.txt"
+              onChange={(e) => { const f = e.target.files?.[0]; if (f) importCsv(f); e.currentTarget.value = ""; }}
+            />
+          </div>
+
+          <div className="rounded-lg border border-primary/20 bg-background/60 p-3 space-y-2">
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <Watch className="h-4 w-4" /> Sincronização automática (app nativo)
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              Quando você instalar o Glow Up Club como app nativo (via Capacitor), poderá puxar passos do HealthKit/Google Fit com um clique.
+            </p>
+            <Button size="sm" variant="outline" onClick={importNative}>
+              <Watch className="h-3 w-3 mr-1" /> Sincronizar agora
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+
         <CardHeader>
           <CardTitle className="text-base">Últimos 7 dias</CardTitle>
           <CardDescription>Média: {weekAvg.toLocaleString("pt-BR")} passos/dia • Total: {weekTotal.toLocaleString("pt-BR")}</CardDescription>
