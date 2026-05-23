@@ -382,6 +382,7 @@ export default function Protocolo145Page() {
   const navigate = useNavigate();
   const [progress, setProgress] = useState<Progress>(() => loadProgress());
   const [history, setHistory] = useState<HistoryRun[]>(() => loadHistory());
+  const [streak, setStreak] = useState<Streak>(() => loadStreak());
   const [resumed, setResumed] = useState(false);
   const [celebrated, setCelebrated] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -389,6 +390,25 @@ export default function Protocolo145Page() {
 
   useEffect(() => { saveProgress(progress); }, [progress]);
   useEffect(() => { saveHistory(history); }, [history]);
+  useEffect(() => { saveStreak(streak); }, [streak]);
+
+  // Marca atividade do dia → atualiza streak diário (consecutivo por dias do calendário)
+  const bumpStreak = () => {
+    setStreak((s) => {
+      const today = todayKey();
+      if (s.lastActiveDate === today) return s;
+      let nextCurrent = 1;
+      if (s.lastActiveDate) {
+        const diff = daysBetween(s.lastActiveDate, today);
+        if (diff === 1) nextCurrent = s.current + 1;
+        else if (diff === 0) return s;
+      }
+      const nextBest = Math.max(s.best, nextCurrent);
+      if (nextCurrent > 1) toast.success(`🔥 ${nextCurrent} dias seguidos no protocolo`);
+      return { ...s, current: nextCurrent, best: nextBest, lastActiveDate: today };
+    });
+  };
+
 
   useEffect(() => {
     const observer = new IntersectionObserver(
