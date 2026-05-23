@@ -18,7 +18,7 @@ type Task = { id: string; title: string; desc: string; xp: number };
 type ModuleDef = {
   id: string;
   title: string;
-  area: "IE" | "PSI" | "NEURO" | "MKT";
+  area: "IE" | "PSI" | "NEURO" | "MKT" | "COM" | "PER" | "CRI";
   icon: typeof Brain;
   tagline: string;
   tasks: Task[];
