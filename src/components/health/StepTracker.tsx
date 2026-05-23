@@ -41,9 +41,184 @@ export default function StepTracker() {
   const km = ((todaySteps * stride) / 100000).toFixed(2);
   const kcal = Math.round(todaySteps * 0.04);
 
+  // Chronometer (cronômetro) — persists across reloads + persistent notification
+  const [chronoStart, setChronoStart] = useState<number | null>(() => {
+    const v = localStorage.getItem(TIMER_KEY);
+    return v ? Number(v) : null;
+  });
+  const [chronoNow, setChronoNow] = useState(Date.now());
+  const notifRef = useRef<Notification | null>(null);
+  const wakeLockRef = useRef<any>(null);
+
   useEffect(() => { saveHistory(history); }, [history]);
   useEffect(() => { localStorage.setItem(GOAL_KEY, String(goal)); }, [goal]);
   useEffect(() => { localStorage.setItem(STRIDE_KEY, String(stride)); }, [stride]);
+
+  // Chronometer ticker + persistent notification updates
+  useEffect(() => {
+    if (chronoStart == null) return;
+    localStorage.setItem(TIMER_KEY, String(chronoStart));
+    const id = setInterval(async () => {
+      setChronoNow(Date.now());
+      // Update persistent notification (Android / desktop). iOS web é limitado.
+      if ("serviceWorker" in navigator && Notification.permission === "granted") {
+        try {
+          const reg = await navigator.serviceWorker.getRegistration();
+          const elapsedMs = Date.now() - chronoStart;
+          const h = Math.floor(elapsedMs / 3600000);
+          const m = Math.floor((elapsedMs % 3600000) / 60000);
+          const s = Math.floor((elapsedMs % 60000) / 1000);
+          const time = `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+          await reg?.showNotification("⏱️ Caminhada em andamento", {
+            body: `${time} • ${todaySteps.toLocaleString("pt-BR")} passos • ${km} km`,
+            tag: "steps-chrono",
+            icon: "/icon-192.png",
+            badge: "/icon-192.png",
+            silent: true,
+            // @ts-ignore
+            ongoing: true,
+            // @ts-ignore
+            renotify: false,
+          });
+        } catch {}
+      }
+    }, 1000);
+    return () => clearInterval(id);
+  }, [chronoStart, todaySteps, km]);
+
+  const startChrono = async () => {
+    try {
+      if ("Notification" in window && Notification.permission === "default") {
+        await Notification.requestPermission();
+      }
+      // Wake Lock — mantém tela acordada enquanto caminha (Android Chrome)
+      if ("wakeLock" in navigator) {
+        try { wakeLockRef.current = await (navigator as any).wakeLock.request("screen"); } catch {}
+      }
+    } catch {}
+    setChronoStart(Date.now());
+    setCounting(true);
+    setSessionSteps(0);
+    toast.success("Cronômetro iniciado");
+  };
+  const stopChrono = async () => {
+    setChronoStart(null);
+    localStorage.removeItem(TIMER_KEY);
+    setCounting(false);
+    try { await wakeLockRef.current?.release?.(); } catch {}
+    if ("serviceWorker" in navigator) {
+      const reg = await navigator.serviceWorker.getRegistration();
+      const notifs = await reg?.getNotifications({ tag: "steps-chrono" });
+      notifs?.forEach((n) => n.close());
+    }
+    toast.success("Cronômetro parado");
+  };
+  const chronoText = (() => {
+    if (chronoStart == null) return "00:00:00";
+    const e = chronoNow - chronoStart;
+    const h = Math.floor(e / 3600000);
+    const m = Math.floor((e % 3600000) / 60000);
+    const s = Math.floor((e % 60000) / 1000);
+    return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  })();
+
+  // --- Importadores ---
+  const mergeImported = (entries: Record<string, number>, mode: "sum" | "replace" = "sum") => {
+    setHistory((h) => {
+      const next = { ...h };
+      for (const [d, n] of Object.entries(entries)) {
+        if (!d || !Number.isFinite(n)) continue;
+        next[d] = mode === "sum" ? (next[d] || 0) + Math.round(n) : Math.round(n);
+      }
+      return next;
+    });
+    const days = Object.keys(entries).length;
+    toast.success(`Importados ${days} dia(s) de histórico`);
+  };
+
+  // Apple Health: usuário exporta no iOS (Saúde → ícone perfil → Exportar Dados de Saúde).
+  // Aceita o .zip OU o export.xml descompactado.
+  const importAppleHealth = async (file: File) => {
+    try {
+      toast.info("Lendo arquivo… pode levar alguns segundos");
+      let xml = "";
+      if (file.name.endsWith(".zip")) {
+        const buf = new Uint8Array(await file.arrayBuffer());
+        const files: Record<string, Uint8Array> = await new Promise((res, rej) =>
+          unzip(buf, (err, data) => (err ? rej(err) : res(data)))
+        );
+        const key = Object.keys(files).find((k) => k.endsWith("export.xml") || k.endsWith("Exportar.xml"));
+        if (!key) { toast.error("export.xml não encontrado no zip"); return; }
+        xml = strFromU8(files[key]);
+      } else {
+        xml = await file.text();
+      }
+      // Regex em vez de DOMParser (export.xml pode ter >100MB)
+      const re = /<Record\b[^>]*type="HKQuantityTypeIdentifierStepCount"[^>]*startDate="([^"]+)"[^>]*value="([^"]+)"/g;
+      const byDay: Record<string, number> = {};
+      let m: RegExpExecArray | null;
+      while ((m = re.exec(xml))) {
+        const d = m[1].slice(0, 10); // yyyy-MM-dd
+        const v = Number(m[2]) || 0;
+        byDay[d] = (byDay[d] || 0) + v;
+      }
+      if (!Object.keys(byDay).length) { toast.error("Nenhum registro de passos encontrado"); return; }
+      mergeImported(byDay, "replace");
+    } catch (e: any) {
+      toast.error("Falha ao importar: " + (e?.message || "arquivo inválido"));
+    }
+  };
+
+  // CSV genérico (Google Fit, Mi Fit, Samsung Health exportados): "date,steps" — uma linha por dia
+  const importCsv = async (file: File) => {
+    try {
+      const text = await file.text();
+      const lines = text.split(/\r?\n/).filter(Boolean);
+      const byDay: Record<string, number> = {};
+      for (const line of lines) {
+        const parts = line.split(/[,;\t]/);
+        if (parts.length < 2) continue;
+        const dRaw = parts[0].replace(/"/g, "").trim();
+        const v = Number(parts[1].replace(/[^\d.-]/g, ""));
+        // tenta yyyy-MM-dd, dd/MM/yyyy, MM/dd/yyyy
+        let d = "";
+        if (/^\d{4}-\d{2}-\d{2}/.test(dRaw)) d = dRaw.slice(0, 10);
+        else if (/^\d{2}\/\d{2}\/\d{4}/.test(dRaw)) {
+          const [a, b, c] = dRaw.split("/");
+          d = `${c}-${b}-${a}`;
+        }
+        if (d && Number.isFinite(v)) byDay[d] = (byDay[d] || 0) + v;
+      }
+      if (!Object.keys(byDay).length) { toast.error("CSV sem dados válidos (formato: data,passos)"); return; }
+      mergeImported(byDay, "replace");
+    } catch (e: any) {
+      toast.error("Falha ao ler CSV: " + (e?.message || ""));
+    }
+  };
+
+  // Capacitor nativo (quando o app rodar empacotado) — usa HealthKit/Google Fit
+  const importNative = async () => {
+    const cap = (window as any).Capacitor;
+    if (!cap?.isNativePlatform?.()) {
+      toast.error("Disponível só no app nativo. Use 'Exportar do Apple Health' por enquanto.");
+      return;
+    }
+    try {
+      // Plugin sugerido: @perfood/capacitor-healthkit ou capacitor-health
+      const Health = (window as any).CapacitorHealth || (window as any).CapacitorHealthkit;
+      if (!Health) { toast.error("Plugin de saúde não instalado no app nativo"); return; }
+      const since = new Date(); since.setDate(since.getDate() - 30);
+      const res = await Health.queryHKitSampleType?.({ sampleName: "stepCount", startDate: since.toISOString(), endDate: new Date().toISOString(), limit: 0 });
+      const byDay: Record<string, number> = {};
+      for (const r of (res?.resultData || [])) {
+        const d = String(r.startDate).slice(0, 10);
+        byDay[d] = (byDay[d] || 0) + Number(r.value || 0);
+      }
+      mergeImported(byDay, "replace");
+    } catch (e: any) {
+      toast.error("Erro na sincronização: " + (e?.message || ""));
+    }
+  };
 
   const setToday = (n: number) => {
     setHistory((h) => ({ ...h, [today]: Math.max(0, Math.round(n)) }));
