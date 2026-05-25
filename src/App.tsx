@@ -44,6 +44,8 @@ import SugestoesPage from "@/pages/SugestoesPage";
 import IdentidadeInabalavelPage from "@/pages/IdentidadeInabalavelPage";
 import Protocolo145Page from "@/pages/Protocolo145Page";
 import MentePoderosaPage from "@/pages/MentePoderosaPage";
+import GlowMovePage from "@/pages/GlowMovePage";
+import GlowMovePillarPage from "@/pages/GlowMovePillarPage";
 import AdminSugestoesPage from "@/pages/AdminSugestoesPage";
 import LandingPage from "@/pages/LandingPage";
 import { useSubscription } from "@/hooks/useSubscription";
