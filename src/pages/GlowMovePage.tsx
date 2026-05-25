@@ -76,12 +76,12 @@ export default function GlowMovePage() {
         <section className="relative overflow-hidden rounded-3xl p-6 border border-gold/20 bg-gradient-to-br from-purple-950/40 via-background to-amber-950/20">
           <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[radial-gradient(circle_at_20%_20%,hsl(var(--gold))_0%,transparent_50%)]" />
           <div className="relative">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-gold/80 font-body">Sua jornada</p>
+            <p className="text-[11px] uppercase tracking-[0.2em] text-gold/80 font-body">21 dias de transformação</p>
             <h2 className="font-display text-3xl text-foreground mt-1">
               7 movimentos.<br />Uma só mulher.
             </h2>
             <p className="text-sm text-muted-foreground mt-3 max-w-md">
-              Avance por fases dentro de 7 pilares de vida. Cada missão é um passo de transformação real.
+              21 dias de transformação em movimento. Avance por fases dentro de 7 pilares de vida — cada missão é um passo real.
             </p>
             <div className="mt-5">
               <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1.5">
