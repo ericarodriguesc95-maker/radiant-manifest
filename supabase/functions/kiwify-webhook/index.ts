@@ -10,6 +10,20 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    // Validate webhook came from Kiwify (configure token in Kiwify dashboard)
+    const expectedToken = Deno.env.get("KIWIFY_WEBHOOK_SECRET");
+    const providedToken =
+      req.headers.get("x-kiwify-token") ||
+      req.headers.get("x-kiwify-signature") ||
+      new URL(req.url).searchParams.get("token");
+    if (!expectedToken || providedToken !== expectedToken) {
+      console.warn("[kiwify-webhook] Rejected: invalid or missing token");
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
