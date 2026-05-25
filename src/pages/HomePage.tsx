@@ -232,7 +232,7 @@ const HomePage = () => {
               <Sparkles className="h-6 w-6 text-gold" />
             </div>
             <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Glow Move</p>
+              <p className="text-sm font-display font-bold text-foreground">Gloow Movimenta</p>
               <p className="text-[11px] font-body text-foreground/70 mt-0.5">Sua jornada de transformação em 7 movimentos</p>
             </div>
             <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-gold border border-gold/40 rounded-full px-2 py-0.5">Iniciar</span>

@@ -61,7 +61,7 @@ export default function GlowMovePage() {
             <ArrowLeft className="h-5 w-5 text-gold" />
           </button>
           <div className="flex-1">
-            <h1 className="font-display text-lg leading-none text-foreground">Glow Move</h1>
+            <h1 className="font-display text-lg leading-none text-foreground">Gloow Movimenta</h1>
             <p className="text-[10px] text-muted-foreground capitalize">{today}</p>
           </div>
           <div className="text-right">
