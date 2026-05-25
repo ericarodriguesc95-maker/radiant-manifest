@@ -44,6 +44,8 @@ import SugestoesPage from "@/pages/SugestoesPage";
 import IdentidadeInabalavelPage from "@/pages/IdentidadeInabalavelPage";
 import Protocolo145Page from "@/pages/Protocolo145Page";
 import MentePoderosaPage from "@/pages/MentePoderosaPage";
+import GlowMovePage from "@/pages/GlowMovePage";
+import GlowMovePillarPage from "@/pages/GlowMovePillarPage";
 import AdminSugestoesPage from "@/pages/AdminSugestoesPage";
 import LandingPage from "@/pages/LandingPage";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -137,6 +139,8 @@ const AppRoutes = () => (
       <Route path="/identidade-inabalavel" element={<ErrorBoundary><IdentidadeInabalavelPage /></ErrorBoundary>} />
       <Route path="/protocolo-14-5" element={<ErrorBoundary><Protocolo145Page /></ErrorBoundary>} />
       <Route path="/mente-poderosa" element={<ErrorBoundary><MentePoderosaPage /></ErrorBoundary>} />
+      <Route path="/glow-move" element={<ErrorBoundary><PremiumRoute><GlowMovePage /></PremiumRoute></ErrorBoundary>} />
+      <Route path="/glow-move/:pillarId" element={<ErrorBoundary><PremiumRoute><GlowMovePillarPage /></PremiumRoute></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>

@@ -894,6 +894,84 @@ export type Database = {
         }
         Relationships: []
       }
+      glow_move_missions: {
+        Row: {
+          completed_at: string
+          frase_ancora: string | null
+          id: string
+          mission_text: string
+          phase: number
+          pillar_id: string
+          reflection: string | null
+          tempo_estimado: string | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          frase_ancora?: string | null
+          id?: string
+          mission_text: string
+          phase: number
+          pillar_id: string
+          reflection?: string | null
+          tempo_estimado?: string | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          frase_ancora?: string | null
+          id?: string
+          mission_text?: string
+          phase?: number
+          pillar_id?: string
+          reflection?: string | null
+          tempo_estimado?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      glow_move_progress: {
+        Row: {
+          created_at: string
+          current_phase: number
+          glow_points: number
+          id: string
+          last_completed_date: string | null
+          missions_in_phase: number
+          pillar_id: string
+          streak: number
+          unlocked: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_phase?: number
+          glow_points?: number
+          id?: string
+          last_completed_date?: string | null
+          missions_in_phase?: number
+          pillar_id: string
+          streak?: number
+          unlocked?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_phase?: number
+          glow_points?: number
+          id?: string
+          last_completed_date?: string | null
+          missions_in_phase?: number
+          pillar_id?: string
+          streak?: number
+          unlocked?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       goal_tasks: {
         Row: {
           created_at: string

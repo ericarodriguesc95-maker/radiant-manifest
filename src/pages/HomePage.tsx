@@ -219,6 +219,28 @@ const HomePage = () => {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
+        {/* GLOW MOVE — 21 dias · 7 pilares (purple CTA) */}
+        {/* ═══════════════════════════════════════════ */}
+        <div className="animate-stagger" style={{ "--stagger": 9 } as React.CSSProperties}>
+          <button
+            onClick={() => navigate("/glow-move")}
+            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-gold/30"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-950 via-purple-900/80 to-fuchsia-950/60" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.25),transparent_60%)]" />
+            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/40 group-hover:bg-gold/25 transition-all">
+              <Sparkles className="h-6 w-6 text-gold" />
+            </div>
+            <div className="relative z-10 flex-1 text-left">
+              <p className="text-sm font-display font-bold text-foreground">Glow Move</p>
+              <p className="text-[11px] font-body text-foreground/70 mt-0.5">Sua jornada de transformação em 7 movimentos</p>
+            </div>
+            <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-gold border border-gold/40 rounded-full px-2 py-0.5">Iniciar</span>
+            <ChevronRight className="relative z-10 h-5 w-5 text-gold/70 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
+          </button>
+        </div>
+
+        {/* ═══════════════════════════════════════════ */}
         {/* BIBLE 365 — Premium CTA */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
