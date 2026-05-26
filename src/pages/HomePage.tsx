@@ -91,12 +91,12 @@ const HomePage = () => {
   };
 
   const quickActions = [
-    { icon: Brain, label: "Reprogramação\nMental", to: "/reprogramacao", gradient: "from-purple-900/40 to-purple-800/20" },
-    { icon: Zap, label: "Alta\nPerformance", to: "/alta-performance", gradient: "from-amber-900/40 to-amber-800/20" },
-    { icon: Target, label: "Metas &\nManifestação", to: "/metas", gradient: "from-rose-900/40 to-rose-800/20" },
-    { icon: Heart, label: "Destravar\nFeminino", to: "/jornada", gradient: "from-emerald-900/40 to-emerald-800/20" },
-    { icon: Crown, label: "Identidade\nInabalável", to: "/identidade-inabalavel", gradient: "from-gold/30 to-amber-900/20" },
-    { icon: Flame, label: "Protocolo\n14.5 · Reset", to: "/protocolo-14-5", gradient: "from-zinc-900/60 to-amber-950/30" },
+    { icon: Brain, label: "Reprogramação\nMental", description: "PNL, meditações e frequências para reprogramar sua mente", to: "/reprogramacao", gradient: "from-purple-900/40 to-purple-800/20" },
+    { icon: Zap, label: "Alta\nPerformance", description: "Pomodoro, Feynman e hábitos de mulheres de alta performance", to: "/alta-performance", gradient: "from-amber-900/40 to-amber-800/20" },
+    { icon: Target, label: "Metas &\nManifestação", description: "Defina metas SMART e manifeste sua vida dos sonhos", to: "/metas", gradient: "from-rose-900/40 to-rose-800/20" },
+    { icon: Heart, label: "Destravar\nFeminino", description: "14 aulas para libertar sua essência e poder feminino", to: "/jornada", gradient: "from-emerald-900/40 to-emerald-800/20" },
+    { icon: Crown, label: "Identidade\nInabalável", description: "Construa autoestima de rainha e confiança inabalável", to: "/identidade-inabalavel", gradient: "from-gold/30 to-amber-900/20" },
+    { icon: Flame, label: "Protocolo\n14.5 · Reset", description: "Reset total em 14 dias e meio para renascer poderosa", to: "/protocolo-14-5", gradient: "from-zinc-900/60 to-amber-950/30" },
   ];
 
   return (
