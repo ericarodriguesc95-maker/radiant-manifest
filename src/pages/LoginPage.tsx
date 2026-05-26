@@ -47,30 +47,8 @@ export default function LoginPage() {
       return;
     }
 
-    if (authData?.user) {
-      const { data: sub } = await supabase
-        .from("subscriptions")
-        .select("status, plan_type, expiry_date")
-        .eq("user_id", authData.user.id)
-        .maybeSingle();
-
-      const isActive = sub && (
-        sub.plan_type === "lifetime" ||
-        sub.status === "active" ||
-        sub.status === "trialing"
-      );
-      const isExpired = sub?.plan_type !== "lifetime" && sub?.expiry_date && new Date(sub.expiry_date) < new Date();
-
-      setLoading(false);
-      if (!sub || !isActive || isExpired) {
-        navigate("/renovar-brilho");
-      } else {
-        navigate("/");
-      }
-    } else {
-      setLoading(false);
-      navigate("/");
-    }
+    setLoading(false);
+    navigate("/");
   };
 
   const handleOAuth = async (provider: "google" | "apple") => {

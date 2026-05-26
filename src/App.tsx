@@ -60,16 +60,10 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function SubscriptionGuard({ children }: { children: React.ReactNode }) {
-  const { isActive, isLoading } = useSubscription();
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center"><FourPointStar size={40} animate="spin" className="text-gold" fill="hsl(43 72% 52%)" /></div>;
-  if (!isActive) return <Navigate to="/renovar-brilho" replace />;
   return <>{children}</>;
 }
 
 function PremiumRoute({ children }: { children: React.ReactNode }) {
-  const { isActive, isLoading } = useSubscription();
-  if (isLoading) return <div className="min-h-screen flex items-center justify-center"><FourPointStar size={40} animate="spin" className="text-gold" fill="hsl(43 72% 52%)" /></div>;
-  if (!isActive) return <Navigate to="/renovar-brilho" replace />;
   return <>{children}</>;
 }
 
