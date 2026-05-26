@@ -1,6 +1,6 @@
-import { Heart, Brain, Sparkles, Globe, type LucideIcon } from "lucide-react";
+import { Heart, Brain, Sparkles, Globe, Coins, type LucideIcon } from "lucide-react";
 
-export type Dimension = "corpo" | "mente" | "alma" | "externo";
+export type Dimension = "corpo" | "mente" | "alma" | "externo" | "financas";
 
 export interface DimensionMeta {
   id: Dimension;
@@ -10,6 +10,14 @@ export interface DimensionMeta {
   corBg: string;
   icon: LucideIcon;
 }
+
+export const DIMENSION_ORDER: Dimension[] = [
+  "corpo",
+  "mente",
+  "alma",
+  "externo",
+  "financas",
+];
 
 export const DIMENSIONS: Record<Dimension, DimensionMeta> = {
   corpo: {
@@ -44,6 +52,14 @@ export const DIMENSIONS: Record<Dimension, DimensionMeta> = {
     corBg: "from-emerald-900/30 to-emerald-800/10",
     icon: Globe,
   },
+  financas: {
+    id: "financas",
+    nome: "Finanças",
+    subtitulo: "Abundância prática",
+    cor: "text-yellow-300",
+    corBg: "from-yellow-900/30 to-amber-900/10",
+    icon: Coins,
+  },
 };
 
 export interface Task {
@@ -69,7 +85,7 @@ export const WEEKS = [
 
 export const POINTS_PER_TASK = 10;
 export const TOTAL_DAYS = 21;
-export const TASKS_PER_DAY = 4;
+export const TASKS_PER_DAY = 5;
 
 export const DAYS: DayData[] = [
   // SEMANA 1 — DESPERTAR
