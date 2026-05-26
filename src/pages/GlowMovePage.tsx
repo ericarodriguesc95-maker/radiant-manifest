@@ -84,7 +84,7 @@ export default function GlowMovePage() {
   const totalPossible = TOTAL_DAYS * TASKS_PER_DAY;
   const challengePct = Math.round((totalCompleted / totalPossible) * 100);
 
-  // Dias 100% completos (4 tarefas)
+  // Dias 100% completos (5 tarefas)
   const perfectDays = useMemo(() => {
     const counts: Record<number, number> = {};
     completions.forEach((c) => {
@@ -231,8 +231,8 @@ export default function GlowMovePage() {
               )}
             </h2>
             <p className="text-sm text-muted-foreground mt-2 max-w-md leading-relaxed">
-              4 tarefas por dia, uma para cada dimensão. Cada tarefa concluída = {POINTS_PER_TASK}{" "}
-              Glow. Reconstrua-se em 21 dias inteiros, sem dividir mais corpo, mente, alma e mundo.
+              5 tarefas por dia, uma para cada dimensão. Cada tarefa concluída = {POINTS_PER_TASK}{" "}
+              Glow. Reconstrua-se em 21 dias inteiros, integrando corpo, mente, alma, externo e finanças.
             </p>
 
             <div className="mt-5">
