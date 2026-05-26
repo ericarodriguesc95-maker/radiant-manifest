@@ -91,12 +91,12 @@ const HomePage = () => {
   };
 
   const quickActions = [
-    { icon: Brain, label: "Reprogramação\nMental", to: "/reprogramacao", gradient: "from-purple-900/40 to-purple-800/20" },
-    { icon: Zap, label: "Alta\nPerformance", to: "/alta-performance", gradient: "from-amber-900/40 to-amber-800/20" },
-    { icon: Target, label: "Metas &\nManifestação", to: "/metas", gradient: "from-rose-900/40 to-rose-800/20" },
-    { icon: Heart, label: "Destravar\nFeminino", to: "/jornada", gradient: "from-emerald-900/40 to-emerald-800/20" },
-    { icon: Crown, label: "Identidade\nInabalável", to: "/identidade-inabalavel", gradient: "from-gold/30 to-amber-900/20" },
-    { icon: Flame, label: "Protocolo\n14.5 · Reset", to: "/protocolo-14-5", gradient: "from-zinc-900/60 to-amber-950/30" },
+    { icon: Brain, label: "Reprogramação\nMental", description: "PNL, meditações e frequências para reprogramar sua mente", to: "/reprogramacao", gradient: "from-purple-900/40 to-purple-800/20" },
+    { icon: Zap, label: "Alta\nPerformance", description: "Pomodoro, Feynman e hábitos de mulheres de alta performance", to: "/alta-performance", gradient: "from-amber-900/40 to-amber-800/20" },
+    { icon: Target, label: "Metas &\nManifestação", description: "Defina metas SMART e manifeste sua vida dos sonhos", to: "/metas", gradient: "from-rose-900/40 to-rose-800/20" },
+    { icon: Heart, label: "Destravar\nFeminino", description: "14 aulas para libertar sua essência e poder feminino", to: "/jornada", gradient: "from-emerald-900/40 to-emerald-800/20" },
+    { icon: Crown, label: "Identidade\nInabalável", description: "Construa autoestima de rainha e confiança inabalável", to: "/identidade-inabalavel", gradient: "from-gold/30 to-amber-900/20" },
+    { icon: Flame, label: "Protocolo\n14.5 · Reset", description: "Reset total em 14 dias e meio para renascer poderosa", to: "/protocolo-14-5", gradient: "from-zinc-900/60 to-amber-950/30" },
   ];
 
   return (
@@ -192,12 +192,12 @@ const HomePage = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            {quickActions.map(({ icon: Icon, label, to, gradient }, i) => (
+            {quickActions.map(({ icon: Icon, label, description, to, gradient }, i) => (
               <button
                 key={to}
                 onClick={() => navigate(to)}
                 className={cn(
-                  "animate-stagger group relative overflow-hidden rounded-2xl p-4 flex flex-col items-start gap-3 transition-all duration-300",
+                  "animate-stagger group relative overflow-hidden rounded-2xl p-4 flex flex-col items-start gap-2 transition-all duration-300 min-h-[140px]",
                   "glass border border-gold/10 hover:border-gold/30",
                   "hover:shadow-glow active:scale-[0.97]"
                 )}
@@ -210,6 +210,7 @@ const HomePage = () => {
                   <Icon className="h-5 w-5 text-gold" />
                 </div>
                 <span className="relative z-10 text-xs font-body font-semibold text-foreground/90 leading-tight whitespace-pre-line text-left">{label}</span>
+                <span className="relative z-10 text-[10px] font-body text-foreground/60 leading-snug text-left line-clamp-3">{description}</span>
 
                 {/* Corner accent */}
                 <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-gold/5 to-transparent rounded-bl-3xl" />
