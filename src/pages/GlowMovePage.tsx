@@ -1,124 +1,244 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ChevronRight, Lock, Flame, ChevronsRight } from "lucide-react";
+import {
+  ArrowLeft,
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  Flame,
+  Info,
+  Lightbulb,
+  Lock,
+  Sparkles,
+  Trophy,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { PILLARS } from "@/data/glowMoveData";
+import {
+  DAYS,
+  DIMENSIONS,
+  POINTS_PER_TASK,
+  TASKS_PER_DAY,
+  TOTAL_DAYS,
+  WEEKS,
+  type Dimension,
+  getDay,
+} from "@/data/glowMove21Data";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
-interface ProgressRow {
-  pillar_id: string;
-  current_phase: number;
-  missions_in_phase: number;
-  glow_points: number;
-  streak: number;
-  unlocked: boolean;
-}
+type Completion = {
+  pillar_id: string; // dimension
+  phase: number; // day
+  completed_at: string;
+};
+
+const todayISO = () => new Date().toISOString().slice(0, 10);
 
 export default function GlowMovePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [progress, setProgress] = useState<Record<string, ProgressRow>>({});
-  const [completedDays, setCompletedDays] = useState<string[]>([]);
+  const [completions, setCompletions] = useState<Completion[]>([]);
   const [startDate, setStartDate] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [activeDay, setActiveDay] = useState<number>(1);
+  const [openTask, setOpenTask] = useState<string | null>(null);
+  const [saving, setSaving] = useState<string | null>(null);
+  const [particles, setParticles] = useState(false);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
-      const [{ data: prog }, { data: missions }] = await Promise.all([
-        supabase.from("glow_move_progress").select("*").eq("user_id", user.id),
-        supabase
-          .from("glow_move_missions")
-          .select("completed_at")
-          .eq("user_id", user.id)
-          .order("completed_at", { ascending: true }),
-      ]);
-      const map: Record<string, ProgressRow> = {};
-      (prog ?? []).forEach((r: any) => (map[r.pillar_id] = r));
-      setProgress(map);
-      const days = Array.from(
-        new Set((missions ?? []).map((m: any) => (m.completed_at as string).slice(0, 10)))
-      );
-      setCompletedDays(days);
-      setStartDate(days[0] ?? null);
-      setLoading(false);
+      const { data } = await supabase
+        .from("glow_move_missions")
+        .select("pillar_id, phase, completed_at")
+        .eq("user_id", user.id)
+        .order("completed_at", { ascending: true });
+      const list = (data ?? []) as Completion[];
+      setCompletions(list);
+      setStartDate(list[0]?.completed_at?.slice(0, 10) ?? null);
     })();
   }, [user]);
 
-  const totalPoints = Object.values(progress).reduce((s, p) => s + (p.glow_points || 0), 0);
-  const totalCompleted = Object.values(progress).reduce(
-    (s, p) => s + ((p.current_phase - 1) * 7 + p.missions_in_phase),
-    0
+  const currentDay = useMemo(() => {
+    if (!startDate) return 1;
+    const diff = Math.floor(
+      (new Date(todayISO()).getTime() - new Date(startDate).getTime()) / 86400000,
+    );
+    return Math.min(TOTAL_DAYS, Math.max(1, diff + 1));
+  }, [startDate]);
+
+  useEffect(() => {
+    setActiveDay(currentDay);
+  }, [currentDay]);
+
+  const completedKey = (day: number, dim: Dimension) => `${day}-${dim}`;
+  const completedSet = useMemo(
+    () => new Set(completions.map((c) => `${c.phase}-${c.pillar_id}`)),
+    [completions],
   );
-  const totalMax = PILLARS.length * 4 * 7;
-  const overallPct = Math.round((totalCompleted / totalMax) * 100);
 
-  // Desafio de 21 dias
-  const TOTAL_DAYS = 21;
-  const todayStr = new Date().toISOString().slice(0, 10);
-  const daysCompletedCount = Math.min(completedDays.length, TOTAL_DAYS);
-  const currentDay = startDate
-    ? Math.min(
-        TOTAL_DAYS,
-        Math.floor(
-          (new Date(todayStr).getTime() - new Date(startDate).getTime()) / 86400000
-        ) + 1
-      )
-    : 1;
-  const completedToday = completedDays.includes(todayStr);
-  const challengePct = Math.round((daysCompletedCount / TOTAL_DAYS) * 100);
-  const challengeComplete = daysCompletedCount >= TOTAL_DAYS;
+  const totalCompleted = completions.length;
+  const totalPoints = totalCompleted * POINTS_PER_TASK;
+  const totalPossible = TOTAL_DAYS * TASKS_PER_DAY;
+  const challengePct = Math.round((totalCompleted / totalPossible) * 100);
 
-  const today = new Date().toLocaleDateString("pt-BR", {
+  // Dias 100% completos (4 tarefas)
+  const perfectDays = useMemo(() => {
+    const counts: Record<number, number> = {};
+    completions.forEach((c) => {
+      counts[c.phase] = (counts[c.phase] ?? 0) + 1;
+    });
+    return Object.entries(counts)
+      .filter(([, v]) => v >= TASKS_PER_DAY)
+      .map(([k]) => Number(k));
+  }, [completions]);
+
+  // Streak: dias consecutivos com ao menos 1 tarefa
+  const streak = useMemo(() => {
+    const set = new Set(completions.map((c) => c.completed_at.slice(0, 10)));
+    let s = 0;
+    let d = new Date(todayISO());
+    while (set.has(d.toISOString().slice(0, 10))) {
+      s++;
+      d = new Date(d.getTime() - 86400000);
+    }
+    return s;
+  }, [completions]);
+
+  // Semanas conquistadas
+  const weeksDone = WEEKS.filter((w) => {
+    const [a, b] = w.dias;
+    for (let i = a; i <= b; i++) if (!perfectDays.includes(i)) return false;
+    return true;
+  });
+
+  const completeTask = async (day: number, dim: Dimension, titulo: string) => {
+    if (!user) {
+      toast.error("Faça login para registrar suas missões");
+      return;
+    }
+    if (day > currentDay) {
+      toast.info("Esse dia ainda não foi liberado, rainha");
+      return;
+    }
+    const key = completedKey(day, dim);
+    if (completedSet.has(key)) return;
+    setSaving(key);
+    try {
+      const { error } = await supabase.from("glow_move_missions").insert({
+        user_id: user.id,
+        pillar_id: dim,
+        phase: day,
+        mission_text: titulo,
+      });
+      if (error) throw error;
+      const nowIso = new Date().toISOString();
+      setCompletions((prev) => [
+        ...prev,
+        { pillar_id: dim, phase: day, completed_at: nowIso },
+      ]);
+      if (!startDate) setStartDate(nowIso.slice(0, 10));
+      setParticles(true);
+      setTimeout(() => setParticles(false), 1400);
+      toast.success(`+${POINTS_PER_TASK} Glow · ${DIMENSIONS[dim].nome}`);
+    } catch (e: any) {
+      toast.error(e.message || "Erro ao concluir tarefa");
+    } finally {
+      setSaving(null);
+    }
+  };
+
+  const day = getDay(activeDay)!;
+  const dayCompletedCount = (["corpo", "mente", "alma", "externo"] as Dimension[]).filter(
+    (d) => completedSet.has(completedKey(activeDay, d)),
+  ).length;
+  const dayPct = Math.round((dayCompletedCount / TASKS_PER_DAY) * 100);
+  const todayLabel = new Date().toLocaleDateString("pt-BR", {
     weekday: "long",
     day: "2-digit",
     month: "long",
   });
+  const activeWeek = WEEKS.find((w) => activeDay >= w.dias[0] && activeDay <= w.dias[1])!;
+  const isLocked = activeDay > currentDay;
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background pb-24 relative overflow-hidden">
+      {/* Particles */}
+      {particles && (
+        <div className="pointer-events-none fixed inset-0 z-50">
+          {Array.from({ length: 22 }).map((_, i) => (
+            <span
+              key={i}
+              className="absolute h-1.5 w-1.5 rounded-full bg-gold animate-[fall_1.3s_ease-out_forwards]"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: "-5%",
+                animationDelay: `${Math.random() * 0.3}s`,
+                boxShadow: "0 0 8px hsl(var(--gold))",
+              }}
+            />
+          ))}
+          <style>{`@keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }`}</style>
+        </div>
+      )}
+
       {/* Header */}
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/80 border-b border-gold/10">
         <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/")}
             className="h-9 w-9 rounded-full flex items-center justify-center hover:bg-gold/10 transition-colors"
           >
             <ArrowLeft className="h-5 w-5 text-gold" />
           </button>
-          <div className="flex-1">
-            <h1 className="font-display text-lg leading-none text-foreground">Gloow Movimenta</h1>
-            <p className="text-[10px] text-muted-foreground capitalize">{today}</p>
+          <div className="flex-1 min-w-0">
+            <h1 className="font-display text-lg leading-none text-foreground truncate">
+              Gloow Movimenta
+            </h1>
+            <p className="text-[10px] text-muted-foreground capitalize truncate">
+              {todayLabel}
+            </p>
           </div>
           <div className="text-right">
-            <p className="text-[10px] text-muted-foreground">Pontos Glow</p>
-            <p className="font-display text-gold text-lg leading-none">{totalPoints}</p>
+            <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Glow</p>
+            <p className="font-display text-gold text-base leading-none">{totalPoints}</p>
           </div>
+          {streak > 0 && (
+            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-gold/10 border border-gold/20">
+              <Flame className="h-3.5 w-3.5 text-gold" />
+              <span className="text-xs font-semibold text-gold">{streak}</span>
+            </div>
+          )}
         </div>
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-        {/* Hero */}
-        <section className="relative overflow-hidden rounded-3xl p-6 border border-gold/20 bg-gradient-to-br from-purple-950/40 via-background to-amber-950/20">
-          <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[radial-gradient(circle_at_20%_20%,hsl(var(--gold))_0%,transparent_50%)]" />
+        {/* Hero do desafio */}
+        <section className="relative overflow-hidden rounded-3xl p-6 border border-gold/25 bg-gradient-to-br from-purple-950/50 via-background to-amber-950/30">
+          <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[radial-gradient(circle_at_20%_20%,hsl(var(--gold))_0%,transparent_55%)]" />
           <div className="relative">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-gold/80 font-body">Desafio de 21 dias</p>
+            <p className="text-[10px] uppercase tracking-[0.25em] text-gold/80 font-body">
+              Desafio de 21 dias · Corpo · Mente · Alma · Externo
+            </p>
             <h2 className="font-display text-3xl text-foreground mt-1">
-              Dia {currentDay} <span className="text-gold/60 text-2xl">/ {TOTAL_DAYS}</span>
+              {totalCompleted >= totalPossible
+                ? "Transformação completa"
+                : `Dia ${currentDay} `}
+              {totalCompleted < totalPossible && (
+                <span className="text-gold/60 text-2xl">/ {TOTAL_DAYS}</span>
+              )}
             </h2>
-            <p className="text-sm text-muted-foreground mt-2 max-w-md">
-              {challengeComplete
-                ? "Você completou os 21 dias. Sua transformação está enraizada."
-                : completedToday
-                ? "Missão de hoje concluída. Volte amanhã para continuar."
-                : "Complete pelo menos 1 missão hoje para avançar no desafio."}
+            <p className="text-sm text-muted-foreground mt-2 max-w-md leading-relaxed">
+              4 tarefas por dia, uma para cada dimensão. Cada tarefa concluída = {POINTS_PER_TASK}{" "}
+              Glow. Reconstrua-se em 21 dias inteiros, sem dividir mais corpo, mente, alma e mundo.
             </p>
 
-            {/* Barra de dias */}
             <div className="mt-5">
               <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-2">
-                <span>{daysCompletedCount} de {TOTAL_DAYS} dias</span>
+                <span>
+                  {totalCompleted} de {totalPossible} tarefas
+                </span>
                 <span className="text-gold">{challengePct}%</span>
               </div>
               <div className="h-2 rounded-full bg-gold/10 overflow-hidden">
@@ -128,104 +248,290 @@ export default function GlowMovePage() {
                 />
               </div>
 
-              {/* 21 marcadores diários */}
-              <div className="mt-4 grid grid-cols-21 gap-1" style={{ gridTemplateColumns: "repeat(21, minmax(0, 1fr))" }}>
+              {/* 21 marcadores */}
+              <div
+                className="mt-4 grid gap-1"
+                style={{ gridTemplateColumns: `repeat(${TOTAL_DAYS}, minmax(0, 1fr))` }}
+              >
                 {Array.from({ length: TOTAL_DAYS }).map((_, i) => {
-                  const day = i + 1;
-                  const done = day <= daysCompletedCount;
-                  const isCurrent = day === currentDay && !challengeComplete;
+                  const d = i + 1;
+                  const perfect = perfectDays.includes(d);
+                  const some = !perfect && completions.some((c) => c.phase === d);
+                  const isCurrent = d === currentDay;
+                  const isActive = d === activeDay;
                   return (
-                    <div
-                      key={day}
-                      title={`Dia ${day}${done ? " · concluído" : ""}`}
+                    <button
+                      key={d}
+                      onClick={() => setActiveDay(d)}
+                      title={`Dia ${d}`}
                       className={cn(
-                        "h-6 rounded-[3px] flex items-center justify-center text-[8px] font-medium transition-all",
-                        done
-                          ? "bg-gold text-background shadow-[0_0_8px_-2px_hsl(var(--gold))]"
+                        "h-7 rounded-[4px] flex items-center justify-center text-[9px] font-semibold transition-all",
+                        perfect
+                          ? "bg-gold text-background shadow-[0_0_10px_-2px_hsl(var(--gold))]"
+                          : some
+                          ? "bg-gold/30 text-gold border border-gold/40"
                           : isCurrent
-                          ? "bg-gold/20 text-gold border border-gold/60 animate-pulse"
-                          : "bg-gold/5 text-muted-foreground/40 border border-gold/10"
+                          ? "bg-gold/15 text-gold border border-gold/60 animate-pulse"
+                          : d <= currentDay
+                          ? "bg-gold/5 text-gold/70 border border-gold/15"
+                          : "bg-background/40 text-muted-foreground/40 border border-gold/5",
+                        isActive && "ring-2 ring-gold/60 ring-offset-2 ring-offset-background",
                       )}
                     >
-                      {day}
-                    </div>
+                      {d}
+                    </button>
                   );
                 })}
               </div>
             </div>
-
-            <div className="mt-5 pt-4 border-t border-gold/10">
-              <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1.5">
-                <span>Progresso geral dos pilares</span>
-                <span className="text-gold">{overallPct}%</span>
-              </div>
-              <div className="h-1 rounded-full bg-gold/10 overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-gold via-gold to-amber-300 transition-all duration-700"
-                  style={{ width: `${overallPct}%` }}
-                />
-              </div>
-            </div>
           </div>
         </section>
 
-        {/* Mapa dos pilares */}
-        <section>
-          <h3 className="font-display text-xl text-foreground mb-3 px-1">Os 7 pilares</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {PILLARS.map((p, idx) => {
-              const prog = progress[p.id];
-              const phase = prog?.current_phase ?? 1;
-              const missionsInPhase = prog?.missions_in_phase ?? 0;
-              const pillarPct = Math.round((((phase - 1) * 7 + missionsInPhase) / (4 * 7)) * 100);
-              const isLast = idx === PILLARS.length - 1;
-              const active = !!prog && prog.glow_points > 0;
-              const locked = false; // todas desbloqueadas por padrão (escolha livre)
-              const Icon = p.icon;
+        {/* Navegador de dia */}
+        <section className="flex items-center justify-between gap-3">
+          <button
+            disabled={activeDay <= 1}
+            onClick={() => setActiveDay((d) => Math.max(1, d - 1))}
+            className="h-10 w-10 rounded-full flex items-center justify-center border border-gold/15 hover:bg-gold/5 disabled:opacity-30 transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4 text-gold" />
+          </button>
+          <div className="flex-1 text-center">
+            <p className="text-[10px] uppercase tracking-[0.25em] text-gold/70">
+              Semana {activeWeek.n} · {activeWeek.nome}
+            </p>
+            <h3 className="font-display text-xl text-foreground leading-tight">
+              Dia {day.dia} · {day.tema}
+            </h3>
+            <p className="text-xs text-muted-foreground mt-0.5 italic">"{day.intencao}"</p>
+          </div>
+          <button
+            disabled={activeDay >= TOTAL_DAYS}
+            onClick={() => setActiveDay((d) => Math.min(TOTAL_DAYS, d + 1))}
+            className="h-10 w-10 rounded-full flex items-center justify-center border border-gold/15 hover:bg-gold/5 disabled:opacity-30 transition-colors"
+          >
+            <ChevronRight className="h-4 w-4 text-gold" />
+          </button>
+        </section>
+
+        {/* Progresso do dia */}
+        <section className="rounded-2xl glass border border-gold/15 p-4">
+          <div className="flex items-center justify-between text-[11px] mb-2">
+            <span className="text-muted-foreground">
+              Progresso do dia {activeDay}
+            </span>
+            <span className="text-gold">
+              {dayCompletedCount}/{TASKS_PER_DAY} · {dayPct}%
+            </span>
+          </div>
+          <div className="h-1.5 rounded-full bg-gold/10 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-gold to-amber-300 transition-all duration-500"
+              style={{ width: `${dayPct}%` }}
+            />
+          </div>
+          {dayPct === 100 && (
+            <div className="mt-3 flex items-center gap-2 text-xs text-gold">
+              <Trophy className="h-4 w-4" /> Dia completo conquistado
+            </div>
+          )}
+        </section>
+
+        {/* Tarefas */}
+        {isLocked ? (
+          <div className="rounded-3xl border border-gold/15 p-8 text-center bg-background/40">
+            <Lock className="h-7 w-7 text-gold/50 mx-auto mb-3" />
+            <p className="font-display text-lg text-foreground">Dia ainda bloqueado</p>
+            <p className="text-xs text-muted-foreground mt-1 max-w-xs mx-auto">
+              Cada dia é desbloqueado no tempo certo. Volte amanhã, rainha.
+            </p>
+          </div>
+        ) : (
+          <section className="space-y-3">
+            {(["corpo", "mente", "alma", "externo"] as Dimension[]).map((dimId) => {
+              const meta = DIMENSIONS[dimId];
+              const task = day.tarefas[dimId];
+              const Icon = meta.icon;
+              const key = completedKey(day.dia, dimId);
+              const done = completedSet.has(key);
+              const isOpen = openTask === `${day.dia}-${dimId}`;
               return (
-                <button
-                  key={p.id}
-                  onClick={() => navigate(`/glow-move/${p.id}`)}
+                <article
+                  key={dimId}
                   className={cn(
-                    "relative overflow-hidden rounded-2xl p-4 text-left transition-all active:scale-[0.97] group",
-                    "glass border",
-                    active
-                      ? "border-gold/40 shadow-[0_0_30px_-12px_hsl(var(--gold)/0.5)]"
-                      : "border-gold/10 hover:border-gold/25",
-                    isLast && "col-span-2"
+                    "relative overflow-hidden rounded-2xl border transition-all",
+                    done
+                      ? "border-gold/40 bg-gold/5"
+                      : "border-gold/15 bg-background/40 hover:border-gold/30",
                   )}
                 >
-                  <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-bl from-gold/10 to-transparent rounded-bl-3xl" />
-                  <div className="flex items-start justify-between">
-                    <div className="h-10 w-10 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
-                      <Icon className="h-5 w-5 text-gold" />
+                  <div
+                    className={cn(
+                      "absolute inset-0 bg-gradient-to-br opacity-60 pointer-events-none",
+                      meta.corBg,
+                    )}
+                  />
+                  <div className="relative p-4">
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={cn(
+                          "h-11 w-11 rounded-xl border flex items-center justify-center shrink-0",
+                          done
+                            ? "bg-gold border-gold text-background"
+                            : "bg-background/60 border-gold/20",
+                        )}
+                      >
+                        {done ? (
+                          <Check className="h-5 w-5" />
+                        ) : (
+                          <Icon className={cn("h-5 w-5", meta.cor)} />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p
+                            className={cn(
+                              "text-[9px] uppercase tracking-[0.2em] font-semibold",
+                              meta.cor,
+                            )}
+                          >
+                            {meta.nome}
+                          </p>
+                          <span className="text-[9px] uppercase tracking-wider text-muted-foreground">
+                            · {meta.subtitulo}
+                          </span>
+                          <span className="text-[9px] text-muted-foreground ml-auto">
+                            ⏱ {task.tempo}
+                          </span>
+                        </div>
+                        <h4 className="font-display text-base text-foreground leading-tight mt-1">
+                          {task.titulo}
+                        </h4>
+                        <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
+                          {task.descricao}
+                        </p>
+                      </div>
                     </div>
-                    {locked && <Lock className="h-3.5 w-3.5 text-muted-foreground/40" />}
-                    {(prog?.streak ?? 0) >= 3 && (
-                      <div className="flex items-center gap-0.5 text-[10px] text-gold">
-                        <Flame className="h-3 w-3" /> {prog!.streak}
+
+                    {/* Toggle dicas */}
+                    <button
+                      onClick={() =>
+                        setOpenTask(isOpen ? null : `${day.dia}-${dimId}`)
+                      }
+                      className="mt-3 flex items-center gap-1.5 text-[11px] text-gold/80 hover:text-gold transition-colors"
+                    >
+                      <Info className="h-3.5 w-3.5" />
+                      {isOpen ? "Esconder explicação" : "Por que e como fazer"}
+                      <ChevronDown
+                        className={cn(
+                          "h-3.5 w-3.5 transition-transform",
+                          isOpen && "rotate-180",
+                        )}
+                      />
+                    </button>
+
+                    {isOpen && (
+                      <div className="mt-3 space-y-2.5 rounded-xl bg-background/60 border border-gold/10 p-3">
+                        <div>
+                          <p className="text-[10px] uppercase tracking-wider text-gold/70 mb-1">
+                            Por que importa
+                          </p>
+                          <p className="text-xs text-foreground/80 leading-relaxed">
+                            {task.porque}
+                          </p>
+                        </div>
+                        <div className="flex gap-2 items-start pt-2 border-t border-gold/10">
+                          <Lightbulb className="h-4 w-4 text-gold mt-0.5 shrink-0" />
+                          <div>
+                            <p className="text-[10px] uppercase tracking-wider text-gold/70 mb-0.5">
+                              Dica da mentora
+                            </p>
+                            <p className="text-xs text-foreground/80 leading-relaxed">
+                              {task.dica}
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     )}
+
+                    <button
+                      onClick={() => completeTask(day.dia, dimId, task.titulo)}
+                      disabled={done || saving === key}
+                      className={cn(
+                        "mt-3 w-full h-11 rounded-xl font-body font-semibold flex items-center justify-center gap-2 transition-all text-sm",
+                        done
+                          ? "bg-gold/15 text-gold/70 border border-gold/25 cursor-default"
+                          : "bg-gold text-background hover:brightness-110 active:scale-[0.98] shadow-[0_8px_24px_-10px_hsl(var(--gold)/0.7)]",
+                      )}
+                    >
+                      {done ? (
+                        <>
+                          <Check className="h-4 w-4" /> Concluída · +{POINTS_PER_TASK} Glow
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="h-4 w-4" /> Marcar como feita
+                        </>
+                      )}
+                    </button>
                   </div>
-                  <h4 className="font-display text-lg text-foreground mt-3 leading-tight">{p.nome}</h4>
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-0.5">{p.subtitulo}</p>
-                  <div className="mt-3">
-                    <p className="text-[10px] text-gold/80 mb-1">Fase {phase} · {pillarPct}%</p>
-                    <div className="h-0.5 rounded-full bg-gold/10 overflow-hidden">
-                      <div className="h-full bg-gold transition-all duration-500" style={{ width: `${pillarPct}%` }} />
-                    </div>
-                  </div>
-                </button>
+                </article>
+              );
+            })}
+          </section>
+        )}
+
+        {/* Badges das semanas */}
+        <section className="rounded-2xl border border-gold/15 bg-background/40 p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Trophy className="h-4 w-4 text-gold" />
+            <h3 className="font-display text-base">Conquistas</h3>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {WEEKS.map((w) => {
+              const conquered = weeksDone.some((d) => d.n === w.n);
+              return (
+                <div
+                  key={w.n}
+                  className={cn(
+                    "rounded-xl p-3 border text-center transition-all",
+                    conquered
+                      ? "bg-gold/15 border-gold/40 text-foreground"
+                      : "bg-background/60 border-gold/10 text-muted-foreground/60",
+                  )}
+                >
+                  <p className="text-[9px] uppercase tracking-wider">Semana {w.n}</p>
+                  <p
+                    className={cn(
+                      "font-display text-sm mt-0.5",
+                      conquered ? "text-gold" : "text-muted-foreground/70",
+                    )}
+                  >
+                    {w.nome}
+                  </p>
+                  <p className="text-[9px] mt-1 leading-tight">{w.desc}</p>
+                </div>
               );
             })}
           </div>
+          <div className="mt-3 grid grid-cols-2 gap-2 text-[11px]">
+            <div className="rounded-lg border border-gold/10 p-2 flex items-center gap-2">
+              <Flame className="h-4 w-4 text-gold" />
+              <span className="text-muted-foreground">
+                Streak: <span className="text-foreground font-semibold">{streak} dias</span>
+              </span>
+            </div>
+            <div className="rounded-lg border border-gold/10 p-2 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-gold" />
+              <span className="text-muted-foreground">
+                Dias 100%:{" "}
+                <span className="text-foreground font-semibold">
+                  {perfectDays.length}/{TOTAL_DAYS}
+                </span>
+              </span>
+            </div>
+          </div>
         </section>
-
-        {!loading && totalCompleted === 0 && (
-          <p className="text-center text-xs text-muted-foreground italic px-6">
-            Comece por qualquer pilar. A ordem é sua.
-          </p>
-        )}
       </main>
     </div>
   );
