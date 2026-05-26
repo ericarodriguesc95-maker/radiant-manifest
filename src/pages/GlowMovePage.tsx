@@ -103,16 +103,60 @@ export default function GlowMovePage() {
         <section className="relative overflow-hidden rounded-3xl p-6 border border-gold/20 bg-gradient-to-br from-purple-950/40 via-background to-amber-950/20">
           <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[radial-gradient(circle_at_20%_20%,hsl(var(--gold))_0%,transparent_50%)]" />
           <div className="relative">
-            <p className="text-[11px] uppercase tracking-[0.2em] text-gold/80 font-body">21 dias de transformação</p>
+            <p className="text-[11px] uppercase tracking-[0.2em] text-gold/80 font-body">Desafio de 21 dias</p>
             <h2 className="font-display text-3xl text-foreground mt-1">
-              7 movimentos.<br />Uma só mulher.
+              Dia {currentDay} <span className="text-gold/60 text-2xl">/ {TOTAL_DAYS}</span>
             </h2>
-            <p className="text-sm text-muted-foreground mt-3 max-w-md">
-              21 dias de transformação em movimento. Avance por fases dentro de 7 pilares de vida — cada missão é um passo real.
+            <p className="text-sm text-muted-foreground mt-2 max-w-md">
+              {challengeComplete
+                ? "Você completou os 21 dias. Sua transformação está enraizada."
+                : completedToday
+                ? "Missão de hoje concluída. Volte amanhã para continuar."
+                : "Complete pelo menos 1 missão hoje para avançar no desafio."}
             </p>
+
+            {/* Barra de dias */}
             <div className="mt-5">
+              <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-2">
+                <span>{daysCompletedCount} de {TOTAL_DAYS} dias</span>
+                <span className="text-gold">{challengePct}%</span>
+              </div>
+              <div className="h-2 rounded-full bg-gold/10 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-gold via-amber-300 to-gold transition-all duration-700"
+                  style={{ width: `${challengePct}%` }}
+                />
+              </div>
+
+              {/* 21 marcadores diários */}
+              <div className="mt-4 grid grid-cols-21 gap-1" style={{ gridTemplateColumns: "repeat(21, minmax(0, 1fr))" }}>
+                {Array.from({ length: TOTAL_DAYS }).map((_, i) => {
+                  const day = i + 1;
+                  const done = day <= daysCompletedCount;
+                  const isCurrent = day === currentDay && !challengeComplete;
+                  return (
+                    <div
+                      key={day}
+                      title={`Dia ${day}${done ? " · concluído" : ""}`}
+                      className={cn(
+                        "h-6 rounded-[3px] flex items-center justify-center text-[8px] font-medium transition-all",
+                        done
+                          ? "bg-gold text-background shadow-[0_0_8px_-2px_hsl(var(--gold))]"
+                          : isCurrent
+                          ? "bg-gold/20 text-gold border border-gold/60 animate-pulse"
+                          : "bg-gold/5 text-muted-foreground/40 border border-gold/10"
+                      )}
+                    >
+                      {day}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="mt-5 pt-4 border-t border-gold/10">
               <div className="flex items-center justify-between text-[11px] text-muted-foreground mb-1.5">
-                <span>Progresso geral</span>
+                <span>Progresso geral dos pilares</span>
                 <span className="text-gold">{overallPct}%</span>
               </div>
               <div className="h-1 rounded-full bg-gold/10 overflow-hidden">
