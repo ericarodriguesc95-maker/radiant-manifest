@@ -150,7 +150,7 @@ export default function GlowMovePage() {
   };
 
   const day = getDay(activeDay)!;
-  const dayCompletedCount = (["corpo", "mente", "alma", "externo"] as Dimension[]).filter(
+  const dayCompletedCount = DIMENSION_ORDER.filter(
     (d) => completedSet.has(completedKey(activeDay, d)),
   ).length;
   const dayPct = Math.round((dayCompletedCount / TASKS_PER_DAY) * 100);
