@@ -18,6 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import {
   DAYS,
   DIMENSIONS,
+  DIMENSION_ORDER,
   POINTS_PER_TASK,
   TASKS_PER_DAY,
   TOTAL_DAYS,
