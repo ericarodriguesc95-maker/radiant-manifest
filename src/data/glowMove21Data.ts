@@ -1,6 +1,6 @@
-import { Heart, Brain, Sparkles, Globe, type LucideIcon } from "lucide-react";
+import { Heart, Brain, Sparkles, Globe, Coins, type LucideIcon } from "lucide-react";
 
-export type Dimension = "corpo" | "mente" | "alma" | "externo";
+export type Dimension = "corpo" | "mente" | "alma" | "externo" | "financas";
 
 export interface DimensionMeta {
   id: Dimension;
@@ -10,6 +10,14 @@ export interface DimensionMeta {
   corBg: string;
   icon: LucideIcon;
 }
+
+export const DIMENSION_ORDER: Dimension[] = [
+  "corpo",
+  "mente",
+  "alma",
+  "externo",
+  "financas",
+];
 
 export const DIMENSIONS: Record<Dimension, DimensionMeta> = {
   corpo: {
@@ -44,6 +52,14 @@ export const DIMENSIONS: Record<Dimension, DimensionMeta> = {
     corBg: "from-emerald-900/30 to-emerald-800/10",
     icon: Globe,
   },
+  financas: {
+    id: "financas",
+    nome: "Finanças",
+    subtitulo: "Abundância prática",
+    cor: "text-yellow-300",
+    corBg: "from-yellow-900/30 to-amber-900/10",
+    icon: Coins,
+  },
 };
 
 export interface Task {
@@ -69,7 +85,7 @@ export const WEEKS = [
 
 export const POINTS_PER_TASK = 10;
 export const TOTAL_DAYS = 21;
-export const TASKS_PER_DAY = 4;
+export const TASKS_PER_DAY = 5;
 
 export const DAYS: DayData[] = [
   // SEMANA 1 — DESPERTAR
@@ -104,6 +120,13 @@ export const DAYS: DayData[] = [
         descricao: "Escolha um pequeno espaço (mesa, gaveta, criado-mudo) e deixe impecável.",
         porque: "Ambiente externo espelha o estado interno. Começar pequeno ensina o cérebro que mudança é possível.",
         dica: "Cronometre 15 minutos. Pare quando tocar.",
+        tempo: "15 min",
+      },
+      financas: {
+        titulo: "Mapa financeiro de partida",
+        descricao: "Anote saldo em conta, d\u00edvidas, gastos fixos mensais e renda atual em um caderno ou planilha.",
+        porque: "Voc\u00ea s\u00f3 transforma o que enxerga. Encarar os n\u00fameros reais desativa a ansiedade do n\u00e3o-saber.",
+        dica: "Sem julgamento. \u00c9 s\u00f3 um raio-X \u2014 n\u00e3o um veredicto sobre voc\u00ea.",
         tempo: "15 min",
       },
     },
@@ -141,6 +164,13 @@ export const DAYS: DayData[] = [
         dica: "Específico vence genérico. Em vez de 'você é incrível', diga o quê e por quê.",
         tempo: "3 min",
       },
+      financas: {
+        titulo: "Anote cada gasto do dia",
+        descricao: "Hoje registre TODO valor que sair, mesmo R$2 do caf\u00e9. Use app, notas ou papel.",
+        porque: "Consci\u00eancia financeira come\u00e7a na visibilidade do micro. 70% dos gastos invis\u00edveis acontecem em valores baixos.",
+        dica: "Foto do recibo + nota r\u00e1pida no celular. Final do dia: some.",
+        tempo: "Dia inteiro",
+      },
     },
   },
   {
@@ -174,6 +204,13 @@ export const DAYS: DayData[] = [
         descricao: "Abra as redes e deixe de seguir 10 contas que te fazem comparar, sentir menos ou consumir mal.",
         porque: "Seu feed é seu inconsciente coletivo. O que você consome vira pensamento automático.",
         dica: "Critério: depois de ver o post, eu me sinto inspirada ou drenada?",
+        tempo: "10 min",
+      },
+      financas: {
+        titulo: "Cancele 1 assinatura inativa",
+        descricao: "Revise apps, streamings e servi\u00e7os. Cancele 1 que voc\u00ea n\u00e3o usa de verdade.",
+        porque: "Vazamentos silenciosos consomem em m\u00e9dia R$150/m\u00eas. Pequenos cortes financiam grandes sonhos.",
+        dica: "Procure no extrato dos \u00faltimos 60 dias por cobran\u00e7as recorrentes.",
         tempo: "10 min",
       },
     },
@@ -211,6 +248,13 @@ export const DAYS: DayData[] = [
         dica: "Estique lençóis, alinhe travesseiros, jogue almofadas com intenção.",
         tempo: "3 min",
       },
+      financas: {
+        titulo: "Defina sua meta financeira dos 21 dias",
+        descricao: "Escreva 1 meta concreta: poupar X, quitar Y, faturar Z. Com prazo claro.",
+        porque: "Meta vaga vira nada. Meta escrita com prazo aumenta 42% a chance de ser cumprida.",
+        dica: "Formato: 'At\u00e9 o dia 21 eu vou ___ no valor de R$___'.",
+        tempo: "10 min",
+      },
     },
   },
   {
@@ -246,6 +290,13 @@ export const DAYS: DayData[] = [
         dica: "Não precisa justificar. 'Não vou conseguir, obrigada' basta.",
         tempo: "1 min",
       },
+      financas: {
+        titulo: "Identifique 1 cren\u00e7a sobre dinheiro",
+        descricao: "Complete: 'Dinheiro para mim \u00e9 ___.' Essa frase guia suas decis\u00f5es inconscientes.",
+        porque: "Sua rela\u00e7\u00e3o com dinheiro espelha sua rela\u00e7\u00e3o com merecimento e seguran\u00e7a.",
+        dica: "Geralmente vem do que voc\u00ea ouviu em casa antes dos 10 anos.",
+        tempo: "10 min",
+      },
     },
   },
   {
@@ -279,6 +330,13 @@ export const DAYS: DayData[] = [
         descricao: "Prepare uma refeição completa em casa, do zero. Sem entrega, sem pronto.",
         porque: "Cozinhar é meditação ativa. Você decide o que entra no corpo e a quem está alimentando.",
         dica: "Receita simples, ingredientes vivos. Mesa posta, mesmo sozinha.",
+        tempo: "45 min",
+      },
+      financas: {
+        titulo: "Cozinhe em casa em vez de pedir",
+        descricao: "Substitua 1 refei\u00e7\u00e3o entregue por uma feita por voc\u00ea. Anote o valor economizado.",
+        porque: "Pedir delivery 3x/semana custa em m\u00e9dia R$600/m\u00eas. Cozinhar \u00e9 ato de auto-cuidado e economia.",
+        dica: "Receita simples, ingredientes da feira. Fa\u00e7a em quantidade pra render.",
         tempo: "45 min",
       },
     },
@@ -316,6 +374,13 @@ export const DAYS: DayData[] = [
         dica: "Não precisa ser nas redes. Uma amiga, mãe ou parceiro já basta.",
         tempo: "10 min",
       },
+      financas: {
+        titulo: "Revis\u00e3o financeira da semana",
+        descricao: "Some os gastos da semana e categorize: essenciais, sup\u00e9rfluos, vazamentos.",
+        porque: "Sem revis\u00e3o, voc\u00ea repete o mesmo padr\u00e3o por anos. Reflex\u00e3o semanal vira controle real.",
+        dica: "Use 3 cores: verde (essencial), amarelo (sup\u00e9rfluo), vermelho (vazamento).",
+        tempo: "20 min",
+      },
     },
   },
   // SEMANA 2 — EXPANSÃO
@@ -352,6 +417,13 @@ export const DAYS: DayData[] = [
         dica: "Brinco, batom, perfume. Detalhe pequeno, impacto grande.",
         tempo: "5 min",
       },
+      financas: {
+        titulo: "Negocie 1 d\u00edvida ou conta",
+        descricao: "Ligue para um credor, plano de sa\u00fade, internet \u2014 pe\u00e7a desconto, prazo melhor ou portabilidade.",
+        porque: "Empresas t\u00eam margem de 15-30% para negociar. Quem pede, recebe. Quem cala, paga caro.",
+        dica: "Frase: 'Preciso renegociar essa conta. Que condi\u00e7\u00e3o voc\u00eas conseguem para eu continuar cliente?'",
+        tempo: "20 min",
+      },
     },
   },
   {
@@ -386,6 +458,13 @@ export const DAYS: DayData[] = [
         porque: "Presença plena é o presente raro que constrói confiança real em qualquer relação.",
         dica: "Olhe nos olhos. Repita o que ouviu antes de responder.",
         tempo: "—",
+      },
+      financas: {
+        titulo: "Liste 5 fontes de renda poss\u00edveis",
+        descricao: "Escreva 5 formas diferentes que voc\u00ea poderia gerar dinheiro com o que j\u00e1 sabe.",
+        porque: "Mentalidade de renda \u00fanica gera medo. Mentalidade de m\u00faltiplas fontes gera coragem.",
+        dica: "Vale freela, aula, venda de algo parado em casa, consultoria, conte\u00fado.",
+        tempo: "15 min",
       },
     },
   },
@@ -422,6 +501,13 @@ export const DAYS: DayData[] = [
         dica: "Streaming, app, academia que você não vai. Sem culpa.",
         tempo: "10 min",
       },
+      financas: {
+        titulo: "Diagn\u00f3stico financeiro express",
+        descricao: "Calcule: quanto voc\u00ea precisa por m\u00eas para viver com dignidade? Quanto entra hoje? Qual o gap?",
+        porque: "Quem n\u00e3o sabe o n\u00famero-base vive sempre na escassez emocional, mesmo ganhando bem.",
+        dica: "Inclua tudo: moradia, comida, transporte, lazer m\u00ednimo, reserva.",
+        tempo: "20 min",
+      },
     },
   },
   {
@@ -455,6 +541,13 @@ export const DAYS: DayData[] = [
         descricao: "Peça desconto, peça ajuda, peça aumento, peça atenção. Algo que você costuma evitar.",
         porque: "'Não' você já tem. Pedir treina o músculo do merecimento.",
         dica: "Mensagem ou ao vivo. Mesmo um pedido pequeno conta.",
+        tempo: "5 min",
+      },
+      financas: {
+        titulo: "Pe\u00e7a aumento, desconto ou or\u00e7amento melhor",
+        descricao: "Fa\u00e7a 1 pedido financeiro hoje que voc\u00ea costuma evitar.",
+        porque: "'N\u00e3o' voc\u00ea j\u00e1 tem. Pedir treina o m\u00fasculo do merecimento financeiro.",
+        dica: "Mensagem curta, valor claro, sem desculpa longa.",
         tempo: "5 min",
       },
     },
@@ -492,6 +585,13 @@ export const DAYS: DayData[] = [
         dica: "Frase curta, sem justificativa longa. 'A partir de hoje, eu...'",
         tempo: "5 min",
       },
+      financas: {
+        titulo: "Defina seu limite de gasto n\u00e3o-essencial",
+        descricao: "Estabele\u00e7a quanto pode gastar por semana em n\u00e3o-essenciais. Acima disso = n\u00e3o.",
+        porque: "Limite financeiro pr\u00e9-decidido elimina culpa e impulsividade nas compras pequenas.",
+        dica: "Valor realista. Anote no celular e cheque antes de comprar.",
+        tempo: "10 min",
+      },
     },
   },
   {
@@ -527,6 +627,13 @@ export const DAYS: DayData[] = [
         dica: "Não precisa nas redes. Mande para uma amiga.",
         tempo: "5 min",
       },
+      financas: {
+        titulo: "Venda algo parado em casa",
+        descricao: "Liste algo que voc\u00ea n\u00e3o usa h\u00e1 6 meses no Enjoei, OLX ou grupo de WhatsApp.",
+        porque: "Dinheiro parado em objeto vira energia parada. Vender solta espa\u00e7o e renda.",
+        dica: "Foto boa, descri\u00e7\u00e3o honesta, pre\u00e7o 30% abaixo do novo.",
+        tempo: "20 min",
+      },
     },
   },
   {
@@ -561,6 +668,13 @@ export const DAYS: DayData[] = [
         porque: "Ensinar/inspirar fixa o aprendizado em você mesma em outro nível.",
         dica: "Não pregue. Conte sua experiência real e como você está se sentindo.",
         tempo: "10 min",
+      },
+      financas: {
+        titulo: "Revis\u00e3o da segunda semana financeira",
+        descricao: "Compare seus gastos da semana 1 e 2. O que mudou? Onde ainda h\u00e1 vazamento?",
+        porque: "Compara\u00e7\u00e3o semanal mostra padr\u00e3o real. Sem isso, voc\u00ea acha que est\u00e1 bem quando n\u00e3o est\u00e1.",
+        dica: "Anote 1 vit\u00f3ria e 1 ponto de aten\u00e7\u00e3o.",
+        tempo: "15 min",
       },
     },
   },
@@ -598,6 +712,13 @@ export const DAYS: DayData[] = [
         dica: "Pode ser uma resposta, uma compra, um pedido. Pequeno conta.",
         tempo: "—",
       },
+      financas: {
+        titulo: "Abra ou organize sua reserva de emerg\u00eancia",
+        descricao: "Se ainda n\u00e3o tem, abra uma conta separada hoje. Se j\u00e1 tem, deposite qualquer valor (at\u00e9 R$10).",
+        porque: "Reserva \u00e9 liberdade emocional. Mulher com reserva diz 'n\u00e3o' com mais firmeza.",
+        dica: "Tesouro Selic, CDB liquidez di\u00e1ria ou conta digital com rendimento.",
+        tempo: "15 min",
+      },
     },
   },
   {
@@ -632,6 +753,13 @@ export const DAYS: DayData[] = [
         porque: "Ambiente preparado vence força de vontade. Você cria estrutura para a versão de amanhã.",
         dica: "Garrafa cheia, tênis ao lado da cama, livro aberto na mesa.",
         tempo: "5 min",
+      },
+      financas: {
+        titulo: "Defina rotina financeira semanal",
+        descricao: "Marque na agenda 1 momento fixo por semana para revisar finan\u00e7as (30 min).",
+        porque: "Sem rotina, voc\u00ea s\u00f3 olha quando a conta aperta. Rotina constr\u00f3i paz financeira.",
+        dica: "Domingo de manh\u00e3 com caf\u00e9 funciona pra maioria. Escolha o seu.",
+        tempo: "10 min",
       },
     },
   },
@@ -668,6 +796,13 @@ export const DAYS: DayData[] = [
         dica: "DM honesta, comentário genuíno, ligação direta. Sem agenda escondida.",
         tempo: "10 min",
       },
+      financas: {
+        titulo: "Fa\u00e7a 1 investimento (mesmo pequeno)",
+        descricao: "Aplique qualquer valor (R$10 j\u00e1 vale) em renda fixa, fundo ou a\u00e7\u00f5es.",
+        porque: "O primeiro investimento desbloqueia identidade de investidora. Valor importa menos que o ato.",
+        dica: "Tesouro Direto a partir de R$30. Foco em fazer, n\u00e3o em acertar valor.",
+        tempo: "20 min",
+      },
     },
   },
   {
@@ -702,6 +837,13 @@ export const DAYS: DayData[] = [
         porque: "Auto-presente sem culpa reprograma a relação com merecimento.",
         dica: "Valor não importa. Intenção importa. Embrulhe pra você se quiser.",
         tempo: "—",
+      },
+      financas: {
+        titulo: "Invista em voc\u00ea (curso, livro, sess\u00e3o)",
+        descricao: "Compre algo que aumenta seu conhecimento ou autoridade.",
+        porque: "O melhor investimento de retorno \u00e9 em capacidade pr\u00f3pria. Voc\u00ea nunca perde esse ativo.",
+        dica: "Pode ser livro, mentoria curta, curso, terapia. Valor n\u00e3o importa, inten\u00e7\u00e3o importa.",
+        tempo: "\u2014",
       },
     },
   },
@@ -738,6 +880,13 @@ export const DAYS: DayData[] = [
         dica: "Diga em voz alta: 'Está feito. Eu solto.'",
         tempo: "5 min",
       },
+      financas: {
+        titulo: "Perdoe-se por 1 escolha financeira passada",
+        descricao: "Identifique 1 erro financeiro que ainda pesa. Escreva: 'Eu me perdoo por ___.'",
+        porque: "Culpa financeira paralisa. Perd\u00e3o liberta para decidir o pr\u00f3ximo passo limpa.",
+        dica: "Sem justificar. Sem voltar a viver de novo. Solte para construir agora.",
+        tempo: "10 min",
+      },
     },
   },
   {
@@ -773,6 +922,13 @@ export const DAYS: DayData[] = [
         dica: "Mensagem, ligação, jantar. Verbalizar grava.",
         tempo: "15 min",
       },
+      financas: {
+        titulo: "Plano financeiro dos pr\u00f3ximos 90 dias",
+        descricao: "Defina 3 metas financeiras claras para os pr\u00f3ximos 90 dias com valor e data.",
+        porque: "Sem pr\u00f3ximo plano, voc\u00ea desmonta o avan\u00e7o. Continuidade exige pr\u00f3xima meta vis\u00edvel.",
+        dica: "Espec\u00edfico: 'At\u00e9 dd/mm, eu terei R$___ poupados e R$___ a menos em d\u00edvida'.",
+        tempo: "20 min",
+      },
     },
   },
   {
@@ -806,6 +962,13 @@ export const DAYS: DayData[] = [
         descricao: "Conte sua jornada completa para outra mulher. Inspire-a a também começar.",
         porque: "Quem vive transformação real e não compartilha, perde 50% do impacto que poderia ter.",
         dica: "Pode ser publicamente nas redes ou em privado. O que importa é honrar a história.",
+        tempo: "15 min",
+      },
+      financas: {
+        titulo: "Celebre + decida a pr\u00f3xima meta financeira",
+        descricao: "Some quanto economizou, ganhou ou organizou nos 21 dias. Defina a pr\u00f3xima meta de 90 dias.",
+        porque: "Celebrar conquista financeira reprograma a identidade de mulher pr\u00f3spera.",
+        dica: "Pode ser pequeno. R$50 economizado j\u00e1 \u00e9 prova de que voc\u00ea sabe gerir.",
         tempo: "15 min",
       },
     },

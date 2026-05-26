@@ -18,6 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import {
   DAYS,
   DIMENSIONS,
+  DIMENSION_ORDER,
   POINTS_PER_TASK,
   TASKS_PER_DAY,
   TOTAL_DAYS,
@@ -150,7 +151,7 @@ export default function GlowMovePage() {
   };
 
   const day = getDay(activeDay)!;
-  const dayCompletedCount = (["corpo", "mente", "alma", "externo"] as Dimension[]).filter(
+  const dayCompletedCount = DIMENSION_ORDER.filter(
     (d) => completedSet.has(completedKey(activeDay, d)),
   ).length;
   const dayPct = Math.round((dayCompletedCount / TASKS_PER_DAY) * 100);
@@ -348,7 +349,7 @@ export default function GlowMovePage() {
           </div>
         ) : (
           <section className="space-y-3">
-            {(["corpo", "mente", "alma", "externo"] as Dimension[]).map((dimId) => {
+            {DIMENSION_ORDER.map((dimId) => {
               const meta = DIMENSIONS[dimId];
               const task = day.tarefas[dimId];
               const Icon = meta.icon;
