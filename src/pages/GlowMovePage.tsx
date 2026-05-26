@@ -19,18 +19,29 @@ export default function GlowMovePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [progress, setProgress] = useState<Record<string, ProgressRow>>({});
+  const [completedDays, setCompletedDays] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
-      const { data } = await supabase
-        .from("glow_move_progress")
-        .select("*")
-        .eq("user_id", user.id);
+      const [{ data: prog }, { data: missions }] = await Promise.all([
+        supabase.from("glow_move_progress").select("*").eq("user_id", user.id),
+        supabase
+          .from("glow_move_missions")
+          .select("completed_at")
+          .eq("user_id", user.id)
+          .order("completed_at", { ascending: true }),
+      ]);
       const map: Record<string, ProgressRow> = {};
-      (data ?? []).forEach((r: any) => (map[r.pillar_id] = r));
+      (prog ?? []).forEach((r: any) => (map[r.pillar_id] = r));
       setProgress(map);
+      const days = Array.from(
+        new Set((missions ?? []).map((m: any) => (m.completed_at as string).slice(0, 10)))
+      );
+      setCompletedDays(days);
+      setStartDate(days[0] ?? null);
       setLoading(false);
     })();
   }, [user]);
@@ -42,6 +53,22 @@ export default function GlowMovePage() {
   );
   const totalMax = PILLARS.length * 4 * 7;
   const overallPct = Math.round((totalCompleted / totalMax) * 100);
+
+  // Desafio de 21 dias
+  const TOTAL_DAYS = 21;
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const daysCompletedCount = Math.min(completedDays.length, TOTAL_DAYS);
+  const currentDay = startDate
+    ? Math.min(
+        TOTAL_DAYS,
+        Math.floor(
+          (new Date(todayStr).getTime() - new Date(startDate).getTime()) / 86400000
+        ) + 1
+      )
+    : 1;
+  const completedToday = completedDays.includes(todayStr);
+  const challengePct = Math.round((daysCompletedCount / TOTAL_DAYS) * 100);
+  const challengeComplete = daysCompletedCount >= TOTAL_DAYS;
 
   const today = new Date().toLocaleDateString("pt-BR", {
     weekday: "long",
