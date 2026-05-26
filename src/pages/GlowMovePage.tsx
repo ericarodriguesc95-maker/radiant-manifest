@@ -349,7 +349,7 @@ export default function GlowMovePage() {
           </div>
         ) : (
           <section className="space-y-3">
-            {(["corpo", "mente", "alma", "externo"] as Dimension[]).map((dimId) => {
+            {DIMENSION_ORDER.map((dimId) => {
               const meta = DIMENSIONS[dimId];
               const task = day.tarefas[dimId];
               const Icon = meta.icon;
