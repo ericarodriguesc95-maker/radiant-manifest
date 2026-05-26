@@ -84,7 +84,7 @@ export default function GlowMovePage() {
   const totalPossible = TOTAL_DAYS * TASKS_PER_DAY;
   const challengePct = Math.round((totalCompleted / totalPossible) * 100);
 
-  // Dias 100% completos (4 tarefas)
+  // Dias 100% completos (5 tarefas)
   const perfectDays = useMemo(() => {
     const counts: Record<number, number> = {};
     completions.forEach((c) => {
