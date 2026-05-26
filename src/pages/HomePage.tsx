@@ -192,12 +192,12 @@ const HomePage = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            {quickActions.map(({ icon: Icon, label, to, gradient }, i) => (
+            {quickActions.map(({ icon: Icon, label, description, to, gradient }, i) => (
               <button
                 key={to}
                 onClick={() => navigate(to)}
                 className={cn(
-                  "animate-stagger group relative overflow-hidden rounded-2xl p-4 flex flex-col items-start gap-3 transition-all duration-300",
+                  "animate-stagger group relative overflow-hidden rounded-2xl p-4 flex flex-col items-start gap-2 transition-all duration-300 min-h-[140px]",
                   "glass border border-gold/10 hover:border-gold/30",
                   "hover:shadow-glow active:scale-[0.97]"
                 )}
@@ -210,6 +210,7 @@ const HomePage = () => {
                   <Icon className="h-5 w-5 text-gold" />
                 </div>
                 <span className="relative z-10 text-xs font-body font-semibold text-foreground/90 leading-tight whitespace-pre-line text-left">{label}</span>
+                <span className="relative z-10 text-[10px] font-body text-foreground/60 leading-snug text-left line-clamp-3">{description}</span>
 
                 {/* Corner accent */}
                 <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-gold/5 to-transparent rounded-bl-3xl" />
