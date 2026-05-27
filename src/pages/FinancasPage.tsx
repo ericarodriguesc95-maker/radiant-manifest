@@ -462,10 +462,17 @@ const FinancasPage = () => {
             </p>
           </div>
           <div className="bg-card rounded-xl p-4 shadow-card">
-            <p className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">Saldo</p>
-            <p className={cn("text-lg font-display font-bold", saldo >= 0 ? "text-gold" : "text-red-400")}>
+            <p className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">
+              {saldo >= 0 ? "Saldo" : "Ajuste de Rota"}
+            </p>
+            <p className={cn("text-lg font-display font-bold", saldo >= 0 ? "text-gold" : "text-amber-300/90")}>
               R$ {saldo.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </p>
+            {saldo < 0 && (
+              <p className="text-[9px] font-body text-muted-foreground mt-1 leading-snug">
+                Respira, rainha. Vamos reverter passo a passo. ✨
+              </p>
+            )}
           </div>
           <div className="bg-card rounded-xl p-4 shadow-card">
             <p className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">Despesas Fixas</p>
