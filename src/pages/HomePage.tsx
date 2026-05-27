@@ -13,6 +13,7 @@ import PostConquista from "@/components/PostConquista";
 import StreakMedals from "@/components/StreakMedals";
 import AppUpdatesModal from "@/components/AppUpdatesModal";
 import SuccessKeysCards from "@/components/SuccessKeysCards";
+import HormonalPhaseSuggestion from "@/components/HormonalPhaseSuggestion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
