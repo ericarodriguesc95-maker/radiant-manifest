@@ -698,22 +698,22 @@ const ComunidadePage = () => {
             <button
               onClick={() => { setShowDMs(true); try { localStorage.setItem("dm-used", "1"); } catch {} }}
               className="flex flex-col items-center gap-0.5 px-1.5 py-1 rounded-xl hover:bg-muted/50 transition-colors group"
-              title="Mensagens diretas"
+              title="Conversar em particular com outra girl"
             >
               <span className="relative p-2 rounded-full bg-gold/10 ring-1 ring-gold/40 shadow-[0_0_14px_rgba(212,175,55,0.45)] group-hover:shadow-[0_0_20px_rgba(212,175,55,0.7)] transition-shadow">
                 <Mail className="h-[18px] w-[18px] text-gold" />
               </span>
-              <span className="text-[9px] font-body font-semibold text-gold/90 leading-none">DM</span>
+              <span className="text-[9px] font-body font-semibold text-gold/90 leading-none">Conversas</span>
             </button>
             <button
               onClick={() => { setShowChatRooms(true); try { localStorage.setItem("chatrooms-used", "1"); } catch {} }}
               className="flex flex-col items-center gap-0.5 px-1.5 py-1 rounded-xl hover:bg-muted/50 transition-colors group"
-              title="Salas de chat por assunto"
+              title="Entrar em grupos por tema (saúde, finanças, fé...)"
             >
               <span className="relative p-2 rounded-full bg-gold/10 ring-1 ring-gold/40 shadow-[0_0_14px_rgba(212,175,55,0.45)] group-hover:shadow-[0_0_20px_rgba(212,175,55,0.7)] transition-shadow">
                 <Hash className="h-[18px] w-[18px] text-gold" />
               </span>
-              <span className="text-[9px] font-body font-semibold text-gold/90 leading-none">Salas</span>
+              <span className="text-[9px] font-body font-semibold text-gold/90 leading-none">Grupos</span>
             </button>
             <button
               onClick={() => setShowNotifications(!showNotifications)}

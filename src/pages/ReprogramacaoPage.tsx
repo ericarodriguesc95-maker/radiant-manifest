@@ -10,11 +10,11 @@ import NeurocienciaPNL from "@/components/mental/NeurocienciaPNL";
 type Section = "menu" | "fundamentos" | "lei-atracao" | "hooponopono" | "meditacoes" | "neurociencia";
 
 const sections = [
-  { id: "fundamentos" as Section, icon: BookOpen, label: "Fundamentos", desc: "O que é cada técnica e como reprograma o cérebro", color: "bg-gold/10 text-gold" },
-  { id: "meditacoes" as Section, icon: Play, label: "Meditações Guiadas", desc: "20 meditações com frequências Hz e sons da natureza", color: "bg-blue-500/10 text-blue-500" },
-  { id: "hooponopono" as Section, icon: Heart, label: "Ho'oponopono", desc: "Limpeza energética com fundo musical e voz guiada", color: "bg-pink-500/10 text-pink-500" },
-  { id: "lei-atracao" as Section, icon: Sparkles, label: "Lei da Atração & RAS", desc: "20 exercícios: visualização, journaling e manifestação", color: "bg-gold/10 text-gold" },
-  { id: "neurociencia" as Section, icon: Brain, label: "Neurociência & PNL", desc: "10 PNL + 10 Neuro: ancoragem, foco, regulação emocional", color: "bg-purple-500/10 text-purple-500" },
+  { id: "fundamentos" as Section, icon: BookOpen, label: "Entender como funciona", desc: "Em 1 minuto: o que cada técnica faz na sua mente", color: "bg-gold/10 text-gold" },
+  { id: "meditacoes" as Section, icon: Play, label: "Meditar e relaxar", desc: "20 áudios guiados para acalmar a mente em minutos", color: "bg-blue-500/10 text-blue-500" },
+  { id: "hooponopono" as Section, icon: Heart, label: "Limpar o que pesa", desc: "Solte mágoas e culpas com a oração havaiana guiada", color: "bg-pink-500/10 text-pink-500" },
+  { id: "lei-atracao" as Section, icon: Sparkles, label: "Atrair o que eu quero", desc: "20 exercícios práticos para visualizar e manifestar", color: "bg-gold/10 text-gold" },
+  { id: "neurociencia" as Section, icon: Brain, label: "Treinar foco e emoção", desc: "20 técnicas para controlar reações e manter o foco", color: "bg-purple-500/10 text-purple-500" },
 ];
 
 const fundamentos = [
