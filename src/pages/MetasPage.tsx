@@ -233,7 +233,7 @@ const MetasPage = () => {
       <header className="px-5 pt-12 pb-4">
         <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Sua jornada</p>
         <h1 className="text-2xl font-display font-bold">Metas & <span className="text-gold">Manifestação</span></h1>
-        <p className="text-sm text-muted-foreground mt-1">Defina o que você quer, acompanhe e veja acontecer.</p>
+        <p className="text-sm text-muted-foreground mt-1">Escreva o que você quer, marque seu progresso e veja acontecer.</p>
       </header>
 
       <div className="px-5 space-y-4 pb-6">
@@ -247,7 +247,7 @@ const MetasPage = () => {
             )}
           >
             <Sparkles className="h-3.5 w-3.5" />
-            Manifestação
+            Atrair o que quero
           </button>
           <button
             onClick={() => setActiveTab("metas")}
@@ -257,7 +257,7 @@ const MetasPage = () => {
             )}
           >
             <Target className="h-3.5 w-3.5" />
-            Metas SMART
+            Minhas metas
           </button>
         </div>
 
