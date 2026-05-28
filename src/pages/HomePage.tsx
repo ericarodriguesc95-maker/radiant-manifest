@@ -272,7 +272,7 @@ const HomePage = () => {
             </div>
             <div className="relative z-10 flex-1 text-left">
               <p className="text-sm font-display font-bold text-foreground">Bíblia em 365 Dias</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Leitura diária + neurociência aplicada</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">1 leitura curta por dia + reflexão prática</p>
             </div>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </button>
