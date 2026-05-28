@@ -887,7 +887,7 @@ export default function SaudePage() {
           <Heart className="h-5 w-5 text-primary" />
           <h1 className="text-2xl font-display font-semibold text-foreground">Saúde & Fitness</h1>
         </div>
-        <p className="text-sm text-muted-foreground font-body">Dieta, peso, exercícios, suplementos e medicações</p>
+        <p className="text-sm text-muted-foreground font-body">Acompanhe peso, dieta, treinos, água, ciclo, sono e remédios em um só lugar.</p>
       </div>
 
       {/* Atalho: Regulador Inteligente do Sono */}
