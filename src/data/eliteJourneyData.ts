@@ -507,6 +507,8 @@ export const SUCCESS_KEYS: SuccessKey[] = [
     icon: "♟️",
     color: "from-emerald-900/40 to-emerald-700/10",
     description: "Leia o ambiente, jogue com inteligência",
+    benefit: "Eleva sua inteligência social, melhora negociações, posiciona você como referência em qualquer sala e protege sua energia de ambientes tóxicos. Quem domina essa chave constrói redes que abrem portas sem precisar pedir.",
+    neuroscience: "Os neurônios-espelho (Rizzolatti) fazem o cérebro simular automaticamente os estados emocionais ao redor — por isso ambientes contaminam. Observar antes de reagir ativa a teoria da mente no córtex pré-frontal medial, área que decodifica intenções alheias. E o 'mere exposure effect' de Zajonc mostra que presença estratégica e repetida em ambientes-chave aumenta sua percepção de autoridade.",
     exercises: [
       { day: "Domingo", title: "Mapa de aliados", instruction: "Liste 5 pessoas que te elevam. Planeje 1 conexão com cada nesta semana.", duration: "10 min" },
       { day: "Segunda", title: "Observação silenciosa", instruction: "Em 1 reunião hoje, fale 30% menos e observe 70% mais.", duration: "Reunião" },
