@@ -505,25 +505,25 @@ const FinancasPage = () => {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="w-full flex overflow-x-auto no-scrollbar bg-muted/50 h-auto p-1 gap-0.5">
             <TabsTrigger value="registros" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
-              <ArrowUpDown className="h-3 w-3 shrink-0" /> Registros
+              <ArrowUpDown className="h-3 w-3 shrink-0" /> Entradas/Saídas
             </TabsTrigger>
             <TabsTrigger value="cartao" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400 px-1.5 py-1.5">
               <CreditCard className="h-3 w-3 shrink-0" /> Cartão
             </TabsTrigger>
             <TabsTrigger value="poupanca" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 px-1.5 py-1.5">
-              <PiggyBank className="h-3 w-3 shrink-0" /> Poupança
+              <PiggyBank className="h-3 w-3 shrink-0" /> Guardar
             </TabsTrigger>
             <TabsTrigger value="grafico" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
-              <TrendingUp className="h-3 w-3 shrink-0" /> Gráfico
+              <TrendingUp className="h-3 w-3 shrink-0" /> Onde gasto
             </TabsTrigger>
             <TabsTrigger value="dicas" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
               <Lightbulb className="h-3 w-3 shrink-0" /> Dicas
             </TabsTrigger>
             <TabsTrigger value="ia" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
-              <Bot className="h-3 w-3 shrink-0" /> IA
+              <Bot className="h-3 w-3 shrink-0" /> Consultora
             </TabsTrigger>
             <TabsTrigger value="quiz" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
-              <Brain className="h-3 w-3 shrink-0" /> Quiz
+              <Brain className="h-3 w-3 shrink-0" /> Meu perfil
             </TabsTrigger>
           </TabsList>
 
