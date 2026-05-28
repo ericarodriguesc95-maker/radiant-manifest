@@ -31,16 +31,16 @@ interface BubbleDef {
 }
 
 const BUBBLES: BubbleDef[] = [
-  { id: "dm", label: "Mensagens diretas", shortLabel: "DM", icon: MessageCircle,
+  { id: "dm", label: "Conversar em particular", shortLabel: "Conversas", icon: MessageCircle,
     href: "/comunidade?openDms=1", hideOnPrefix: ["/comunidade"], usedFlag: "dm-used" },
-  { id: "salas", label: "Salas de chat", shortLabel: "Salas", icon: Hash,
+  { id: "salas", label: "Grupos por tema", shortLabel: "Grupos", icon: Hash,
     href: "/comunidade?openRooms=1", hideOnPrefix: ["/comunidade"], usedFlag: "chatrooms-used" },
   // IAs: SEMPRE visíveis (não exigem uso prévio) — usedFlag vazio funciona como "sempre liberado"
-  { id: "ia", label: "Assistente Pessoal", shortLabel: "Tempo", icon: Clock,
+  { id: "ia", label: "Minha agenda do dia", shortLabel: "Agenda", icon: Clock,
     href: "/alta-performance?openAi=1", hideOnPrefix: ["/alta-performance"], usedFlag: "" },
-  { id: "eu-superior", label: "Eu Superior", shortLabel: "Eu+", icon: Crown,
+  { id: "eu-superior", label: "Falar com a melhor versão de mim", shortLabel: "Eu+", icon: Crown,
     href: "/metas?tab=manifestacao&openEuSuperior=1", hideOnPrefix: ["/metas"], usedFlag: "" },
-  { id: "financeira", label: "IA Financeira", shortLabel: "$", icon: Wallet,
+  { id: "financeira", label: "Consultora do meu dinheiro", shortLabel: "Dinheiro", icon: Wallet,
     href: "/financas?openAi=1", hideOnPrefix: ["/financas"], usedFlag: "" },
 ];
 
