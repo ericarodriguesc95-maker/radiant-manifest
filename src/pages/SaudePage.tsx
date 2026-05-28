@@ -909,12 +909,12 @@ export default function SaudePage() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid grid-cols-7 w-full h-auto p-1">
-          <TabsTrigger value="perfil" className="text-[9px] px-0.5 py-1.5">⚖️ Perfil</TabsTrigger>
-          <TabsTrigger value="dieta" className="text-[9px] px-0.5 py-1.5">🍽️ Dieta</TabsTrigger>
+          <TabsTrigger value="perfil" className="text-[9px] px-0.5 py-1.5">⚖️ Meu corpo</TabsTrigger>
+          <TabsTrigger value="dieta" className="text-[9px] px-0.5 py-1.5">🍽️ O que comi</TabsTrigger>
           <TabsTrigger value="treino" className="text-[9px] px-0.5 py-1.5">💪 Treino</TabsTrigger>
           <TabsTrigger value="passos" className="text-[9px] px-0.5 py-1.5">👣 Passos</TabsTrigger>
           <TabsTrigger value="suplem" className="text-[9px] px-0.5 py-1.5">💊 Suplem.</TabsTrigger>
-          <TabsTrigger value="ciclo" className="text-[9px] px-0.5 py-1.5">🩸 Ciclo</TabsTrigger>
+          <TabsTrigger value="ciclo" className="text-[9px] px-0.5 py-1.5">🩸 Meu ciclo</TabsTrigger>
           <TabsTrigger value="medic" className="text-[9px] px-0.5 py-1.5">💉 Medic.</TabsTrigger>
         </TabsList>
 
