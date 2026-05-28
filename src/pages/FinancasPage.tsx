@@ -434,6 +434,7 @@ const FinancasPage = () => {
       <header className="px-5 pt-12 pb-4">
         <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Controle</p>
         <h1 className="text-2xl font-display font-bold">Finanças <span className="text-gold">✦</span></h1>
+        <p className="text-sm text-muted-foreground mt-1">Veja quanto entra, quanto sai e quanto sobra todo mês.</p>
       </header>
 
       <div className="px-5 space-y-4 pb-28">
