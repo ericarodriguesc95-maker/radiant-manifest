@@ -250,7 +250,7 @@ const HomePage = () => {
             </div>
             <div className="relative z-10 flex-1 text-left">
               <p className="text-sm font-display font-bold text-foreground">Gloow Movimenta</p>
-              <p className="text-[11px] font-body text-foreground/70 mt-0.5">Desafio gamificado de 21 dias: corpo, mente, alma, externo e finanças</p>
+              <p className="text-[11px] font-body text-foreground/70 mt-0.5">21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida</p>
             </div>
             <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-gold border border-gold/40 rounded-full px-2 py-0.5">Iniciar</span>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/70 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
