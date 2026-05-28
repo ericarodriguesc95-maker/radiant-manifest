@@ -93,12 +93,12 @@ const HomePage = () => {
   };
 
   const quickActions = [
-    { icon: Brain, label: "Reprogramação\nMental", description: "PNL, meditações e frequências para reprogramar sua mente", to: "/reprogramacao", gradient: "from-purple-900/40 to-purple-800/20" },
-    { icon: Zap, label: "Alta\nPerformance", description: "Técnicas de estudo, podcasts, cursos, canais e hobbies para evoluir todo dia", to: "/alta-performance", gradient: "from-amber-900/40 to-amber-800/20" },
-    { icon: Target, label: "Metas &\nManifestação", description: "Defina metas SMART e manifeste sua vida dos sonhos", to: "/metas", gradient: "from-rose-900/40 to-rose-800/20" },
-    { icon: Heart, label: "Destravar\nFeminino", description: "14 aulas para libertar sua essência e poder feminino", to: "/jornada", gradient: "from-emerald-900/40 to-emerald-800/20" },
-    { icon: Crown, label: "Identidade\nInabalável", description: "Construa autoestima de rainha e confiança inabalável", to: "/identidade-inabalavel", gradient: "from-gold/30 to-amber-900/20" },
-    { icon: Flame, label: "Protocolo\n14.5 · Reset", description: "5 dias de reset com janela de 14h de jejum intermitente", to: "/protocolo-14-5", gradient: "from-zinc-900/60 to-amber-950/30" },
+    { icon: Brain, label: "Reprogramar\na Mente", description: "Áudios e exercícios para trocar pensamentos que te travam", to: "/reprogramacao", gradient: "from-purple-900/40 to-purple-800/20" },
+    { icon: Zap, label: "Estudar e\nEvoluir", description: "Técnicas, podcasts e cursos para aprender mais rápido", to: "/alta-performance", gradient: "from-amber-900/40 to-amber-800/20" },
+    { icon: Target, label: "Metas &\nManifestação", description: "Defina o que quer e veja sua vida dos sonhos sair do papel", to: "/metas", gradient: "from-rose-900/40 to-rose-800/20" },
+    { icon: Heart, label: "Destravar\nFeminino", description: "14 aulas curtas para soltar o que está te prendendo", to: "/jornada", gradient: "from-emerald-900/40 to-emerald-800/20" },
+    { icon: Crown, label: "Autoestima\nde Rainha", description: "Construa uma confiança que ninguém consegue abalar", to: "/identidade-inabalavel", gradient: "from-gold/30 to-amber-900/20" },
+    { icon: Flame, label: "Reset 14.5\n(5 dias)", description: "5 dias com jejum de 14h por dia para resetar o corpo", to: "/protocolo-14-5", gradient: "from-zinc-900/60 to-amber-950/30" },
   ];
 
   return (
