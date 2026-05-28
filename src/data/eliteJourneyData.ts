@@ -471,6 +471,8 @@ export const SUCCESS_KEYS: SuccessKey[] = [
     icon: "🧭",
     color: "from-amber-900/40 to-amber-700/10",
     description: "Bússola interna para escolhas alinhadas",
+    benefit: "Reduz a fadiga de decisão, elimina a paralisia por excesso de opções e libera energia mental para o que realmente importa. Mulheres com direção clara relatam menos ansiedade e mais autoconfiança no longo prazo.",
+    neuroscience: "Quando você define uma intenção clara, o córtex pré-frontal ativa o sistema reticular ativador ascendente — o filtro cerebral que passa a destacar oportunidades alinhadas e ignorar ruído. Estudos de Roy Baumeister mostram que cada microdecisão drena glicose cerebral; ter direção definida economiza esse combustível para o que move sua vida.",
     exercises: [
       { day: "Domingo", title: "Visão da semana", instruction: "Escreva em 1 frase o resultado que você quer ver até domingo que vem.", duration: "5 min" },
       { day: "Segunda", title: "Pergunta-bússola", instruction: "Pergunte-se: 'Esta ação me aproxima ou me afasta da mulher que quero ser?'", duration: "3 min" },
