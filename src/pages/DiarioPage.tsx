@@ -185,8 +185,8 @@ export default function DiarioPage() {
             <BookOpen className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="text-xl font-heading font-bold text-foreground">Diário</h1>
-            <p className="text-xs font-body text-muted-foreground">Seu espaço privado para escrever pensamentos, ideias e sentimentos.</p>
+            <h1 className="text-xl font-heading font-bold text-foreground">Meu Diário</h1>
+            <p className="text-xs font-body text-muted-foreground">Só você lê o que escreve aqui. Desabafe, planeje, sonhe.</p>
           </div>
         </div>
         <Button variant="gold" size="sm" onClick={createNote} className="gap-1.5">
