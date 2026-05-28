@@ -27,7 +27,7 @@ export default function GuiasPage() {
           <BookOpen className="h-5 w-5 text-primary" />
           <h1 className="text-2xl font-display font-semibold text-foreground">Guias Completos</h1>
         </div>
-        <p className="text-sm text-muted-foreground font-body">Tudo que você precisa saber para usar o app ao máximo</p>
+        <p className="text-sm text-muted-foreground font-body">Manual rápido: como usar cada função do app, cuidar da pele e da saúde.</p>
       </div>
 
       <Tabs defaultValue="funcoes" className="w-full">
