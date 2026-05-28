@@ -189,7 +189,7 @@ const HomePage = () => {
         <section className="space-y-4">
           <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 5 } as React.CSSProperties}>
             <Sparkles className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Acesso Rápido</h2>
+            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Comece por aqui</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
           </div>
 
