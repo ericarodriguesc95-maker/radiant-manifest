@@ -88,6 +88,26 @@ export default function SuccessKeysCards() {
 
                   <div className="h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
 
+                  {/* Benefício */}
+                  <div className="rounded-xl bg-gold/5 border border-gold/20 p-3 space-y-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <Sparkles className="h-3 w-3 text-gold" />
+                      <p className="text-[10px] font-body tracking-[0.2em] uppercase text-gold/80 font-semibold">Para que serve</p>
+                    </div>
+                    <p className="text-[11px] font-body text-foreground/80 leading-relaxed">{activeKey.benefit}</p>
+                  </div>
+
+                  {/* Neurociência */}
+                  <div className="rounded-xl bg-violet-500/5 border border-violet-400/20 p-3 space-y-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <Brain className="h-3 w-3 text-violet-300" />
+                      <p className="text-[10px] font-body tracking-[0.2em] uppercase text-violet-300/90 font-semibold">O que a neurociência diz</p>
+                    </div>
+                    <p className="text-[11px] font-body text-foreground/80 leading-relaxed">{activeKey.neuroscience}</p>
+                  </div>
+
+                  <div className="h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent" />
+
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
                       <Calendar className="h-3.5 w-3.5 text-gold" />
