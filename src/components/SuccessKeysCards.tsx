@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Clock, Calendar, KeyRound } from "lucide-react";
+import { X, Clock, Calendar, KeyRound, Sparkles, Brain } from "lucide-react";
 import { SUCCESS_KEYS, SuccessKey } from "@/data/eliteJourneyData";
 import { cn } from "@/lib/utils";
 
