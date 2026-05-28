@@ -326,7 +326,7 @@ const HomePage = () => {
             </div>
             <div className="relative z-10 flex-1 text-left">
               <p className="text-sm font-display font-bold text-foreground">Jornada Elite</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Trilha 5 níveis · Diagnóstico · 80+ aulas</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Trilha completa em 5 níveis · 80+ aulas + teste de perfil</p>
             </div>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </button>
