@@ -1083,7 +1083,7 @@ export default function DesafiosPage() {
               <div className="bg-card px-5 py-3 flex items-center justify-between">
                 <span className="flex items-center gap-1.5 text-xs font-body text-muted-foreground">
                   <Flame className="h-3.5 w-3.5 text-orange-400" />
-                  {participants} meninas participando
+                  {participants >= 10 ? `${participants} rainhas ativas` : "Ativo esta semana"}
                 </span>
                 {joined ? (
                   <Button
