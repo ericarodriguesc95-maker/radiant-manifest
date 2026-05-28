@@ -13,12 +13,12 @@ import { speakWithPauses } from "@/lib/voiceUtils";
 type View = "hub" | "ritual" | "eu-superior" | "frequencias" | "termometro" | "manifestacao-escrita" | "quadro-sonhos";
 
 const menuItems: { id: View; icon: React.ElementType; label: string }[] = [
-  { id: "ritual", icon: Sun, label: "Começar meu dia" },
-  { id: "eu-superior", icon: Sparkles, label: "Conversar com meu Eu Superior" },
-  { id: "frequencias", icon: Music, label: "Preciso alinhar minha vibração" },
-  { id: "manifestacao-escrita", icon: PenLine, label: "Escrever no meu diário vibracional" },
-  { id: "quadro-sonhos", icon: ImageIcon, label: "Meu quadro dos sonhos" },
-  { id: "termometro", icon: Thermometer, label: "Escala de Hawkins — Minha frequência" },
+  { id: "ritual", icon: Sun, label: "Começar meu dia com intenção" },
+  { id: "eu-superior", icon: Sparkles, label: "Conversar com a versão mais alta de mim" },
+  { id: "frequencias", icon: Music, label: "Ouvir frequências para acalmar a mente" },
+  { id: "manifestacao-escrita", icon: PenLine, label: "Escrever o que quero atrair hoje" },
+  { id: "quadro-sonhos", icon: ImageIcon, label: "Montar meu mural dos sonhos" },
+  { id: "termometro", icon: Thermometer, label: "Medir como minha energia está agora" },
 ];
 
 export default function ManifestacaoHub() {

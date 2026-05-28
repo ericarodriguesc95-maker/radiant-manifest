@@ -255,29 +255,28 @@ export default function SonoPage() {
                 <div className="mx-auto h-16 w-16 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center mb-4">
                   <Brain className="h-8 w-8 text-gold" />
                 </div>
-                <CardTitle className="font-serif text-3xl text-gold">Regulador Inteligente do Sono</CardTitle>
+                <CardTitle className="font-serif text-3xl text-gold">Descubra como dormir melhor</CardTitle>
                 <CardDescription className="text-base text-foreground/70 max-w-xl mx-auto mt-2">
-                  Uma neurocientista especializada em medicina do sono e ritmos circadianos
-                  irá analisar seu padrão atual e criar um plano personalizado de otimização cerebral.
+                  Responda 4 perguntas e receba um plano feito pra você: a que horas dormir, acordar e como ter mais energia no dia seguinte.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 pb-10">
                 <div className="grid sm:grid-cols-3 gap-3">
                   <div className="p-4 rounded-lg border border-gold/20 bg-card/50 text-center">
                     <Clock className="h-5 w-5 text-gold mx-auto mb-2" />
-                    <p className="text-xs text-foreground/70">4 perguntas rápidas</p>
+                    <p className="text-xs text-foreground/70">Leva 2 minutos</p>
                   </div>
                   <div className="p-4 rounded-lg border border-gold/20 bg-card/50 text-center">
                     <Brain className="h-5 w-5 text-gold mx-auto mb-2" />
-                    <p className="text-xs text-foreground/70">Análise neurocientífica</p>
+                    <p className="text-xs text-foreground/70">Plano feito pra você</p>
                   </div>
                   <div className="p-4 rounded-lg border border-gold/20 bg-card/50 text-center">
                     <MessageCircle className="h-5 w-5 text-gold mx-auto mb-2" />
-                    <p className="text-xs text-foreground/70">Chat com especialista</p>
+                    <p className="text-xs text-foreground/70">Tire dúvidas no chat</p>
                   </div>
                 </div>
                 <Button onClick={() => setStep("form")} className="w-full bg-gold text-background hover:bg-gold/90 h-12 text-base font-semibold">
-                  {history.length > 0 ? "Fazer Novo Diagnóstico" : "Iniciar Diagnóstico Circadiano"}
+                  {history.length > 0 ? "Refazer meu plano de sono" : "Começar agora (2 min)"}
                 </Button>
                 {history.length > 0 && (
                   <Button variant="outline" onClick={() => viewHistoryItem(history[0])} className="w-full border-gold/30 text-gold hover:bg-gold/10">

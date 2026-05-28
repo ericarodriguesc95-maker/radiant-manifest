@@ -154,8 +154,8 @@ export default function JornadaElitePage() {
       <div className="px-5 pt-5">
         <div className="grid grid-cols-3 gap-1 p-1 rounded-xl glass border border-gold/15">
           {([
-            { id: "trilha" as Tab, label: "Trilha", icon: Crown },
-            { id: "diagnostico" as Tab, label: "Diagnóstico", icon: ClipboardCheck },
+            { id: "trilha" as Tab, label: "Meu caminho", icon: Crown },
+            { id: "diagnostico" as Tab, label: "Quem eu sou", icon: ClipboardCheck },
             { id: "aulas" as Tab, label: "Aulas", icon: Play },
           ]).map(({ id, label, icon: Icon }) => (
             <button
@@ -178,9 +178,9 @@ export default function JornadaElitePage() {
         {tab === "trilha" && (
           <>
             <div className="text-center space-y-2 animate-stagger">
-              <p className="text-[10px] font-body tracking-[0.3em] uppercase text-gold/70">Pirâmide da Elite</p>
-              <h2 className="text-xl font-display font-bold text-foreground">5 Níveis até a Liderança</h2>
-              <p className="text-xs text-muted-foreground">{totalLevelsDone} de {JOURNEY_LEVELS.length} níveis concluídos</p>
+              <p className="text-[10px] font-body tracking-[0.3em] uppercase text-gold/70">Sua subida até o topo</p>
+              <h2 className="text-xl font-display font-bold text-foreground">5 níveis para virar referência</h2>
+              <p className="text-xs text-muted-foreground">Você já completou {totalLevelsDone} de {JOURNEY_LEVELS.length} níveis</p>
             </div>
 
             <div className="space-y-3">
