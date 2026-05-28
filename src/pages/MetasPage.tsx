@@ -246,18 +246,8 @@ const MetasPage = () => {
               activeTab === "manifestacao" ? "bg-gold text-background shadow-lg" : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <Sparkles className="h-3.5 w-3.5" />
-            Manifestação
-          </button>
-          <button
-            onClick={() => setActiveTab("metas")}
-            className={cn(
-              "flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-xs font-body font-semibold transition-all",
-              activeTab === "metas" ? "bg-gold text-background shadow-lg" : "text-muted-foreground hover:text-foreground"
-            )}
-          >
             <Target className="h-3.5 w-3.5" />
-            Metas SMART
+            Minhas metas
           </button>
         </div>
 
