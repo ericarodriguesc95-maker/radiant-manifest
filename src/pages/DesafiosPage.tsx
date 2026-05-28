@@ -887,7 +887,9 @@ export default function DesafiosPage() {
           <div>
             <p className="text-sm font-semibold font-body">Mural: {selectedChallenge.title}</p>
             <p className="text-[10px] text-muted-foreground font-body">
-              🔥 {participantCounts[selectedChallenge.id] || 0} participando
+              {(participantCounts[selectedChallenge.id] || 0) >= 10
+                ? `🔥 ${participantCounts[selectedChallenge.id]} rainhas ativas`
+                : "🔥 Desafio ativo esta semana"}
             </p>
           </div>
         </div>
@@ -968,7 +970,11 @@ export default function DesafiosPage() {
 
         <div className="flex items-center gap-2 mb-4 text-sm font-body text-muted-foreground">
           <Flame className="h-4 w-4 text-orange-400" />
-          <span>{participantCounts[selectedChallenge.id] || 0} meninas participando</span>
+          <span>
+            {(participantCounts[selectedChallenge.id] || 0) >= 10
+              ? `${participantCounts[selectedChallenge.id]} rainhas nessa jornada`
+              : "Desafio ativo esta semana no clube"}
+          </span>
         </div>
 
         {/* Day grid */}
@@ -1077,7 +1083,7 @@ export default function DesafiosPage() {
               <div className="bg-card px-5 py-3 flex items-center justify-between">
                 <span className="flex items-center gap-1.5 text-xs font-body text-muted-foreground">
                   <Flame className="h-3.5 w-3.5 text-orange-400" />
-                  {participants} meninas participando
+                  {participants >= 10 ? `${participants} rainhas ativas` : "Ativo esta semana"}
                 </span>
                 {joined ? (
                   <Button

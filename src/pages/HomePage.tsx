@@ -14,6 +14,7 @@ import StreakMedals from "@/components/StreakMedals";
 import AppUpdatesModal from "@/components/AppUpdatesModal";
 import SuccessKeysCards from "@/components/SuccessKeysCards";
 import HormonalPhaseSuggestion from "@/components/HormonalPhaseSuggestion";
+import ProgressPulseWidget from "@/components/ProgressPulseWidget";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -225,6 +226,13 @@ const HomePage = () => {
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 8 } as React.CSSProperties}>
           <HormonalPhaseSuggestion />
+        </div>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* PROGRESS PULSE — Metas + Finanças (dopamina visual) */}
+        {/* ═══════════════════════════════════════════ */}
+        <div className="animate-stagger" style={{ "--stagger": 8 } as React.CSSProperties}>
+          <ProgressPulseWidget />
         </div>
 
         {/* ═══════════════════════════════════════════ */}
