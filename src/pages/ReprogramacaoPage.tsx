@@ -114,7 +114,7 @@ const ReprogramacaoPage = () => {
         </button>
         <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Sua jornada de</p>
         <h1 className="text-2xl font-display font-bold">Reprogramação Mental <span className="text-gold">✦</span></h1>
-        <p className="text-xs text-muted-foreground font-body mt-1">Transforme seus pensamentos, transforme sua vida</p>
+        <p className="text-xs text-muted-foreground font-body mt-1">Áudios, exercícios e frequências para trocar pensamentos que te travam por crenças que te impulsionam.</p>
       </header>
 
       <div className="px-5 space-y-3 pb-6 mt-4">
