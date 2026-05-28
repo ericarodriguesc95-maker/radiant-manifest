@@ -293,7 +293,7 @@ const HomePage = () => {
             </div>
             <div className="relative z-10 flex-1 text-left">
               <p className="text-sm font-display font-bold text-foreground">Mente Infalível</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Inteligência emocional · Psicologia · Neurociência · Neuromarketing</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Treine emoções, foco e influência com ciência simples</p>
             </div>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </button>
