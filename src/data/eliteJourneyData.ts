@@ -459,6 +459,8 @@ export interface SuccessKey {
   icon: string;
   color: string;
   description: string;
+  benefit: string;
+  neuroscience: string;
   exercises: { day: string; title: string; instruction: string; duration: string }[];
 }
 
@@ -469,6 +471,8 @@ export const SUCCESS_KEYS: SuccessKey[] = [
     icon: "🧭",
     color: "from-amber-900/40 to-amber-700/10",
     description: "Bússola interna para escolhas alinhadas",
+    benefit: "Reduz a fadiga de decisão, elimina a paralisia por excesso de opções e libera energia mental para o que realmente importa. Mulheres com direção clara relatam menos ansiedade e mais autoconfiança no longo prazo.",
+    neuroscience: "Quando você define uma intenção clara, o córtex pré-frontal ativa o sistema reticular ativador ascendente — o filtro cerebral que passa a destacar oportunidades alinhadas e ignorar ruído. Estudos de Roy Baumeister mostram que cada microdecisão drena glicose cerebral; ter direção definida economiza esse combustível para o que move sua vida.",
     exercises: [
       { day: "Domingo", title: "Visão da semana", instruction: "Escreva em 1 frase o resultado que você quer ver até domingo que vem.", duration: "5 min" },
       { day: "Segunda", title: "Pergunta-bússola", instruction: "Pergunte-se: 'Esta ação me aproxima ou me afasta da mulher que quero ser?'", duration: "3 min" },
@@ -485,6 +489,8 @@ export const SUCCESS_KEYS: SuccessKey[] = [
     icon: "🗝️",
     color: "from-violet-900/40 to-violet-700/10",
     description: "Domine sua mente antes que ela te domine",
+    benefit: "Aumenta a regulação emocional, reduz reações impulsivas (compras por ansiedade, brigas, autocrítica) e fortalece a sensação de agência sobre a própria vida — base da autoestima inabalável.",
+    neuroscience: "A pausa consciente antes de reagir ativa o córtex pré-frontal e desativa a amígdala — fenômeno chamado de 'reversão do sequestro amigdaliano' por Daniel Goleman. Nomear emoções (affect labeling) reduz em até 50% a atividade da amígdala, segundo Matthew Lieberman (UCLA). É neuroplasticidade pura: cada pausa fortalece o circuito do autocontrole.",
     exercises: [
       { day: "Domingo", title: "Inventário emocional", instruction: "Nomeie as 3 emoções que mais sentiu na semana. Não julgue, apenas note.", duration: "8 min" },
       { day: "Segunda", title: "Pausa de 4 segundos", instruction: "Antes de reagir hoje, respire por 4 segundos. Toda vez.", duration: "Dia todo" },
@@ -501,6 +507,8 @@ export const SUCCESS_KEYS: SuccessKey[] = [
     icon: "♟️",
     color: "from-emerald-900/40 to-emerald-700/10",
     description: "Leia o ambiente, jogue com inteligência",
+    benefit: "Eleva sua inteligência social, melhora negociações, posiciona você como referência em qualquer sala e protege sua energia de ambientes tóxicos. Quem domina essa chave constrói redes que abrem portas sem precisar pedir.",
+    neuroscience: "Os neurônios-espelho (Rizzolatti) fazem o cérebro simular automaticamente os estados emocionais ao redor — por isso ambientes contaminam. Observar antes de reagir ativa a teoria da mente no córtex pré-frontal medial, área que decodifica intenções alheias. E o 'mere exposure effect' de Zajonc mostra que presença estratégica e repetida em ambientes-chave aumenta sua percepção de autoridade.",
     exercises: [
       { day: "Domingo", title: "Mapa de aliados", instruction: "Liste 5 pessoas que te elevam. Planeje 1 conexão com cada nesta semana.", duration: "10 min" },
       { day: "Segunda", title: "Observação silenciosa", instruction: "Em 1 reunião hoje, fale 30% menos e observe 70% mais.", duration: "Reunião" },
