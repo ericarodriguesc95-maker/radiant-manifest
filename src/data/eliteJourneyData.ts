@@ -459,6 +459,8 @@ export interface SuccessKey {
   icon: string;
   color: string;
   description: string;
+  benefit: string;
+  neuroscience: string;
   exercises: { day: string; title: string; instruction: string; duration: string }[];
 }
 
