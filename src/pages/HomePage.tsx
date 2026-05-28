@@ -346,8 +346,8 @@ const HomePage = () => {
               <ClipboardCheck className="h-6 w-6 text-gold" />
             </div>
             <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Testes de Autoconhecimento</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">DISC · Comportamental · Produtividade · Neurociência</p>
+              <p className="text-sm font-display font-bold text-foreground">Descubra seu Perfil</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Testes rápidos: DISC, comportamento e produtividade</p>
             </div>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </button>
