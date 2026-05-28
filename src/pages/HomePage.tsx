@@ -229,6 +229,13 @@ const HomePage = () => {
         </div>
 
         {/* ═══════════════════════════════════════════ */}
+        {/* PROGRESS PULSE — Metas + Finanças (dopamina visual) */}
+        {/* ═══════════════════════════════════════════ */}
+        <div className="animate-stagger" style={{ "--stagger": 8 } as React.CSSProperties}>
+          <ProgressPulseWidget />
+        </div>
+
+        {/* ═══════════════════════════════════════════ */}
         {/* GLOW MOVE — 21 dias · 7 pilares (purple CTA) */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 9 } as React.CSSProperties}>
