@@ -489,6 +489,8 @@ export const SUCCESS_KEYS: SuccessKey[] = [
     icon: "🗝️",
     color: "from-violet-900/40 to-violet-700/10",
     description: "Domine sua mente antes que ela te domine",
+    benefit: "Aumenta a regulação emocional, reduz reações impulsivas (compras por ansiedade, brigas, autocrítica) e fortalece a sensação de agência sobre a própria vida — base da autoestima inabalável.",
+    neuroscience: "A pausa consciente antes de reagir ativa o córtex pré-frontal e desativa a amígdala — fenômeno chamado de 'reversão do sequestro amigdaliano' por Daniel Goleman. Nomear emoções (affect labeling) reduz em até 50% a atividade da amígdala, segundo Matthew Lieberman (UCLA). É neuroplasticidade pura: cada pausa fortalece o circuito do autocontrole.",
     exercises: [
       { day: "Domingo", title: "Inventário emocional", instruction: "Nomeie as 3 emoções que mais sentiu na semana. Não julgue, apenas note.", duration: "8 min" },
       { day: "Segunda", title: "Pausa de 4 segundos", instruction: "Antes de reagir hoje, respire por 4 segundos. Toda vez.", duration: "Dia todo" },
