@@ -368,7 +368,7 @@ const HomePage = () => {
             </div>
             <div className="relative z-10 flex-1 text-left">
               <p className="text-sm font-display font-bold text-foreground">Desafios Progressivos</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Jornadas transformadoras de 7 a 90 dias</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Escolha um desafio de 7, 21, 30 ou 90 dias e bora</p>
             </div>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </button>
