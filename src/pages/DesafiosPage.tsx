@@ -887,7 +887,9 @@ export default function DesafiosPage() {
           <div>
             <p className="text-sm font-semibold font-body">Mural: {selectedChallenge.title}</p>
             <p className="text-[10px] text-muted-foreground font-body">
-              🔥 {participantCounts[selectedChallenge.id] || 0} participando
+              {(participantCounts[selectedChallenge.id] || 0) >= 10
+                ? `🔥 ${participantCounts[selectedChallenge.id]} rainhas ativas`
+                : "🔥 Desafio ativo esta semana"}
             </p>
           </div>
         </div>
