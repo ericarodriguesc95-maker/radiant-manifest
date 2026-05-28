@@ -93,12 +93,12 @@ const HomePage = () => {
   };
 
   const quickActions = [
-    { icon: Brain, label: "Reprogramação\nMental", description: "PNL, meditações e frequências para reprogramar sua mente", to: "/reprogramacao", gradient: "from-purple-900/40 to-purple-800/20" },
-    { icon: Zap, label: "Alta\nPerformance", description: "Técnicas de estudo, podcasts, cursos, canais e hobbies para evoluir todo dia", to: "/alta-performance", gradient: "from-amber-900/40 to-amber-800/20" },
-    { icon: Target, label: "Metas &\nManifestação", description: "Defina metas SMART e manifeste sua vida dos sonhos", to: "/metas", gradient: "from-rose-900/40 to-rose-800/20" },
-    { icon: Heart, label: "Destravar\nFeminino", description: "14 aulas para libertar sua essência e poder feminino", to: "/jornada", gradient: "from-emerald-900/40 to-emerald-800/20" },
-    { icon: Crown, label: "Identidade\nInabalável", description: "Construa autoestima de rainha e confiança inabalável", to: "/identidade-inabalavel", gradient: "from-gold/30 to-amber-900/20" },
-    { icon: Flame, label: "Protocolo\n14.5 · Reset", description: "5 dias de reset com janela de 14h de jejum intermitente", to: "/protocolo-14-5", gradient: "from-zinc-900/60 to-amber-950/30" },
+    { icon: Brain, label: "Reprogramar\na Mente", description: "Áudios e exercícios para trocar pensamentos que te travam", to: "/reprogramacao", gradient: "from-purple-900/40 to-purple-800/20" },
+    { icon: Zap, label: "Estudar e\nEvoluir", description: "Técnicas, podcasts e cursos para aprender mais rápido", to: "/alta-performance", gradient: "from-amber-900/40 to-amber-800/20" },
+    { icon: Target, label: "Metas &\nManifestação", description: "Defina o que quer e veja sua vida dos sonhos sair do papel", to: "/metas", gradient: "from-rose-900/40 to-rose-800/20" },
+    { icon: Heart, label: "Destravar\nFeminino", description: "14 aulas curtas para soltar o que está te prendendo", to: "/jornada", gradient: "from-emerald-900/40 to-emerald-800/20" },
+    { icon: Crown, label: "Autoestima\nde Rainha", description: "Construa uma confiança que ninguém consegue abalar", to: "/identidade-inabalavel", gradient: "from-gold/30 to-amber-900/20" },
+    { icon: Flame, label: "Reset 14.5\n(5 dias)", description: "5 dias com jejum de 14h por dia para resetar o corpo", to: "/protocolo-14-5", gradient: "from-zinc-900/60 to-amber-950/30" },
   ];
 
   return (
@@ -171,7 +171,7 @@ const HomePage = () => {
         <section className="space-y-4">
           <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 2 } as React.CSSProperties}>
             <Star className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Sua Inspiração Diária</h2>
+            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Para começar o dia</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
           </div>
 
@@ -189,7 +189,7 @@ const HomePage = () => {
         <section className="space-y-4">
           <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 5 } as React.CSSProperties}>
             <Sparkles className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Acesso Rápido</h2>
+            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Comece por aqui</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
           </div>
 
@@ -250,7 +250,7 @@ const HomePage = () => {
             </div>
             <div className="relative z-10 flex-1 text-left">
               <p className="text-sm font-display font-bold text-foreground">Gloow Movimenta</p>
-              <p className="text-[11px] font-body text-foreground/70 mt-0.5">Desafio gamificado de 21 dias: corpo, mente, alma, externo e finanças</p>
+              <p className="text-[11px] font-body text-foreground/70 mt-0.5">21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida</p>
             </div>
             <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-gold border border-gold/40 rounded-full px-2 py-0.5">Iniciar</span>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/70 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
@@ -272,7 +272,7 @@ const HomePage = () => {
             </div>
             <div className="relative z-10 flex-1 text-left">
               <p className="text-sm font-display font-bold text-foreground">Bíblia em 365 Dias</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Leitura diária + neurociência aplicada</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">1 leitura curta por dia + reflexão prática</p>
             </div>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </button>
@@ -293,7 +293,7 @@ const HomePage = () => {
             </div>
             <div className="relative z-10 flex-1 text-left">
               <p className="text-sm font-display font-bold text-foreground">Mente Infalível</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Inteligência emocional · Psicologia · Neurociência · Neuromarketing</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Treine emoções, foco e influência com ciência simples</p>
             </div>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </button>
@@ -305,7 +305,7 @@ const HomePage = () => {
         <section className="space-y-4">
           <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
             <Sparkles className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Chaves do Sucesso</h2>
+            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">3 Chaves para Destravar</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
           </div>
           <SuccessKeysCards />
@@ -326,7 +326,7 @@ const HomePage = () => {
             </div>
             <div className="relative z-10 flex-1 text-left">
               <p className="text-sm font-display font-bold text-foreground">Jornada Elite</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Trilha 5 níveis · Diagnóstico · 80+ aulas</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Trilha completa em 5 níveis · 80+ aulas + teste de perfil</p>
             </div>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </button>
@@ -346,8 +346,8 @@ const HomePage = () => {
               <ClipboardCheck className="h-6 w-6 text-gold" />
             </div>
             <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Testes de Autoconhecimento</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">DISC · Comportamental · Produtividade · Neurociência</p>
+              <p className="text-sm font-display font-bold text-foreground">Descubra seu Perfil</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Testes rápidos: DISC, comportamento e produtividade</p>
             </div>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </button>
@@ -368,7 +368,7 @@ const HomePage = () => {
             </div>
             <div className="relative z-10 flex-1 text-left">
               <p className="text-sm font-display font-bold text-foreground">Desafios Progressivos</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Jornadas transformadoras de 7 a 90 dias</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Escolha um desafio de 7, 21, 30 ou 90 dias e bora</p>
             </div>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </button>
@@ -380,7 +380,7 @@ const HomePage = () => {
         <section className="space-y-4 animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
           <div className="flex items-center gap-2">
             <Star className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Planejamento Mensal</h2>
+            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Seu mês de relance</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
           </div>
           <MonthlyCalendar />
@@ -392,7 +392,7 @@ const HomePage = () => {
         <section className="space-y-4 animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
           <div className="flex items-center gap-2">
             <Sparkles className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Hábitos de Hoje</h2>
+            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Marque seus hábitos de hoje</h2>
             <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
           </div>
           <HabitTracker onCompletedChange={setCompletedHabits} />

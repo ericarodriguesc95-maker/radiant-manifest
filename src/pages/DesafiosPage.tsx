@@ -1048,7 +1048,7 @@ export default function DesafiosPage() {
           <Trophy className="h-5 w-5 text-gold" />
           <h1 className="text-2xl font-display font-semibold text-foreground">Desafios</h1>
         </div>
-        <p className="text-sm text-muted-foreground font-body">Escolha sua jornada de transformação. Cada tarefa tem fundamentação científica e exercícios práticos para a mulher brasileira moderna.</p>
+        <p className="text-sm text-muted-foreground font-body">Escolha um desafio de 7 a 90 dias. Cada dia você recebe uma tarefa simples e prática para virar o jogo na sua vida.</p>
       </div>
 
       <div className="space-y-4">

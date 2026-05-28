@@ -445,10 +445,9 @@ export default function MentePoderosaPage() {
         {/* Intro */}
         <section className="rounded-2xl border border-gold/30 bg-gradient-to-br from-zinc-950 via-black to-amber-950/10 p-5">
           <p className="text-xs tracking-[0.25em] uppercase text-gold/70 font-semibold mb-2">Bom dia, rainha</p>
-          <h2 className="font-display text-xl text-foreground mb-2">Domine sua mente. Influencie o mundo.</h2>
+          <h2 className="font-display text-xl text-foreground mb-2">Treine sua mente. Conquiste o que quer.</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Um programa em 4 trilhas para mulheres que querem regulação emocional de elite, leitura humana profunda,
-            domínio neural e poder de influência ético. Tarefas diárias, gamificação real e uma IA expert ao seu lado.
+            4 trilhas para você controlar emoções, entender pessoas, focar de verdade e influenciar com elegância. Tarefas curtas todo dia, pontos por cada conclusão e uma IA expert te guiando.
           </p>
         </section>
 

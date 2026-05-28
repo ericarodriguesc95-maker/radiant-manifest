@@ -266,8 +266,7 @@ const Biblia365Page = () => {
           </p>
         </div>
         <p className="text-sm text-muted-foreground max-w-xs font-body">
-          Leia a Bíblia inteira em um ano com contexto histórico, neurociência,
-          devocional e diário pessoal — tudo em um só lugar.
+          Leia a Bíblia em 1 ano com uma reflexão curta por dia. Devocional, diário e contexto histórico em um só lugar.
         </p>
 
         <div className="w-full max-w-xs space-y-2">

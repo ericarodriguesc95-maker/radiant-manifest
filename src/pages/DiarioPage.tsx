@@ -186,7 +186,7 @@ export default function DiarioPage() {
           </div>
           <div>
             <h1 className="text-xl font-heading font-bold text-foreground">Diário</h1>
-            <p className="text-xs font-body text-muted-foreground">Suas anotações e insights</p>
+            <p className="text-xs font-body text-muted-foreground">Seu espaço privado para escrever pensamentos, ideias e sentimentos.</p>
           </div>
         </div>
         <Button variant="gold" size="sm" onClick={createNote} className="gap-1.5">

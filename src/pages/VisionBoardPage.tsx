@@ -82,7 +82,7 @@ const VisionBoardPage = () => {
       <header className="px-5 pt-12 pb-2">
         <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Meu</p>
         <h1 className="text-2xl font-display font-bold">Vision Board <span className="text-gold">✦</span></h1>
-        <p className="text-xs text-muted-foreground font-body mt-1">Visualize seus sonhos todos os dias</p>
+        <p className="text-xs text-muted-foreground font-body mt-1">Salve fotos do que você quer viver. Olhe todo dia para programar o cérebro.</p>
       </header>
 
       <div className="px-5 space-y-4 pb-6">

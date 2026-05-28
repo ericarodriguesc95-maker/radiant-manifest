@@ -73,7 +73,7 @@ export default function AltaPerformancePage() {
           <Zap className="h-5 w-5 text-gold" />
           <h1 className="text-2xl font-display font-semibold text-foreground">Alta Performance</h1>
         </div>
-        <p className="text-sm text-muted-foreground font-body">Guia completo para desenvolvimento pessoal e profissional</p>
+        <p className="text-sm text-muted-foreground font-body">Tudo o que você precisa para estudar melhor, focar mais e evoluir todo dia: técnicas, podcasts, cursos e ferramentas.</p>
       </div>
 
       <div className="space-y-6">
