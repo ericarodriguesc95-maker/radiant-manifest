@@ -910,9 +910,15 @@ export default function LandingPage() {
         </div>
 
         {/* Urgência */}
-        <div className="mt-8 rounded-2xl p-5 border text-center" style={{ background: "hsl(43 72% 52% / 0.06)", borderColor: "hsl(43 72% 52% / 0.25)" }}>
-          <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.8)" }}>
-            O preço atual é de lançamento. Quando os próximos módulos forem lançados, o valor será reajustado. Quem entrar agora garante o acesso às atualizações sem pagar mais.
+        <div className="mt-8 rounded-2xl p-6 border text-center" style={{ background: "hsl(43 72% 52% / 0.08)", borderColor: "hsl(43 72% 52% / 0.3)" }}>
+          <p className="text-[10px] tracking-[0.3em] uppercase mb-2" style={{ color: "hsl(43 72% 60%)" }}>
+            ✦ Preço de lançamento
+          </p>
+          <p className="text-base md:text-lg leading-relaxed font-semibold" style={{ color: "rgba(255,255,255,0.95)" }}>
+            Quando os próximos módulos entrarem, o valor sobe.
+          </p>
+          <p className="mt-2 text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
+            Quem entrar agora <span className="font-bold" style={{ color: "hsl(43 72% 60%)" }}>trava R$ 27,90 para sempre</span> — com todas as atualizações futuras incluídas, sem pagar mais.
           </p>
         </div>
 
