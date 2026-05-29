@@ -368,6 +368,7 @@ const faqItems = [
 
 export default function LandingPage() {
   const [activePreview, setActivePreview] = useState<PreviewKey>("home");
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     document.title = "Gloow Up Club ✦ Ecossistema Feminino de Alta Performance";
@@ -381,11 +382,51 @@ export default function LandingPage() {
     }
   }, []);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 480);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <div className="min-h-screen text-[#F5F5F5]" style={{ background: "#0A0A0A" }}>
       {/* Ambient glow */}
       <div className="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-20 pointer-events-none" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.3), transparent 70%)" }} />
       <div className="fixed bottom-[-15%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-15 pointer-events-none" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.2), transparent 70%)" }} />
+
+      {/* STICKY HEADER (aparece após o primeiro scroll) */}
+      <div
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}
+        style={{
+          background: "rgba(10,10,10,0.92)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid hsl(43 72% 52% / 0.15)",
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-3">
+          <span className="text-sm md:text-base font-bold tracking-tight">
+            Gloow Up <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>Club</span> <span style={{ color: "hsl(43 72% 52%)" }}>✦</span>
+          </span>
+          <div className="flex items-center gap-2 md:gap-3">
+            <span className="hidden sm:inline text-[11px] md:text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>
+              R$ 27,90 <span style={{ color: "hsl(43 72% 60%)" }}>· preço de lançamento</span>
+            </span>
+            <a
+              href={KIWIFY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full px-4 md:px-5 py-2 text-[11px] md:text-xs font-bold uppercase tracking-wider transition-all hover:scale-105 whitespace-nowrap"
+              style={{
+                background: "linear-gradient(135deg, hsl(43 72% 60%), hsl(43 72% 45%))",
+                color: "#0A0A0A",
+                boxShadow: "0 6px 24px -8px hsl(43 72% 52% / 0.6)",
+              }}
+            >
+              Quero meu acesso ✦
+            </a>
+          </div>
+        </div>
+      </div>
 
       {/* NAV */}
       <header className="relative z-10 max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
@@ -394,10 +435,10 @@ export default function LandingPage() {
         </h1>
         <Link
           to="/login"
-          className="rounded-full px-5 py-2.5 text-sm font-medium border transition-all hover:scale-105"
-          style={{ borderColor: "hsl(43 72% 52% / 0.3)", color: "#F5F5F5" }}
+          className="text-sm font-medium transition-colors hover:text-white inline-flex items-center gap-1.5"
+          style={{ color: "rgba(255,255,255,0.6)" }}
         >
-          Já sou rainha do Gloow Up Club ✦
+          Já sou membra <span style={{ color: "hsl(43 72% 60%)" }}>→ Login</span>
         </Link>
       </header>
 
