@@ -1,8 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
+import depoimentoNayara from "@/assets/depoimento-nayara.png";
+import depoimentoSimone from "@/assets/depoimento-simone.png";
+import depoimentoKamila from "@/assets/depoimento-kamila.png";
+import depoimentoGabrielly from "@/assets/depoimento-gabrielly.png";
+import depoimentoWpp1 from "@/assets/depoimento-wpp1.png";
+import depoimentoWpp2 from "@/assets/depoimento-wpp2.png";
 
 const KIWIFY_URL = "https://pay.kiwify.com.br/b2qJYrZ";
+
+const realTestimonials = [
+  { name: "Nayara Moraes", img: depoimentoNayara, quote: "Ameeei demais principalmente a parte de performance. Gostei muito da dica de cursos, links e livros." },
+  { name: "Simone Costa", img: depoimentoSimone, quote: "Dia produtivo: todos os hábitos feitos! (4/6 hábitos) — Achei demais! Parabéns." },
+  { name: "Kamila Moreira", img: depoimentoKamila, quote: "Achei chique! Sucesso Éricaaa ✨💗" },
+  { name: "Gabrielly Rosa", img: depoimentoGabrielly, quote: "Completei minha meditação e checklist hoje! (4/6 hábitos)" },
+  { name: "Membra (WhatsApp)", img: depoimentoWpp1, quote: "Está muito legal 💚💚💚 ⚡ Amei aquela parte das dicas do que assistir e de conteúdo. Muito show mesmo." },
+  { name: "Membra (WhatsApp)", img: depoimentoWpp2, quote: "Muito shoooooow. Legal mesmo, mente de milhões 💚" },
+];
 
 const modules = [
   {
