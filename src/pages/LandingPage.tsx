@@ -676,11 +676,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* TESTIMONIALS — prints reais das membras */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-20">
         <div className="text-center mb-14">
           <p className="text-xs tracking-[0.3em] uppercase mb-4" style={{ color: "hsl(43 72% 52%)" }}>
-            Resultados Reais
+            Prints reais · Membras da comunidade
           </p>
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight">
             O que acontece quando{" "}
@@ -688,24 +688,36 @@ export default function LandingPage() {
               sistema substitui tentativa.
             </span>
           </h3>
+          <p className="mt-5 max-w-2xl mx-auto text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
+            Feedbacks reais publicados dentro do app e enviados no WhatsApp por mulheres que já estão dentro.
+          </p>
         </div>
-        <div className="grid md:grid-cols-2 gap-5">
-          {testimonials.map((t, i) => (
-            <div
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {realTestimonials.map((t, i) => (
+            <figure
               key={i}
-              className="rounded-2xl p-6 border"
+              className="rounded-2xl p-4 border flex flex-col"
               style={{
                 background: "linear-gradient(145deg, rgba(20,20,20,0.6), rgba(12,12,12,0.8))",
                 borderColor: "rgba(255,255,255,0.06)",
               }}
             >
-              <p className="italic mb-4 leading-relaxed" style={{ color: "rgba(255,255,255,0.8)", fontFamily: "Georgia, serif" }}>
-                "{t.text}"
-              </p>
-              <p className="text-xs uppercase tracking-widest" style={{ color: "hsl(43 72% 52%)" }}>
-                {t.name}
-              </p>
-            </div>
+              <div className="rounded-xl overflow-hidden mb-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                <img
+                  src={t.img}
+                  alt={`Depoimento real de ${t.name} — membra do Gloow Up Club`}
+                  loading="lazy"
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+              <blockquote className="text-sm italic leading-relaxed mb-3 flex-1" style={{ color: "rgba(255,255,255,0.78)", fontFamily: "Georgia, serif" }}>
+                "{t.quote}"
+              </blockquote>
+              <figcaption className="text-[11px] uppercase tracking-widest font-semibold" style={{ color: "hsl(43 72% 60%)" }}>
+                — {t.name}
+              </figcaption>
+            </figure>
           ))}
         </div>
 
@@ -721,6 +733,7 @@ export default function LandingPage() {
           </p>
         </div>
       </section>
+
 
       {/* INSIDE THE APP, INTERACTIVE PREVIEW */}
       <section id="por-dentro" className="relative z-10 max-w-7xl mx-auto px-6 py-20">
