@@ -711,9 +711,6 @@ export default function LandingPage() {
                   className="w-full h-auto object-contain"
                 />
               </div>
-              <blockquote className="text-sm italic leading-relaxed mb-3 flex-1" style={{ color: "rgba(255,255,255,0.78)", fontFamily: "Georgia, serif" }}>
-                "{t.quote}"
-              </blockquote>
               <figcaption className="text-[11px] uppercase tracking-widest font-semibold" style={{ color: "hsl(43 72% 60%)" }}>
                 — {t.name}
               </figcaption>
