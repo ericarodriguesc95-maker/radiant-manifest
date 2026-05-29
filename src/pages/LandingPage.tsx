@@ -1,8 +1,23 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
+import depoimentoNayara from "@/assets/depoimento-nayara.png";
+import depoimentoSimone from "@/assets/depoimento-simone.png";
+import depoimentoKamila from "@/assets/depoimento-kamila.png";
+import depoimentoGabrielly from "@/assets/depoimento-gabrielly.png";
+import depoimentoWpp1 from "@/assets/depoimento-wpp1.png";
+import depoimentoWpp2 from "@/assets/depoimento-wpp2.png";
 
 const KIWIFY_URL = "https://pay.kiwify.com.br/b2qJYrZ";
+
+const realTestimonials = [
+  { name: "Nayara Moraes", img: depoimentoNayara, quote: "Ameeei demais principalmente a parte de performance. Gostei muito da dica de cursos, links e livros." },
+  { name: "Simone Costa", img: depoimentoSimone, quote: "Dia produtivo: todos os hábitos feitos! (4/6 hábitos) — Achei demais! Parabéns." },
+  { name: "Kamila Moreira", img: depoimentoKamila, quote: "Achei chique! Sucesso Éricaaa ✨💗" },
+  { name: "Gabrielly Rosa", img: depoimentoGabrielly, quote: "Completei minha meditação e checklist hoje! (4/6 hábitos)" },
+  { name: "Membra (WhatsApp)", img: depoimentoWpp1, quote: "Está muito legal 💚💚💚 ⚡ Amei aquela parte das dicas do que assistir e de conteúdo. Muito show mesmo." },
+  { name: "Membra (WhatsApp)", img: depoimentoWpp2, quote: "Muito shoooooow. Legal mesmo, mente de milhões 💚" },
+];
 
 const modules = [
   {
@@ -353,6 +368,7 @@ const faqItems = [
 
 export default function LandingPage() {
   const [activePreview, setActivePreview] = useState<PreviewKey>("home");
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     document.title = "Gloow Up Club ✦ Ecossistema Feminino de Alta Performance";
@@ -366,11 +382,51 @@ export default function LandingPage() {
     }
   }, []);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 480);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <div className="min-h-screen text-[#F5F5F5]" style={{ background: "#0A0A0A" }}>
       {/* Ambient glow */}
       <div className="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-20 pointer-events-none" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.3), transparent 70%)" }} />
       <div className="fixed bottom-[-15%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-15 pointer-events-none" style={{ background: "radial-gradient(circle, hsl(43 72% 52% / 0.2), transparent 70%)" }} />
+
+      {/* STICKY HEADER (aparece após o primeiro scroll) */}
+      <div
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"}`}
+        style={{
+          background: "rgba(10,10,10,0.92)",
+          backdropFilter: "blur(12px)",
+          borderBottom: "1px solid hsl(43 72% 52% / 0.15)",
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-3">
+          <span className="text-sm md:text-base font-bold tracking-tight">
+            Gloow Up <span className="italic" style={{ color: "hsl(43 72% 52%)", fontFamily: "Georgia, serif" }}>Club</span> <span style={{ color: "hsl(43 72% 52%)" }}>✦</span>
+          </span>
+          <div className="flex items-center gap-2 md:gap-3">
+            <span className="hidden sm:inline text-[11px] md:text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>
+              R$ 27,90 <span style={{ color: "hsl(43 72% 60%)" }}>· preço de lançamento</span>
+            </span>
+            <a
+              href={KIWIFY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full px-4 md:px-5 py-2 text-[11px] md:text-xs font-bold uppercase tracking-wider transition-all hover:scale-105 whitespace-nowrap"
+              style={{
+                background: "linear-gradient(135deg, hsl(43 72% 60%), hsl(43 72% 45%))",
+                color: "#0A0A0A",
+                boxShadow: "0 6px 24px -8px hsl(43 72% 52% / 0.6)",
+              }}
+            >
+              Quero meu acesso ✦
+            </a>
+          </div>
+        </div>
+      </div>
 
       {/* NAV */}
       <header className="relative z-10 max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
@@ -379,10 +435,10 @@ export default function LandingPage() {
         </h1>
         <Link
           to="/login"
-          className="rounded-full px-5 py-2.5 text-sm font-medium border transition-all hover:scale-105"
-          style={{ borderColor: "hsl(43 72% 52% / 0.3)", color: "#F5F5F5" }}
+          className="text-sm font-medium transition-colors hover:text-white inline-flex items-center gap-1.5"
+          style={{ color: "rgba(255,255,255,0.6)" }}
         >
-          Já sou rainha do Gloow Up Club ✦
+          Já sou membra <span style={{ color: "hsl(43 72% 60%)" }}>→ Login</span>
         </Link>
       </header>
 
@@ -620,11 +676,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* TESTIMONIALS — prints reais das membras */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 py-20">
         <div className="text-center mb-14">
           <p className="text-xs tracking-[0.3em] uppercase mb-4" style={{ color: "hsl(43 72% 52%)" }}>
-            Resultados Reais
+            Prints reais · Membras da comunidade
           </p>
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight">
             O que acontece quando{" "}
@@ -632,24 +688,36 @@ export default function LandingPage() {
               sistema substitui tentativa.
             </span>
           </h3>
+          <p className="mt-5 max-w-2xl mx-auto text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
+            Feedbacks reais publicados dentro do app e enviados no WhatsApp por mulheres que já estão dentro.
+          </p>
         </div>
-        <div className="grid md:grid-cols-2 gap-5">
-          {testimonials.map((t, i) => (
-            <div
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {realTestimonials.map((t, i) => (
+            <figure
               key={i}
-              className="rounded-2xl p-6 border"
+              className="rounded-2xl p-4 border flex flex-col"
               style={{
                 background: "linear-gradient(145deg, rgba(20,20,20,0.6), rgba(12,12,12,0.8))",
                 borderColor: "rgba(255,255,255,0.06)",
               }}
             >
-              <p className="italic mb-4 leading-relaxed" style={{ color: "rgba(255,255,255,0.8)", fontFamily: "Georgia, serif" }}>
-                "{t.text}"
-              </p>
-              <p className="text-xs uppercase tracking-widest" style={{ color: "hsl(43 72% 52%)" }}>
-                {t.name}
-              </p>
-            </div>
+              <div className="rounded-xl overflow-hidden mb-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                <img
+                  src={t.img}
+                  alt={`Depoimento real de ${t.name} — membra do Gloow Up Club`}
+                  loading="lazy"
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+              <blockquote className="text-sm italic leading-relaxed mb-3 flex-1" style={{ color: "rgba(255,255,255,0.78)", fontFamily: "Georgia, serif" }}>
+                "{t.quote}"
+              </blockquote>
+              <figcaption className="text-[11px] uppercase tracking-widest font-semibold" style={{ color: "hsl(43 72% 60%)" }}>
+                — {t.name}
+              </figcaption>
+            </figure>
           ))}
         </div>
 
@@ -665,6 +733,7 @@ export default function LandingPage() {
           </p>
         </div>
       </section>
+
 
       {/* INSIDE THE APP, INTERACTIVE PREVIEW */}
       <section id="por-dentro" className="relative z-10 max-w-7xl mx-auto px-6 py-20">
@@ -854,9 +923,15 @@ export default function LandingPage() {
         </div>
 
         {/* Urgência */}
-        <div className="mt-8 rounded-2xl p-5 border text-center" style={{ background: "hsl(43 72% 52% / 0.06)", borderColor: "hsl(43 72% 52% / 0.25)" }}>
-          <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.8)" }}>
-            O preço atual é de lançamento. Quando os próximos módulos forem lançados, o valor será reajustado. Quem entrar agora garante o acesso às atualizações sem pagar mais.
+        <div className="mt-8 rounded-2xl p-6 border text-center" style={{ background: "hsl(43 72% 52% / 0.08)", borderColor: "hsl(43 72% 52% / 0.3)" }}>
+          <p className="text-[10px] tracking-[0.3em] uppercase mb-2" style={{ color: "hsl(43 72% 60%)" }}>
+            ✦ Preço de lançamento
+          </p>
+          <p className="text-base md:text-lg leading-relaxed font-semibold" style={{ color: "rgba(255,255,255,0.95)" }}>
+            Quando os próximos módulos entrarem, o valor sobe.
+          </p>
+          <p className="mt-2 text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>
+            Quem entrar agora <span className="font-bold" style={{ color: "hsl(43 72% 60%)" }}>trava R$ 27,90 para sempre</span> — com todas as atualizações futuras incluídas, sem pagar mais.
           </p>
         </div>
 
