@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowRight, Check, Sparkles, ShieldCheck } from "lucide-react";
 import depoimentoNayara from "@/assets/depoimento-nayara.png";
 import depoimentoSimone from "@/assets/depoimento-simone.png";
 import depoimentoKamila from "@/assets/depoimento-kamila.png";
@@ -362,7 +362,8 @@ const faqItems = [
   { q: "Tem leitura da Bíblia?", a: "Sim. O módulo Bíblia em 365 Dias oferece um cronograma personalizado de leitura completa em um ano, com diário integrado para insights, listas e reflexões com cores customizáveis." },
   { q: "Como recebo notificações?", a: "Após instalar o app no celular, você habilita as notificações push e recebe lembretes personalizados conforme seus hábitos, desafios e agenda configurada." },
   { q: "Quanto custa e como pago?", a: "R$ 27,90 em pagamento único, 12 meses de acesso completo. Você também pode parcelar em até 6x de R$ 5,24 no cartão. Pagamento seguro via Kiwify." },
-  { q: "Posso cancelar?", a: "Como o plano é anual com pagamento único, o acesso fica garantido pelos 12 meses contratados. Não há cobrança recorrente." },
+  { q: "Tem garantia?", a: "Sim. Você tem 7 dias de garantia incondicional. Se em até 7 dias após a compra você sentir que o Gloow Up Club não é para você, basta solicitar o reembolso e devolvemos 100% do valor pago, sem perguntas e sem burocracia. O risco é todo nosso." },
+  { q: "Posso cancelar?", a: "Como o plano é anual com pagamento único, o acesso fica garantido pelos 12 meses contratados. Não há cobrança recorrente. Caso queira reembolso, basta solicitar dentro dos 7 dias de garantia." },
   { q: "Recebo atualizações sem pagar mais?", a: "Sim. Todas as atualizações de conteúdo e novas ferramentas lançadas durante o seu período de acesso estão incluídas sem custo adicional. É um dos maiores diferenciais do plano." },
 ];
 
@@ -493,6 +494,13 @@ export default function LandingPage() {
             >
               Ver o que tem dentro →
             </a>
+          </div>
+
+          <div className="mt-5 inline-flex items-center gap-2 rounded-full px-4 py-2 border" style={{ background: "hsl(43 72% 52% / 0.08)", borderColor: "hsl(43 72% 52% / 0.3)" }}>
+            <ShieldCheck className="w-4 h-4" style={{ color: "hsl(43 72% 60%)" }} />
+            <span className="text-xs font-semibold" style={{ color: "rgba(255,255,255,0.9)" }}>
+              7 dias de garantia incondicional · 100% do valor de volta
+            </span>
           </div>
         </div>
 
@@ -914,7 +922,14 @@ export default function LandingPage() {
             Quero meu acesso anual ✦
           </a>
 
-          <p className="mt-6 text-center text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+          <div className="mt-5 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 border mx-auto w-fit" style={{ background: "hsl(43 72% 52% / 0.08)", borderColor: "hsl(43 72% 52% / 0.3)" }}>
+            <ShieldCheck className="w-4 h-4" style={{ color: "hsl(43 72% 60%)" }} />
+            <span className="text-xs font-semibold" style={{ color: "rgba(255,255,255,0.9)" }}>
+              7 dias de garantia · 100% do valor de volta
+            </span>
+          </div>
+
+          <p className="mt-4 text-center text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
             Pagamento seguro via Kiwify · Acesso liberado em até 5 minutos
           </p>
         </div>
