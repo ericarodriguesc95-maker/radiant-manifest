@@ -922,7 +922,14 @@ export default function LandingPage() {
             Quero meu acesso anual ✦
           </a>
 
-          <p className="mt-6 text-center text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
+          <div className="mt-5 flex items-center justify-center gap-2 rounded-full px-4 py-2.5 border mx-auto w-fit" style={{ background: "hsl(43 72% 52% / 0.08)", borderColor: "hsl(43 72% 52% / 0.3)" }}>
+            <ShieldCheck className="w-4 h-4" style={{ color: "hsl(43 72% 60%)" }} />
+            <span className="text-xs font-semibold" style={{ color: "rgba(255,255,255,0.9)" }}>
+              7 dias de garantia · 100% do valor de volta
+            </span>
+          </div>
+
+          <p className="mt-4 text-center text-xs" style={{ color: "rgba(255,255,255,0.35)" }}>
             Pagamento seguro via Kiwify · Acesso liberado em até 5 minutos
           </p>
         </div>
