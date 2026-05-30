@@ -495,6 +495,13 @@ export default function LandingPage() {
               Ver o que tem dentro →
             </a>
           </div>
+
+          <div className="mt-5 inline-flex items-center gap-2 rounded-full px-4 py-2 border" style={{ background: "hsl(43 72% 52% / 0.08)", borderColor: "hsl(43 72% 52% / 0.3)" }}>
+            <ShieldCheck className="w-4 h-4" style={{ color: "hsl(43 72% 60%)" }} />
+            <span className="text-xs font-semibold" style={{ color: "rgba(255,255,255,0.9)" }}>
+              7 dias de garantia incondicional · 100% do valor de volta
+            </span>
+          </div>
         </div>
 
         {/* Hero card preview */}
