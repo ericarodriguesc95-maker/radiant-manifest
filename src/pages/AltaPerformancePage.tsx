@@ -267,6 +267,7 @@ export default function AltaPerformancePage() {
               { href: "https://www.youtube.com/@AliAbdaal", name: "Ali Abdaal", desc: "Produtividade, finanças, lifestyle" },
               { href: "https://www.youtube.com/@TheDiaryOfACEO", name: "Diary of a CEO", desc: "Entrevistas com CEOs e especialistas" },
               { href: "https://www.youtube.com/@ThomasFrank", name: "Thomas Frank", desc: "Estudo, produtividade, organização" },
+              ...adminYoutube.map(y => ({ href: y.url || "#", name: y.title, desc: y.description || "" })),
             ].map(({ href, name, desc }) => (
               <a key={name} href={href} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                 <div className="space-y-1">
