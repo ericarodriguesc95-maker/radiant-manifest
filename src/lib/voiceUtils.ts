@@ -267,9 +267,8 @@ export function createBrazilianUtterance(
   utterance.lang = "pt-BR";
   
   // Meditative defaults: pt-BR suave, calmo, acolhedor
-  // pitch alto = voz feminina mais fina/delicada
   const defaultRate = 0.75;
-  const defaultPitch = gender === "female" ? 1.35 : 1.0;
+  const defaultPitch = gender === "female" ? 0.88 : 0.78;
   const defaultVolume = 0.85;
   
   utterance.rate = options?.rate ?? defaultRate;
