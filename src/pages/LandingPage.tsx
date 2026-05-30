@@ -362,7 +362,8 @@ const faqItems = [
   { q: "Tem leitura da Bíblia?", a: "Sim. O módulo Bíblia em 365 Dias oferece um cronograma personalizado de leitura completa em um ano, com diário integrado para insights, listas e reflexões com cores customizáveis." },
   { q: "Como recebo notificações?", a: "Após instalar o app no celular, você habilita as notificações push e recebe lembretes personalizados conforme seus hábitos, desafios e agenda configurada." },
   { q: "Quanto custa e como pago?", a: "R$ 27,90 em pagamento único, 12 meses de acesso completo. Você também pode parcelar em até 6x de R$ 5,24 no cartão. Pagamento seguro via Kiwify." },
-  { q: "Posso cancelar?", a: "Como o plano é anual com pagamento único, o acesso fica garantido pelos 12 meses contratados. Não há cobrança recorrente." },
+  { q: "Tem garantia?", a: "Sim. Você tem 7 dias de garantia incondicional. Se em até 7 dias após a compra você sentir que o Gloow Up Club não é para você, basta solicitar o reembolso e devolvemos 100% do valor pago, sem perguntas e sem burocracia. O risco é todo nosso." },
+  { q: "Posso cancelar?", a: "Como o plano é anual com pagamento único, o acesso fica garantido pelos 12 meses contratados. Não há cobrança recorrente. Caso queira reembolso, basta solicitar dentro dos 7 dias de garantia." },
   { q: "Recebo atualizações sem pagar mais?", a: "Sim. Todas as atualizações de conteúdo e novas ferramentas lançadas durante o seu período de acesso estão incluídas sem custo adicional. É um dos maiores diferenciais do plano." },
 ];
 
