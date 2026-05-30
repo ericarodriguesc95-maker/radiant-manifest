@@ -266,13 +266,16 @@ export function createBrazilianUtterance(
   
   utterance.lang = "pt-BR";
   
-  // Meditative defaults: slow, calm, reflective
-  const defaultRate = 0.8;
-  const defaultPitch = gender === "female" ? 0.9 : 0.8;
+  // Meditative defaults: pt-BR suave, calmo, acolhedor
+  // rate baixa = fala lenta; pitch levemente grave = aconchego;
+  // volume 0.85 = tom sussurrado, sem agressividade
+  const defaultRate = 0.75;
+  const defaultPitch = gender === "female" ? 0.88 : 0.78;
+  const defaultVolume = 0.85;
   
   utterance.rate = options?.rate ?? defaultRate;
   utterance.pitch = options?.pitch ?? defaultPitch;
-  utterance.volume = options?.volume ?? 1;
+  utterance.volume = options?.volume ?? defaultVolume;
   
   return utterance;
 }
