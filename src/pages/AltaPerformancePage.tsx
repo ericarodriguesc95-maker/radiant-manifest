@@ -46,12 +46,16 @@ export default function AltaPerformancePage() {
       .then(({ data }) => setIsAdmin((data as any[])?.length > 0));
   }, [user]);
 
+  const adminPodcasts = adminContent.filter(i => i.category === "podcasts");
+  const adminYoutube = adminContent.filter(i => i.category === "youtube");
   const groupedAdmin = Object.entries(
-    adminContent.reduce((acc, item) => {
-      if (!acc[item.category]) acc[item.category] = [];
-      acc[item.category].push(item);
-      return acc;
-    }, {} as Record<string, AdminContent[]>)
+    adminContent
+      .filter(i => i.category !== "podcasts" && i.category !== "youtube")
+      .reduce((acc, item) => {
+        if (!acc[item.category]) acc[item.category] = [];
+        acc[item.category].push(item);
+        return acc;
+      }, {} as Record<string, AdminContent[]>)
   );
 
   return (
