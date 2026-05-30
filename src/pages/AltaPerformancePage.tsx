@@ -187,6 +187,7 @@ export default function AltaPerformancePage() {
               { href: "https://www.youtube.com/@lexfridman", name: "Lex Fridman", desc: "IA, filosofia, ciência, liderança" },
               { href: "https://www.youtube.com/@PrimoCast", name: "PrimoCast", desc: "Empreendedorismo e negócios BR" },
               { href: "https://www.youtube.com/@FlowPodcastBR", name: "Flow Podcast", desc: "Cultura, ciência e sociedade" },
+              ...adminPodcasts.map(p => ({ href: p.url || "#", name: p.title, desc: p.description || "" })),
             ].map(({ href, name, desc }) => (
               <a key={name} href={href} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors">
                 <div className="space-y-1">
