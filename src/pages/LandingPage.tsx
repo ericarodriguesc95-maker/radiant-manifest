@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowRight, Check, Sparkles, ShieldCheck } from "lucide-react";
 import depoimentoNayara from "@/assets/depoimento-nayara.png";
 import depoimentoSimone from "@/assets/depoimento-simone.png";
 import depoimentoKamila from "@/assets/depoimento-kamila.png";
