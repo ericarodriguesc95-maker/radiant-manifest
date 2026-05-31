@@ -520,6 +520,42 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_devotionals: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          practice: string
+          reflection: string
+          religion: string
+          source: string
+          study: string
+          verse: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          practice: string
+          reflection: string
+          religion: string
+          source: string
+          study: string
+          verse: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          practice?: string
+          reflection?: string
+          religion?: string
+          source?: string
+          study?: string
+          verse?: string
+        }
+        Relationships: []
+      }
       diary_notes: {
         Row: {
           color: string
