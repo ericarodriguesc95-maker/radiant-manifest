@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { BookMarked, ChevronLeft, ChevronRight, History } from "lucide-react";
+import { BookMarked, ChevronLeft, ChevronRight, History, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { format, subDays, addDays, isToday } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { supabase } from "@/integrations/supabase/client";
 
 type Religion =
   | "crista_catolica" | "crista_evangelica" | "crista_ortodoxa" | "crista_adventista"
@@ -61,7 +62,7 @@ const devotionalsByReligion: Record<Religion, Devotional[]> = {
     { verse: "Toda Escritura é inspirada por Deus e útil para o ensino, para a repreensão, para a correção e para a instrução na justiça.", source: "2 Timóteo 3:16", reflection: "A Bíblia é a Palavra viva de Deus, suficiente para guiar toda a vida cristã.", study: "Paulo instrui Timóteo sobre a autoridade das Escrituras. Na tradição evangélica, a Bíblia é a autoridade suprema (sola scriptura) para fé e prática.", practice: "Separe 15 minutos para leitura bíblica devocional. Escolha um livro e leia um capítulo com caderno ao lado para anotar o que Deus falar." },
     { verse: "Clama a mim, e responder-te-ei, e anunciar-te-ei coisas grandes e ocultas, que não sabes.", source: "Jeremias 33:3", reflection: "Deus promete responder quando clamamos. A oração não é monólogo, é diálogo com o Criador.", study: "Jeremias recebeu esta promessa enquanto estava preso. Deus responde mesmo quando estamos em situações limitantes. A vida de oração é central na espiritualidade evangélica.", practice: "Faça uma oração específica hoje. Anote o pedido e a data. Volte depois para ver como Deus respondeu." },
     { verse: "Não temas, porque eu sou contigo; não te assombres, porque eu sou o teu Deus.", source: "Isaías 41:10", reflection: "O medo perde poder quando lembramos que o Deus do universo está conosco.", study: "Isaías profetiza consolação ao povo de Israel. Na teologia evangélica, a presença de Deus é a base da segurança do crente — não as circunstâncias.", practice: "Escreva este versículo e cole em um lugar visível. Toda vez que sentir medo, leia em voz alta." },
-    { verse: "Delight yourself in the Lord, and he will give you the desires of your heart.", source: "Salmo 37:4 — Deleita-te no Senhor e Ele te concederá os desejos do teu coração.", reflection: "Quando nos alinhamos com Deus, nossos desejos se transformam nos d'Ele.", study: "O salmista ensina que a verdadeira satisfação vem do relacionamento com Deus. Na prática evangélica, isso significa buscar primeiro o Reino de Deus (Mt 6:33).", practice: "Liste seus maiores desejos. Ore entregando cada um a Deus e peça que alinhe seu coração com a vontade d'Ele." },
+    { verse: "Deleita-te no Senhor e Ele te concederá os desejos do teu coração.", source: "Salmo 37:4", reflection: "Quando nos alinhamos com Deus, nossos desejos se transformam nos d'Ele.", study: "O salmista ensina que a verdadeira satisfação vem do relacionamento com Deus. Na prática evangélica, isso significa buscar primeiro o Reino de Deus (Mt 6:33).", practice: "Liste seus maiores desejos. Ore entregando cada um a Deus e peça que alinhe seu coração com a vontade d'Ele." },
     { verse: "O ladrão não vem senão a roubar, matar e destruir; eu vim para que tenham vida, e a tenham com abundância.", source: "João 10:10", reflection: "Jesus oferece vida plena — não apenas sobrevivência. A vida abundante é propósito, paz e plenitude.", study: "Jesus se compara ao Bom Pastor que dá a vida pelas ovelhas. A vida abundante na teologia evangélica inclui alegria, propósito e intimidade com Deus.", practice: "Identifique uma área onde o 'ladrão' está roubando sua paz. Declare em oração que Jesus veio para restaurar abundância nessa área." },
     { verse: "Mas os que esperam no Senhor renovarão as suas forças; subirão com asas como águias.", source: "Isaías 40:31", reflection: "Esperar no Senhor não é passividade — é confiança ativa enquanto Deus renova suas forças.", study: "Isaías encoraja o povo exausto. A águia renova suas penas em processo doloroso mas necessário. Na vida cristã, períodos de espera são tempos de renovação.", practice: "Se você está em um período de espera, ore declarando que suas forças estão sendo renovadas. Descanse em Deus hoje." },
   ],
@@ -268,10 +269,38 @@ export default function DailyDevotional() {
   });
 
   const [viewDate, setViewDate] = useState(new Date());
+  const [devotional, setDevotional] = useState<Devotional | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (religion) localStorage.setItem("user-religion", religion);
   }, [religion]);
+
+  // Fetch devotional from edge function (with cache) — guarantees unique pt-BR content per day
+  useEffect(() => {
+    if (!religion) return;
+    let cancelled = false;
+    const dateStr = format(viewDate, "yyyy-MM-dd");
+    setLoading(true);
+    // Show static fallback immediately while AI loads
+    setDevotional(getDevotionalForDate(religion, viewDate));
+
+    supabase.functions
+      .invoke("daily-devotional", { body: { religion, date: dateStr } })
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error || !data?.devotional) {
+          // keep static fallback
+          return;
+        }
+        setDevotional(data.devotional as Devotional);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => { cancelled = true; };
+  }, [religion, viewDate]);
 
   const goBack = () => setViewDate((d) => subDays(d, 1));
   const goForward = () => { if (!isToday(viewDate)) setViewDate((d) => addDays(d, 1)); };
@@ -301,7 +330,7 @@ export default function DailyDevotional() {
     );
   }
 
-  const devotional = getDevotionalForDate(religion, viewDate);
+  const current = devotional ?? getDevotionalForDate(religion, viewDate);
   const dateLabel = isToday(viewDate) ? "Hoje" : format(viewDate, "dd 'de' MMMM", { locale: ptBR });
 
   return (
@@ -310,6 +339,7 @@ export default function DailyDevotional() {
         <div className="flex items-center gap-2">
           <BookMarked className="h-4 w-4 text-primary" />
           <p className="text-[10px] font-body tracking-[0.2em] uppercase text-primary">Palavra do Dia</p>
+          {loading && <Loader2 className="h-3 w-3 text-primary/60 animate-spin" />}
         </div>
         <select
           value={religion}
@@ -335,21 +365,21 @@ export default function DailyDevotional() {
         </Button>
       </div>
 
-      <p className="text-base font-display font-medium text-card-foreground leading-relaxed italic">"{devotional.verse}"</p>
-      <p className="text-[10px] font-body text-primary font-semibold">— {devotional.source}</p>
+      <p className="text-base font-display font-medium text-card-foreground leading-relaxed italic">"{current.verse}"</p>
+      <p className="text-[10px] font-body text-primary font-semibold">— {current.source}</p>
 
       <div className="space-y-3 border-t border-border pt-3">
         <div>
           <p className="text-[10px] font-body tracking-[0.2em] uppercase text-muted-foreground mb-1">Reflexão</p>
-          <p className="text-sm font-body text-muted-foreground leading-relaxed">{devotional.reflection}</p>
+          <p className="text-sm font-body text-muted-foreground leading-relaxed">{current.reflection}</p>
         </div>
         <div>
           <p className="text-[10px] font-body tracking-[0.2em] uppercase text-muted-foreground mb-1">📖 Estudo da Palavra</p>
-          <p className="text-sm font-body text-muted-foreground leading-relaxed">{devotional.study}</p>
+          <p className="text-sm font-body text-muted-foreground leading-relaxed">{current.study}</p>
         </div>
         <div>
           <p className="text-[10px] font-body tracking-[0.2em] uppercase text-muted-foreground mb-1">🙏 Prática do Dia</p>
-          <p className="text-sm font-body text-muted-foreground leading-relaxed">{devotional.practice}</p>
+          <p className="text-sm font-body text-muted-foreground leading-relaxed">{current.practice}</p>
         </div>
       </div>
     </section>
