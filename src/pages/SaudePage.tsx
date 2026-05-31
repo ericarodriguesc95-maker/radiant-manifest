@@ -10,6 +10,7 @@ const CycleTracker = lazy(() => import("@/components/health/CycleTracker"));
 const WeeklyDashboard = lazy(() => import("@/components/health/WeeklyDashboard"));
 const ProteinWaterCalculator = lazy(() => import("@/components/health/ProteinWaterCalculator"));
 const StepTracker = lazy(() => import("@/components/health/StepTracker"));
+const NutricionistaAI = lazy(() => import("@/components/health/NutricionistaAI"));
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
