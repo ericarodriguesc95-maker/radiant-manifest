@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { Crown, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import brandLogo from "@/assets/gloow-up-club-logo.png";
 
 const eliteQuotes = [
   "Mulheres fortes não esperam oportunidades — elas as criam.",
@@ -173,23 +174,15 @@ export default function LoginPage() {
         >
           {/* Logo area */}
           <div className="text-center space-y-3">
-            <div
-              className="mx-auto w-16 h-16 rounded-2xl flex items-center justify-center"
-              style={{
-                background: "linear-gradient(135deg, hsl(43 72% 52% / 0.2), hsl(43 72% 52% / 0.05))",
-                border: "1px solid hsl(43 72% 52% / 0.3)",
-              }}
-            >
-              <Crown className="w-8 h-8" style={{ color: "hsl(43 72% 52%)" }} />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight" style={{ color: "#F5F5F5" }}>
-                GLOOW UP <span style={{ color: "hsl(43 72% 52%)" }}>CLUB ✦</span>
-              </h1>
-              <p className="text-xs tracking-[0.3em] uppercase mt-1" style={{ color: "hsl(43 50% 55% / 0.5)" }}>
-                Exclusivo para mulheres de elite
-              </p>
-            </div>
+            <img
+              src={brandLogo}
+              alt="Gloow Up Club"
+              className="mx-auto h-28 w-auto object-contain rounded-2xl"
+              style={{ boxShadow: "0 10px 40px -10px hsl(43 72% 52% / 0.25)" }}
+            />
+            <p className="text-xs tracking-[0.3em] uppercase mt-1" style={{ color: "hsl(43 50% 55% / 0.5)" }}>
+              Exclusivo para mulheres de elite
+            </p>
           </div>
 
           {/* OAuth */}
