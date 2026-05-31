@@ -1176,14 +1176,16 @@ const ComunidadePage = () => {
                             </div>
                             <div className="flex items-center gap-2 mt-0.5 px-1">
                               <span className="text-[10px] text-muted-foreground font-body">{formatTime(comment.created_at)}</span>
-                              {comment.user_id === user?.id && editingCommentId !== comment.id && (
+                              {(comment.user_id === user?.id || isAdmin) && editingCommentId !== comment.id && (
                                 <>
-                                  <button
-                                    onClick={() => startEditComment(comment)}
-                                    className="text-[10px] text-muted-foreground hover:text-gold transition-colors opacity-0 group-hover:opacity-100"
-                                  >
-                                    editar
-                                  </button>
+                                  {comment.user_id === user?.id && (
+                                    <button
+                                      onClick={() => startEditComment(comment)}
+                                      className="text-[10px] text-muted-foreground hover:text-gold transition-colors opacity-0 group-hover:opacity-100"
+                                    >
+                                      editar
+                                    </button>
+                                  )}
                                   <button
                                     onClick={() => deleteComment(comment.id)}
                                     className="text-[10px] text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
