@@ -18,6 +18,7 @@ import ProgressPulseWidget from "@/components/ProgressPulseWidget";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
+import brandLogo from "@/assets/gloow-up-club-logo.png";
 
 const HABITS_COUNT = 6;
 
@@ -111,12 +112,9 @@ const HomePage = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[120px] bg-gradient-to-b from-gold/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative flex items-center justify-between">
-          <div className="space-y-0.5">
+          <div className="space-y-1">
             <p className="text-[10px] font-body tracking-[0.3em] uppercase text-gold/70">{greeting()}, rainha</p>
-            <h1 className="text-2xl font-display font-bold text-foreground flex items-center gap-2">
-              Gloow Up Club
-              <Crown className="h-5 w-5 text-gold animate-pulse" />
-            </h1>
+            <img src={brandLogo} alt="Gloow Up Club" className="h-14 w-auto object-contain" />
           </div>
           <div className="flex items-center gap-1">
             {isAdmin && (

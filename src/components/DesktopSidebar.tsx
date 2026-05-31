@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useViewMode } from "@/contexts/ViewModeContext";
 import FourPointStar from "./FourPointStar";
+import brandLogo from "@/assets/gloow-up-club-logo.png";
 
 export default function DesktopSidebar() {
   const location = useLocation();
@@ -48,12 +49,8 @@ export default function DesktopSidebar() {
   return (
     <aside className="fixed left-0 top-0 bottom-0 w-64 bg-card border-r border-border z-40 flex flex-col overflow-y-auto">
       {/* Brand */}
-      <div className="px-5 pt-6 pb-4 flex items-center gap-3 border-b border-border">
-        <FourPointStar size={28} fill="hsl(43 72% 52%)" className="text-gold flex-shrink-0" />
-        <div>
-          <h1 className="text-lg font-display font-bold text-foreground">Gloow Up</h1>
-          <p className="text-[9px] font-body tracking-[0.2em] uppercase text-gold/60">Club</p>
-        </div>
+      <div className="px-5 pt-6 pb-4 flex items-center justify-center border-b border-border">
+        <img src={brandLogo} alt="Gloow Up Club" className="h-16 w-auto object-contain" />
       </div>
 
       {/* Navigation */}
