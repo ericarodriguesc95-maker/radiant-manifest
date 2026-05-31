@@ -503,27 +503,27 @@ const FinancasPage = () => {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full flex overflow-x-auto no-scrollbar bg-muted/50 h-auto p-1 gap-0.5">
-            <TabsTrigger value="registros" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
-              <ArrowUpDown className="h-3 w-3 shrink-0" /> Entradas/Saídas
+          <TabsList className="w-full flex overflow-x-auto no-scrollbar bg-muted/50 h-auto p-1 gap-1 justify-start">
+            <TabsTrigger value="registros" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
+              <ArrowUpDown className="h-3.5 w-3.5 shrink-0" /> Entradas/Saídas
             </TabsTrigger>
-            <TabsTrigger value="cartao" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400 px-1.5 py-1.5">
-              <CreditCard className="h-3 w-3 shrink-0" /> Cartão
+            <TabsTrigger value="cartao" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400 px-2.5 py-1.5">
+              <CreditCard className="h-3.5 w-3.5 shrink-0" /> Cartão
             </TabsTrigger>
-            <TabsTrigger value="poupanca" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 px-1.5 py-1.5">
-              <PiggyBank className="h-3 w-3 shrink-0" /> Guardar
+            <TabsTrigger value="poupanca" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 px-2.5 py-1.5">
+              <PiggyBank className="h-3.5 w-3.5 shrink-0" /> Guardar
             </TabsTrigger>
-            <TabsTrigger value="grafico" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
-              <TrendingUp className="h-3 w-3 shrink-0" /> Onde gasto
+            <TabsTrigger value="grafico" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
+              <TrendingUp className="h-3.5 w-3.5 shrink-0" /> Onde gasto
             </TabsTrigger>
-            <TabsTrigger value="dicas" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
-              <Lightbulb className="h-3 w-3 shrink-0" /> Dicas
+            <TabsTrigger value="dicas" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
+              <Lightbulb className="h-3.5 w-3.5 shrink-0" /> Dicas
             </TabsTrigger>
-            <TabsTrigger value="ia" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
-              <Bot className="h-3 w-3 shrink-0" /> Consultora
+            <TabsTrigger value="ia" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
+              <Bot className="h-3.5 w-3.5 shrink-0" /> Consultora
             </TabsTrigger>
-            <TabsTrigger value="quiz" className="text-[10px] gap-1 flex-1 min-w-0 data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-1.5 py-1.5">
-              <Brain className="h-3 w-3 shrink-0" /> Meu perfil
+            <TabsTrigger value="quiz" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
+              <Brain className="h-3.5 w-3.5 shrink-0" /> Meu perfil
             </TabsTrigger>
           </TabsList>
 
