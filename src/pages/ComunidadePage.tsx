@@ -49,6 +49,7 @@ interface PostWithProfile {
 
 const ComunidadePage = () => {
   const { user, profile } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
   const location = useLocation();
 
