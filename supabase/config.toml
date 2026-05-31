@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.daily-devotional]
 verify_jwt = false
+
+[functions.nutricionista-ai]
+verify_jwt = false

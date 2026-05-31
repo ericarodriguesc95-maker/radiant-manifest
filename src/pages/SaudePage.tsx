@@ -10,6 +10,7 @@ const CycleTracker = lazy(() => import("@/components/health/CycleTracker"));
 const WeeklyDashboard = lazy(() => import("@/components/health/WeeklyDashboard"));
 const ProteinWaterCalculator = lazy(() => import("@/components/health/ProteinWaterCalculator"));
 const StepTracker = lazy(() => import("@/components/health/StepTracker"));
+const NutricionistaAI = lazy(() => import("@/components/health/NutricionistaAI"));
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -908,15 +909,23 @@ export default function SaudePage() {
       </button>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid grid-cols-7 w-full h-auto p-1">
+        <TabsList className="grid grid-cols-4 sm:grid-cols-8 w-full h-auto p-1 gap-1">
           <TabsTrigger value="perfil" className="text-[9px] px-0.5 py-1.5">⚖️ Meu corpo</TabsTrigger>
           <TabsTrigger value="dieta" className="text-[9px] px-0.5 py-1.5">🍽️ O que comi</TabsTrigger>
+          <TabsTrigger value="nutri" className="text-[9px] px-0.5 py-1.5">🥗 IA Nutri</TabsTrigger>
           <TabsTrigger value="treino" className="text-[9px] px-0.5 py-1.5">💪 Treino</TabsTrigger>
           <TabsTrigger value="passos" className="text-[9px] px-0.5 py-1.5">👣 Passos</TabsTrigger>
           <TabsTrigger value="suplem" className="text-[9px] px-0.5 py-1.5">💊 Suplem.</TabsTrigger>
           <TabsTrigger value="ciclo" className="text-[9px] px-0.5 py-1.5">🩸 Meu ciclo</TabsTrigger>
           <TabsTrigger value="medic" className="text-[9px] px-0.5 py-1.5">💉 Medic.</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="nutri" className="space-y-4">
+          <Suspense fallback={<div className="h-64 flex items-center justify-center"><div className="h-6 w-6 rounded-full border-2 border-gold border-t-transparent animate-spin" /></div>}>
+            <NutricionistaAI profile={profile} />
+          </Suspense>
+        </TabsContent>
+
 
         <TabsContent value="perfil" className="space-y-4">
           <Card>
