@@ -50,7 +50,7 @@ export default function DesktopSidebar() {
     <aside className="fixed left-0 top-0 bottom-0 w-64 bg-card border-r border-border z-40 flex flex-col overflow-y-auto">
       {/* Brand */}
       <div className="px-5 pt-6 pb-4 flex items-center justify-center border-b border-border">
-        <img src={brandLogo} alt="Gloow Up Club" className="h-16 w-auto object-contain" />
+        <img src={brandLogo} alt="Gloow Up Club" className="h-16 w-auto object-contain rounded-2xl" />
       </div>
 
       {/* Navigation */}

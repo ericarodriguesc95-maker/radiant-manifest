@@ -114,7 +114,7 @@ const HomePage = () => {
         <div className="relative flex items-center justify-between">
           <div className="space-y-1">
             <p className="text-[10px] font-body tracking-[0.3em] uppercase text-gold/70">{greeting()}, rainha</p>
-            <img src={brandLogo} alt="Gloow Up Club" className="h-14 w-auto object-contain" />
+            <img src={brandLogo} alt="Gloow Up Club" className="h-14 w-auto object-contain rounded-2xl" />
           </div>
           <div className="flex items-center gap-1">
             {isAdmin && (
