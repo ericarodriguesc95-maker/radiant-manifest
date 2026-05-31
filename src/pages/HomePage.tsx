@@ -112,9 +112,9 @@ const HomePage = () => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[120px] bg-gradient-to-b from-gold/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative flex items-center justify-between">
-          <div className="space-y-1">
-            <p className="text-[10px] font-body tracking-[0.3em] uppercase text-gold/70">{greeting()}, rainha</p>
-            <img src={brandLogo} alt="Gloow Up Club" className="h-14 w-auto object-contain rounded-2xl" />
+          <div className="flex flex-col items-center gap-2">
+            <img src={brandLogo} alt="Gloow Up Club" className="h-14 w-14 object-contain rounded-2xl" />
+            <p className="text-[10px] font-body tracking-[0.3em] uppercase text-gold/70 text-center">{greeting()}, rainha</p>
           </div>
           <div className="flex items-center gap-1">
             {isAdmin && (
