@@ -406,7 +406,7 @@ export default function LandingPage() {
         }}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-3">
-          <img src={brandLogo} alt="Gloow Up Club" className="h-10 md:h-12 w-auto object-contain" />
+          <img src={brandLogo} alt="Gloow Up Club" className="h-10 md:h-12 w-auto object-contain rounded-xl" />
           <div className="flex items-center gap-2 md:gap-3">
             <span className="hidden sm:inline text-[11px] md:text-xs" style={{ color: "rgba(255,255,255,0.55)" }}>
               R$ 27,90 <span style={{ color: "hsl(43 72% 60%)" }}>· preço de lançamento</span>
@@ -430,7 +430,7 @@ export default function LandingPage() {
 
       {/* NAV */}
       <header className="relative z-10 max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-        <img src={brandLogo} alt="Gloow Up Club" className="h-16 md:h-20 w-auto object-contain" />
+        <img src={brandLogo} alt="Gloow Up Club" className="h-16 md:h-20 w-auto object-contain rounded-2xl" />
         <Link
           to="/login"
           className="text-sm font-medium transition-colors hover:text-white inline-flex items-center gap-1.5"
