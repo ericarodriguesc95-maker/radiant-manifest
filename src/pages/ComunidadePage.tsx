@@ -949,7 +949,7 @@ const ComunidadePage = () => {
                     )}
                   </button>
                 )}
-                {post.user_id === user?.id && (
+                {(post.user_id === user?.id || isAdmin) && (
                   <div className="flex items-center gap-1">
                     {editingPostId === post.id ? (
                       <>
@@ -962,10 +962,12 @@ const ComunidadePage = () => {
                       </>
                     ) : (
                       <>
-                        <button onClick={() => startEditPost(post)} className="text-muted-foreground hover:text-gold transition-colors p-1" title="Editar">
-                          <Pencil className="h-3.5 w-3.5" />
-                        </button>
-                        <button onClick={() => deletePost(post.id)} className="text-muted-foreground hover:text-destructive transition-colors p-1" title="Excluir">
+                        {post.user_id === user?.id && (
+                          <button onClick={() => startEditPost(post)} className="text-muted-foreground hover:text-gold transition-colors p-1" title="Editar">
+                            <Pencil className="h-3.5 w-3.5" />
+                          </button>
+                        )}
+                        <button onClick={() => deletePost(post.id)} className="text-muted-foreground hover:text-destructive transition-colors p-1" title={isAdmin && post.user_id !== user?.id ? "Excluir (admin)" : "Excluir"}>
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       </>
