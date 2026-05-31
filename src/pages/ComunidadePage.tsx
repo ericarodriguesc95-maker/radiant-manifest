@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import Leaderboard from "@/components/Leaderboard";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 import { useNavigate, useLocation } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -48,6 +49,7 @@ interface PostWithProfile {
 
 const ComunidadePage = () => {
   const { user, profile } = useAuth();
+  const { isAdmin } = useIsAdmin();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -947,7 +949,7 @@ const ComunidadePage = () => {
                     )}
                   </button>
                 )}
-                {post.user_id === user?.id && (
+                {(post.user_id === user?.id || isAdmin) && (
                   <div className="flex items-center gap-1">
                     {editingPostId === post.id ? (
                       <>
@@ -960,10 +962,12 @@ const ComunidadePage = () => {
                       </>
                     ) : (
                       <>
-                        <button onClick={() => startEditPost(post)} className="text-muted-foreground hover:text-gold transition-colors p-1" title="Editar">
-                          <Pencil className="h-3.5 w-3.5" />
-                        </button>
-                        <button onClick={() => deletePost(post.id)} className="text-muted-foreground hover:text-destructive transition-colors p-1" title="Excluir">
+                        {post.user_id === user?.id && (
+                          <button onClick={() => startEditPost(post)} className="text-muted-foreground hover:text-gold transition-colors p-1" title="Editar">
+                            <Pencil className="h-3.5 w-3.5" />
+                          </button>
+                        )}
+                        <button onClick={() => deletePost(post.id)} className="text-muted-foreground hover:text-destructive transition-colors p-1" title={isAdmin && post.user_id !== user?.id ? "Excluir (admin)" : "Excluir"}>
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       </>
@@ -1172,14 +1176,16 @@ const ComunidadePage = () => {
                             </div>
                             <div className="flex items-center gap-2 mt-0.5 px-1">
                               <span className="text-[10px] text-muted-foreground font-body">{formatTime(comment.created_at)}</span>
-                              {comment.user_id === user?.id && editingCommentId !== comment.id && (
+                              {(comment.user_id === user?.id || isAdmin) && editingCommentId !== comment.id && (
                                 <>
-                                  <button
-                                    onClick={() => startEditComment(comment)}
-                                    className="text-[10px] text-muted-foreground hover:text-gold transition-colors opacity-0 group-hover:opacity-100"
-                                  >
-                                    editar
-                                  </button>
+                                  {comment.user_id === user?.id && (
+                                    <button
+                                      onClick={() => startEditComment(comment)}
+                                      className="text-[10px] text-muted-foreground hover:text-gold transition-colors opacity-0 group-hover:opacity-100"
+                                    >
+                                      editar
+                                    </button>
+                                  )}
                                   <button
                                     onClick={() => deleteComment(comment.id)}
                                     className="text-[10px] text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
