@@ -160,7 +160,7 @@ const MODULES = [
   {
     n: "06",
     title: "Espiritualidade e Diário",
-    desc: "Nutra sua alma com a mesma intencionalidade que nutre seu corpo. Cronograma personalizado de leitura em 365 dias, devocional diário e diário pessoal com reflexões. Independente da sua crença ou religião.",
+    desc: "Nutra sua alma com a mesma intencionalidade que nutre seu corpo. Cronograma personalizado de leitura em 365 dias, devocional diário e diário pessoal com reflexões. Dentro do app você escolhe entre 22 orientações religiosas — cristã, católica, espírita, umbanda, candomblé, judaica, budista, islâmica e mais. Respeitamos todas.",
   },
   {
     n: "07",
