@@ -226,7 +226,7 @@ const BENEFITS = [
   "Acesso completo aos 10+ módulos",
   "App no celular e site no computador",
   "Girls Community — rede social privada exclusiva",
-  "IA Assistente, IA do Sono, IA do Eu Superior, IA de Finanças",
+  "IA Assistente, IA Nutri Luna, IA do Sono, IA do Eu Superior, IA de Finanças",
   "Reprogramação Mental e Alta Performance",
   "Desafios progressivos de 7 a 90 dias",
   "Saúde, Finanças, Bíblia 365 e Diário",
