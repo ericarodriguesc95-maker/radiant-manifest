@@ -236,8 +236,8 @@ const FAQ = [
     a: "São jornadas de transformação de 7 a 90 dias, com fundamentação científica em cada tarefa. Cada desafio foi desenhado para criar momentum real.",
   },
   {
-    q: "Tem leitura da Bíblia?",
-    a: "Sim, com cronograma personalizado de 365 dias e devocional diário. Independente da sua crença ou religião. Respeitamos todas.",
+    q: "Tem leitura da Bíblia? E quem não é cristã?",
+    a: "Sim, com cronograma personalizado de 365 dias e devocional diário. E dentro do app você escolhe entre 22 orientações religiosas — cristã, católica, espírita, umbanda, candomblé, judaica, budista, islâmica, entre outras. O conteúdo se adapta à sua crença. Respeitamos todas.",
   },
   {
     q: "Tem IA?",
