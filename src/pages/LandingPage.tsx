@@ -304,7 +304,7 @@ export default function LandingPage() {
               Gloow Up <span style={{ color: C.gold }}>Club</span>
             </span>
           </Link>
-          <GhostLink to="/auth">Já sou membra →</GhostLink>
+          <GhostLink to="/login">Já sou membra →</GhostLink>
         </div>
       </header>
 
@@ -676,7 +676,7 @@ export default function LandingPage() {
                 Quero meu acesso anual ✦
               </PrimaryCTA>
               <p style={{ color: C.creamFaint }} className="mt-5 text-[12px] font-light">
-                Já é membra? <Link to="/auth" style={{ color: C.gold }}>Faça login →</Link>
+                Já é membra? <Link to="/login" style={{ color: C.gold }}>Faça login →</Link>
               </p>
             </div>
           </div>
