@@ -3,6 +3,21 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import ericaFounder from "@/assets/erica-founder.jpg";
 import brandLogo from "@/assets/gloow-up-club-logo.png";
+import depoimentoNayara from "@/assets/depoimento-nayara.png";
+import depoimentoSimone from "@/assets/depoimento-simone.png";
+import depoimentoKamila from "@/assets/depoimento-kamila.png";
+import depoimentoGabrielly from "@/assets/depoimento-gabrielly.png";
+import depoimentoWpp1 from "@/assets/depoimento-wpp1.png";
+import depoimentoWpp2 from "@/assets/depoimento-wpp2.png";
+
+const TESTIMONIALS = [
+  { name: "Nayara Moraes", img: depoimentoNayara },
+  { name: "Simone Costa", img: depoimentoSimone },
+  { name: "Kamila Moreira", img: depoimentoKamila },
+  { name: "Gabrielly Rosa", img: depoimentoGabrielly },
+  { name: "Larissa Pereira", img: depoimentoWpp1 },
+  { name: "Larissa Pereira", img: depoimentoWpp2 },
+];
 
 const KIWIFY_URL = "https://pay.kiwify.com.br/b2qJYrZ";
 
