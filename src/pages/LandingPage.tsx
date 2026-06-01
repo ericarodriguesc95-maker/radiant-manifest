@@ -283,8 +283,11 @@ export default function LandingPage() {
         className="fixed top-0 left-0 right-0 z-50 transition-all"
       >
         <div className="max-w-[1080px] mx-auto px-5 md:px-12 py-4 flex items-center justify-between">
-          <Link to="/" style={{ ...serif, color: C.cream }} className="text-[18px] font-normal">
-            Gloow Up <span style={{ color: C.gold }}>Club ✦</span>
+          <Link to="/" className="flex items-center gap-2.5">
+            <img src={brandLogo} alt="Gloow Up Club" className="h-9 w-9 object-contain rounded-lg" />
+            <span style={{ ...serif, color: C.cream }} className="text-[18px] font-light hidden sm:inline">
+              Gloow Up <span style={{ color: C.gold }}>Club</span>
+            </span>
           </Link>
           <GhostLink to="/auth">Já sou membra →</GhostLink>
         </div>
