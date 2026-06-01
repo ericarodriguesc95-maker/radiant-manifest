@@ -165,7 +165,7 @@ const MODULES = [
   {
     n: "04",
     title: "Saúde e Fitness",
-    desc: "Seu corpo é seu ativo mais valioso. Acompanhe dieta, treino, suplementos, sono e ciclo menstrual integrados. O regulador inteligente do sono usa IA para criar um plano personalizado. E a aba de ciclo adapta sua rotina à sua biologia.",
+    desc: "Seu corpo é seu ativo mais valioso. Acompanhe dieta, treino, suplementos, sono e ciclo menstrual integrados. Conte com a IA Nutri Luna, nutricionista funcional especialista em jejum intermitente e reprogramação metabólica feminina. O regulador inteligente do sono usa IA para criar um plano personalizado. E a aba de ciclo adapta sua rotina à sua biologia.",
   },
   {
     n: "05",
