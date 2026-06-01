@@ -256,7 +256,7 @@ const FAQ = [
   },
   {
     q: "Tem IA?",
-    a: "Sim. O Club tem IA Assistente Pessoal, IA do Sono com diagnóstico circadiano, IA do Eu Superior para conexão espiritual e IA de Finanças.",
+    a: "Sim. O Club tem IA Assistente Pessoal, IA Nutri Luna (nutricionista funcional especialista em jejum intermitente e reprogramação metabólica feminina), IA do Sono com diagnóstico circadiano, IA do Eu Superior para conexão espiritual e IA de Finanças.",
   },
   {
     q: "Quanto custa e como pago?",
