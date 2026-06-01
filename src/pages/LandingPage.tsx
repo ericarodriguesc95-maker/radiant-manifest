@@ -175,7 +175,7 @@ const MODULES = [
   {
     n: "06",
     title: "Espiritualidade e Diário",
-    desc: "Nutra sua alma com a mesma intencionalidade que nutre seu corpo. Cronograma personalizado de leitura em 365 dias, devocional diário e diário pessoal com reflexões. Dentro do app você escolhe entre 22 orientações religiosas — cristã, católica, espírita, umbanda, candomblé, judaica, budista, islâmica e mais. Respeitamos todas.",
+    desc: "Nutra sua alma com a mesma intencionalidade que nutre seu corpo. Cronograma personalizado de leitura em 365 dias, devocional diário e diário pessoal com reflexões. Dentro do app você escolhe entre 22 orientações religiosas — cristã, católica, espírita, umbanda, candomblé, judaica, budista e mais. Respeitamos todas.",
   },
   {
     n: "07",
@@ -252,7 +252,7 @@ const FAQ = [
   },
   {
     q: "Tem leitura da Bíblia? E quem não é cristã?",
-    a: "Sim, com cronograma personalizado de 365 dias e devocional diário. E dentro do app você escolhe entre 22 orientações religiosas — cristã, católica, espírita, umbanda, candomblé, judaica, budista, islâmica, entre outras. O conteúdo se adapta à sua crença. Respeitamos todas.",
+    a: "Sim, com cronograma personalizado de 365 dias e devocional diário. E dentro do app você escolhe entre 22 orientações religiosas — cristã, católica, espírita, umbanda, candomblé, judaica, budista, entre outras. O conteúdo se adapta à sua crença. Respeitamos todas.",
   },
   {
     q: "Tem IA?",
