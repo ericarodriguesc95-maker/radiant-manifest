@@ -708,8 +708,11 @@ export default function LandingPage() {
         className="py-12 px-5 md:px-12"
       >
         <div className="max-w-[1080px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div style={{ ...serif, color: C.cream }} className="text-[18px] font-normal">
-            Gloow Up <span style={{ color: C.gold }}>Club ✦</span>
+          <div className="flex items-center gap-2.5">
+            <img src={brandLogo} alt="Gloow Up Club" className="h-8 w-8 object-contain rounded-lg" />
+            <span style={{ ...serif, color: C.cream }} className="text-[18px] font-light">
+              Gloow Up <span style={{ color: C.gold }}>Club</span>
+            </span>
           </div>
           <div style={{ color: C.creamFaint }} className="text-[12px] font-light text-center">
             Criado por @erica.carvalhor · gloowupclub.com · @gloowupclub
