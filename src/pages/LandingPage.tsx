@@ -566,6 +566,58 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* DEPOIMENTOS */}
+      <section className="py-24 md:py-32 px-5 md:px-12">
+        <div className="max-w-[1080px] mx-auto">
+          <div className="text-center mb-14">
+            <SectionLabel>Resultados reais</SectionLabel>
+            <H2 highlight="sistema substitui tentativa.">O que acontece quando</H2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {TESTIMONIALS.map((t, i) => (
+              <figure
+                key={i}
+                style={{
+                  background: C.bgCard,
+                  border: `1px solid ${C.border}`,
+                  borderRadius: 14,
+                  overflow: "hidden",
+                }}
+                className="flex flex-col"
+              >
+                <div className="w-full overflow-hidden" style={{ background: C.bg }}>
+                  <img
+                    src={t.img}
+                    alt={`Depoimento de ${t.name}`}
+                    className="w-full h-auto object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <figcaption
+                  style={{ borderTop: `1px solid ${C.borderSoft}`, color: C.cream }}
+                  className="px-5 py-4 text-center"
+                >
+                  <span style={{ ...serif, color: C.gold }} className="italic text-[15px]">
+                    {t.name}
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <p
+            style={{ color: C.creamDim, lineHeight: 1.75 }}
+            className="mt-12 text-center text-[15px] md:text-[16px] font-light max-w-[600px] mx-auto"
+          >
+            Elas não tinham mais tempo, mais dinheiro ou mais talento.
+            <br />
+            Tinham o mesmo sistema que você está prestes a ter.
+          </p>
+          <div className="mt-10 text-center">
+            <PrimaryCTA href={KIWIFY_URL}>Quero viver isso também</PrimaryCTA>
+          </div>
+        </div>
+      </section>
+
       {/* PREÇO */}
       <section
         style={{ background: C.bgSoft, borderTop: `1px solid ${C.borderSoft}`, borderBottom: `1px solid ${C.borderSoft}` }}
