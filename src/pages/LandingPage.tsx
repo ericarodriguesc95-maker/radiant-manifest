@@ -3,6 +3,21 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import ericaFounder from "@/assets/erica-founder.jpg";
 import brandLogo from "@/assets/gloow-up-club-logo.png";
+import depoimentoNayara from "@/assets/depoimento-nayara.png";
+import depoimentoSimone from "@/assets/depoimento-simone.png";
+import depoimentoKamila from "@/assets/depoimento-kamila.png";
+import depoimentoGabrielly from "@/assets/depoimento-gabrielly.png";
+import depoimentoWpp1 from "@/assets/depoimento-wpp1.png";
+import depoimentoWpp2 from "@/assets/depoimento-wpp2.png";
+
+const TESTIMONIALS = [
+  { name: "Nayara Moraes", img: depoimentoNayara },
+  { name: "Simone Costa", img: depoimentoSimone },
+  { name: "Kamila Moreira", img: depoimentoKamila },
+  { name: "Gabrielly Rosa", img: depoimentoGabrielly },
+  { name: "Larissa Pereira", img: depoimentoWpp1 },
+  { name: "Larissa Pereira", img: depoimentoWpp2 },
+];
 
 const KIWIFY_URL = "https://pay.kiwify.com.br/b2qJYrZ";
 
@@ -160,7 +175,7 @@ const MODULES = [
   {
     n: "06",
     title: "Espiritualidade e Diário",
-    desc: "Nutra sua alma com a mesma intencionalidade que nutre seu corpo. Cronograma personalizado de leitura em 365 dias, devocional diário e diário pessoal com reflexões. Independente da sua crença ou religião.",
+    desc: "Nutra sua alma com a mesma intencionalidade que nutre seu corpo. Cronograma personalizado de leitura em 365 dias, devocional diário e diário pessoal com reflexões. Dentro do app você escolhe entre 22 orientações religiosas — cristã, católica, espírita, umbanda, candomblé, judaica, budista, islâmica e mais. Respeitamos todas.",
   },
   {
     n: "07",
@@ -236,8 +251,8 @@ const FAQ = [
     a: "São jornadas de transformação de 7 a 90 dias, com fundamentação científica em cada tarefa. Cada desafio foi desenhado para criar momentum real.",
   },
   {
-    q: "Tem leitura da Bíblia?",
-    a: "Sim, com cronograma personalizado de 365 dias e devocional diário. Independente da sua crença ou religião. Respeitamos todas.",
+    q: "Tem leitura da Bíblia? E quem não é cristã?",
+    a: "Sim, com cronograma personalizado de 365 dias e devocional diário. E dentro do app você escolhe entre 22 orientações religiosas — cristã, católica, espírita, umbanda, candomblé, judaica, budista, islâmica, entre outras. O conteúdo se adapta à sua crença. Respeitamos todas.",
   },
   {
     q: "Tem IA?",
@@ -547,6 +562,58 @@ export default function LandingPage() {
                 Por @erica.carvalhor
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* DEPOIMENTOS */}
+      <section className="py-24 md:py-32 px-5 md:px-12">
+        <div className="max-w-[1080px] mx-auto">
+          <div className="text-center mb-14">
+            <SectionLabel>Resultados reais</SectionLabel>
+            <H2 highlight="sistema substitui tentativa.">O que acontece quando</H2>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {TESTIMONIALS.map((t, i) => (
+              <figure
+                key={i}
+                style={{
+                  background: C.bgCard,
+                  border: `1px solid ${C.border}`,
+                  borderRadius: 14,
+                  overflow: "hidden",
+                }}
+                className="flex flex-col"
+              >
+                <div className="w-full overflow-hidden" style={{ background: C.bg }}>
+                  <img
+                    src={t.img}
+                    alt={`Depoimento de ${t.name}`}
+                    className="w-full h-auto object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <figcaption
+                  style={{ borderTop: `1px solid ${C.borderSoft}`, color: C.cream }}
+                  className="px-5 py-4 text-center"
+                >
+                  <span style={{ ...serif, color: C.gold }} className="italic text-[15px]">
+                    {t.name}
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <p
+            style={{ color: C.creamDim, lineHeight: 1.75 }}
+            className="mt-12 text-center text-[15px] md:text-[16px] font-light max-w-[600px] mx-auto"
+          >
+            Elas não tinham mais tempo, mais dinheiro ou mais talento.
+            <br />
+            Tinham o mesmo sistema que você está prestes a ter.
+          </p>
+          <div className="mt-10 text-center">
+            <PrimaryCTA href={KIWIFY_URL}>Quero viver isso também</PrimaryCTA>
           </div>
         </div>
       </section>
