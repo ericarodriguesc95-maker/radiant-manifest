@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import ericaFounder from "@/assets/erica-founder.jpg";
+import brandLogo from "@/assets/gloow-up-club-logo.png";
 
 const KIWIFY_URL = "https://pay.kiwify.com.br/b2qJYrZ";
 
@@ -53,7 +54,7 @@ const H2 = ({
 }) => (
   <h2
     style={{ ...serif, color: C.cream, lineHeight: 1.1 }}
-    className="text-[34px] md:text-[48px] font-semibold tracking-tight text-center"
+    className="text-[34px] md:text-[48px] font-light tracking-tight text-center"
   >
     {children}
     {highlight && (
@@ -282,8 +283,11 @@ export default function LandingPage() {
         className="fixed top-0 left-0 right-0 z-50 transition-all"
       >
         <div className="max-w-[1080px] mx-auto px-5 md:px-12 py-4 flex items-center justify-between">
-          <Link to="/" style={{ ...serif, color: C.cream }} className="text-[18px] font-semibold">
-            Gloow Up <span style={{ color: C.gold }}>Club ✦</span>
+          <Link to="/" className="flex items-center gap-2.5">
+            <img src={brandLogo} alt="Gloow Up Club" className="h-9 w-9 object-contain rounded-lg" />
+            <span style={{ ...serif, color: C.cream }} className="text-[18px] font-light hidden sm:inline">
+              Gloow Up <span style={{ color: C.gold }}>Club</span>
+            </span>
           </Link>
           <GhostLink to="/auth">Já sou membra →</GhostLink>
         </div>
@@ -308,7 +312,7 @@ export default function LandingPage() {
           </p>
           <h1
             style={{ ...serif, color: C.cream, lineHeight: 1.05 }}
-            className="text-[44px] md:text-[72px] font-semibold tracking-tight"
+            className="text-[44px] md:text-[72px] font-light tracking-tight"
           >
             Você não tem falta de motivação.
             <br />
@@ -420,7 +424,7 @@ export default function LandingPage() {
                 }}
                 className="p-7"
               >
-                <p style={{ ...serif, color: C.cream }} className="text-[20px] font-semibold italic leading-snug">
+                <p style={{ ...serif, color: C.cream }} className="text-[20px] font-normal italic leading-snug">
                   {t}
                 </p>
               </div>
@@ -454,7 +458,7 @@ export default function LandingPage() {
                 >
                   {m.n}
                 </div>
-                <h3 style={{ ...serif, color: C.cream }} className="text-[22px] font-semibold mb-3">
+                <h3 style={{ ...serif, color: C.cream }} className="text-[22px] font-normal mb-3">
                   {m.title}
                 </h3>
                 <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="text-[15px] font-light">
@@ -525,7 +529,7 @@ export default function LandingPage() {
             <SectionLabel>Quem está do outro lado</SectionLabel>
             <h2
               style={{ ...serif, color: C.cream, lineHeight: 1.1 }}
-              className="text-[34px] md:text-[48px] font-semibold tracking-tight"
+              className="text-[34px] md:text-[48px] font-light tracking-tight"
             >
               Quem criou o <em style={{ color: C.gold, fontStyle: "italic" }}>Club</em>
             </h2>
@@ -575,7 +579,7 @@ export default function LandingPage() {
               <p style={{ ...sans, color: C.gold, letterSpacing: "0.2em" }} className="text-[11px] font-medium uppercase mb-4">
                 ✦ Plano Anual — Preço de lançamento
               </p>
-              <div style={{ ...serif, color: C.cream }} className="text-[64px] md:text-[80px] font-semibold leading-none">
+              <div style={{ ...serif, color: C.cream }} className="text-[64px] md:text-[80px] font-light leading-none">
                 R$27<span style={{ color: C.goldMuted }}>,90</span>
               </div>
               <p style={{ color: C.creamDim }} className="mt-3 text-[14px] font-light">
@@ -625,7 +629,7 @@ export default function LandingPage() {
           <p style={{ ...sans, color: C.gold, letterSpacing: "0.2em" }} className="text-[11px] font-medium uppercase mb-4">
             Garantia
           </p>
-          <h3 style={{ ...serif, color: C.cream }} className="text-[26px] md:text-[32px] font-semibold">
+          <h3 style={{ ...serif, color: C.cream }} className="text-[26px] md:text-[32px] font-light">
             7 dias para sentir se é <em style={{ color: C.gold, fontStyle: "italic" }}>para você</em>
           </h3>
           <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="mt-5 text-[15px] font-light">
@@ -704,8 +708,11 @@ export default function LandingPage() {
         className="py-12 px-5 md:px-12"
       >
         <div className="max-w-[1080px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div style={{ ...serif, color: C.cream }} className="text-[18px] font-semibold">
-            Gloow Up <span style={{ color: C.gold }}>Club ✦</span>
+          <div className="flex items-center gap-2.5">
+            <img src={brandLogo} alt="Gloow Up Club" className="h-8 w-8 object-contain rounded-lg" />
+            <span style={{ ...serif, color: C.cream }} className="text-[18px] font-light">
+              Gloow Up <span style={{ color: C.gold }}>Club</span>
+            </span>
           </div>
           <div style={{ color: C.creamFaint }} className="text-[12px] font-light text-center">
             Criado por @erica.carvalhor · gloowupclub.com · @gloowupclub
