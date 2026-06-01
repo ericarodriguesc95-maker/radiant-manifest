@@ -165,7 +165,7 @@ const MODULES = [
   {
     n: "04",
     title: "Saúde e Fitness",
-    desc: "Seu corpo é seu ativo mais valioso. Acompanhe dieta, treino, suplementos, sono e ciclo menstrual integrados. O regulador inteligente do sono usa IA para criar um plano personalizado. E a aba de ciclo adapta sua rotina à sua biologia.",
+    desc: "Seu corpo é seu ativo mais valioso. Acompanhe dieta, treino, suplementos, sono e ciclo menstrual integrados. Conte com a IA Nutri Luna, nutricionista funcional especialista em jejum intermitente e reprogramação metabólica feminina. O regulador inteligente do sono usa IA para criar um plano personalizado. E a aba de ciclo adapta sua rotina à sua biologia.",
   },
   {
     n: "05",
@@ -226,7 +226,7 @@ const BENEFITS = [
   "Acesso completo aos 10+ módulos",
   "App no celular e site no computador",
   "Girls Community — rede social privada exclusiva",
-  "IA Assistente, IA do Sono, IA do Eu Superior, IA de Finanças",
+  "IA Assistente, IA Nutri Luna, IA do Sono, IA do Eu Superior, IA de Finanças",
   "Reprogramação Mental e Alta Performance",
   "Desafios progressivos de 7 a 90 dias",
   "Saúde, Finanças, Bíblia 365 e Diário",
@@ -256,7 +256,7 @@ const FAQ = [
   },
   {
     q: "Tem IA?",
-    a: "Sim. O Club tem IA Assistente Pessoal, IA do Sono com diagnóstico circadiano, IA do Eu Superior para conexão espiritual e IA de Finanças.",
+    a: "Sim. O Club tem IA Assistente Pessoal, IA Nutri Luna (nutricionista funcional especialista em jejum intermitente e reprogramação metabólica feminina), IA do Sono com diagnóstico circadiano, IA do Eu Superior para conexão espiritual e IA de Finanças.",
   },
   {
     q: "Quanto custa e como pago?",
