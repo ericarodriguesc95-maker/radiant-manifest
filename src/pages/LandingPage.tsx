@@ -656,7 +656,7 @@ export default function LandingPage() {
                 ou em até 12x de R$5,16 no cartão
               </p>
               <p style={{ ...serif, color: C.gold }} className="mt-6 italic text-[16px]">
-                Menos de R$4,16 por mês.
+                Menos de R$5,16 por mês.
               </p>
             </div>
 
