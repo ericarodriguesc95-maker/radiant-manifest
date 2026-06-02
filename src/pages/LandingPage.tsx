@@ -260,7 +260,7 @@ const FAQ = [
   },
   {
     q: "Quanto custa e como pago?",
-    a: "R$27,90 no ano, pagamento único, ou em até 6x de R$5,24 no cartão. Não há renovação automática.",
+    a: "R$49,90 no ano, pagamento único, ou em até 12x de R$5,16 no cartão. Não há renovação automática.",
   },
   {
     q: "Posso cancelar?",
