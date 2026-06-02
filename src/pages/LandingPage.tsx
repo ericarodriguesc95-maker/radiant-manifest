@@ -653,7 +653,7 @@ export default function LandingPage() {
                 pagamento único · 12 meses de acesso completo
               </p>
               <p style={{ color: C.creamFaint }} className="text-[13px] font-light">
-                ou em até 6x de R$9,68 no cartão
+                ou em até 12x de R$5,16 no cartão
               </p>
               <p style={{ ...serif, color: C.gold }} className="mt-6 italic text-[16px]">
                 Menos de R$4,16 por mês.
