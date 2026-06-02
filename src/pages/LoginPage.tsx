@@ -290,7 +290,7 @@ export default function LoginPage() {
           {/* Parcelamento info */}
           <div className="text-center pt-2">
             <p className="text-[10px]" style={{ color: "hsl(43 60% 55% / 0.7)" }}>
-              ✦ Ainda não é membro? <Link to="/planos" className="underline hover:text-gold">Assine agora</Link> em até <strong style={{ color: "hsl(43 72% 52%)" }}>6x de R$ 5,24</strong>
+              ✦ Ainda não é membro? <a href="https://pay.kiwify.com.br/gfzob11" target="_blank" rel="noopener noreferrer" className="underline hover:text-gold">Assine agora</a> por <strong style={{ color: "hsl(43 72% 52%)" }}>R$ 49,90/ano</strong> ou em até <strong style={{ color: "hsl(43 72% 52%)" }}>12x de R$ 5,16</strong>
             </p>
           </div>
         </div>
