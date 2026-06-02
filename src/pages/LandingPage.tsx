@@ -19,7 +19,7 @@ const TESTIMONIALS = [
   { name: "Larissa Pereira", img: depoimentoWpp2 },
 ];
 
-const KIWIFY_URL = "https://pay.kiwify.com.br/b2qJYrZ";
+const KIWIFY_URL = "https://pay.kiwify.com.br/gfzob11";
 
 // ===== Design tokens (inline to keep this page self-contained) =====
 const C = {
@@ -647,16 +647,16 @@ export default function LandingPage() {
                 ✦ Plano Anual — Preço de lançamento
               </p>
               <div style={{ ...serif, color: C.cream }} className="text-[64px] md:text-[80px] font-light leading-none">
-                R$27<span style={{ color: C.goldMuted }}>,90</span>
+                R$49<span style={{ color: C.goldMuted }}>,90</span>
               </div>
               <p style={{ color: C.creamDim }} className="mt-3 text-[14px] font-light">
                 pagamento único · 12 meses de acesso completo
               </p>
               <p style={{ color: C.creamFaint }} className="text-[13px] font-light">
-                ou em até 6x de R$5,24 no cartão
+                ou em até 6x de R$9,68 no cartão
               </p>
               <p style={{ ...serif, color: C.gold }} className="mt-6 italic text-[16px]">
-                Menos de R$2,33 por mês.
+                Menos de R$4,16 por mês.
               </p>
             </div>
 
