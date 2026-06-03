@@ -168,6 +168,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
 
   const speakStep = useCallback((text: string, onEnd?: () => void) => {
     if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
+    if (noPtVoice) { onEnd?.(); return; } // never speak in English fallback
     window.speechSynthesis.cancel();
     if (cancelSpeechRef.current) cancelSpeechRef.current();
     
