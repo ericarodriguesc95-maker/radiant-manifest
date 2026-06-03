@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
-import { ensureVoicesLoaded, createBrazilianUtterance } from "@/lib/voiceUtils";
+import { ensureVoicesLoaded, createBrazilianUtterance, hasPtVoice, cancelSpeech } from "@/lib/voiceUtils";
 
 interface Message {
   role: "user" | "assistant";
@@ -77,8 +77,14 @@ function VoiceWaveform({ active }: { active: boolean }) {
 // ─── TTS Helper ─────────────────────────────────────────────────────────────
 
 function speakText(text: string) {
-  if (!("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+  cancelSpeech();
+
+  // If user's device has no pt-* voice, skip TTS entirely so we never read in English.
+  if (!hasPtVoice()) {
+    console.warn("[TTS] Nenhuma voz em Português instalada — áudio desativado.");
+    return;
+  }
 
   // Clean markdown for speech
   const clean = text
@@ -111,9 +117,7 @@ function speakText(text: string) {
 }
 
 function stopSpeaking() {
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
+  cancelSpeech();
 }
 
 // ─── Main Component ─────────────────────────────────────────────────────────
