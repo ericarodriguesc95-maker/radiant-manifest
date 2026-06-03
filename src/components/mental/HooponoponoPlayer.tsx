@@ -97,7 +97,7 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
 
   const speakMantra = useCallback((text: string, onEnd?: () => void) => {
     if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
-    window.speechSynthesis.cancel();
+    cancelSpeech();
     if (cancelSpeechRef.current) cancelSpeechRef.current();
 
     setDucking(true);
@@ -155,7 +155,7 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
     setCurrentMantra(0);
     setCycles(0);
     setElapsed(0);
-    window.speechSynthesis.cancel();
+    cancelSpeech();
   };
 
   const formatTime = (s: number) => `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;

@@ -174,7 +174,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   const speakStep = useCallback((text: string, onEnd?: () => void) => {
     if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
     if (noPtVoice) { onEnd?.(); return; } // never speak in English fallback
-    window.speechSynthesis.cancel();
+    cancelSpeech();
     if (cancelSpeechRef.current) cancelSpeechRef.current();
     
     setDucking(true);
@@ -194,7 +194,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
       const next = prev + 1;
       if (next >= activeMeditation.steps.length) {
         setIsPlaying(false);
-        window.speechSynthesis.cancel();
+        cancelSpeech();
         // Mark completed
         setCompletedIds(prev => {
           const updated = prev.includes(activeMeditation.id) ? prev : [...prev, activeMeditation.id];
@@ -229,13 +229,13 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
     setCurrentStep(0);
     setElapsed(0);
     setIsPlaying(false);
-    window.speechSynthesis.cancel();
+    cancelSpeech();
   };
 
   const togglePlay = () => {
     if (isPlaying) {
       setIsPlaying(false);
-      window.speechSynthesis.cancel();
+      cancelSpeech();
       if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
     } else {
       setIsPlaying(true);
@@ -253,7 +253,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
     return (
       <div className="min-h-screen">
         <header className="px-5 pt-12 pb-2">
-          <button onClick={() => { setActiveMeditation(null); setIsPlaying(false); window.speechSynthesis.cancel(); }} className="flex items-center gap-1 text-muted-foreground text-sm font-body mb-2">
+          <button onClick={() => { setActiveMeditation(null); setIsPlaying(false); cancelSpeech(); }} className="flex items-center gap-1 text-muted-foreground text-sm font-body mb-2">
             <ArrowLeft className="h-4 w-4" /> Voltar
           </button>
           <div className="flex items-center gap-2">
@@ -337,7 +337,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
 
           {/* Controls */}
           <div className="flex items-center gap-6">
-            <button onClick={() => { window.speechSynthesis.cancel(); if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current); advanceToNextStep(); }} className="h-12 w-12 rounded-full bg-card border border-border flex items-center justify-center shadow-card">
+            <button onClick={() => { cancelSpeech(); if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current); advanceToNextStep(); }} className="h-12 w-12 rounded-full bg-card border border-border flex items-center justify-center shadow-card">
               <SkipForward className="h-5 w-5 text-muted-foreground" />
             </button>
             <button onClick={togglePlay} className="h-16 w-16 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
