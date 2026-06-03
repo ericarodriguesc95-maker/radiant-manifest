@@ -64,11 +64,16 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [elapsed, setElapsed] = useState(0);
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const initialPrefs = loadVoicePrefs();
+  const [voiceEnabled, setVoiceEnabledState] = useState(initialPrefs.enabled);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [bgSound, setBgSound] = useState("none");
-  const [voiceGender, setVoiceGender] = useState<"female" | "male">("female");
+  const [voiceGender, setVoiceGenderState] = useState<"female" | "male">(initialPrefs.gender);
   const [filterCat, setFilterCat] = useState("all");
+
+  // Persisted setters — remember user's pt-BR voice preference across sessions
+  const setVoiceGender = (g: "female" | "male") => { setVoiceGenderState(g); saveVoicePrefs({ gender: g }); };
+  const setVoiceEnabled = (v: boolean) => { setVoiceEnabledState(v); saveVoicePrefs({ enabled: v }); };
   const [showSoundInfo, setShowSoundInfo] = useState(false);
   const [voicesReady, setVoicesReady] = useState(false);
   const [noMaleVoice, setNoMaleVoice] = useState(false);
