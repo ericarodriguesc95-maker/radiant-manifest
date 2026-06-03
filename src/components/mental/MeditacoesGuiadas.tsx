@@ -87,6 +87,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
     ensureVoicesLoaded().then(() => {
       setVoicesReady(true);
       setNoMaleVoice(!hasMaleVoice());
+      setNoPtVoice(!hasPtVoice());
     });
   }, []);
 
