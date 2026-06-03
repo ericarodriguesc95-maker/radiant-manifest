@@ -259,11 +259,15 @@ export function createBrazilianUtterance(
 ): SpeechSynthesisUtterance {
   const utterance = new SpeechSynthesisUtterance(text);
   const voice = getBrazilianVoice(gender);
-  
+
   if (voice) {
     utterance.voice = voice;
+  } else {
+    // Force any available pt-* voice as last resort to avoid English fallback
+    const anyPt = loadVoices().find(v => v.lang?.toLowerCase().startsWith("pt"));
+    if (anyPt) utterance.voice = anyPt;
   }
-  
+
   utterance.lang = "pt-BR";
   
   // Meditative defaults: pt-BR suave, calmo, acolhedor
