@@ -31,9 +31,13 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
   const [currentMantra, setCurrentMantra] = useState(0);
   const [cycles, setCycles] = useState(0);
   const [elapsed, setElapsed] = useState(0);
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [voiceGender, setVoiceGender] = useState<"female" | "male">("female");
-  const [showMeaning, setShowMeaning] = useState(true);
+  const initialPrefs = loadVoicePrefs();
+  const [voiceEnabled, setVoiceEnabledState] = useState(initialPrefs.enabled);
+  const [voiceGender, setVoiceGenderState] = useState<"female" | "male">(initialPrefs.gender);
+
+  // Persist pt-BR voice preference across sessions
+  const setVoiceEnabled = (v: boolean) => { setVoiceEnabledState(v); saveVoicePrefs({ enabled: v }); };
+  const setVoiceGender = (g: "female" | "male") => { setVoiceGenderState(g); saveVoicePrefs({ gender: g }); };
   const [bgMusicOn, setBgMusicOn] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voicesReady, setVoicesReady] = useState(false);
