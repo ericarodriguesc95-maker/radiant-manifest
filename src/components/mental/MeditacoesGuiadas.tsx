@@ -276,7 +276,16 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
           {isSpeaking && (
             <div className="flex items-center gap-1.5 mb-2 animate-pulse">
               {[1, 2, 3, 2, 1].map((h, i) => <div key={i} className="rounded-full bg-gold" style={{ height: `${h * 4}px`, width: "3px" }} />)}
-              <span className="text-[10px] text-gold font-body ml-1">falando...</span>
+              <span className="text-[10px] text-gold font-body ml-1">falando em pt-BR...</span>
+            </div>
+          )}
+
+          {noPtVoice && voiceEnabled && (
+            <div className="w-full mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <p className="text-[11px] font-body text-amber-200 leading-relaxed">
+                Seu dispositivo não tem uma voz em <strong>Português (Brasil)</strong> instalada. O áudio foi desativado para não falar em inglês. Acompanhe lendo o texto, ou instale uma voz pt-BR nas configurações do seu sistema (iOS: Ajustes › Acessibilidade › Conteúdo Falado › Vozes › Português).
+              </p>
             </div>
           )}
 
