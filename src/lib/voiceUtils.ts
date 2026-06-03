@@ -292,6 +292,13 @@ export function hasMaleVoice(): boolean {
 }
 
 /**
+ * Check if any pt-* voice is installed in the system.
+ */
+export function hasPtVoice(): boolean {
+  return loadVoices().some(v => v.lang?.toLowerCase().startsWith("pt"));
+}
+
+/**
  * Get the display name of the current voice for transparency.
  */
 export function getVoiceDisplayName(gender: "female" | "male"): string {
