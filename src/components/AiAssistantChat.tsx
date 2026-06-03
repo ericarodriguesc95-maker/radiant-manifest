@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
-import { ensureVoicesLoaded, createBrazilianUtterance } from "@/lib/voiceUtils";
+import { ensureVoicesLoaded, createBrazilianUtterance, hasPtVoice, cancelSpeech } from "@/lib/voiceUtils";
 
 interface Message {
   role: "user" | "assistant";
