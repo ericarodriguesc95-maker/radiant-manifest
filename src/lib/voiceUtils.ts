@@ -2,20 +2,41 @@
  * Centralized pt-BR voice selection utility.
  * Elite voice prioritization with meditative speech configuration.
  * Includes SSML-like pause engineering for guided meditation.
+ * Persists user voice preferences across sessions.
  */
 
 let voicesLoaded = false;
 let cachedVoices: SpeechSynthesisVoice[] = [];
 
+// Safe accessor — avoids "Cannot read properties of undefined (reading 'getVoices')"
+// on SSR, web workers, or older browsers without Web Speech API.
+function getSynth(): SpeechSynthesis | null {
+  if (typeof window === "undefined") return null;
+  return window.speechSynthesis ?? null;
+}
+
 function loadVoices(): SpeechSynthesisVoice[] {
-  cachedVoices = window.speechSynthesis.getVoices();
+  const synth = getSynth();
+  if (!synth) return [];
+  cachedVoices = synth.getVoices();
   if (cachedVoices.length > 0) voicesLoaded = true;
   return cachedVoices;
+}
+
+/** Safely cancel any in-flight speech. */
+export function cancelSpeech(): void {
+  const synth = getSynth();
+  if (synth) {
+    try { synth.cancel(); } catch {}
+  }
 }
 
 /** Ensures voices are loaded before use. Returns a promise that resolves when ready. */
 export function ensureVoicesLoaded(): Promise<SpeechSynthesisVoice[]> {
   return new Promise((resolve) => {
+    const synth = getSynth();
+    if (!synth) { resolve([]); return; }
+
     const voices = loadVoices();
     if (voices.length > 0) {
       resolve(voices);
@@ -24,9 +45,9 @@ export function ensureVoicesLoaded(): Promise<SpeechSynthesisVoice[]> {
     const handler = () => {
       const v = loadVoices();
       resolve(v);
-      window.speechSynthesis.removeEventListener("voiceschanged", handler);
+      synth.removeEventListener?.("voiceschanged", handler);
     };
-    window.speechSynthesis.addEventListener("voiceschanged", handler);
+    synth.addEventListener?.("voiceschanged", handler);
     setTimeout(() => {
       const v = loadVoices();
       resolve(v);
@@ -34,18 +55,48 @@ export function ensureVoicesLoaded(): Promise<SpeechSynthesisVoice[]> {
   });
 }
 
+// ---------- Persisted voice preferences ----------
+
+const PREFS_KEY = "voice-prefs-v1";
+
+export interface VoicePrefs {
+  gender: "female" | "male";
+  enabled: boolean;
+  voiceName?: string; // exact voice.name chosen by user (optional)
+}
+
+const DEFAULT_PREFS: VoicePrefs = { gender: "female", enabled: true };
+
+export function loadVoicePrefs(): VoicePrefs {
+  try {
+    const raw = localStorage.getItem(PREFS_KEY);
+    if (!raw) return { ...DEFAULT_PREFS };
+    const parsed = JSON.parse(raw);
+    return {
+      gender: parsed.gender === "male" ? "male" : "female",
+      enabled: parsed.enabled !== false,
+      voiceName: typeof parsed.voiceName === "string" ? parsed.voiceName : undefined,
+    };
+  } catch {
+    return { ...DEFAULT_PREFS };
+  }
+}
+
+export function saveVoicePrefs(patch: Partial<VoicePrefs>): VoicePrefs {
+  const current = loadVoicePrefs();
+  const next = { ...current, ...patch };
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(next)); } catch {}
+  return next;
+}
+
 // Elite voice names — prioritize Natural/Neural/Premium quality voices
 const FEMALE_PREFERRED = [
-  // Microsoft Neural voices (highest quality on Windows/Edge)
   "microsoft francisca online",
   "microsoft francisca",
-  // Apple premium voices
   "luciana",
   "vitória",
   "vitoria",
-  // Google Neural
   "google português do brasil",
-  // Other high-quality
   "francisca",
   "maria",
   "thalita",
@@ -54,14 +105,10 @@ const FEMALE_PREFERRED = [
 ];
 
 const MALE_PREFERRED = [
-  // Microsoft Neural voices
   "microsoft antonio online",
   "microsoft antonio",
-  // Apple premium voices
   "felipe",
-  // Google Neural
   "google português do brasil masculino",
-  // Other
   "daniel",
   "rodrigo",
   "antonio",
@@ -71,30 +118,36 @@ const MALE_PREFERRED = [
 const FEMALE_HINTS = ["female", "feminina", "mulher", "francisca", "maria", "luciana", "thalita", "fernanda", "vitória", "vitoria"];
 const MALE_HINTS = ["male", "masculin", "homem", "daniel", "rodrigo", "felipe", "antonio", "ricardo"];
 
-// Quality indicators — prefer voices with these tags
 const QUALITY_TAGS = ["online", "neural", "natural", "premium", "enhanced"];
 
 /**
  * Get the best pt-BR voice for the given gender.
- * Prioritizes Neural/Natural/Premium quality voices for a meditative experience.
+ * If the user has saved a specific voiceName preference (and it's still installed),
+ * that voice wins automatically.
  */
 export function getBrazilianVoice(gender: "female" | "male"): SpeechSynthesisVoice | null {
   const allVoices = loadVoices();
-  
-  // Strict pt-BR filter
+  if (allVoices.length === 0) return null;
+
+  // 0. Honor the user's saved preferred voice (if still available and pt-*)
+  const prefs = loadVoicePrefs();
+  if (prefs.voiceName) {
+    const saved = allVoices.find(
+      v => v.name === prefs.voiceName && v.lang?.toLowerCase().startsWith("pt")
+    );
+    if (saved) return saved;
+  }
+
   const ptBRVoices = allVoices.filter(v => v.lang === "pt-BR" || v.lang === "pt_BR");
-  // Broader pt filter as fallback
   const ptVoices = allVoices.filter(v => v.lang.startsWith("pt"));
 
   const preferred = gender === "female" ? FEMALE_PREFERRED : MALE_PREFERRED;
   const genderHints = gender === "female" ? FEMALE_HINTS : MALE_HINTS;
   const oppositeHints = gender === "female" ? MALE_HINTS : FEMALE_HINTS;
 
-  // Helper: check if voice has quality indicators
   const isHighQuality = (v: SpeechSynthesisVoice) =>
     QUALITY_TAGS.some(tag => v.name.toLowerCase().includes(tag));
 
-  // 1. Try preferred names in pt-BR voices, preferring high-quality
   for (const pref of preferred) {
     const match = ptBRVoices.find(v => v.name.toLowerCase().includes(pref));
     if (match) {
@@ -104,19 +157,16 @@ export function getBrazilianVoice(gender: "female" | "male"): SpeechSynthesisVoi
     }
   }
 
-  // 2. Try high-quality pt-BR voices with gender hints
   const highQualityGender = ptBRVoices.find(v =>
     isHighQuality(v) && genderHints.some(h => v.name.toLowerCase().includes(h))
   );
   if (highQualityGender) return highQualityGender;
 
-  // 3. Try any pt-BR voice with gender hints
   const genderMatch = ptBRVoices.find(v =>
     genderHints.some(h => v.name.toLowerCase().includes(h))
   );
   if (genderMatch) return genderMatch;
 
-  // 4. For female: prefer first pt-BR voice (usually female by default)
   if (gender === "female" && ptBRVoices.length > 0) {
     return ptBRVoices[0];
   }
@@ -127,7 +177,6 @@ export function getBrazilianVoice(gender: "female" | "male"): SpeechSynthesisVoi
     if (notFemale) return notFemale;
   }
 
-  // 5. Fallback to broader pt voices
   if (ptVoices.length > 0) {
     const ptGender = ptVoices.find(v => genderHints.some(h => v.name.toLowerCase().includes(h)));
     if (ptGender) return ptGender;
@@ -137,46 +186,41 @@ export function getBrazilianVoice(gender: "female" | "male"): SpeechSynthesisVoi
   return null;
 }
 
-/**
- * Insert SSML-like pauses into text for meditative speech.
- * Splits text at sentence/comma boundaries and returns chunks with pause durations.
- */
-export function splitTextWithPauses(text: string): Array<{ text: string; pauseAfterMs: number }> {
-  const chunks: Array<{ text: string; pauseAfterMs: number }> = [];
-  
-  // Split by sentences (period, exclamation, question mark)
-  const sentences = text.split(/(?<=[.!?])\s+/);
-  
-  for (const sentence of sentences) {
-    if (!sentence.trim()) continue;
-    
-    // Split each sentence by commas for sub-pauses
-    const parts = sentence.split(/(?<=,)\s*/);
-    
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i].trim();
-      if (!part) continue;
-      
-      const isLastPart = i === parts.length - 1;
-      // Sentence end = 2s pause, comma = 1s pause
-      const endsWithSentence = /[.!?]$/.test(part);
-      const endsWithComma = /,$/.test(part);
-      
-      let pauseMs = 500; // default small pause
-      if (endsWithSentence) pauseMs = 2000;
-      else if (endsWithComma || !isLastPart) pauseMs = 1000;
-      
-      chunks.push({ text: part, pauseAfterMs: pauseMs });
-    }
-  }
-  
-  return chunks.length > 0 ? chunks : [{ text, pauseAfterMs: 1000 }];
+/** List all installed pt-* voices (useful for a future "pick your voice" UI). */
+export function listPortugueseVoices(): SpeechSynthesisVoice[] {
+  return loadVoices().filter(v => v.lang?.toLowerCase().startsWith("pt"));
 }
 
 /**
- * Speak text with meditative pauses between sentences/clauses.
- * Returns a cleanup function to cancel speech.
+ * Insert SSML-like pauses into text for meditative speech.
  */
+export function splitTextWithPauses(text: string): Array<{ text: string; pauseAfterMs: number }> {
+  const chunks: Array<{ text: string; pauseAfterMs: number }> = [];
+  const sentences = text.split(/(?<=[.!?])\s+/);
+
+  for (const sentence of sentences) {
+    if (!sentence.trim()) continue;
+    const parts = sentence.split(/(?<=,)\s*/);
+
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i].trim();
+      if (!part) continue;
+
+      const isLastPart = i === parts.length - 1;
+      const endsWithSentence = /[.!?]$/.test(part);
+      const endsWithComma = /,$/.test(part);
+
+      let pauseMs = 500;
+      if (endsWithSentence) pauseMs = 2000;
+      else if (endsWithComma || !isLastPart) pauseMs = 1000;
+
+      chunks.push({ text: part, pauseAfterMs: pauseMs });
+    }
+  }
+
+  return chunks.length > 0 ? chunks : [{ text, pauseAfterMs: 1000 }];
+}
+
 export function speakWithPauses(
   text: string,
   gender: "female" | "male",
@@ -189,6 +233,12 @@ export function speakWithPauses(
     onSpeaking?: (speaking: boolean) => void;
   }
 ): () => void {
+  const synth = getSynth();
+  if (!synth) {
+    options?.onEnd?.();
+    return () => {};
+  }
+
   const chunks = splitTextWithPauses(text);
   let cancelled = false;
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
@@ -208,9 +258,7 @@ export function speakWithPauses(
       volume: options?.volume,
     });
 
-    if (currentIndex === 0) {
-      options?.onStart?.();
-    }
+    if (currentIndex === 0) options?.onStart?.();
 
     utterance.onstart = () => options?.onSpeaking?.(true);
     utterance.onend = () => {
@@ -232,7 +280,7 @@ export function speakWithPauses(
       }
     };
 
-    window.speechSynthesis.speak(utterance);
+    synth.speak(utterance);
   };
 
   speakNext();
@@ -240,22 +288,14 @@ export function speakWithPauses(
   return () => {
     cancelled = true;
     if (timeoutId) clearTimeout(timeoutId);
-    window.speechSynthesis.cancel();
+    cancelSpeech();
   };
 }
 
-/**
- * Create a properly configured SpeechSynthesisUtterance for pt-BR.
- * Meditative defaults: rate 0.8, pitch 0.9 (female) / 0.8 (male)
- */
 export function createBrazilianUtterance(
   text: string,
   gender: "female" | "male",
-  options?: {
-    rate?: number;
-    pitch?: number;
-    volume?: number;
-  }
+  options?: { rate?: number; pitch?: number; volume?: number }
 ): SpeechSynthesisUtterance {
   const utterance = new SpeechSynthesisUtterance(text);
   const voice = getBrazilianVoice(gender);
@@ -263,47 +303,35 @@ export function createBrazilianUtterance(
   if (voice) {
     utterance.voice = voice;
   } else {
-    // Force any available pt-* voice as last resort to avoid English fallback
     const anyPt = loadVoices().find(v => v.lang?.toLowerCase().startsWith("pt"));
     if (anyPt) utterance.voice = anyPt;
   }
 
   utterance.lang = "pt-BR";
-  
-  // Meditative defaults: pt-BR suave, calmo, acolhedor
+
   const defaultRate = 0.75;
   const defaultPitch = gender === "female" ? 0.88 : 0.78;
   const defaultVolume = 0.85;
-  
+
   utterance.rate = options?.rate ?? defaultRate;
   utterance.pitch = options?.pitch ?? defaultPitch;
   utterance.volume = options?.volume ?? defaultVolume;
-  
+
   return utterance;
 }
 
-/**
- * Check if a real male pt-BR voice is available.
- */
 export function hasMaleVoice(): boolean {
   const allVoices = loadVoices();
   const ptBR = allVoices.filter(v => v.lang === "pt-BR" || v.lang === "pt_BR");
   return ptBR.some(v => MALE_HINTS.some(h => v.name.toLowerCase().includes(h)));
 }
 
-/**
- * Check if any pt-* voice is installed in the system.
- */
 export function hasPtVoice(): boolean {
   return loadVoices().some(v => v.lang?.toLowerCase().startsWith("pt"));
 }
 
-/**
- * Get the display name of the current voice for transparency.
- */
 export function getVoiceDisplayName(gender: "female" | "male"): string {
   const voice = getBrazilianVoice(gender);
   if (!voice) return "Voz padrão do sistema";
-  // Clean up name for display
   return voice.name.replace(/Microsoft |Google |Apple /gi, "").trim();
 }

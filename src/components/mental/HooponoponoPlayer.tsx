@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ArrowLeft, Play, Pause, RotateCcw, Heart, Volume2, VolumeX, User, Info, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ensureVoicesLoaded, speakWithPauses, hasMaleVoice } from "@/lib/voiceUtils";
+import { ensureVoicesLoaded, speakWithPauses, hasMaleVoice, loadVoicePrefs, saveVoicePrefs, cancelSpeech } from "@/lib/voiceUtils";
 
 const mantras = [
   {
@@ -31,8 +31,13 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
   const [currentMantra, setCurrentMantra] = useState(0);
   const [cycles, setCycles] = useState(0);
   const [elapsed, setElapsed] = useState(0);
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
-  const [voiceGender, setVoiceGender] = useState<"female" | "male">("female");
+  const initialPrefs = loadVoicePrefs();
+  const [voiceEnabled, setVoiceEnabledState] = useState(initialPrefs.enabled);
+  const [voiceGender, setVoiceGenderState] = useState<"female" | "male">(initialPrefs.gender);
+
+  // Persist pt-BR voice preference across sessions
+  const setVoiceEnabled = (v: boolean) => { setVoiceEnabledState(v); saveVoicePrefs({ enabled: v }); };
+  const setVoiceGender = (g: "female" | "male") => { setVoiceGenderState(g); saveVoicePrefs({ gender: g }); };
   const [showMeaning, setShowMeaning] = useState(true);
   const [bgMusicOn, setBgMusicOn] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -97,7 +102,7 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
 
   const speakMantra = useCallback((text: string, onEnd?: () => void) => {
     if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
-    window.speechSynthesis.cancel();
+    cancelSpeech();
     if (cancelSpeechRef.current) cancelSpeechRef.current();
 
     setDucking(true);
@@ -155,7 +160,7 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
     setCurrentMantra(0);
     setCycles(0);
     setElapsed(0);
-    window.speechSynthesis.cancel();
+    cancelSpeech();
   };
 
   const formatTime = (s: number) => `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
