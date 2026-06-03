@@ -38,6 +38,7 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
   // Persist pt-BR voice preference across sessions
   const setVoiceEnabled = (v: boolean) => { setVoiceEnabledState(v); saveVoicePrefs({ enabled: v }); };
   const setVoiceGender = (g: "female" | "male") => { setVoiceGenderState(g); saveVoicePrefs({ gender: g }); };
+  const [showMeaning, setShowMeaning] = useState(true);
   const [bgMusicOn, setBgMusicOn] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [voicesReady, setVoicesReady] = useState(false);
