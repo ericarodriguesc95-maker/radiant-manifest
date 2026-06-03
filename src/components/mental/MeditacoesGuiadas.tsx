@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ArrowLeft, Play, Pause, SkipForward, Clock, Volume2, VolumeX, Music, TreePine, User, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ensureVoicesLoaded, speakWithPauses, hasMaleVoice, getVoiceDisplayName } from "@/lib/voiceUtils";
+import { ensureVoicesLoaded, speakWithPauses, hasMaleVoice, hasPtVoice, getVoiceDisplayName } from "@/lib/voiceUtils";
 
 interface Meditation {
   id: string;
@@ -72,6 +72,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
   const [showSoundInfo, setShowSoundInfo] = useState(false);
   const [voicesReady, setVoicesReady] = useState(false);
   const [noMaleVoice, setNoMaleVoice] = useState(false);
+  const [noPtVoice, setNoPtVoice] = useState(false);
   const [completedIds, setCompletedIds] = useState<string[]>(() => {
     try { return JSON.parse(localStorage.getItem("meditation-completed") || "[]"); } catch { return []; }
   });
@@ -86,6 +87,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
     ensureVoicesLoaded().then(() => {
       setVoicesReady(true);
       setNoMaleVoice(!hasMaleVoice());
+      setNoPtVoice(!hasPtVoice());
     });
   }, []);
 
@@ -166,6 +168,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
 
   const speakStep = useCallback((text: string, onEnd?: () => void) => {
     if (!voiceEnabled || !voicesReady) { onEnd?.(); return; }
+    if (noPtVoice) { onEnd?.(); return; } // never speak in English fallback
     window.speechSynthesis.cancel();
     if (cancelSpeechRef.current) cancelSpeechRef.current();
     
@@ -178,7 +181,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
         onEnd?.();
       },
     });
-  }, [voiceEnabled, voiceGender, voicesReady, setDucking]);
+  }, [voiceEnabled, voiceGender, voicesReady, noPtVoice, setDucking]);
 
   const advanceToNextStep = useCallback(() => {
     if (!activeMeditation) return;
@@ -273,7 +276,16 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
           {isSpeaking && (
             <div className="flex items-center gap-1.5 mb-2 animate-pulse">
               {[1, 2, 3, 2, 1].map((h, i) => <div key={i} className="rounded-full bg-gold" style={{ height: `${h * 4}px`, width: "3px" }} />)}
-              <span className="text-[10px] text-gold font-body ml-1">falando...</span>
+              <span className="text-[10px] text-gold font-body ml-1">falando em pt-BR...</span>
+            </div>
+          )}
+
+          {noPtVoice && voiceEnabled && (
+            <div className="w-full mb-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <p className="text-[11px] font-body text-amber-200 leading-relaxed">
+                Seu dispositivo não tem uma voz em <strong>Português (Brasil)</strong> instalada. O áudio foi desativado para não falar em inglês. Acompanhe lendo o texto, ou instale uma voz pt-BR nas configurações do seu sistema (iOS: Ajustes › Acessibilidade › Conteúdo Falado › Vozes › Português).
+              </p>
             </div>
           )}
 

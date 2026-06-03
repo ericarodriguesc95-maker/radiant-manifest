@@ -259,11 +259,15 @@ export function createBrazilianUtterance(
 ): SpeechSynthesisUtterance {
   const utterance = new SpeechSynthesisUtterance(text);
   const voice = getBrazilianVoice(gender);
-  
+
   if (voice) {
     utterance.voice = voice;
+  } else {
+    // Force any available pt-* voice as last resort to avoid English fallback
+    const anyPt = loadVoices().find(v => v.lang?.toLowerCase().startsWith("pt"));
+    if (anyPt) utterance.voice = anyPt;
   }
-  
+
   utterance.lang = "pt-BR";
   
   // Meditative defaults: pt-BR suave, calmo, acolhedor
@@ -285,6 +289,13 @@ export function hasMaleVoice(): boolean {
   const allVoices = loadVoices();
   const ptBR = allVoices.filter(v => v.lang === "pt-BR" || v.lang === "pt_BR");
   return ptBR.some(v => MALE_HINTS.some(h => v.name.toLowerCase().includes(h)));
+}
+
+/**
+ * Check if any pt-* voice is installed in the system.
+ */
+export function hasPtVoice(): boolean {
+  return loadVoices().some(v => v.lang?.toLowerCase().startsWith("pt"));
 }
 
 /**
