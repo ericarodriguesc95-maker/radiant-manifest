@@ -181,7 +181,7 @@ export default function MeditacoesGuiadas({ onBack }: { onBack: () => void }) {
         onEnd?.();
       },
     });
-  }, [voiceEnabled, voiceGender, voicesReady, setDucking]);
+  }, [voiceEnabled, voiceGender, voicesReady, noPtVoice, setDucking]);
 
   const advanceToNextStep = useCallback(() => {
     if (!activeMeditation) return;
