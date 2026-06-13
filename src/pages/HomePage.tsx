@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sparkles, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield, Trophy, Crown, Star, Heart, Target, BookOpen, ClipboardCheck, Flame } from "lucide-react";
+import { Sparkles, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield, Trophy, Crown, Star, Heart, Target, BookOpen, ClipboardCheck, Flame, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
@@ -371,6 +371,36 @@ const HomePage = () => {
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </button>
         </div>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* COMUNIDADE — WhatsApp group CTA */}
+        {/* ═══════════════════════════════════════════ */}
+        <section className="space-y-4 animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
+          <div className="flex items-center gap-2">
+            <MessageCircle className="h-3.5 w-3.5 text-gold" />
+            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Comunidade</h2>
+            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
+          </div>
+          <a
+            href="https://chat.whatsapp.com/KqwvIi2Ht238RoSMVCS7J0"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-gold/20"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/40 via-green-800/20 to-emerald-700/5" />
+            <div className="absolute inset-0 glass" />
+            <div className="relative z-10 h-12 w-12 rounded-2xl bg-green-500/15 flex items-center justify-center border border-green-400/30 group-hover:bg-green-500/25 transition-all">
+              <MessageCircle className="h-6 w-6 text-green-400" />
+            </div>
+            <div className="relative z-10 flex-1 text-left">
+              <p className="text-sm font-display font-bold text-foreground">Entre no grupo do WhatsApp</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Conecte-se com outras rainhas, troque experiências e cresça junto 👑</p>
+            </div>
+            <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-green-400 border border-green-400/40 rounded-full px-2 py-0.5">Entrar</span>
+            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
+          </a>
+        </section>
+
 
         {/* ═══════════════════════════════════════════ */}
         {/* MONTHLY CALENDAR — Elegant section */}
