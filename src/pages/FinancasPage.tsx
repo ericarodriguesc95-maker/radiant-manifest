@@ -558,20 +558,47 @@ const FinancasPage = () => {
       </header>
 
       <div className="px-5 space-y-4 pb-28">
-        {/* Month selector */}
-        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-          {monthNames.map((m, i) => (
-            <button
-              key={m}
-              onClick={() => setCurrentMonth(i)}
-              className={cn(
-                "shrink-0 px-3 py-1.5 rounded-full text-xs font-body font-medium transition-all",
-                i === currentMonth ? "bg-gold text-primary-foreground" : "bg-muted text-muted-foreground"
-              )}
-            >
-              {m.slice(0, 3)}
-            </button>
-          ))}
+        {/* PF / CNPJ toggle */}
+        <div className="grid grid-cols-2 gap-2 bg-muted/30 rounded-2xl p-1">
+          <button
+            onClick={() => setMode("pf")}
+            className={cn(
+              "flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-body font-semibold transition-all",
+              mode === "pf" ? "bg-gold text-background shadow-sm" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <UserIcon className="h-3.5 w-3.5" /> Pessoa Física
+          </button>
+          <button
+            onClick={() => setMode("cnpj")}
+            className={cn(
+              "flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-body font-semibold transition-all",
+              mode === "cnpj" ? "bg-gold text-background shadow-sm" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Briefcase className="h-3.5 w-3.5" /> CNPJ
+          </button>
+        </div>
+
+        {/* Month selector + copy */}
+        <div className="flex items-center gap-2">
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 flex-1">
+            {monthNames.map((m, i) => (
+              <button
+                key={m}
+                onClick={() => setCurrentMonth(i)}
+                className={cn(
+                  "shrink-0 px-3 py-1.5 rounded-full text-xs font-body font-medium transition-all",
+                  i === currentMonth ? "bg-gold text-primary-foreground" : "bg-muted text-muted-foreground"
+                )}
+              >
+                {m.slice(0, 3)}
+              </button>
+            ))}
+          </div>
+          <Button variant="outline" size="sm" className="shrink-0 text-[10px] gap-1" onClick={copyFromPreviousMonth} title="Copiar lançamentos do mês anterior">
+            <Copy className="h-3 w-3" /> Copiar mês anterior
+          </Button>
         </div>
 
         {/* Summary Cards */}
@@ -641,6 +668,12 @@ const FinancasPage = () => {
             </TabsTrigger>
             <TabsTrigger value="ia" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
               <Bot className="h-3.5 w-3.5 shrink-0" /> Consultora
+            </TabsTrigger>
+            <TabsTrigger value="planejar" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
+              <Target className="h-3.5 w-3.5 shrink-0" /> Planejar
+            </TabsTrigger>
+            <TabsTrigger value="dividas" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-red-500/20 data-[state=active]:text-red-400 px-2.5 py-1.5">
+              <AlertCircle className="h-3.5 w-3.5 shrink-0" /> Dívidas
             </TabsTrigger>
             <TabsTrigger value="quiz" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
               <Brain className="h-3.5 w-3.5 shrink-0" /> Meu perfil
