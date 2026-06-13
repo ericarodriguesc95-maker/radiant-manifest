@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown, Lightbulb, Bot, Send, Brain } from "lucide-react";
+import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown, Lightbulb, Bot, Send, Brain, Briefcase, User as UserIcon, Copy, Target, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
@@ -241,6 +241,22 @@ const FinancasPage = () => {
   const [editAmount, setEditAmount] = useState("");
   const [editType, setEditType] = useState<EntryType>("renda");
   const [activeTab, setActiveTab] = useState("registros");
+  const [mode, setModeRaw] = useState<"pf" | "cnpj">(() => {
+    try { return (localStorage.getItem("fin-mode") as any) === "cnpj" ? "cnpj" : "pf"; } catch { return "pf"; }
+  });
+  const setMode = (m: "pf" | "cnpj") => {
+    setModeRaw(m);
+    try { localStorage.setItem("fin-mode", m); } catch {}
+  };
+
+  // Budgets (Planejar)
+  const [budgets, setBudgets] = useState<Record<string, number>>({});
+  // Debts
+  interface Debt { id: string; name: string; total_amount: number; paid_amount: number; monthly_interest: number; installments_total: number | null; installments_paid: number; due_date: string | null; notes: string | null; }
+  const [debts, setDebts] = useState<Debt[]>([]);
+  const [showDebtForm, setShowDebtForm] = useState(false);
+  const [debtForm, setDebtForm] = useState({ name: "", total_amount: "", paid_amount: "", monthly_interest: "", installments_total: "", installments_paid: "", due_date: "" });
+  const [editingDebtId, setEditingDebtId] = useState<string | null>(null);
 
   // Deep-link from floating IA Financeira bubble
   useEffect(() => {
@@ -262,11 +278,12 @@ const FinancasPage = () => {
   const fetchEntries = useCallback(async () => {
     if (!user) return;
     setLoading(true);
-    const [{ data }, { data: noteData }, { data: yearData }] = await Promise.all([
+    const [{ data }, { data: noteData }, { data: yearData }, { data: budgetData }, { data: debtData }] = await Promise.all([
       supabase
         .from("finance_entries")
         .select("*")
         .eq("user_id", user.id)
+        .eq("mode", mode)
         .eq("month", currentMonth)
         .eq("year", currentYear)
         .order("created_at", { ascending: true }),
@@ -274,6 +291,7 @@ const FinancasPage = () => {
         .from("finance_notes")
         .select("content")
         .eq("user_id", user.id)
+        .eq("mode", mode)
         .eq("month", currentMonth)
         .eq("year", currentYear)
         .maybeSingle(),
@@ -281,13 +299,37 @@ const FinancasPage = () => {
         .from("finance_entries")
         .select("month, type, amount")
         .eq("user_id", user.id)
+        .eq("mode", mode)
         .eq("year", currentYear),
+      supabase
+        .from("finance_budgets" as any)
+        .select("category, ceiling")
+        .eq("user_id", user.id)
+        .eq("mode", mode)
+        .eq("month", currentMonth)
+        .eq("year", currentYear),
+      supabase
+        .from("finance_debts" as any)
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("mode", mode)
+        .order("created_at", { ascending: false }),
     ]);
     setEntries((data || []).map((e: any) => ({ id: e.id, description: e.description, amount: Number(e.amount), type: e.type })));
     setAllYearEntries((yearData || []).map((e: any) => ({ month: e.month, type: e.type, amount: Number(e.amount) })));
     setNotes(noteData?.content || "");
+    const bmap: Record<string, number> = {};
+    ((budgetData as any[]) || []).forEach((b: any) => { bmap[b.category] = Number(b.ceiling); });
+    setBudgets(bmap);
+    setDebts(((debtData as any[]) || []).map((d: any) => ({
+      id: d.id, name: d.name,
+      total_amount: Number(d.total_amount), paid_amount: Number(d.paid_amount),
+      monthly_interest: Number(d.monthly_interest),
+      installments_total: d.installments_total, installments_paid: d.installments_paid,
+      due_date: d.due_date, notes: d.notes,
+    })));
     setLoading(false);
-  }, [user, currentMonth, currentYear]);
+  }, [user, currentMonth, currentYear, mode]);
 
   useEffect(() => { fetchEntries(); }, [fetchEntries]);
 
@@ -323,7 +365,7 @@ const FinancasPage = () => {
     if (isNaN(amount)) return;
     const { data, error } = await supabase
       .from("finance_entries")
-      .insert({ user_id: user.id, description: newDesc, amount, type: newType, month: currentMonth, year: currentYear })
+      .insert({ user_id: user.id, description: newDesc, amount, type: newType, month: currentMonth, year: currentYear, mode })
       .select()
       .single();
     if (error) { toast.error("Erro ao adicionar"); return; }
@@ -368,9 +410,87 @@ const FinancasPage = () => {
     setNotesSaving(true);
     await supabase
       .from("finance_notes")
-      .upsert({ user_id: user.id, month: currentMonth, year: currentYear, content: notes, updated_at: new Date().toISOString() }, { onConflict: "user_id,month,year" });
+      .upsert({ user_id: user.id, month: currentMonth, year: currentYear, mode, content: notes, updated_at: new Date().toISOString() }, { onConflict: "user_id,month,year,mode" });
     setNotesSaving(false);
     toast.success("Notas salvas!");
+  };
+
+  // ─── Copiar lançamentos do mês anterior ──────────────────────────────────
+  const copyFromPreviousMonth = async () => {
+    if (!user) return;
+    const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+    const { data: prev } = await supabase
+      .from("finance_entries")
+      .select("description, amount, type")
+      .eq("user_id", user.id)
+      .eq("mode", mode)
+      .eq("month", prevMonth)
+      .eq("year", prevYear);
+    if (!prev || prev.length === 0) { toast.info("Nenhum lançamento no mês anterior."); return; }
+    const rows = prev.map((p: any) => ({ user_id: user.id, mode, month: currentMonth, year: currentYear, description: p.description, amount: p.amount, type: p.type }));
+    const { error } = await supabase.from("finance_entries").insert(rows);
+    if (error) { toast.error("Erro ao copiar"); return; }
+    toast.success(`${rows.length} lançamento(s) copiado(s)!`);
+    fetchEntries();
+  };
+
+  // ─── Orçamento por categoria (Planejar) ──────────────────────────────────
+  const saveBudget = async (category: string, value: number) => {
+    if (!user) return;
+    setBudgets(b => ({ ...b, [category]: value }));
+    await supabase.from("finance_budgets" as any).upsert({
+      user_id: user.id, mode, category, ceiling: value, month: currentMonth, year: currentYear,
+    } as any, { onConflict: "user_id,mode,category,month,year" });
+  };
+
+  const realByType = (t: EntryType) => entries.filter(e => e.type === t).reduce((s, e) => s + e.amount, 0);
+
+  // ─── Dívidas CRUD ────────────────────────────────────────────────────────
+  const totalDebt = debts.reduce((s, d) => s + (d.total_amount - d.paid_amount), 0);
+  const totalPaid = debts.reduce((s, d) => s + d.paid_amount, 0);
+  const monthlyInterest = debts.reduce((s, d) => s + d.monthly_interest, 0);
+
+  const submitDebt = async () => {
+    if (!user || !debtForm.name) return;
+    const payload: any = {
+      user_id: user.id, mode,
+      name: debtForm.name,
+      total_amount: parseFloat(debtForm.total_amount) || 0,
+      paid_amount: parseFloat(debtForm.paid_amount) || 0,
+      monthly_interest: parseFloat(debtForm.monthly_interest) || 0,
+      installments_total: debtForm.installments_total ? parseInt(debtForm.installments_total) : null,
+      installments_paid: parseInt(debtForm.installments_paid) || 0,
+      due_date: debtForm.due_date || null,
+    };
+    let error;
+    if (editingDebtId) ({ error } = await supabase.from("finance_debts" as any).update(payload).eq("id", editingDebtId));
+    else ({ error } = await supabase.from("finance_debts" as any).insert(payload));
+    if (error) { toast.error("Erro ao salvar dívida"); return; }
+    toast.success(editingDebtId ? "Dívida atualizada!" : "Dívida adicionada!");
+    setDebtForm({ name: "", total_amount: "", paid_amount: "", monthly_interest: "", installments_total: "", installments_paid: "", due_date: "" });
+    setEditingDebtId(null); setShowDebtForm(false);
+    fetchEntries();
+  };
+
+  const editDebt = (d: Debt) => {
+    setEditingDebtId(d.id);
+    setDebtForm({
+      name: d.name,
+      total_amount: String(d.total_amount), paid_amount: String(d.paid_amount),
+      monthly_interest: String(d.monthly_interest),
+      installments_total: d.installments_total ? String(d.installments_total) : "",
+      installments_paid: String(d.installments_paid),
+      due_date: d.due_date || "",
+    });
+    setShowDebtForm(true);
+  };
+
+  const deleteDebt = async (id: string) => {
+    const { error } = await supabase.from("finance_debts" as any).delete().eq("id", id);
+    if (error) { toast.error("Erro ao excluir"); return; }
+    toast.success("Dívida excluída");
+    fetchEntries();
   };
 
   const renderEntryList = (types: EntryType[], emptyMsg: string) => {
@@ -438,20 +558,47 @@ const FinancasPage = () => {
       </header>
 
       <div className="px-5 space-y-4 pb-28">
-        {/* Month selector */}
-        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-          {monthNames.map((m, i) => (
-            <button
-              key={m}
-              onClick={() => setCurrentMonth(i)}
-              className={cn(
-                "shrink-0 px-3 py-1.5 rounded-full text-xs font-body font-medium transition-all",
-                i === currentMonth ? "bg-gold text-primary-foreground" : "bg-muted text-muted-foreground"
-              )}
-            >
-              {m.slice(0, 3)}
-            </button>
-          ))}
+        {/* PF / CNPJ toggle */}
+        <div className="grid grid-cols-2 gap-2 bg-muted/30 rounded-2xl p-1">
+          <button
+            onClick={() => setMode("pf")}
+            className={cn(
+              "flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-body font-semibold transition-all",
+              mode === "pf" ? "bg-gold text-background shadow-sm" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <UserIcon className="h-3.5 w-3.5" /> Pessoa Física
+          </button>
+          <button
+            onClick={() => setMode("cnpj")}
+            className={cn(
+              "flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-body font-semibold transition-all",
+              mode === "cnpj" ? "bg-gold text-background shadow-sm" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <Briefcase className="h-3.5 w-3.5" /> CNPJ
+          </button>
+        </div>
+
+        {/* Month selector + copy */}
+        <div className="flex items-center gap-2">
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 flex-1">
+            {monthNames.map((m, i) => (
+              <button
+                key={m}
+                onClick={() => setCurrentMonth(i)}
+                className={cn(
+                  "shrink-0 px-3 py-1.5 rounded-full text-xs font-body font-medium transition-all",
+                  i === currentMonth ? "bg-gold text-primary-foreground" : "bg-muted text-muted-foreground"
+                )}
+              >
+                {m.slice(0, 3)}
+              </button>
+            ))}
+          </div>
+          <Button variant="outline" size="sm" className="shrink-0 text-[10px] gap-1" onClick={copyFromPreviousMonth} title="Copiar lançamentos do mês anterior">
+            <Copy className="h-3 w-3" /> Copiar mês anterior
+          </Button>
         </div>
 
         {/* Summary Cards */}
@@ -521,6 +668,12 @@ const FinancasPage = () => {
             </TabsTrigger>
             <TabsTrigger value="ia" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
               <Bot className="h-3.5 w-3.5 shrink-0" /> Consultora
+            </TabsTrigger>
+            <TabsTrigger value="planejar" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
+              <Target className="h-3.5 w-3.5 shrink-0" /> Planejar
+            </TabsTrigger>
+            <TabsTrigger value="dividas" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-red-500/20 data-[state=active]:text-red-400 px-2.5 py-1.5">
+              <AlertCircle className="h-3.5 w-3.5 shrink-0" /> Dívidas
             </TabsTrigger>
             <TabsTrigger value="quiz" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
               <Brain className="h-3.5 w-3.5 shrink-0" /> Meu perfil
@@ -708,6 +861,145 @@ const FinancasPage = () => {
           </TabsContent>
 
           {/* Quiz */}
+          {/* Planejar — Orçamento por categoria */}
+          <TabsContent value="planejar">
+            <div className="bg-card rounded-2xl border border-border overflow-hidden mt-3">
+              <div className="p-4 border-b border-border flex items-center gap-2">
+                <Target className="h-4 w-4 text-gold" />
+                <h3 className="text-sm font-display font-semibold">Planejar — Teto x Real</h3>
+              </div>
+              <div className="divide-y divide-border">
+                {(["renda","fixa","variavel","cartao","poupanca"] as EntryType[]).map(t => {
+                  const teto = budgets[t] || 0;
+                  const real = realByType(t);
+                  const pct = teto > 0 ? Math.min(100, Math.round((real / teto) * 100)) : 0;
+                  const over = teto > 0 && real > teto;
+                  return (
+                    <div key={t} className="p-3">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-base">{typeIcons[t]}</span>
+                          <span className="text-xs font-body font-semibold">{typeLabels[t]}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[10px] text-muted-foreground font-body">R$</span>
+                          <input
+                            type="number"
+                            placeholder="0,00"
+                            defaultValue={teto || ""}
+                            onBlur={(e) => {
+                              const v = parseFloat(e.target.value) || 0;
+                              if (v !== teto) saveBudget(t, v);
+                            }}
+                            className="w-24 bg-muted rounded-lg px-2 py-1 text-xs font-body outline-none text-right"
+                          />
+                        </div>
+                      </div>
+                      {teto > 0 && (
+                        <>
+                          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                            <div className={cn("h-full transition-all", over ? "bg-red-500" : "bg-gold")} style={{ width: `${pct}%` }} />
+                          </div>
+                          <div className="flex justify-between mt-1">
+                            <span className={cn("text-[10px] font-body", over ? "text-red-400" : "text-muted-foreground")}>
+                              Real: R$ {real.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                            </span>
+                            <span className={cn("text-[10px] font-body", over ? "text-red-400" : "text-muted-foreground")}>
+                              {pct}% do teto
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <p className="text-[10px] text-muted-foreground text-center mt-2">💡 Defina o teto de gasto por categoria. O real é calculado automaticamente.</p>
+          </TabsContent>
+
+          {/* Dívidas */}
+          <TabsContent value="dividas">
+            <div className="grid grid-cols-3 gap-2 mt-3">
+              <div className="bg-card rounded-xl p-3 border border-border">
+                <p className="text-[9px] font-body text-muted-foreground uppercase">Total Dívidas</p>
+                <p className="text-sm font-display font-bold text-red-400">R$ {totalDebt.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
+                <p className="text-[9px] font-body text-muted-foreground">{debts.length} ativa(s)</p>
+              </div>
+              <div className="bg-card rounded-xl p-3 border border-border">
+                <p className="text-[9px] font-body text-muted-foreground uppercase">Total Pago</p>
+                <p className="text-sm font-display font-bold text-green-500">R$ {totalPaid.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
+              </div>
+              <div className="bg-card rounded-xl p-3 border border-border">
+                <p className="text-[9px] font-body text-muted-foreground uppercase">Juros/mês</p>
+                <p className="text-sm font-display font-bold text-orange-400">R$ {monthlyInterest.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
+              </div>
+            </div>
+
+            <div className="mt-3 space-y-2">
+              {debts.length === 0 && (
+                <div className="bg-card rounded-2xl border border-border p-6 text-center">
+                  <AlertCircle className="h-8 w-8 text-muted-foreground mx-auto mb-2 opacity-40" />
+                  <p className="text-sm text-muted-foreground font-body">Nenhuma dívida cadastrada. ✨</p>
+                </div>
+              )}
+              {debts.map(d => {
+                const restante = d.total_amount - d.paid_amount;
+                const pct = d.total_amount > 0 ? Math.round((d.paid_amount / d.total_amount) * 100) : 0;
+                return (
+                  <div key={d.id} className="bg-card rounded-xl border border-border p-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-body font-semibold truncate">{d.name}</p>
+                        <p className="text-[10px] text-muted-foreground font-body">
+                          {d.installments_total ? `${d.installments_paid}/${d.installments_total} parcelas` : "Sem parcelamento"}
+                          {d.due_date && ` • Vence ${new Date(d.due_date).toLocaleDateString("pt-BR")}`}
+                        </p>
+                      </div>
+                      <div className="flex gap-1">
+                        <button onClick={() => editDebt(d)} className="p-1 text-muted-foreground hover:text-gold"><Pencil className="h-3 w-3" /></button>
+                        <button onClick={() => deleteDebt(d.id)} className="p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3 w-3" /></button>
+                      </div>
+                    </div>
+                    <div className="mt-2 grid grid-cols-3 gap-1.5 text-[10px] font-body">
+                      <div><span className="text-muted-foreground">Total: </span><span className="text-foreground font-semibold">R$ {d.total_amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>
+                      <div><span className="text-muted-foreground">Pago: </span><span className="text-green-500 font-semibold">R$ {d.paid_amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>
+                      <div><span className="text-muted-foreground">Resta: </span><span className="text-red-400 font-semibold">R$ {restante.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>
+                    </div>
+                    <div className="mt-1.5 h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div className="h-full bg-green-500 transition-all" style={{ width: `${pct}%` }} />
+                    </div>
+                    {d.monthly_interest > 0 && (
+                      <p className="text-[10px] text-orange-400 font-body mt-1">📈 Juros mensal: R$ {d.monthly_interest.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {showDebtForm ? (
+              <div className="bg-card rounded-2xl p-4 border border-border space-y-2 mt-3 animate-fade-in">
+                <input value={debtForm.name} onChange={e => setDebtForm({...debtForm, name: e.target.value})} placeholder="Nome da dívida (ex: Cartão Nubank)" className="w-full bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" autoFocus />
+                <div className="grid grid-cols-2 gap-2">
+                  <input value={debtForm.total_amount} onChange={e => setDebtForm({...debtForm, total_amount: e.target.value})} type="number" placeholder="Valor total" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.paid_amount} onChange={e => setDebtForm({...debtForm, paid_amount: e.target.value})} type="number" placeholder="Já pago" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.monthly_interest} onChange={e => setDebtForm({...debtForm, monthly_interest: e.target.value})} type="number" placeholder="Juros mensal (R$)" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.due_date} onChange={e => setDebtForm({...debtForm, due_date: e.target.value})} type="date" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.installments_total} onChange={e => setDebtForm({...debtForm, installments_total: e.target.value})} type="number" placeholder="Total parcelas" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.installments_paid} onChange={e => setDebtForm({...debtForm, installments_paid: e.target.value})} type="number" placeholder="Parcelas pagas" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="gold" size="sm" onClick={submitDebt}>{editingDebtId ? "Salvar" : "Adicionar"}</Button>
+                  <Button variant="ghost" size="sm" onClick={() => { setShowDebtForm(false); setEditingDebtId(null); setDebtForm({ name: "", total_amount: "", paid_amount: "", monthly_interest: "", installments_total: "", installments_paid: "", due_date: "" }); }}>Cancelar</Button>
+                </div>
+              </div>
+            ) : (
+              <Button variant="outline" className="w-full border-dashed mt-3 border-red-500/30 text-red-400 hover:bg-red-500/10" onClick={() => setShowDebtForm(true)}>
+                <Plus className="h-4 w-4 mr-2" /> Nova Dívida
+              </Button>
+            )}
+          </TabsContent>
+
           <TabsContent value="quiz">
             <FinanceProfileQuiz />
           </TabsContent>

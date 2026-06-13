@@ -870,12 +870,97 @@ export type Database = {
         }
         Relationships: []
       }
+      finance_budgets: {
+        Row: {
+          category: string
+          ceiling: number
+          created_at: string
+          id: string
+          mode: string
+          month: number
+          updated_at: string
+          user_id: string
+          year: number
+        }
+        Insert: {
+          category: string
+          ceiling?: number
+          created_at?: string
+          id?: string
+          mode?: string
+          month: number
+          updated_at?: string
+          user_id: string
+          year: number
+        }
+        Update: {
+          category?: string
+          ceiling?: number
+          created_at?: string
+          id?: string
+          mode?: string
+          month?: number
+          updated_at?: string
+          user_id?: string
+          year?: number
+        }
+        Relationships: []
+      }
+      finance_debts: {
+        Row: {
+          created_at: string
+          due_date: string | null
+          id: string
+          installments_paid: number
+          installments_total: number | null
+          mode: string
+          monthly_interest: number
+          name: string
+          notes: string | null
+          paid_amount: number
+          total_amount: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          installments_paid?: number
+          installments_total?: number | null
+          mode?: string
+          monthly_interest?: number
+          name: string
+          notes?: string | null
+          paid_amount?: number
+          total_amount?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          installments_paid?: number
+          installments_total?: number | null
+          mode?: string
+          monthly_interest?: number
+          name?: string
+          notes?: string | null
+          paid_amount?: number
+          total_amount?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       finance_entries: {
         Row: {
           amount: number
           created_at: string
           description: string
           id: string
+          mode: string
           month: number
           type: string
           user_id: string
@@ -886,6 +971,7 @@ export type Database = {
           created_at?: string
           description: string
           id?: string
+          mode?: string
           month: number
           type?: string
           user_id: string
@@ -896,6 +982,7 @@ export type Database = {
           created_at?: string
           description?: string
           id?: string
+          mode?: string
           month?: number
           type?: string
           user_id?: string
@@ -907,6 +994,7 @@ export type Database = {
         Row: {
           content: string
           id: string
+          mode: string
           month: number
           updated_at: string
           user_id: string
@@ -915,6 +1003,7 @@ export type Database = {
         Insert: {
           content?: string
           id?: string
+          mode?: string
           month: number
           updated_at?: string
           user_id: string
@@ -923,6 +1012,7 @@ export type Database = {
         Update: {
           content?: string
           id?: string
+          mode?: string
           month?: number
           updated_at?: string
           user_id?: string
