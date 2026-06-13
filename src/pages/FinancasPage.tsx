@@ -365,7 +365,7 @@ const FinancasPage = () => {
     if (isNaN(amount)) return;
     const { data, error } = await supabase
       .from("finance_entries")
-      .insert({ user_id: user.id, description: newDesc, amount, type: newType, month: currentMonth, year: currentYear })
+      .insert({ user_id: user.id, description: newDesc, amount, type: newType, month: currentMonth, year: currentYear, mode })
       .select()
       .single();
     if (error) { toast.error("Erro ao adicionar"); return; }
@@ -410,7 +410,7 @@ const FinancasPage = () => {
     setNotesSaving(true);
     await supabase
       .from("finance_notes")
-      .upsert({ user_id: user.id, month: currentMonth, year: currentYear, content: notes, updated_at: new Date().toISOString() }, { onConflict: "user_id,month,year" });
+      .upsert({ user_id: user.id, month: currentMonth, year: currentYear, mode, content: notes, updated_at: new Date().toISOString() }, { onConflict: "user_id,month,year,mode" });
     setNotesSaving(false);
     toast.success("Notas salvas!");
   };
