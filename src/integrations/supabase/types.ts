@@ -2186,6 +2186,17 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_monthly_top_active: {
+        Args: { _month_start: string }
+        Returns: {
+          actions_count: number
+          active_days: number
+          avatar_url: string
+          display_name: string
+          last_active: string
+          user_id: string
+        }[]
+      }
       get_public_profiles: {
         Args: never
         Returns: {
