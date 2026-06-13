@@ -5,6 +5,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import FinanceProfileQuiz from "@/components/finance/FinanceProfileQuiz";
+import PluggyConnectButton from "@/components/finance/PluggyConnectButton";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -579,6 +580,11 @@ const FinancasPage = () => {
             <Briefcase className="h-3.5 w-3.5" /> CNPJ
           </button>
         </div>
+
+        {/* Open Finance (Pluggy) */}
+        <PluggyConnectButton mode={mode} onSynced={fetchEntries} />
+
+
 
         {/* Month selector + copy */}
         <div className="flex items-center gap-2">
