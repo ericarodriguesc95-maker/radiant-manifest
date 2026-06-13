@@ -1358,33 +1358,6 @@ export default function SaudePage() {
           <Suspense fallback={<div className="h-24 rounded-xl bg-muted/30 animate-pulse" />}>
             <PlanoAlimentarIA profile={profile} />
           </Suspense>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2"><Apple className="h-4 w-4 text-primary" /> Planos de Dieta</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Accordion type="single" collapsible className="w-full">
-                {dietPlans.map((plan, i) => (
-                  <AccordionItem key={i} value={`plan-${i}`}>
-                    <AccordionTrigger className="text-sm font-semibold text-foreground">{plan.name}</AccordionTrigger>
-                    <AccordionContent className="space-y-2">
-                      <p className="text-xs text-muted-foreground">{plan.desc}</p>
-                      <div className="flex gap-2">
-                        {Object.entries(plan.macros).map(([k, v]) => (
-                          <span key={k} className="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-[10px] font-semibold uppercase">{k}: {v}</span>
-                        ))}
-                      </div>
-                      <div className="space-y-1 mt-2">
-                        {Object.entries(plan.meals).map(([meal, desc]) => (
-                          <div key={meal} className="text-xs"><span className="font-semibold text-foreground">{meal}:</span> <span className="text-muted-foreground">{desc}</span></div>
-                        ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </CardContent>
-          </Card>
 
           <Card>
             <CardHeader>
