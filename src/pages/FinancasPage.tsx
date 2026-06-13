@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown, Lightbulb, Bot, Send, Brain } from "lucide-react";
+import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown, Lightbulb, Bot, Send, Brain, Briefcase, User as UserIcon, Copy, Target, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
@@ -241,6 +241,22 @@ const FinancasPage = () => {
   const [editAmount, setEditAmount] = useState("");
   const [editType, setEditType] = useState<EntryType>("renda");
   const [activeTab, setActiveTab] = useState("registros");
+  const [mode, setModeRaw] = useState<"pf" | "cnpj">(() => {
+    try { return (localStorage.getItem("fin-mode") as any) === "cnpj" ? "cnpj" : "pf"; } catch { return "pf"; }
+  });
+  const setMode = (m: "pf" | "cnpj") => {
+    setModeRaw(m);
+    try { localStorage.setItem("fin-mode", m); } catch {}
+  };
+
+  // Budgets (Planejar)
+  const [budgets, setBudgets] = useState<Record<string, number>>({});
+  // Debts
+  interface Debt { id: string; name: string; total_amount: number; paid_amount: number; monthly_interest: number; installments_total: number | null; installments_paid: number; due_date: string | null; notes: string | null; }
+  const [debts, setDebts] = useState<Debt[]>([]);
+  const [showDebtForm, setShowDebtForm] = useState(false);
+  const [debtForm, setDebtForm] = useState({ name: "", total_amount: "", paid_amount: "", monthly_interest: "", installments_total: "", installments_paid: "", due_date: "" });
+  const [editingDebtId, setEditingDebtId] = useState<string | null>(null);
 
   // Deep-link from floating IA Financeira bubble
   useEffect(() => {
@@ -262,11 +278,12 @@ const FinancasPage = () => {
   const fetchEntries = useCallback(async () => {
     if (!user) return;
     setLoading(true);
-    const [{ data }, { data: noteData }, { data: yearData }] = await Promise.all([
+    const [{ data }, { data: noteData }, { data: yearData }, { data: budgetData }, { data: debtData }] = await Promise.all([
       supabase
         .from("finance_entries")
         .select("*")
         .eq("user_id", user.id)
+        .eq("mode", mode)
         .eq("month", currentMonth)
         .eq("year", currentYear)
         .order("created_at", { ascending: true }),
@@ -274,6 +291,7 @@ const FinancasPage = () => {
         .from("finance_notes")
         .select("content")
         .eq("user_id", user.id)
+        .eq("mode", mode)
         .eq("month", currentMonth)
         .eq("year", currentYear)
         .maybeSingle(),
@@ -281,13 +299,37 @@ const FinancasPage = () => {
         .from("finance_entries")
         .select("month, type, amount")
         .eq("user_id", user.id)
+        .eq("mode", mode)
         .eq("year", currentYear),
+      supabase
+        .from("finance_budgets" as any)
+        .select("category, ceiling")
+        .eq("user_id", user.id)
+        .eq("mode", mode)
+        .eq("month", currentMonth)
+        .eq("year", currentYear),
+      supabase
+        .from("finance_debts" as any)
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("mode", mode)
+        .order("created_at", { ascending: false }),
     ]);
     setEntries((data || []).map((e: any) => ({ id: e.id, description: e.description, amount: Number(e.amount), type: e.type })));
     setAllYearEntries((yearData || []).map((e: any) => ({ month: e.month, type: e.type, amount: Number(e.amount) })));
     setNotes(noteData?.content || "");
+    const bmap: Record<string, number> = {};
+    ((budgetData as any[]) || []).forEach((b: any) => { bmap[b.category] = Number(b.ceiling); });
+    setBudgets(bmap);
+    setDebts(((debtData as any[]) || []).map((d: any) => ({
+      id: d.id, name: d.name,
+      total_amount: Number(d.total_amount), paid_amount: Number(d.paid_amount),
+      monthly_interest: Number(d.monthly_interest),
+      installments_total: d.installments_total, installments_paid: d.installments_paid,
+      due_date: d.due_date, notes: d.notes,
+    })));
     setLoading(false);
-  }, [user, currentMonth, currentYear]);
+  }, [user, currentMonth, currentYear, mode]);
 
   useEffect(() => { fetchEntries(); }, [fetchEntries]);
 
