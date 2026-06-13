@@ -1,0 +1,2 @@
+ALTER TABLE public.finance_notes DROP CONSTRAINT IF EXISTS finance_notes_user_id_month_year_key;
+ALTER TABLE public.finance_notes ADD CONSTRAINT finance_notes_user_id_month_year_mode_key UNIQUE (user_id, month, year, mode);
