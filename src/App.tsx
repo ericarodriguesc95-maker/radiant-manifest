@@ -138,6 +138,9 @@ const AppRoutes = () => (
       <Route path="/mente-poderosa" element={<ErrorBoundary><MentePoderosaPage /></ErrorBoundary>} />
       <Route path="/glow-move" element={<ErrorBoundary><PremiumRoute><GlowMovePage /></PremiumRoute></ErrorBoundary>} />
       <Route path="/glow-move/:pillarId" element={<ErrorBoundary><PremiumRoute><GlowMovePillarPage /></PremiumRoute></ErrorBoundary>} />
+      <Route path="/ranking-mensal" element={<ErrorBoundary><RankingMensalPage /></ErrorBoundary>} />
+      <Route path="/apresentacoes" element={<ErrorBoundary><ApresentacoesPage /></ErrorBoundary>} />
+      <Route path="/bem-vindo" element={<ErrorBoundary><BemVindoPage /></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>
