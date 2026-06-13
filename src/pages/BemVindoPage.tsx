@@ -4,11 +4,11 @@ import { Sparkles, MessageCircle, Compass, Crown, Heart, Trophy, BookOpen, Targe
 const steps = [
   {
     n: 1, icon: Sparkles, title: "O que é o Gloow Up Club?",
-    body: "É o seu cantinho de evolução diária: devocional personalizado, hábitos, metas SMART, finanças com IA, reprogramação mental, jornada Destravar Feminino, ciclo menstrual, vision board e muito mais — tudo pensado para mulheres que querem brilhar de verdade. 👑",
+    body: "É o seu cantinho de evolução diária: devocional personalizado, hábitos, metas SMART, finanças com IA, reprogramação mental, jornada Destravar Feminino, ciclo menstrual, vision board e muito mais. Tudo pensado para mulheres que querem brilhar de verdade. 👑",
   },
   {
     n: 2, icon: Heart, title: "Apresente-se para as rainhas",
-    body: "Conte quem você é, o que faz e o que sonha conquistar por aqui. É assim que a gente cria conexões reais dentro do clubinho.",
+    body: "Conte quem você é, o que faz e o que sonha conquistar por aqui. É assim que a gente cria conexões reais dentro do clube.",
     cta: { label: "Fazer minha apresentação", to: "/apresentacoes" },
   },
   {
@@ -39,7 +39,7 @@ const steps = [
   },
   {
     n: 7, icon: Target, title: "Defina suas metas e sonhos",
-    body: "Use Metas SMART, Vision Board e a Jornada Destravar Feminino pra transformar desejo em conquista. O clubinho caminha com você. ✨",
+    body: "Use Metas SMART, Vision Board e a Jornada Destravar Feminino pra transformar desejo em conquista. O clube caminha com você. ✨",
     cta: { label: "Criar minha primeira meta", to: "/metas" },
   },
 ];
@@ -55,13 +55,13 @@ const BemVindoPage = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--gold)/0.25),transparent_60%)]" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 py-20 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-gold/30 text-[10px] uppercase tracking-[0.3em] font-body text-gold">
-            <Crown className="h-3 w-3" /> Bom dia, rainha — bem-vinda ao
+            <Crown className="h-3 w-3" /> Bom dia, rainha. Bem-vinda ao
           </span>
           <h1 className="mt-5 text-5xl md:text-7xl font-display font-bold text-foreground">
             Gloow Up <span className="italic text-gold">Club</span>
           </h1>
           <p className="mt-4 text-base md:text-lg font-body text-muted-foreground max-w-2xl mx-auto">
-            A comunidade premium de mulheres que escolheram brilhar todos os dias — mente, espírito, corpo e prosperidade num só lugar.
+            A comunidade premium de mulheres que escolheram brilhar todos os dias. Mente, espírito, corpo e prosperidade num só lugar.
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
             <button onClick={() => navigate("/comunidade")}
@@ -83,10 +83,10 @@ const BemVindoPage = () => {
             <Compass className="h-3 w-3" /> Tour
           </span>
           <h2 className="mt-3 text-3xl md:text-4xl font-display font-bold text-foreground">
-            Primeiros passos no <span className="italic text-gold">Clubinho</span>
+            Primeiros passos no <span className="italic text-gold">Clube</span>
           </h2>
           <p className="mt-3 text-sm font-body text-muted-foreground">
-            Que alegria ter você aqui! ✨ O Gloow Up Club foi feito para mulheres como você — que querem evoluir com leveza, fé, propósito e estratégia. Siga os passos abaixo e descubra tudo o que preparamos com carinho pra sua jornada.
+            Que alegria ter você aqui! ✨ O Gloow Up Club foi feito para mulheres como você, que querem evoluir com leveza, fé, propósito e estratégia. Siga os passos abaixo e descubra tudo o que preparamos com carinho pra sua jornada.
           </p>
         </div>
 
