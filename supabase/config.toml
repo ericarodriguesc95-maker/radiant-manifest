@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.nutricionista-ai]
 verify_jwt = false
+
+[functions.analyze-food-photo]
+verify_jwt = false
