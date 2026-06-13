@@ -1,39 +1,46 @@
 import { useNavigate } from "react-router-dom";
-import { BookOpen, MessageCircle, Sparkles, Compass, Crown, Heart } from "lucide-react";
+import { Sparkles, MessageCircle, Compass, Crown, Heart, Trophy, BookOpen, Target } from "lucide-react";
 
 const steps = [
   {
-    n: 1, icon: BookOpen, title: "Como funciona a comunidade?",
-    body: "Conteúdos diários, devocional, hábitos, finanças, desafios e muito papo sobre crescimento pessoal e prosperidade — tudo num lugar só.",
+    n: 1, icon: Sparkles, title: "O que é o Gloow Up Club?",
+    body: "É o seu cantinho de evolução diária: devocional personalizado, hábitos, metas SMART, finanças com IA, reprogramação mental, jornada Destravar Feminino, ciclo menstrual, vision board e muito mais — tudo pensado para mulheres que querem brilhar de verdade. 👑",
   },
   {
-    n: 2, icon: Heart, title: "Apresente-se para as outras rainhas!",
-    body: "Conte quem é você, o que faz, o que ama e seus objetivos financeiros.",
-    cta: { label: "Apresente-se aqui!", to: "/apresentacoes" },
+    n: 2, icon: Heart, title: "Apresente-se para as rainhas",
+    body: "Conte quem você é, o que faz e o que sonha conquistar por aqui. É assim que a gente cria conexões reais dentro do clubinho.",
+    cta: { label: "Fazer minha apresentação", to: "/apresentacoes" },
   },
   {
-    n: 3, icon: MessageCircle, title: "Entre no nosso grupo do WhatsApp",
-    body: "👉 Clique aqui para acessar pelo celular",
+    n: 3, icon: MessageCircle, title: "Entre no grupo do WhatsApp",
+    body: "Trocas diárias, avisos quentinhos, lives exclusivas e aquele apoio das meninas no dia a dia. Bora pra dentro?",
     cta: { label: "Entrar no grupo", href: "https://chat.whatsapp.com/KqwvIi2Ht238RoSMVCS7J0" },
   },
   {
     n: 4, icon: BookOpen, title: "Conheça nossas diretrizes",
-    body: "👉 Leia nossas regras antes de começar",
-    cta: { label: "Leia nossas regras", to: "/sugestoes" },
+    body: "Aqui a gente cultiva respeito, sororidade e elegância. Dá uma olhada nas regrinhas pra manter o clubinho leve e seguro pra todas.",
+    cta: { label: "Ver diretrizes", to: "/sugestoes" },
   },
   {
-    n: 5, icon: Sparkles, title: "Comece a explorar a comunidade",
-    body: "Feed, eventos, grupos temáticos e suas finanças — tudo a um clique.",
+    n: 5, icon: Compass, title: "Comece a explorar tudo",
+    body: "Tem muita coisa boa esperando por você. Já dá pra começar pelo feed, pelo seu devocional do dia ou pelo ranking mensal.",
     links: [
-      { label: "Ir para o feed", to: "/comunidade" },
-      { label: "Ver ranking", to: "/ranking-mensal" },
-      { label: "Ver finanças", to: "/financas" },
+      { label: "Ir para o feed da comunidade", to: "/comunidade" },
+      { label: "Devocional de hoje", to: "/devocional" },
+      { label: "Ver ranking mensal", to: "/ranking-mensal" },
+      { label: "Minhas finanças", to: "/financas" },
+      { label: "Vision Board", to: "/vision-board" },
     ],
   },
   {
-    n: 6, icon: Crown, title: "Tour Exclusivo do Gloow Up Club",
-    body: "Descubra tudo o que o clubinho pode fazer por você. Neste tour completo, vamos te mostrar os bastidores, benefícios e oportunidades que só quem faz parte tem acesso. 👑",
-    cta: { label: "Veja o tour", to: "/" },
+    n: 6, icon: Trophy, title: "Participe dos desafios e suba no ranking",
+    body: "A cada post, comentário e curtida você acumula pontos no ranking mensal Top Clubbers. Bora competir bonito e celebrar as vitórias juntas?",
+    cta: { label: "Ver Top Clubbers", to: "/ranking-mensal" },
+  },
+  {
+    n: 7, icon: Target, title: "Defina suas metas e sonhos",
+    body: "Use Metas SMART, Vision Board e a Jornada Destravar Feminino pra transformar desejo em conquista. O clubinho caminha com você. ✨",
+    cta: { label: "Criar minha primeira meta", to: "/metas" },
   },
 ];
 
@@ -48,13 +55,13 @@ const BemVindoPage = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,hsl(var(--gold)/0.25),transparent_60%)]" />
         <div className="relative z-10 max-w-4xl mx-auto px-4 py-20 text-center">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border border-gold/30 text-[10px] uppercase tracking-[0.3em] font-body text-gold">
-            <Crown className="h-3 w-3" /> Bem-vinda ao
+            <Crown className="h-3 w-3" /> Bom dia, rainha — bem-vinda ao
           </span>
           <h1 className="mt-5 text-5xl md:text-7xl font-display font-bold text-foreground">
             Gloow Up <span className="italic text-gold">Club</span>
           </h1>
           <p className="mt-4 text-base md:text-lg font-body text-muted-foreground max-w-2xl mx-auto">
-            A melhor comunidade de finanças, autocuidado e produtividade para mulheres extraordinárias.
+            A comunidade premium de mulheres que escolheram brilhar todos os dias — mente, espírito, corpo e prosperidade num só lugar.
           </p>
           <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
             <button onClick={() => navigate("/comunidade")}
@@ -63,7 +70,7 @@ const BemVindoPage = () => {
             </button>
             <button onClick={() => navigate("/apresentacoes")}
               className="px-6 py-3 rounded-full border border-gold/40 text-foreground font-display font-semibold hover:bg-gold/10 transition-colors">
-              Apresente-se
+              Me apresentar
             </button>
           </div>
         </div>
@@ -76,11 +83,10 @@ const BemVindoPage = () => {
             <Compass className="h-3 w-3" /> Tour
           </span>
           <h2 className="mt-3 text-3xl md:text-4xl font-display font-bold text-foreground">
-            Primeiros passos na <span className="italic text-gold">Comunidade</span>
+            Primeiros passos no <span className="italic text-gold">Clubinho</span>
           </h2>
           <p className="mt-3 text-sm font-body text-muted-foreground">
-            Oie, que incrível ter você aqui! ✨ 💗<br />
-            Esse espaço foi criado para mulheres como nós — que querem aprender, crescer e se organizar financeiramente sem aquela linguagem chata e complicada. Aqui a gente fala de dinheiro, carreira, hábitos e vida real. E você nunca mais vai se sentir sozinha ou perdida nessa jornada.
+            Que alegria ter você aqui! ✨ O Gloow Up Club foi feito para mulheres como você — que querem evoluir com leveza, fé, propósito e estratégia. Siga os passos abaixo e descubra tudo o que preparamos com carinho pra sua jornada.
           </p>
         </div>
 
@@ -108,7 +114,7 @@ const BemVindoPage = () => {
                           </a>
                         ) : (
                           <button onClick={() => navigate((s.cta as any).to)}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-gold/40 text-foreground text-xs font-display font-semibold hover:bg-gold/10">
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold text-background text-xs font-display font-semibold hover:opacity-90">
                             {s.cta.label}
                           </button>
                         )}

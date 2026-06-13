@@ -134,7 +134,7 @@ const ApresentacoesPage = () => {
                   </div>
                   {i.objetivos && (
                     <div className="pt-3 border-t border-gold/10">
-                      <h4 className="font-display font-semibold text-foreground text-sm mb-1">Meus objetivos financeiros:</h4>
+                      <h4 className="font-display font-semibold text-foreground text-sm mb-1">Meus objetivos no clubinho:</h4>
                       <p className="text-sm font-body text-muted-foreground leading-relaxed whitespace-pre-wrap">{i.objetivos}</p>
                     </div>
                   )}
@@ -179,7 +179,7 @@ const IntroModal = ({ onClose, onSaved }: { onClose: () => void; onSaved: () => 
         <div className="flex items-start justify-between mb-4">
           <div>
             <h3 className="text-xl font-display font-bold text-foreground">Faça sua apresentação</h3>
-            <p className="text-xs font-body text-muted-foreground mt-1">Compartilhe um pouco sobre você e seus objetivos financeiros.</p>
+            <p className="text-xs font-body text-muted-foreground mt-1">Compartilhe um pouco sobre você e o que espera viver no clubinho.</p>
           </div>
           <button onClick={onClose} className="p-1 rounded-full hover:bg-muted"><X className="h-5 w-5" /></button>
         </div>
@@ -193,9 +193,9 @@ const IntroModal = ({ onClose, onSaved }: { onClose: () => void; onSaved: () => 
         </label>
 
         <label className="block mt-3">
-          <span className="text-sm font-display font-semibold text-foreground">Meus objetivos financeiros</span>
+          <span className="text-sm font-display font-semibold text-foreground">Meus objetivos no clubinho</span>
           <textarea value={obj} onChange={e => setObj(e.target.value.slice(0, 1000))} rows={4}
-            placeholder="Quais são seus objetivos financeiros? O que você quer alcançar?"
+            placeholder="O que você quer alcançar por aqui? Sonhos, metas pessoais, espirituais, profissionais, hábitos…"
             className="mt-1 w-full rounded-xl bg-background border border-gold/20 p-3 text-sm font-body focus:border-gold focus:outline-none resize-none" />
           <div className="text-[10px] text-right text-muted-foreground">{obj.length}/1000</div>
         </label>
