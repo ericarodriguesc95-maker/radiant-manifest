@@ -5,6 +5,7 @@ import BottomNav from "./BottomNav";
 import DesktopSidebar from "./DesktopSidebar";
 import ViewModeToggle from "./ViewModeToggle";
 import GuidedTour from "./GuidedTour";
+import BackButton from "./BackButton";
 import InstallAppBanner from "./InstallAppBanner";
 import WelcomeBackAlert from "./WelcomeBackAlert";
 import NpsPopup from "./NpsPopup";
@@ -55,6 +56,7 @@ export default function AppLayout() {
       <WelcomeBackAlert />
 
       <div className={cn(isDesktop && "max-w-5xl mx-auto px-6 py-4")}>
+        <BackButton />
         <Outlet />
       </div>
 
