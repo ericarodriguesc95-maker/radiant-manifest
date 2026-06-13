@@ -159,9 +159,71 @@ const HomePage = () => {
 
       <div className="px-5 space-y-7 pb-8">
         {/* ═══════════════════════════════════════════ */}
+        {/* WELCOME BANNER — Primeira ação da rainha */}
+        {/* ═══════════════════════════════════════════ */}
+        <section
+          className="animate-stagger"
+          style={{ "--stagger": 0 } as React.CSSProperties}
+        >
+          <div className="relative overflow-hidden rounded-3xl border border-gold/40 shadow-glow">
+            {/* glow layers */}
+            <div className="absolute inset-0 bg-gradient-to-br from-gold/25 via-amber-900/30 to-background" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,hsl(var(--gold)/0.35),transparent_55%)]" />
+            <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-gold/20 blur-3xl animate-pulse" />
+
+            <div className="relative z-10 p-5 md:p-6">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="h-2 w-2 rounded-full bg-gold animate-pulse" />
+                <span className="text-[10px] font-body tracking-[0.3em] uppercase text-gold font-semibold">
+                  Comece por aqui
+                </span>
+              </div>
+              <h2 className="text-xl md:text-2xl font-display font-bold text-foreground leading-tight">
+                Apresente-se para o <span className="italic text-gold">clube</span> 👑
+              </h2>
+              <p className="mt-1.5 text-xs md:text-sm font-body text-muted-foreground max-w-md">
+                Esse é o seu primeiro passo. Conte quem você é, conecte-se com outras rainhas e ative seu lugar na comunidade.
+              </p>
+
+              <button
+                onClick={() => navigate("/apresentacoes")}
+                className="mt-4 w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gold text-background font-display font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-lg"
+              >
+                <Heart className="h-4 w-4" />
+                Fazer minha apresentação agora
+                <ChevronRight className="h-4 w-4" />
+              </button>
+
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => navigate("/bem-vindo")}
+                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl glass border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all text-left active:scale-[0.98]"
+                >
+                  <Crown className="h-4 w-4 text-gold flex-shrink-0" />
+                  <div className="min-w-0">
+                    <div className="text-[11px] font-display font-bold text-foreground truncate">Boas-vindas</div>
+                    <div className="text-[10px] font-body text-muted-foreground truncate">Primeiros passos</div>
+                  </div>
+                </button>
+                <button
+                  onClick={() => navigate("/ranking-mensal")}
+                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl glass border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all text-left active:scale-[0.98]"
+                >
+                  <Trophy className="h-4 w-4 text-gold flex-shrink-0" />
+                  <div className="min-w-0">
+                    <div className="text-[11px] font-display font-bold text-foreground truncate">Top clubbers</div>
+                    <div className="text-[10px] font-body text-muted-foreground truncate">Ranking mensal</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════ */}
         {/* STREAK — Premium glass card */}
         {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 0 } as React.CSSProperties}>
+        <div className="animate-stagger" style={{ "--stagger": 1 } as React.CSSProperties}>
           <DailyStreak completedHabits={completedHabits} requiredHabits={["meditate", "goals"]} />
         </div>
 
