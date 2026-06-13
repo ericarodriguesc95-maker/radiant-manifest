@@ -11,6 +11,7 @@ const WeeklyDashboard = lazy(() => import("@/components/health/WeeklyDashboard")
 const ProteinWaterCalculator = lazy(() => import("@/components/health/ProteinWaterCalculator"));
 const StepTracker = lazy(() => import("@/components/health/StepTracker"));
 const NutricionistaAI = lazy(() => import("@/components/health/NutricionistaAI"));
+const PlanoAlimentarIA = lazy(() => import("@/components/health/PlanoAlimentarIA"));
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -280,6 +281,7 @@ export default function SaudePage() {
   const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [dietPhoto, setDietPhoto] = useState<File | null>(null);
   const dietFileRef = useRef<HTMLInputElement>(null);
+  const [analyzingPhoto, setAnalyzingPhoto] = useState(false);
   const [foodSearch, setFoodSearch] = useState("");
   const [selectedFoods, setSelectedFoods] = useState<Array<{ food: typeof foodDatabase[0]; qty: number }>>([]);
 
@@ -496,6 +498,63 @@ export default function SaudePage() {
     })) as DietEntry[];
 
     setDietEntries(normalized);
+  }
+
+  async function analyzePhotoWithAI() {
+    if (!dietPhoto) return;
+    setAnalyzingPhoto(true);
+    try {
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          resolve(result.split(",")[1] || "");
+        };
+        reader.onerror = () => reject(new Error("Erro ao ler imagem"));
+        reader.readAsDataURL(dietPhoto);
+      });
+
+      const { data, error } = await supabase.functions.invoke("analyze-food-photo", {
+        body: { image_base64: base64, mime_type: dietPhoto.type || "image/jpeg" },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      const items = Array.isArray(data?.items) ? data.items : [];
+      if (items.length === 0) {
+        toast.error("Nenhum alimento identificado. Tente uma foto mais nítida.");
+        return;
+      }
+
+      const desc = items
+        .map((it: any) => `• ${it.name}${it.portion ? ` (${it.portion})` : ""} — ${Math.round(it.calories || 0)} kcal`)
+        .join("\n");
+
+      const total = data.total || items.reduce(
+        (acc: any, it: any) => ({
+          calories: acc.calories + (Number(it.calories) || 0),
+          protein: acc.protein + (Number(it.protein) || 0),
+          carbs: acc.carbs + (Number(it.carbs) || 0),
+          fat: acc.fat + (Number(it.fat) || 0),
+        }),
+        { calories: 0, protein: 0, carbs: 0, fat: 0 }
+      );
+
+      setDietForm((f) => ({
+        ...f,
+        description: f.description ? `${f.description}\n${desc}` : desc,
+        calories: String(Math.round(total.calories || 0)),
+        protein: String(Math.round((total.protein || 0) * 10) / 10),
+        carbs: String(Math.round((total.carbs || 0) * 10) / 10),
+        fat: String(Math.round((total.fat || 0) * 10) / 10),
+      }));
+
+      toast.success(`✨ ${items.length} alimento(s) identificado(s) — ${Math.round(total.calories || 0)} kcal`);
+    } catch (e: any) {
+      toast.error(e?.message || "Erro ao analisar foto");
+    } finally {
+      setAnalyzingPhoto(false);
+    }
   }
 
   async function saveDietEntry() {
@@ -1296,6 +1355,9 @@ export default function SaudePage() {
 
         {/* ====== DIETA ====== */}
         <TabsContent value="dieta" className="space-y-4">
+          <Suspense fallback={<div className="h-24 rounded-xl bg-muted/30 animate-pulse" />}>
+            <PlanoAlimentarIA profile={profile} />
+          </Suspense>
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2"><Apple className="h-4 w-4 text-primary" /> Planos de Dieta</CardTitle>
@@ -1457,11 +1519,23 @@ export default function SaudePage() {
                     <Input type="number" placeholder="Gord (g)" value={dietForm.fat} onChange={(e) => setDietForm({ ...dietForm, fat: e.target.value })} className="text-xs" />
                   </div>
 
-                  <div>
-                    <input ref={dietFileRef} type="file" accept="image/*" className="hidden" onChange={(e) => setDietPhoto(e.target.files?.[0] || null)} />
+                  <div className="space-y-2">
+                    <input ref={dietFileRef} type="file" accept="image/*" capture="environment" className="hidden" onChange={(e) => setDietPhoto(e.target.files?.[0] || null)} />
                     <Button variant="outline" size="sm" className="w-full text-xs" onClick={() => dietFileRef.current?.click()}>
-                      <Camera className="h-3 w-3 mr-1" /> {dietPhoto ? dietPhoto.name.slice(0, 20) + "…" : "📸 Foto da refeição"}
+                      <Camera className="h-3 w-3 mr-1" /> {dietPhoto ? dietPhoto.name.slice(0, 20) + "…" : "📸 Tirar/Enviar foto da refeição"}
                     </Button>
+                    {dietPhoto && (
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="gold"
+                        className="w-full text-xs"
+                        disabled={analyzingPhoto}
+                        onClick={analyzePhotoWithAI}
+                      >
+                        {analyzingPhoto ? "🔎 Analisando alimentos..." : "🤖 Analisar foto com IA (calorias automáticas)"}
+                      </Button>
+                    )}
                   </div>
                   <div className="flex gap-2">
                     <Button type="button" size="sm" onClick={saveDietEntry} className="flex-1">
