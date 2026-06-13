@@ -375,27 +375,33 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          kind: string
           likes_count: number
           media_type: string | null
           media_url: string | null
+          objetivos: string | null
           text: string
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
+          kind?: string
           likes_count?: number
           media_type?: string | null
           media_url?: string | null
+          objetivos?: string | null
           text: string
           user_id: string
         }
         Update: {
           created_at?: string
           id?: string
+          kind?: string
           likes_count?: number
           media_type?: string | null
           media_url?: string | null
+          objetivos?: string | null
           text?: string
           user_id?: string
         }
@@ -2164,6 +2170,19 @@ export type Database = {
           avatar_url: string
           display_name: string
           streak: number
+          user_id: string
+        }[]
+      }
+      get_monthly_ranking: {
+        Args: { _month_start: string }
+        Returns: {
+          avatar_url: string
+          comments_count: number
+          display_name: string
+          likes_given: number
+          likes_received: number
+          points: number
+          posts_count: number
           user_id: string
         }[]
       }
