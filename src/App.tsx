@@ -48,6 +48,9 @@ import GlowMovePage from "@/pages/GlowMovePage";
 import GlowMovePillarPage from "@/pages/GlowMovePillarPage";
 import AdminSugestoesPage from "@/pages/AdminSugestoesPage";
 import LandingPage from "@/pages/LandingPage";
+import RankingMensalPage from "@/pages/RankingMensalPage";
+import ApresentacoesPage from "@/pages/ApresentacoesPage";
+import BemVindoPage from "@/pages/BemVindoPage";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
