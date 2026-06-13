@@ -399,7 +399,27 @@ const HomePage = () => {
             <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-green-400 border border-green-400/40 rounded-full px-2 py-0.5">Entrar</span>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </a>
+
+          {/* Sub-cards: Apresentações + Ranking + Bem-vinda */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <button onClick={() => navigate("/apresentacoes")} className="glass border border-gold/15 hover:border-gold/30 rounded-2xl p-4 text-left transition-all hover:shadow-glow active:scale-[0.98] group">
+              <Heart className="h-5 w-5 text-gold mb-2" />
+              <p className="text-sm font-display font-bold text-foreground">Apresentações</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Conheça as outras rainhas</p>
+            </button>
+            <button onClick={() => navigate("/ranking-mensal")} className="glass border border-gold/15 hover:border-gold/30 rounded-2xl p-4 text-left transition-all hover:shadow-glow active:scale-[0.98] group">
+              <Trophy className="h-5 w-5 text-gold mb-2" />
+              <p className="text-sm font-display font-bold text-foreground">Top clubbers</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Ranking mensal de pontos</p>
+            </button>
+            <button onClick={() => navigate("/bem-vindo")} className="glass border border-gold/15 hover:border-gold/30 rounded-2xl p-4 text-left transition-all hover:shadow-glow active:scale-[0.98] group">
+              <Crown className="h-5 w-5 text-gold mb-2" />
+              <p className="text-sm font-display font-bold text-foreground">Primeiros passos</p>
+              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Tour da comunidade</p>
+            </button>
+          </div>
         </section>
+
 
 
         {/* ═══════════════════════════════════════════ */}
