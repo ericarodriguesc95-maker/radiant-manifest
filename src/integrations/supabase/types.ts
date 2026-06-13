@@ -906,6 +906,42 @@ export type Database = {
         }
         Relationships: []
       }
+      finance_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          icon: string | null
+          id: string
+          is_default: boolean
+          kind: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_default?: boolean
+          kind: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_default?: boolean
+          kind?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       finance_debts: {
         Row: {
           created_at: string
@@ -957,33 +993,48 @@ export type Database = {
       finance_entries: {
         Row: {
           amount: number
+          category: string | null
           created_at: string
           description: string
           id: string
           mode: string
           month: number
+          occurred_at: string | null
+          pluggy_item_id: string | null
+          pluggy_transaction_id: string | null
+          source: string
           type: string
           user_id: string
           year: number
         }
         Insert: {
           amount?: number
+          category?: string | null
           created_at?: string
           description: string
           id?: string
           mode?: string
           month: number
+          occurred_at?: string | null
+          pluggy_item_id?: string | null
+          pluggy_transaction_id?: string | null
+          source?: string
           type?: string
           user_id: string
           year: number
         }
         Update: {
           amount?: number
+          category?: string | null
           created_at?: string
           description?: string
           id?: string
           mode?: string
           month?: number
+          occurred_at?: string | null
+          pluggy_item_id?: string | null
+          pluggy_transaction_id?: string | null
+          source?: string
           type?: string
           user_id?: string
           year?: number
@@ -1367,6 +1418,42 @@ export type Database = {
           created_at?: string
           id?: string
           score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      pluggy_items: {
+        Row: {
+          connector_image_url: string | null
+          connector_name: string | null
+          created_at: string
+          id: string
+          last_synced_at: string | null
+          pluggy_item_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          connector_image_url?: string | null
+          connector_name?: string | null
+          created_at?: string
+          id?: string
+          last_synced_at?: string | null
+          pluggy_item_id: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          connector_image_url?: string | null
+          connector_name?: string | null
+          created_at?: string
+          id?: string
+          last_synced_at?: string | null
+          pluggy_item_id?: string
+          status?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
