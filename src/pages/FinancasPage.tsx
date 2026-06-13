@@ -861,6 +861,145 @@ const FinancasPage = () => {
           </TabsContent>
 
           {/* Quiz */}
+          {/* Planejar — Orçamento por categoria */}
+          <TabsContent value="planejar">
+            <div className="bg-card rounded-2xl border border-border overflow-hidden mt-3">
+              <div className="p-4 border-b border-border flex items-center gap-2">
+                <Target className="h-4 w-4 text-gold" />
+                <h3 className="text-sm font-display font-semibold">Planejar — Teto x Real</h3>
+              </div>
+              <div className="divide-y divide-border">
+                {(["renda","fixa","variavel","cartao","poupanca"] as EntryType[]).map(t => {
+                  const teto = budgets[t] || 0;
+                  const real = realByType(t);
+                  const pct = teto > 0 ? Math.min(100, Math.round((real / teto) * 100)) : 0;
+                  const over = teto > 0 && real > teto;
+                  return (
+                    <div key={t} className="p-3">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-base">{typeIcons[t]}</span>
+                          <span className="text-xs font-body font-semibold">{typeLabels[t]}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[10px] text-muted-foreground font-body">R$</span>
+                          <input
+                            type="number"
+                            placeholder="0,00"
+                            defaultValue={teto || ""}
+                            onBlur={(e) => {
+                              const v = parseFloat(e.target.value) || 0;
+                              if (v !== teto) saveBudget(t, v);
+                            }}
+                            className="w-24 bg-muted rounded-lg px-2 py-1 text-xs font-body outline-none text-right"
+                          />
+                        </div>
+                      </div>
+                      {teto > 0 && (
+                        <>
+                          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+                            <div className={cn("h-full transition-all", over ? "bg-red-500" : "bg-gold")} style={{ width: `${pct}%` }} />
+                          </div>
+                          <div className="flex justify-between mt-1">
+                            <span className={cn("text-[10px] font-body", over ? "text-red-400" : "text-muted-foreground")}>
+                              Real: R$ {real.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                            </span>
+                            <span className={cn("text-[10px] font-body", over ? "text-red-400" : "text-muted-foreground")}>
+                              {pct}% do teto
+                            </span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <p className="text-[10px] text-muted-foreground text-center mt-2">💡 Defina o teto de gasto por categoria. O real é calculado automaticamente.</p>
+          </TabsContent>
+
+          {/* Dívidas */}
+          <TabsContent value="dividas">
+            <div className="grid grid-cols-3 gap-2 mt-3">
+              <div className="bg-card rounded-xl p-3 border border-border">
+                <p className="text-[9px] font-body text-muted-foreground uppercase">Total Dívidas</p>
+                <p className="text-sm font-display font-bold text-red-400">R$ {totalDebt.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
+                <p className="text-[9px] font-body text-muted-foreground">{debts.length} ativa(s)</p>
+              </div>
+              <div className="bg-card rounded-xl p-3 border border-border">
+                <p className="text-[9px] font-body text-muted-foreground uppercase">Total Pago</p>
+                <p className="text-sm font-display font-bold text-green-500">R$ {totalPaid.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
+              </div>
+              <div className="bg-card rounded-xl p-3 border border-border">
+                <p className="text-[9px] font-body text-muted-foreground uppercase">Juros/mês</p>
+                <p className="text-sm font-display font-bold text-orange-400">R$ {monthlyInterest.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
+              </div>
+            </div>
+
+            <div className="mt-3 space-y-2">
+              {debts.length === 0 && (
+                <div className="bg-card rounded-2xl border border-border p-6 text-center">
+                  <AlertCircle className="h-8 w-8 text-muted-foreground mx-auto mb-2 opacity-40" />
+                  <p className="text-sm text-muted-foreground font-body">Nenhuma dívida cadastrada. ✨</p>
+                </div>
+              )}
+              {debts.map(d => {
+                const restante = d.total_amount - d.paid_amount;
+                const pct = d.total_amount > 0 ? Math.round((d.paid_amount / d.total_amount) * 100) : 0;
+                return (
+                  <div key={d.id} className="bg-card rounded-xl border border-border p-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-body font-semibold truncate">{d.name}</p>
+                        <p className="text-[10px] text-muted-foreground font-body">
+                          {d.installments_total ? `${d.installments_paid}/${d.installments_total} parcelas` : "Sem parcelamento"}
+                          {d.due_date && ` • Vence ${new Date(d.due_date).toLocaleDateString("pt-BR")}`}
+                        </p>
+                      </div>
+                      <div className="flex gap-1">
+                        <button onClick={() => editDebt(d)} className="p-1 text-muted-foreground hover:text-gold"><Pencil className="h-3 w-3" /></button>
+                        <button onClick={() => deleteDebt(d.id)} className="p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3 w-3" /></button>
+                      </div>
+                    </div>
+                    <div className="mt-2 grid grid-cols-3 gap-1.5 text-[10px] font-body">
+                      <div><span className="text-muted-foreground">Total: </span><span className="text-foreground font-semibold">R$ {d.total_amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>
+                      <div><span className="text-muted-foreground">Pago: </span><span className="text-green-500 font-semibold">R$ {d.paid_amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>
+                      <div><span className="text-muted-foreground">Resta: </span><span className="text-red-400 font-semibold">R$ {restante.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>
+                    </div>
+                    <div className="mt-1.5 h-1.5 bg-muted rounded-full overflow-hidden">
+                      <div className="h-full bg-green-500 transition-all" style={{ width: `${pct}%` }} />
+                    </div>
+                    {d.monthly_interest > 0 && (
+                      <p className="text-[10px] text-orange-400 font-body mt-1">📈 Juros mensal: R$ {d.monthly_interest.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {showDebtForm ? (
+              <div className="bg-card rounded-2xl p-4 border border-border space-y-2 mt-3 animate-fade-in">
+                <input value={debtForm.name} onChange={e => setDebtForm({...debtForm, name: e.target.value})} placeholder="Nome da dívida (ex: Cartão Nubank)" className="w-full bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" autoFocus />
+                <div className="grid grid-cols-2 gap-2">
+                  <input value={debtForm.total_amount} onChange={e => setDebtForm({...debtForm, total_amount: e.target.value})} type="number" placeholder="Valor total" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.paid_amount} onChange={e => setDebtForm({...debtForm, paid_amount: e.target.value})} type="number" placeholder="Já pago" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.monthly_interest} onChange={e => setDebtForm({...debtForm, monthly_interest: e.target.value})} type="number" placeholder="Juros mensal (R$)" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.due_date} onChange={e => setDebtForm({...debtForm, due_date: e.target.value})} type="date" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.installments_total} onChange={e => setDebtForm({...debtForm, installments_total: e.target.value})} type="number" placeholder="Total parcelas" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.installments_paid} onChange={e => setDebtForm({...debtForm, installments_paid: e.target.value})} type="number" placeholder="Parcelas pagas" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                </div>
+                <div className="flex gap-2">
+                  <Button variant="gold" size="sm" onClick={submitDebt}>{editingDebtId ? "Salvar" : "Adicionar"}</Button>
+                  <Button variant="ghost" size="sm" onClick={() => { setShowDebtForm(false); setEditingDebtId(null); setDebtForm({ name: "", total_amount: "", paid_amount: "", monthly_interest: "", installments_total: "", installments_paid: "", due_date: "" }); }}>Cancelar</Button>
+                </div>
+              </div>
+            ) : (
+              <Button variant="outline" className="w-full border-dashed mt-3 border-red-500/30 text-red-400 hover:bg-red-500/10" onClick={() => setShowDebtForm(true)}>
+                <Plus className="h-4 w-4 mr-2" /> Nova Dívida
+              </Button>
+            )}
+          </TabsContent>
+
           <TabsContent value="quiz">
             <FinanceProfileQuiz />
           </TabsContent>
