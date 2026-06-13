@@ -281,6 +281,7 @@ export default function SaudePage() {
   const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [dietPhoto, setDietPhoto] = useState<File | null>(null);
   const dietFileRef = useRef<HTMLInputElement>(null);
+  const [analyzingPhoto, setAnalyzingPhoto] = useState(false);
   const [foodSearch, setFoodSearch] = useState("");
   const [selectedFoods, setSelectedFoods] = useState<Array<{ food: typeof foodDatabase[0]; qty: number }>>([]);
 
@@ -497,6 +498,63 @@ export default function SaudePage() {
     })) as DietEntry[];
 
     setDietEntries(normalized);
+  }
+
+  async function analyzePhotoWithAI() {
+    if (!dietPhoto) return;
+    setAnalyzingPhoto(true);
+    try {
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          resolve(result.split(",")[1] || "");
+        };
+        reader.onerror = () => reject(new Error("Erro ao ler imagem"));
+        reader.readAsDataURL(dietPhoto);
+      });
+
+      const { data, error } = await supabase.functions.invoke("analyze-food-photo", {
+        body: { image_base64: base64, mime_type: dietPhoto.type || "image/jpeg" },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      const items = Array.isArray(data?.items) ? data.items : [];
+      if (items.length === 0) {
+        toast.error("Nenhum alimento identificado. Tente uma foto mais nítida.");
+        return;
+      }
+
+      const desc = items
+        .map((it: any) => `• ${it.name}${it.portion ? ` (${it.portion})` : ""} — ${Math.round(it.calories || 0)} kcal`)
+        .join("\n");
+
+      const total = data.total || items.reduce(
+        (acc: any, it: any) => ({
+          calories: acc.calories + (Number(it.calories) || 0),
+          protein: acc.protein + (Number(it.protein) || 0),
+          carbs: acc.carbs + (Number(it.carbs) || 0),
+          fat: acc.fat + (Number(it.fat) || 0),
+        }),
+        { calories: 0, protein: 0, carbs: 0, fat: 0 }
+      );
+
+      setDietForm((f) => ({
+        ...f,
+        description: f.description ? `${f.description}\n${desc}` : desc,
+        calories: String(Math.round(total.calories || 0)),
+        protein: String(Math.round((total.protein || 0) * 10) / 10),
+        carbs: String(Math.round((total.carbs || 0) * 10) / 10),
+        fat: String(Math.round((total.fat || 0) * 10) / 10),
+      }));
+
+      toast.success(`✨ ${items.length} alimento(s) identificado(s) — ${Math.round(total.calories || 0)} kcal`);
+    } catch (e: any) {
+      toast.error(e?.message || "Erro ao analisar foto");
+    } finally {
+      setAnalyzingPhoto(false);
+    }
   }
 
   async function saveDietEntry() {
