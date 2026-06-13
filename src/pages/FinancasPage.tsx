@@ -581,6 +581,11 @@ const FinancasPage = () => {
           </button>
         </div>
 
+        {/* Open Finance (Pluggy) */}
+        <PluggyConnectButton mode={mode} onSynced={fetchEntries} />
+
+
+
         {/* Month selector + copy */}
         <div className="flex items-center gap-2">
           <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 flex-1">
