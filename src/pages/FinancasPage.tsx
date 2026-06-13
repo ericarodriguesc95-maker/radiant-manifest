@@ -415,6 +415,84 @@ const FinancasPage = () => {
     toast.success("Notas salvas!");
   };
 
+  // ─── Copiar lançamentos do mês anterior ──────────────────────────────────
+  const copyFromPreviousMonth = async () => {
+    if (!user) return;
+    const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+    const prevYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+    const { data: prev } = await supabase
+      .from("finance_entries")
+      .select("description, amount, type")
+      .eq("user_id", user.id)
+      .eq("mode", mode)
+      .eq("month", prevMonth)
+      .eq("year", prevYear);
+    if (!prev || prev.length === 0) { toast.info("Nenhum lançamento no mês anterior."); return; }
+    const rows = prev.map((p: any) => ({ user_id: user.id, mode, month: currentMonth, year: currentYear, description: p.description, amount: p.amount, type: p.type }));
+    const { error } = await supabase.from("finance_entries").insert(rows);
+    if (error) { toast.error("Erro ao copiar"); return; }
+    toast.success(`${rows.length} lançamento(s) copiado(s)!`);
+    fetchEntries();
+  };
+
+  // ─── Orçamento por categoria (Planejar) ──────────────────────────────────
+  const saveBudget = async (category: string, value: number) => {
+    if (!user) return;
+    setBudgets(b => ({ ...b, [category]: value }));
+    await supabase.from("finance_budgets" as any).upsert({
+      user_id: user.id, mode, category, ceiling: value, month: currentMonth, year: currentYear,
+    } as any, { onConflict: "user_id,mode,category,month,year" });
+  };
+
+  const realByType = (t: EntryType) => entries.filter(e => e.type === t).reduce((s, e) => s + e.amount, 0);
+
+  // ─── Dívidas CRUD ────────────────────────────────────────────────────────
+  const totalDebt = debts.reduce((s, d) => s + (d.total_amount - d.paid_amount), 0);
+  const totalPaid = debts.reduce((s, d) => s + d.paid_amount, 0);
+  const monthlyInterest = debts.reduce((s, d) => s + d.monthly_interest, 0);
+
+  const submitDebt = async () => {
+    if (!user || !debtForm.name) return;
+    const payload: any = {
+      user_id: user.id, mode,
+      name: debtForm.name,
+      total_amount: parseFloat(debtForm.total_amount) || 0,
+      paid_amount: parseFloat(debtForm.paid_amount) || 0,
+      monthly_interest: parseFloat(debtForm.monthly_interest) || 0,
+      installments_total: debtForm.installments_total ? parseInt(debtForm.installments_total) : null,
+      installments_paid: parseInt(debtForm.installments_paid) || 0,
+      due_date: debtForm.due_date || null,
+    };
+    let error;
+    if (editingDebtId) ({ error } = await supabase.from("finance_debts" as any).update(payload).eq("id", editingDebtId));
+    else ({ error } = await supabase.from("finance_debts" as any).insert(payload));
+    if (error) { toast.error("Erro ao salvar dívida"); return; }
+    toast.success(editingDebtId ? "Dívida atualizada!" : "Dívida adicionada!");
+    setDebtForm({ name: "", total_amount: "", paid_amount: "", monthly_interest: "", installments_total: "", installments_paid: "", due_date: "" });
+    setEditingDebtId(null); setShowDebtForm(false);
+    fetchEntries();
+  };
+
+  const editDebt = (d: Debt) => {
+    setEditingDebtId(d.id);
+    setDebtForm({
+      name: d.name,
+      total_amount: String(d.total_amount), paid_amount: String(d.paid_amount),
+      monthly_interest: String(d.monthly_interest),
+      installments_total: d.installments_total ? String(d.installments_total) : "",
+      installments_paid: String(d.installments_paid),
+      due_date: d.due_date || "",
+    });
+    setShowDebtForm(true);
+  };
+
+  const deleteDebt = async (id: string) => {
+    const { error } = await supabase.from("finance_debts" as any).delete().eq("id", id);
+    if (error) { toast.error("Erro ao excluir"); return; }
+    toast.success("Dívida excluída");
+    fetchEntries();
+  };
+
   const renderEntryList = (types: EntryType[], emptyMsg: string) => {
     const filtered = filterByTypes(types);
     if (loading) return <div className="p-4 text-center text-muted-foreground text-sm font-body">Carregando...</div>;
