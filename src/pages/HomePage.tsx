@@ -122,6 +122,15 @@ const HomePage = () => {
                 <Shield className="h-4 w-4 text-gold" />
               </button>
             )}
+            <button onClick={() => navigate("/bem-vindo")} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all" title="Primeiros passos">
+              <Crown className="h-4 w-4 text-muted-foreground" />
+            </button>
+            <button onClick={() => navigate("/apresentacoes")} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all" title="Apresentações">
+              <Heart className="h-4 w-4 text-muted-foreground" />
+            </button>
+            <button onClick={() => navigate("/ranking-mensal")} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all" title="Top clubbers">
+              <Trophy className="h-4 w-4 text-muted-foreground" />
+            </button>
             <button onClick={() => (window as any).__startGlowTour?.()} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all" title="Tour guiado">
               <MapPin className="h-4 w-4 text-muted-foreground" />
             </button>
@@ -400,24 +409,6 @@ const HomePage = () => {
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
           </a>
 
-          {/* Sub-cards: Apresentações + Ranking + Bem-vinda */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <button onClick={() => navigate("/apresentacoes")} className="glass border border-gold/15 hover:border-gold/30 rounded-2xl p-4 text-left transition-all hover:shadow-glow active:scale-[0.98] group">
-              <Heart className="h-5 w-5 text-gold mb-2" />
-              <p className="text-sm font-display font-bold text-foreground">Apresentações</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Conheça as outras rainhas</p>
-            </button>
-            <button onClick={() => navigate("/ranking-mensal")} className="glass border border-gold/15 hover:border-gold/30 rounded-2xl p-4 text-left transition-all hover:shadow-glow active:scale-[0.98] group">
-              <Trophy className="h-5 w-5 text-gold mb-2" />
-              <p className="text-sm font-display font-bold text-foreground">Top clubbers</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Ranking mensal de pontos</p>
-            </button>
-            <button onClick={() => navigate("/bem-vindo")} className="glass border border-gold/15 hover:border-gold/30 rounded-2xl p-4 text-left transition-all hover:shadow-glow active:scale-[0.98] group">
-              <Crown className="h-5 w-5 text-gold mb-2" />
-              <p className="text-sm font-display font-bold text-foreground">Primeiros passos</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Tour da comunidade</p>
-            </button>
-          </div>
         </section>
 
 

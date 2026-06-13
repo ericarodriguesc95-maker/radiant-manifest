@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Crown, Users, Calendar, Sparkles, Trophy } from "lucide-react";
+import { Crown, Users, Calendar, Sparkles, Flame } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
@@ -7,11 +7,9 @@ interface RankingRow {
   user_id: string;
   display_name: string | null;
   avatar_url: string | null;
-  points: number;
-  posts_count: number;
-  comments_count: number;
-  likes_received: number;
-  likes_given: number;
+  actions_count: number;
+  active_days: number;
+  last_active: string;
 }
 
 const monthLabel = (d: Date) =>
@@ -29,7 +27,7 @@ const RankingMensalPage = () => {
   useEffect(() => {
     const load = async () => {
       const iso = monthStart.toISOString().slice(0, 10);
-      const { data, error } = await (supabase as any).rpc("get_monthly_ranking", {
+      const { data, error } = await (supabase as any).rpc("get_monthly_top_active", {
         _month_start: iso,
       });
       if (!error && data) setRows(data as RankingRow[]);
@@ -54,7 +52,7 @@ const RankingMensalPage = () => {
     return () => clearInterval(id);
   }, []);
 
-  const totalPoints = rows.reduce((s, r) => s + Number(r.points), 0);
+  const totalActions = rows.reduce((s, r) => s + Number(r.actions_count), 0);
   const podium = rows.slice(0, 3);
   const rest = rows.slice(3, 20);
 
@@ -80,6 +78,9 @@ const RankingMensalPage = () => {
                 Top <span className="italic text-gold">clubbers</span><br />
                 de {monthLabel(now)}.
               </h1>
+              <p className="text-sm font-body text-muted-foreground mt-3 max-w-md">
+                As rainhas que mais acessaram o clube neste mês. Aparecer aqui é puro reflexo da sua dedicação. 👑
+              </p>
               <div className="flex flex-wrap items-center gap-4 mt-5 text-xs font-body">
                 <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-gold/20">
                   <Users className="h-3.5 w-3.5 text-gold" />
@@ -93,9 +94,9 @@ const RankingMensalPage = () => {
                   </span>
                 </span>
                 <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass border border-gold/20">
-                  <Sparkles className="h-3.5 w-3.5 text-gold" />
-                  <strong className="text-foreground">{totalPoints.toLocaleString("pt-BR")}</strong>
-                  <span className="text-muted-foreground">pontos distribuídos</span>
+                  <Flame className="h-3.5 w-3.5 text-gold" />
+                  <strong className="text-foreground">{totalActions.toLocaleString("pt-BR")}</strong>
+                  <span className="text-muted-foreground">acessos no clube</span>
                 </span>
               </div>
             </div>
@@ -111,18 +112,15 @@ const RankingMensalPage = () => {
 
         {/* PODIUM */}
         {loading ? (
-          <div className="text-center py-12 text-muted-foreground font-body text-sm">Carregando ranking…</div>
+          <div className="text-center py-12 text-muted-foreground font-body text-sm">Carregando ranking...</div>
         ) : podium.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground font-body text-sm">
-            Ainda não há pontuação registrada neste mês. Crie um post, comente ou curta para começar!
+            Ainda não há acessos registrados neste mês. Abra o app, explore as áreas e volte amanhã!
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-3 md:gap-6 items-end">
-            {/* 2nd */}
             <PodiumCard rank={2} row={podium[1]} initials={initials} heightClass="pt-10" />
-            {/* 1st */}
             <PodiumCard rank={1} row={podium[0]} initials={initials} heightClass="pt-4" highlighted />
-            {/* 3rd */}
             <PodiumCard rank={3} row={podium[2]} initials={initials} heightClass="pt-12" />
           </div>
         )}
@@ -135,18 +133,18 @@ const RankingMensalPage = () => {
                 Outras <span className="italic text-gold">clubbers</span> destaque
               </h2>
               <span className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">
-                Posições 4 — {Math.min(rest.length + 3, 20)}
+                Posições 4 a {Math.min(rest.length + 3, 20)}
               </span>
             </div>
             {rest.length === 0 ? (
               <p className="text-sm font-body text-muted-foreground text-center py-8">Nenhuma posição extra ainda.</p>
             ) : (
               <div className="space-y-1">
-                <div className="grid grid-cols-[40px_1fr_auto] gap-3 px-2 py-2 text-[10px] font-body uppercase tracking-wider text-muted-foreground border-b border-gold/10">
-                  <span>#</span><span>Membra</span><span>Pontos</span>
+                <div className="grid grid-cols-[40px_1fr_auto_auto] gap-3 px-2 py-2 text-[10px] font-body uppercase tracking-wider text-muted-foreground border-b border-gold/10">
+                  <span>#</span><span>Membra</span><span>Dias</span><span>Acessos</span>
                 </div>
                 {rest.map((r, i) => (
-                  <div key={r.user_id} className="grid grid-cols-[40px_1fr_auto] gap-3 items-center px-2 py-3 rounded-xl hover:bg-gold/5 transition-colors">
+                  <div key={r.user_id} className="grid grid-cols-[40px_1fr_auto_auto] gap-3 items-center px-2 py-3 rounded-xl hover:bg-gold/5 transition-colors">
                     <span className="text-2xl font-display text-gold/40 tabular-nums">{String(i + 4).padStart(2, "0")}</span>
                     <div className="flex items-center gap-3 min-w-0">
                       {r.avatar_url ? (
@@ -158,9 +156,13 @@ const RankingMensalPage = () => {
                       )}
                       <span className="font-body text-sm text-foreground truncate">{r.display_name || "Anônima"}</span>
                     </div>
+                    <div className="text-center">
+                      <div className="font-display text-sm text-foreground tabular-nums">{r.active_days}</div>
+                      <div className="text-[9px] uppercase tracking-wider text-muted-foreground">dias</div>
+                    </div>
                     <div className="text-right">
-                      <div className="font-display text-lg text-foreground tabular-nums">{Number(r.points).toLocaleString("pt-BR")}</div>
-                      <div className="text-[9px] uppercase tracking-wider text-muted-foreground">pontos</div>
+                      <div className="font-display text-lg text-foreground tabular-nums">{Number(r.actions_count).toLocaleString("pt-BR")}</div>
+                      <div className="text-[9px] uppercase tracking-wider text-muted-foreground">acessos</div>
                     </div>
                   </div>
                 ))}
@@ -174,17 +176,16 @@ const RankingMensalPage = () => {
                 <Sparkles className="h-4 w-4 text-gold" />
               </div>
               <h3 className="font-display font-bold text-foreground">
-                Como você <span className="italic text-gold">soma</span> pontos
+                Como você <span className="italic text-gold">aparece aqui</span>
               </h3>
             </div>
             <p className="text-xs font-body text-muted-foreground mb-4 leading-relaxed">
-              Cada interação no clubinho conta. Quanto mais você participa, mais alto chega.
+              Cada vez que você abre o app, navega por uma área ou usa uma ferramenta do clube, conta como acesso. Quanto mais presente, mais alto no ranking.
             </p>
-            <div className="grid grid-cols-2 gap-2">
-              <Rule pts="+10" label="Criar post" />
-              <Rule pts="+5" label="Comentar" />
-              <Rule pts="+2" label="Receber curtida" />
-              <Rule pts="+2" label="Dar curtida" />
+            <div className="grid grid-cols-1 gap-2">
+              <Rule pts="1×" label="Cada ação registrada no app" />
+              <Rule pts="↑" label="Dias diferentes valem mais" />
+              <Rule pts="👑" label="Top 3 ganham destaque no pódio" />
             </div>
           </aside>
         </div>
@@ -240,9 +241,10 @@ const PodiumCard = ({
         highlighted ? "bg-gold/10 border-gold/40" : "border-gold/15"
       )}>
         <div className="font-display text-xl md:text-2xl text-foreground tabular-nums">
-          {Number(row.points).toLocaleString("pt-BR")}
+          {Number(row.actions_count).toLocaleString("pt-BR")}
         </div>
-        <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground">pontos</div>
+        <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground">acessos</div>
+        <div className="text-[10px] font-body text-muted-foreground mt-1">{row.active_days} dias ativos</div>
       </div>
     </div>
   );

@@ -63,7 +63,7 @@ const ApresentacoesPage = () => {
         <div className="relative z-10 max-w-5xl mx-auto px-4 py-14 text-center">
           <h1 className="text-3xl md:text-5xl font-display font-bold text-white">Apresentações da comunidade</h1>
           <p className="mt-3 text-sm md:text-base font-body text-white/80 max-w-2xl mx-auto">
-            Conheça outras membras, compartilhe seus objetivos e mostre pro clubinho que você chegou pra ficar!
+            Conheça outras membras, compartilhe seus objetivos e mostre pro clube que você chegou pra ficar!
           </p>
           <button
             onClick={() => setShowModal(true)}
@@ -134,7 +134,7 @@ const ApresentacoesPage = () => {
                   </div>
                   {i.objetivos && (
                     <div className="pt-3 border-t border-gold/10">
-                      <h4 className="font-display font-semibold text-foreground text-sm mb-1">Meus objetivos no clubinho:</h4>
+                      <h4 className="font-display font-semibold text-foreground text-sm mb-1">Meus objetivos no clube:</h4>
                       <p className="text-sm font-body text-muted-foreground leading-relaxed whitespace-pre-wrap">{i.objetivos}</p>
                     </div>
                   )}
@@ -179,7 +179,7 @@ const IntroModal = ({ onClose, onSaved }: { onClose: () => void; onSaved: () => 
         <div className="flex items-start justify-between mb-4">
           <div>
             <h3 className="text-xl font-display font-bold text-foreground">Faça sua apresentação</h3>
-            <p className="text-xs font-body text-muted-foreground mt-1">Compartilhe um pouco sobre você e o que espera viver no clubinho.</p>
+            <p className="text-xs font-body text-muted-foreground mt-1">Compartilhe um pouco sobre você e o que espera viver no clube.</p>
           </div>
           <button onClick={onClose} className="p-1 rounded-full hover:bg-muted"><X className="h-5 w-5" /></button>
         </div>
@@ -193,7 +193,7 @@ const IntroModal = ({ onClose, onSaved }: { onClose: () => void; onSaved: () => 
         </label>
 
         <label className="block mt-3">
-          <span className="text-sm font-display font-semibold text-foreground">Meus objetivos no clubinho</span>
+          <span className="text-sm font-display font-semibold text-foreground">Meus objetivos no clube</span>
           <textarea value={obj} onChange={e => setObj(e.target.value.slice(0, 1000))} rows={4}
             placeholder="O que você quer alcançar por aqui? Sonhos, metas pessoais, espirituais, profissionais, hábitos…"
             className="mt-1 w-full rounded-xl bg-background border border-gold/20 p-3 text-sm font-body focus:border-gold focus:outline-none resize-none" />
