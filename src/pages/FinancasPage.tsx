@@ -243,7 +243,7 @@ const FinancasPage = () => {
   const [editDesc, setEditDesc] = useState("");
   const [editAmount, setEditAmount] = useState("");
   const [editType, setEditType] = useState<EntryType>("renda");
-  const [activeTab, setActiveTab] = useState("registros");
+  const [activeTab, setActiveTab] = useState("geral");
   const [mode, setModeRaw] = useState<"pf" | "cnpj">(() => {
     try { return (localStorage.getItem("fin-mode") as any) === "cnpj" ? "cnpj" : "pf"; } catch { return "pf"; }
   });
