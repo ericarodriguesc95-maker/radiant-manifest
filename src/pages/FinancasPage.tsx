@@ -1280,7 +1280,7 @@ const FinancasPage = () => {
         </div>
 
         {/* Quiz acessível inline (oculto até clicar) */}
-        <details className="glass rounded-2xl border border-gold/15 p-4">
+        <details id="quiz-fin" className="glass rounded-2xl border border-gold/15 p-4">
           <summary className="text-sm font-display font-semibold cursor-pointer flex items-center gap-2"><Brain className="h-4 w-4 text-gold" />Refazer quiz de perfil financeiro</summary>
           <div className="mt-3"><FinanceProfileQuiz /></div>
         </details>
