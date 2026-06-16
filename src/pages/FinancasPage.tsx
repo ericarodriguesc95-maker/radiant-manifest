@@ -348,6 +348,39 @@ const FinancasPage = () => {
 
   useEffect(() => { fetchEntries(); }, [fetchEntries]);
 
+  // Carregar categorias do usuário
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("finance_categories" as any)
+      .select("id, name, kind, icon, color")
+      .eq("user_id", user.id)
+      .then(({ data }) => setUserCategories(((data as any[]) || []).map(c => ({ id: c.id, name: c.name, kind: c.kind, icon: c.icon, color: c.color }))));
+  }, [user]);
+
+  const saveCategory = async () => {
+    if (!user || !categoryForm.name.trim()) return;
+    const { data, error } = await supabase.from("finance_categories" as any).insert({
+      user_id: user.id, name: categoryForm.name.trim(), kind: categoryForm.kind, icon: categoryForm.icon, color: categoryForm.color, is_default: false,
+    }).select().single();
+    if (error) { toast.error("Erro ao salvar categoria"); return; }
+    setUserCategories(prev => [...prev, { id: (data as any).id, name: categoryForm.name, kind: categoryForm.kind, icon: categoryForm.icon, color: categoryForm.color }]);
+    setCategoryForm({ name: "", kind: "despesa", icon: "💼", color: "#D4AF37" });
+    setShowCategoryForm(false);
+    toast.success("Categoria criada!");
+  };
+
+  const deleteCategory = async (id: string) => {
+    const { error } = await supabase.from("finance_categories" as any).delete().eq("id", id);
+    if (error) { toast.error("Erro ao excluir"); return; }
+    setUserCategories(prev => prev.filter(c => c.id !== id));
+    toast.success("Categoria removida");
+  };
+
+  // Money formatter respeitando showValues
+  const money = (v: number) => showValues ? `R$ ${v.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}` : "R$ ••••";
+
+
   const filterByTypes = (types: EntryType[]) => entries.filter(e => types.includes(e.type));
 
   const renda = entries.filter(e => e.type === "renda").reduce((s, e) => s + e.amount, 0);
