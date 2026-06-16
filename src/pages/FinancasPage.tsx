@@ -278,7 +278,8 @@ const FinancasPage = () => {
     if (typeof window === "undefined") return;
     const params = new URLSearchParams(window.location.search);
     if (params.get("openAi") === "1") {
-      setActiveTab("ia");
+      setActiveTab("geral");
+      setTimeout(() => document.getElementById("ia-fin")?.scrollIntoView({ behavior: "smooth" }), 200);
       try { localStorage.setItem("ai-finance-used", "1"); } catch {}
     }
   }, []);
