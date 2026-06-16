@@ -771,15 +771,15 @@ const FinancasPage = () => {
           <TabsContent value="geral" className="space-y-4 mt-4">
             {/* Atalhos secundários */}
             <div className="grid grid-cols-3 gap-2">
-              <button onClick={() => setActiveTab("dicas-hidden") || setActiveTab("geral")} className="glass rounded-xl p-2.5 border border-gold/15 text-center hover:border-gold/40 transition-all">
+              <button onClick={() => document.getElementById("dicas-fin")?.scrollIntoView({ behavior: "smooth" })} className="glass rounded-xl p-2.5 border border-gold/15 text-center hover:border-gold/40 transition-all">
                 <Lightbulb className="h-4 w-4 text-gold mx-auto" />
                 <p className="text-[10px] font-body mt-1">Dicas</p>
               </button>
-              <button onClick={() => navigate("/financas?openAi=1")} className="glass rounded-xl p-2.5 border border-gold/15 text-center hover:border-gold/40 transition-all">
+              <button onClick={() => document.getElementById("ia-fin")?.scrollIntoView({ behavior: "smooth" })} className="glass rounded-xl p-2.5 border border-gold/15 text-center hover:border-gold/40 transition-all">
                 <Bot className="h-4 w-4 text-gold mx-auto" />
                 <p className="text-[10px] font-body mt-1">IA Consultora</p>
               </button>
-              <button onClick={() => setActiveTab("quiz-hidden")} className="glass rounded-xl p-2.5 border border-gold/15 text-center hover:border-gold/40 transition-all">
+              <button onClick={() => document.getElementById("quiz-fin")?.scrollIntoView({ behavior: "smooth" })} className="glass rounded-xl p-2.5 border border-gold/15 text-center hover:border-gold/40 transition-all">
                 <Brain className="h-4 w-4 text-gold mx-auto" />
                 <p className="text-[10px] font-body mt-1">Meu perfil</p>
               </button>
