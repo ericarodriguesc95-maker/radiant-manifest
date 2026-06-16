@@ -1286,7 +1286,7 @@ const FinancasPage = () => {
         </details>
 
         {/* Dicas inline (oculto até clicar) */}
-        <details className="glass rounded-2xl border border-gold/15 p-4">
+        <details id="dicas-fin" className="glass rounded-2xl border border-gold/15 p-4">
           <summary className="text-sm font-display font-semibold cursor-pointer flex items-center gap-2"><Lightbulb className="h-4 w-4 text-gold" />Dicas comportamentais financeiras</summary>
           <div className="space-y-2 mt-3">
             {financeTips.map((tip, i) => (
