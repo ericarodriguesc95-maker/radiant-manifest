@@ -871,7 +871,7 @@ const FinancasPage = () => {
             </div>
 
             {/* IA Chat */}
-            <FinanceAIChat userId={user.id} renda={renda} despFixas={despFixas} despVar={despVar} cartao={cartao} poupanca={poupanca} saldo={saldo} />
+            <div id="ia-fin"><FinanceAIChat userId={user.id} renda={renda} despFixas={despFixas} despVar={despVar} cartao={cartao} poupanca={poupanca} saldo={saldo} /></div>
           </TabsContent>
 
           {/* ───── TRANSAÇÕES ───── */}
