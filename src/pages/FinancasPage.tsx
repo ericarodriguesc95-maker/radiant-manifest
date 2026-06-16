@@ -597,158 +597,303 @@ const FinancasPage = () => {
     );
   }
 
+  // Categorias padrão Open Finance (PT-BR)
+  const openFinanceCategories = [
+    // Receitas
+    { name: "Salário", kind: "receita", icon: "💰", color: "#10b981" },
+    { name: "Freelance", kind: "receita", icon: "💻", color: "#10b981" },
+    { name: "Rendimentos", kind: "receita", icon: "📈", color: "#10b981" },
+    { name: "Renda Extra", kind: "receita", icon: "✨", color: "#10b981" },
+    { name: "Vendas", kind: "receita", icon: "🛍️", color: "#10b981" },
+    { name: "Reembolso", kind: "receita", icon: "↩️", color: "#0ea5e9" },
+    { name: "Transferência Pix (Receita)", kind: "receita", icon: "⚡", color: "#06b6d4" },
+    { name: "Outros (Receita)", kind: "receita", icon: "📦", color: "#84cc16" },
+    // Despesas
+    { name: "Alimentação", kind: "despesa", icon: "🍽️", color: "#ef4444" },
+    { name: "Moradia", kind: "despesa", icon: "🏠", color: "#f97316" },
+    { name: "Transporte", kind: "despesa", icon: "🚗", color: "#3b82f6" },
+    { name: "Saúde", kind: "despesa", icon: "❤️", color: "#ef4444" },
+    { name: "Lazer", kind: "despesa", icon: "🎉", color: "#a855f7" },
+    { name: "Serviços", kind: "despesa", icon: "🔧", color: "#8b5cf6" },
+    { name: "Compras", kind: "despesa", icon: "🛒", color: "#ec4899" },
+    { name: "Supermercado", kind: "despesa", icon: "🛒", color: "#10b981" },
+    { name: "Farmácia", kind: "despesa", icon: "💊", color: "#ef4444" },
+    { name: "Combustível", kind: "despesa", icon: "⛽", color: "#f97316" },
+    { name: "Fundos de Investimento", kind: "despesa", icon: "💹", color: "#0ea5e9" },
+    { name: "Educação", kind: "despesa", icon: "📚", color: "#14b8a6" },
+    { name: "Viagem", kind: "despesa", icon: "✈️", color: "#3b82f6" },
+    { name: "Investimentos", kind: "despesa", icon: "📊", color: "#0ea5e9" },
+    { name: "Tarifas Bancárias", kind: "despesa", icon: "🏦", color: "#64748b" },
+    { name: "Delivery", kind: "despesa", icon: "🛵", color: "#f97316" },
+    { name: "IOF", kind: "despesa", icon: "📄", color: "#64748b" },
+    { name: "Serviços Digitais", kind: "despesa", icon: "🌐", color: "#8b5cf6" },
+    { name: "Energia Elétrica", kind: "despesa", icon: "💡", color: "#eab308" },
+    { name: "Telecomunicações", kind: "despesa", icon: "📡", color: "#3b82f6" },
+    { name: "Seguros", kind: "despesa", icon: "🛡️", color: "#10b981" },
+    { name: "Impostos", kind: "despesa", icon: "🧾", color: "#dc2626" },
+    { name: "Assinaturas", kind: "despesa", icon: "🎬", color: "#a855f7" },
+    { name: "Pets", kind: "despesa", icon: "🐾", color: "#f97316" },
+    { name: "Vestuário", kind: "despesa", icon: "👗", color: "#ec4899" },
+    { name: "Beleza", kind: "despesa", icon: "💄", color: "#f472b6" },
+    { name: "Água", kind: "despesa", icon: "💧", color: "#06b6d4" },
+    { name: "Gás", kind: "despesa", icon: "🔥", color: "#f97316" },
+    { name: "Internet", kind: "despesa", icon: "📶", color: "#3b82f6" },
+    { name: "Telefone", kind: "despesa", icon: "📱", color: "#8b5cf6" },
+    { name: "Pagamento Cartão", kind: "despesa", icon: "💳", color: "#f59e0b" },
+    { name: "Empréstimos", kind: "despesa", icon: "🏛️", color: "#64748b" },
+    { name: "Streaming", kind: "despesa", icon: "▶️", color: "#a855f7" },
+    { name: "Transferências", kind: "despesa", icon: "🔄", color: "#06b6d4" },
+    { name: "Eletrônicos", kind: "despesa", icon: "💻", color: "#3b82f6" },
+    { name: "Livraria", kind: "despesa", icon: "📖", color: "#14b8a6" },
+    { name: "Serviços Básicos", kind: "despesa", icon: "🧰", color: "#eab308" },
+    { name: "Transporte Público", kind: "despesa", icon: "🚌", color: "#f97316" },
+    { name: "Transferência Pix", kind: "despesa", icon: "⚡", color: "#06b6d4" },
+    { name: "Transferência Própria", kind: "despesa", icon: "↔️", color: "#8b5cf6" },
+  ];
+
+  // Cálculos derivados
+  const balanco = renda - despFixas - despVar - cartao;
+  const totalDespesas = despFixas + despVar;
+
+  // Gastos por categoria (a partir das descrições — agrupando pelos tipos)
+  const gastosPorCategoria = useMemo(() => {
+    const map: Record<string, { value: number; color: string; icon: string }> = {
+      "Despesas Fixas": { value: despFixas, color: "#ef4444", icon: "📌" },
+      "Despesas Variáveis": { value: despVar, color: "#f97316", icon: "🛒" },
+      "Cartão de Crédito": { value: cartao, color: "#a855f7", icon: "💳" },
+    };
+    return Object.entries(map).filter(([, v]) => v.value > 0).map(([name, v]) => ({ name, ...v }));
+  }, [despFixas, despVar, cartao]);
+
+  // Dívidas derivadas
+  const overdueDebts = debts.filter(d => d.due_date && new Date(d.due_date) < new Date() && (d.total_amount - d.paid_amount) > 0);
+  const paidDebts = debts.filter(d => d.paid_amount >= d.total_amount && d.total_amount > 0);
+  const activeDebts = debts.filter(d => (d.total_amount - d.paid_amount) > 0 && !(d.due_date && new Date(d.due_date) < new Date()));
+  const filteredDebts =
+    dividasFilter === "ativas" ? activeDebts :
+    dividasFilter === "vencidas" ? overdueDebts :
+    dividasFilter === "pagas" ? paidDebts : debts;
+
+  const planejarRows = useMemo(() => {
+    const rows = (["renda","fixa","variavel","cartao","poupanca"] as EntryType[]).map(t => {
+      const teto = budgets[t] || 0;
+      const real = realByType(t);
+      const pct = teto > 0 ? (real / teto) * 100 : 0;
+      return { type: t, teto, real, pct };
+    });
+    if (planejarSort === "maior") rows.sort((a,b) => b.real - a.real);
+    else if (planejarSort === "pct") rows.sort((a,b) => b.pct - a.pct);
+    else if (planejarSort === "az") rows.sort((a,b) => typeLabels[a.type].localeCompare(typeLabels[b.type]));
+    return rows;
+  }, [budgets, entries, planejarSort]);
+
   return (
-    <div className="min-h-screen">
-      <header className="px-5 pt-12 pb-4">
-        <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Controle</p>
-        <h1 className="text-2xl font-display font-bold">Finanças <span className="text-gold">✦</span></h1>
-        <p className="text-sm text-muted-foreground mt-1">Veja quanto entra, quanto sai e quanto sobra todo mês.</p>
+    <div className="min-h-screen bg-background">
+      {/* HEADER */}
+      <header className="px-5 pt-10 pb-3">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-display font-bold tracking-tight">Minhas Finanças</h1>
+            <button onClick={() => setShowValues(v => !v)} className="text-gold/70 hover:text-gold p-1" aria-label="Mostrar/ocultar valores">
+              {showValues ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+            </button>
+          </div>
+          <select
+            value={`${currentYear}-${currentMonth}`}
+            onChange={(e) => { const [, m] = e.target.value.split("-"); setCurrentMonth(parseInt(m)); }}
+            className="bg-gold/15 text-gold border border-gold/30 rounded-full px-4 py-1.5 text-xs font-body font-semibold outline-none focus:ring-2 focus:ring-gold/40"
+          >
+            {monthNames.map((m, i) => (
+              <option key={i} value={`${currentYear}-${i}`} className="bg-background text-foreground">
+                {m} {currentYear}
+              </option>
+            ))}
+          </select>
+        </div>
+        <p className="text-[11px] text-muted-foreground font-body mt-1">Quanto entra, quanto sai, quanto sobra. Você no comando, rainha. ✨</p>
       </header>
 
       <div className="px-5 space-y-4 pb-28">
-        {/* PF / CNPJ toggle */}
-        <div className="grid grid-cols-2 gap-2 bg-muted/30 rounded-2xl p-1">
-          <button
-            onClick={() => setMode("pf")}
-            className={cn(
-              "flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-body font-semibold transition-all",
-              mode === "pf" ? "bg-gold text-background shadow-sm" : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            <UserIcon className="h-3.5 w-3.5" /> Pessoa Física
-          </button>
-          <button
-            onClick={() => setMode("cnpj")}
-            className={cn(
-              "flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-body font-semibold transition-all",
-              mode === "cnpj" ? "bg-gold text-background shadow-sm" : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            <Briefcase className="h-3.5 w-3.5" /> CNPJ
-          </button>
-        </div>
-
-        {/* Open Finance (Pluggy) */}
-        <PluggyConnectButton mode={mode} onSynced={fetchEntries} />
-
-
-
-        {/* Month selector + copy */}
+        {/* PF / CNPJ + Conectar conta */}
         <div className="flex items-center gap-2">
-          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 flex-1">
-            {monthNames.map((m, i) => (
-              <button
-                key={m}
-                onClick={() => setCurrentMonth(i)}
-                className={cn(
-                  "shrink-0 px-3 py-1.5 rounded-full text-xs font-body font-medium transition-all",
-                  i === currentMonth ? "bg-gold text-primary-foreground" : "bg-muted text-muted-foreground"
-                )}
-              >
-                {m.slice(0, 3)}
-              </button>
-            ))}
+          <div className="flex bg-muted/30 rounded-full p-0.5 text-[10px] font-body">
+            <button onClick={() => setMode("pf")} className={cn("px-3 py-1.5 rounded-full transition-all", mode === "pf" ? "bg-gold text-background font-semibold" : "text-muted-foreground")}>
+              <UserIcon className="h-3 w-3 inline mr-1" />PF
+            </button>
+            <button onClick={() => setMode("cnpj")} className={cn("px-3 py-1.5 rounded-full transition-all", mode === "cnpj" ? "bg-gold text-background font-semibold" : "text-muted-foreground")}>
+              <Briefcase className="h-3 w-3 inline mr-1" />CNPJ
+            </button>
           </div>
-          <Button variant="outline" size="sm" className="shrink-0 text-[10px] gap-1" onClick={copyFromPreviousMonth} title="Copiar lançamentos do mês anterior">
-            <Copy className="h-3 w-3" /> Copiar mês anterior
-          </Button>
+          <div className="flex-1"><PluggyConnectButton mode={mode} onSynced={fetchEntries} /></div>
         </div>
 
-        {/* Summary Cards */}
+        {/* 4 CARDS DE RESUMO */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-card rounded-xl p-4 shadow-card">
-            <p className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">Renda</p>
-            <p className="text-lg font-display font-bold text-green-500">
-              R$ {renda.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-            </p>
+          <div className="glass rounded-2xl p-4 border-t-2 border-t-blue-400/80 relative overflow-hidden">
+            <PiggyBank className="absolute top-3 right-3 h-4 w-4 text-blue-400/40" />
+            <p className="text-[9px] font-body text-muted-foreground uppercase tracking-widest">Balanço Mensal</p>
+            <p className="text-[10px] font-body text-muted-foreground mt-0.5">Resultado do mês</p>
+            <p className={cn("text-base font-display font-bold mt-1", balanco >= 0 ? "text-blue-400" : "text-amber-300")}>{money(balanco)}</p>
           </div>
-          <div className="bg-card rounded-xl p-4 shadow-card">
-            <p className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">
-              {saldo >= 0 ? "Saldo" : "Ajuste de Rota"}
-            </p>
-            <p className={cn("text-lg font-display font-bold", saldo >= 0 ? "text-gold" : "text-amber-300/90")}>
-              R$ {saldo.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-            </p>
-            {saldo < 0 && (
-              <p className="text-[9px] font-body text-muted-foreground mt-1 leading-snug">
-                Respira, rainha. Vamos reverter passo a passo. ✨
-              </p>
-            )}
+          <div className="glass rounded-2xl p-4 border-t-2 border-t-green-400/80 relative overflow-hidden">
+            <TrendingUp className="absolute top-3 right-3 h-4 w-4 text-green-400/40" />
+            <p className="text-[9px] font-body text-muted-foreground uppercase tracking-widest">Receitas</p>
+            <p className="text-[10px] font-body text-muted-foreground mt-0.5">Total de entradas</p>
+            <p className="text-base font-display font-bold text-green-400 mt-1">{money(renda)}</p>
           </div>
-          <div className="bg-card rounded-xl p-4 shadow-card">
-            <p className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">Despesas Fixas</p>
-            <p className="text-lg font-display font-bold text-red-400">
-              R$ {despFixas.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-            </p>
+          <div className="glass rounded-2xl p-4 border-t-2 border-t-red-400/80 relative overflow-hidden">
+            <ArrowUpDown className="absolute top-3 right-3 h-4 w-4 text-red-400/40" />
+            <p className="text-[9px] font-body text-muted-foreground uppercase tracking-widest">Despesas</p>
+            <p className="text-[10px] font-body text-muted-foreground mt-0.5">Total de saídas</p>
+            <p className="text-base font-display font-bold text-red-400 mt-1">{money(totalDespesas)}</p>
           </div>
-          <div className="bg-card rounded-xl p-4 shadow-card">
-            <p className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">Desp. Variáveis</p>
-            <p className="text-lg font-display font-bold text-orange-400">
-              R$ {despVar.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-            </p>
-          </div>
-          <div className="bg-card rounded-xl p-4 shadow-card">
-            <p className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">Cartão Crédito</p>
-            <p className="text-lg font-display font-bold text-purple-400">
-              R$ {cartao.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-            </p>
-          </div>
-          <div className="bg-card rounded-xl p-4 shadow-card">
-            <p className="text-[10px] font-body text-muted-foreground uppercase tracking-wider">Poupança</p>
-            <p className="text-lg font-display font-bold text-blue-400">
-              R$ {poupanca.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-            </p>
+          <div className="glass rounded-2xl p-4 border-t-2 border-t-purple-400/80 relative overflow-hidden">
+            <CreditCard className="absolute top-3 right-3 h-4 w-4 text-purple-400/40" />
+            <p className="text-[9px] font-body text-muted-foreground uppercase tracking-widest">Cartão</p>
+            <p className="text-[10px] font-body text-muted-foreground mt-0.5">Fatura atual</p>
+            <p className="text-base font-display font-bold text-purple-400 mt-1">{money(cartao)}</p>
           </div>
         </div>
 
-        {/* Tabs */}
+        {/* 7 ABAS */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full flex overflow-x-auto no-scrollbar bg-muted/50 h-auto p-1 gap-1 justify-start">
-            <TabsTrigger value="registros" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
-              <ArrowUpDown className="h-3.5 w-3.5 shrink-0" /> Entradas/Saídas
-            </TabsTrigger>
-            <TabsTrigger value="cartao" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-purple-500/20 data-[state=active]:text-purple-400 px-2.5 py-1.5">
-              <CreditCard className="h-3.5 w-3.5 shrink-0" /> Cartão
-            </TabsTrigger>
-            <TabsTrigger value="poupanca" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-blue-500/20 data-[state=active]:text-blue-400 px-2.5 py-1.5">
-              <PiggyBank className="h-3.5 w-3.5 shrink-0" /> Guardar
-            </TabsTrigger>
-            <TabsTrigger value="grafico" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
-              <TrendingUp className="h-3.5 w-3.5 shrink-0" /> Onde gasto
-            </TabsTrigger>
-            <TabsTrigger value="dicas" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
-              <Lightbulb className="h-3.5 w-3.5 shrink-0" /> Dicas
-            </TabsTrigger>
-            <TabsTrigger value="ia" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
-              <Bot className="h-3.5 w-3.5 shrink-0" /> Consultora
-            </TabsTrigger>
-            <TabsTrigger value="planejar" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
-              <Target className="h-3.5 w-3.5 shrink-0" /> Planejar
-            </TabsTrigger>
-            <TabsTrigger value="dividas" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-red-500/20 data-[state=active]:text-red-400 px-2.5 py-1.5">
-              <AlertCircle className="h-3.5 w-3.5 shrink-0" /> Dívidas
-            </TabsTrigger>
-            <TabsTrigger value="quiz" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold/20 data-[state=active]:text-gold px-2.5 py-1.5">
-              <Brain className="h-3.5 w-3.5 shrink-0" /> Meu perfil
-            </TabsTrigger>
+          <TabsList className="w-full flex overflow-x-auto no-scrollbar bg-muted/30 h-auto p-1 gap-1 justify-start rounded-full">
+            <TabsTrigger value="geral" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold data-[state=active]:text-background rounded-full px-3 py-1.5"><LayoutGrid className="h-3 w-3" />Geral</TabsTrigger>
+            <TabsTrigger value="transacoes" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold data-[state=active]:text-background rounded-full px-3 py-1.5"><ArrowUpDown className="h-3 w-3" />Transações</TabsTrigger>
+            <TabsTrigger value="categorias" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold data-[state=active]:text-background rounded-full px-3 py-1.5"><Tag className="h-3 w-3" />Categorias</TabsTrigger>
+            <TabsTrigger value="planejar" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold data-[state=active]:text-background rounded-full px-3 py-1.5"><Target className="h-3 w-3" />Planejar</TabsTrigger>
+            <TabsTrigger value="investir" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold data-[state=active]:text-background rounded-full px-3 py-1.5"><TrendingUp className="h-3 w-3" />Investir</TabsTrigger>
+            <TabsTrigger value="metas" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold data-[state=active]:text-background rounded-full px-3 py-1.5"><Trophy className="h-3 w-3" />Metas</TabsTrigger>
+            <TabsTrigger value="dividas" className="text-[11px] gap-1.5 shrink-0 whitespace-nowrap data-[state=active]:bg-gold data-[state=active]:text-background rounded-full px-3 py-1.5"><AlertCircle className="h-3 w-3" />Dívidas</TabsTrigger>
           </TabsList>
 
-          {/* Registros (Entradas/Saídas) */}
-          <TabsContent value="registros">
-            <div className="bg-card rounded-2xl border border-border overflow-hidden mt-3">
-              <div className="p-4 border-b border-border">
-                <h3 className="text-sm font-display font-semibold">Entradas e Saídas</h3>
-              </div>
-              {renderEntryList(["renda", "fixa", "variavel"], "Nenhum lançamento neste mês.")}
+          {/* ───── GERAL ───── */}
+          <TabsContent value="geral" className="space-y-4 mt-4">
+            {/* Atalhos secundários */}
+            <div className="grid grid-cols-3 gap-2">
+              <button onClick={() => setActiveTab("dicas-hidden") || setActiveTab("geral")} className="glass rounded-xl p-2.5 border border-gold/15 text-center hover:border-gold/40 transition-all">
+                <Lightbulb className="h-4 w-4 text-gold mx-auto" />
+                <p className="text-[10px] font-body mt-1">Dicas</p>
+              </button>
+              <button onClick={() => navigate("/financas?openAi=1")} className="glass rounded-xl p-2.5 border border-gold/15 text-center hover:border-gold/40 transition-all">
+                <Bot className="h-4 w-4 text-gold mx-auto" />
+                <p className="text-[10px] font-body mt-1">IA Consultora</p>
+              </button>
+              <button onClick={() => setActiveTab("quiz-hidden")} className="glass rounded-xl p-2.5 border border-gold/15 text-center hover:border-gold/40 transition-all">
+                <Brain className="h-4 w-4 text-gold mx-auto" />
+                <p className="text-[10px] font-body mt-1">Meu perfil</p>
+              </button>
             </div>
 
-            {showAdd && activeTab === "registros" ? (
-              <div className="bg-card rounded-2xl p-4 border border-border space-y-3 animate-fade-in mt-3">
-                <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Descrição" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" autoFocus />
-                <input value={newAmount} onChange={e => setNewAmount(e.target.value)} placeholder="Valor (R$)" type="number" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" />
-                <div className="flex gap-2 flex-wrap">
+            {/* Gastos por Categoria + Resumo */}
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="glass rounded-2xl p-4 border border-gold/15">
+                <h3 className="text-xs font-display font-semibold flex items-center gap-1.5 mb-3"><PieChart className="h-3.5 w-3.5 text-gold" />Gastos por Categoria</h3>
+                {gastosPorCategoria.length === 0 ? (
+                  <div className="py-8 text-center">
+                    <PieChart className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+                    <p className="text-xs font-body font-semibold">Você ainda não possui despesas neste mês</p>
+                    <p className="text-[10px] font-body text-muted-foreground mt-1">Adicione transações para visualizar seus gastos por categoria</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-center">
+                      <RPieChart width={180} height={140}>
+                        <Pie data={gastosPorCategoria} dataKey="value" cx={90} cy={70} innerRadius={35} outerRadius={60} paddingAngle={2}>
+                          {gastosPorCategoria.map((d, i) => <Cell key={i} fill={d.color} />)}
+                        </Pie>
+                      </RPieChart>
+                    </div>
+                    <div className="space-y-1.5 mt-2">
+                      {gastosPorCategoria.map(c => (
+                        <div key={c.name} className="flex items-center justify-between text-[11px] font-body">
+                          <span className="flex items-center gap-2"><span className="h-2 w-2 rounded-full" style={{ background: c.color }} />{c.icon} {c.name}</span>
+                          <span className="text-foreground font-semibold">{money(c.value)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div className="glass rounded-2xl p-4 border border-gold/15">
+                <h3 className="text-xs font-display font-semibold flex items-center gap-1.5 mb-3"><Sparkles className="h-3.5 w-3.5 text-gold" />Resumo Financeiro</h3>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between py-2 border-b border-border/40">
+                    <span className="text-[11px] font-body text-muted-foreground">Maior categoria de gastos</span>
+                    <div className="text-right">
+                      <p className="text-[11px] font-body font-semibold">{gastosPorCategoria[0]?.name || "Nenhuma"}</p>
+                      <p className="text-[10px] font-body text-muted-foreground">{money(gastosPorCategoria[0]?.value || 0)}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between py-2 border-b border-border/40">
+                    <span className="text-[11px] font-body text-muted-foreground">Receita do mês</span>
+                    <span className="text-[11px] font-body font-semibold text-green-400">{money(renda)}</span>
+                  </div>
+                  <div className="flex items-center justify-between py-2 border-b border-border/40">
+                    <span className="text-[11px] font-body text-muted-foreground">Sobra do mês</span>
+                    <span className={cn("text-[11px] font-body font-semibold", balanco >= 0 ? "text-gold" : "text-red-400")}>{money(balanco)}</span>
+                  </div>
+                  {(renda === 0 && totalDespesas === 0) && (
+                    <div className="bg-gold/10 border border-gold/30 rounded-xl p-2.5 mt-2 flex items-start gap-2">
+                      <Lightbulb className="h-3.5 w-3.5 text-gold shrink-0 mt-0.5" />
+                      <p className="text-[10px] font-body text-gold/90 leading-snug">Conecte sua conta bancária ou registre transações para começar seu controle financeiro.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Método de Pagamento + Cartões */}
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="glass rounded-2xl p-4 border border-gold/15">
+                <h3 className="text-xs font-display font-semibold flex items-center gap-1.5 mb-3"><Wallet className="h-3.5 w-3.5 text-gold" />Gastos por Método de Pagamento</h3>
+                {totalDespesas === 0 && cartao === 0 ? (
+                  <div className="py-6 text-center">
+                    <CreditCard className="h-7 w-7 text-muted-foreground/30 mx-auto mb-1.5" />
+                    <p className="text-[11px] font-body text-muted-foreground">Nenhum gasto registrado</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-[11px] font-body"><span>💳 Cartão de Crédito</span><span className="font-semibold">{money(cartao)}</span></div>
+                    <div className="flex items-center justify-between text-[11px] font-body"><span>💸 Débito / Dinheiro</span><span className="font-semibold">{money(totalDespesas)}</span></div>
+                  </div>
+                )}
+              </div>
+
+              <div className="glass rounded-2xl p-4 border border-gold/15">
+                <h3 className="text-xs font-display font-semibold flex items-center gap-1.5 mb-3"><CreditCard className="h-3.5 w-3.5 text-gold" />Cartões de Crédito</h3>
+                <div className="py-6 text-center">
+                  <p className="text-[11px] font-body text-muted-foreground">Nenhum cartão de crédito conectado.</p>
+                  <p className="text-[10px] font-body text-muted-foreground/70 mt-1">Conecte via Open Finance.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* IA Chat */}
+            <FinanceAIChat userId={user.id} renda={renda} despFixas={despFixas} despVar={despVar} cartao={cartao} poupanca={poupanca} saldo={saldo} />
+          </TabsContent>
+
+          {/* ───── TRANSAÇÕES ───── */}
+          <TabsContent value="transacoes" className="space-y-3 mt-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-display font-semibold">Lançamentos do mês</h3>
+              <Button variant="outline" size="sm" className="text-[10px] gap-1" onClick={copyFromPreviousMonth}>
+                <Copy className="h-3 w-3" />Copiar do mês anterior
+              </Button>
+            </div>
+
+            <div className="glass rounded-2xl border border-gold/15 overflow-hidden">
+              {renderEntryList(["renda", "fixa", "variavel", "cartao", "poupanca"], "Nenhum lançamento neste mês.")}
+            </div>
+
+            {showAdd ? (
+              <div className="glass rounded-2xl p-4 border border-gold/30 space-y-3 animate-fade-in">
+                <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Descrição" className="w-full bg-muted/40 rounded-lg px-3 py-2 text-sm font-body outline-none" autoFocus />
+                <input value={newAmount} onChange={e => setNewAmount(e.target.value)} placeholder="Valor (R$)" type="number" className="w-full bg-muted/40 rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                <div className="flex gap-1.5 flex-wrap">
                   {(["renda", "fixa", "variavel", "cartao", "poupanca"] as EntryType[]).map(t => (
-                    <button key={t} onClick={() => setNewType(t)} className={cn("px-3 py-1 rounded-full text-[10px] font-body font-medium transition-all", newType === t ? "bg-gold/20 text-gold ring-1 ring-gold/30" : "bg-muted text-muted-foreground")}>
+                    <button key={t} onClick={() => setNewType(t)} className={cn("px-2.5 py-1 rounded-full text-[10px] font-body", newType === t ? "bg-gold text-background font-semibold" : "bg-muted/40 text-muted-foreground")}>
                       {typeIcons[t]} {typeLabels[t]}
                     </button>
                   ))}
@@ -758,309 +903,370 @@ const FinancasPage = () => {
                   <Button variant="ghost" size="sm" onClick={() => setShowAdd(false)}>Cancelar</Button>
                 </div>
               </div>
-            ) : activeTab === "registros" && (
-              <Button variant="outline" className="w-full border-dashed mt-3" onClick={() => { setShowAdd(true); setNewType("renda"); }}>
-                <Plus className="h-4 w-4 mr-2" /> Novo Lançamento
+            ) : (
+              <Button className="w-full bg-gold text-background hover:bg-gold/90 font-semibold" onClick={() => setShowAdd(true)}>
+                <Plus className="h-4 w-4 mr-1.5" />Novo Lançamento
               </Button>
             )}
           </TabsContent>
 
-          {/* Cartão de Crédito */}
-          <TabsContent value="cartao">
-            <div className="bg-card rounded-2xl border border-border overflow-hidden mt-3">
-              <div className="p-4 border-b border-border flex items-center gap-2">
-                <CreditCard className="h-4 w-4 text-purple-400" />
-                <h3 className="text-sm font-display font-semibold">Cartão de Crédito</h3>
-              </div>
-              {renderEntryList(["cartao"], "Nenhum gasto no cartão neste mês.")}
+          {/* ───── CATEGORIAS ───── */}
+          <TabsContent value="categorias" className="space-y-3 mt-4">
+            <div>
+              <h3 className="text-base font-display font-bold">Categorias</h3>
+              <p className="text-[11px] font-body text-muted-foreground">Use as categorias do Open Finance ou crie as suas próprias para personalizar receitas e despesas.</p>
             </div>
 
-            <div className="bg-card/50 rounded-xl p-3 mt-3 border border-purple-500/20">
-              <div className="flex justify-between items-center">
-                <span className="text-xs font-body text-muted-foreground">Total da Fatura</span>
-                <span className="text-sm font-display font-bold text-purple-400">
-                  R$ {cartao.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-                </span>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex gap-1 bg-muted/30 rounded-full p-0.5">
+                <button onClick={() => setCategoriasView("minhas")} className={cn("px-3 py-1.5 rounded-full text-[11px] font-body flex items-center gap-1.5", categoriasView === "minhas" ? "bg-gold text-background font-semibold" : "text-muted-foreground")}>
+                  <Sparkles className="h-3 w-3" />Minhas categorias <span className="bg-background/20 px-1.5 rounded-full text-[9px]">{userCategories.length}</span>
+                </button>
+                <button onClick={() => setCategoriasView("open")} className={cn("px-3 py-1.5 rounded-full text-[11px] font-body flex items-center gap-1.5", categoriasView === "open" ? "bg-gold text-background font-semibold" : "text-muted-foreground")}>
+                  <Briefcase className="h-3 w-3" />Open Finance <span className="bg-background/20 px-1.5 rounded-full text-[9px]">{openFinanceCategories.length}</span>
+                </button>
               </div>
+              {categoriasView === "minhas" && (
+                <Button className="bg-gold text-background hover:bg-gold/90 text-[11px] h-8 gap-1" onClick={() => setShowCategoryForm(s => !s)}>
+                  <Plus className="h-3 w-3" />Nova Categoria
+                </Button>
+              )}
             </div>
 
-            {showAdd && activeTab === "cartao" ? (
-              <div className="bg-card rounded-2xl p-4 border border-border space-y-3 animate-fade-in mt-3">
-                <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Descrição da compra" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" autoFocus />
-                <input value={newAmount} onChange={e => setNewAmount(e.target.value)} placeholder="Valor (R$)" type="number" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" />
+            {categoriasView === "open" && (
+              <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 flex items-start gap-2">
+                <AlertCircle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                <p className="text-[10px] font-body text-amber-200/90 leading-snug">
+                  <span className="font-semibold">Categorias automáticas do Open Finance.</span> Estas categorias são geradas automaticamente ao classificar suas transações. <span className="font-semibold">Não podem ser editadas ou excluídas</span> para garantir o reconhecimento automático. Para personalizar, crie as suas próprias na aba <em>Minhas categorias</em>. ✨
+                </p>
+              </div>
+            )}
+
+            {showCategoryForm && categoriasView === "minhas" && (
+              <div className="glass rounded-2xl p-4 border border-gold/30 space-y-2 animate-fade-in">
+                <input value={categoryForm.name} onChange={e => setCategoryForm({...categoryForm, name: e.target.value})} placeholder="Nome da categoria" className="w-full bg-muted/40 rounded-lg px-3 py-2 text-sm font-body outline-none" autoFocus />
+                <div className="grid grid-cols-3 gap-2">
+                  <select value={categoryForm.kind} onChange={e => setCategoryForm({...categoryForm, kind: e.target.value})} className="bg-muted/40 rounded-lg px-2 py-2 text-xs font-body outline-none">
+                    <option value="receita">Receita</option>
+                    <option value="despesa">Despesa</option>
+                  </select>
+                  <input value={categoryForm.icon} onChange={e => setCategoryForm({...categoryForm, icon: e.target.value})} placeholder="Emoji" maxLength={2} className="bg-muted/40 rounded-lg px-2 py-2 text-sm font-body outline-none text-center" />
+                  <input type="color" value={categoryForm.color} onChange={e => setCategoryForm({...categoryForm, color: e.target.value})} className="w-full h-9 bg-muted/40 rounded-lg cursor-pointer" />
+                </div>
                 <div className="flex gap-2">
-                  <Button variant="gold" size="sm" onClick={() => { setNewType("cartao"); addEntry(); }}>Adicionar</Button>
-                  <Button variant="ghost" size="sm" onClick={() => setShowAdd(false)}>Cancelar</Button>
+                  <Button variant="gold" size="sm" onClick={saveCategory}>Salvar</Button>
+                  <Button variant="ghost" size="sm" onClick={() => setShowCategoryForm(false)}>Cancelar</Button>
                 </div>
               </div>
-            ) : activeTab === "cartao" && (
-              <Button variant="outline" className="w-full border-dashed mt-3 border-purple-500/30 text-purple-400 hover:bg-purple-500/10" onClick={() => { setShowAdd(true); setNewType("cartao"); }}>
-                <Plus className="h-4 w-4 mr-2" /> Adicionar Gasto no Cartão
-              </Button>
             )}
-          </TabsContent>
 
-          {/* Poupança */}
-          <TabsContent value="poupanca">
-            <div className="bg-card rounded-2xl border border-border overflow-hidden mt-3">
-              <div className="p-4 border-b border-border flex items-center gap-2">
-                <PiggyBank className="h-4 w-4 text-blue-400" />
-                <h3 className="text-sm font-display font-semibold">Poupança</h3>
-              </div>
-              {renderEntryList(["poupanca"], "Nenhum depósito na poupança neste mês.")}
-            </div>
-
-            <div className="bg-card/50 rounded-xl p-3 mt-3 border border-blue-500/20">
-              <div className="flex justify-between items-center">
-                <span className="text-xs font-body text-muted-foreground">Total Guardado no Mês</span>
-                <span className="text-sm font-display font-bold text-blue-400">
-                  R$ {poupanca.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-                </span>
-              </div>
-            </div>
-
-            {showAdd && activeTab === "poupanca" ? (
-              <div className="bg-card rounded-2xl p-4 border border-border space-y-3 animate-fade-in mt-3">
-                <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Descrição do depósito" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" autoFocus />
-                <input value={newAmount} onChange={e => setNewAmount(e.target.value)} placeholder="Valor (R$)" type="number" className="w-full bg-transparent text-sm font-body outline-none placeholder:text-muted-foreground" />
-                <div className="flex gap-2">
-                  <Button variant="gold" size="sm" onClick={() => { setNewType("poupanca"); addEntry(); }}>Adicionar</Button>
-                  <Button variant="ghost" size="sm" onClick={() => setShowAdd(false)}>Cancelar</Button>
-                </div>
-              </div>
-            ) : activeTab === "poupanca" && (
-              <Button variant="outline" className="w-full border-dashed mt-3 border-blue-500/30 text-blue-400 hover:bg-blue-500/10" onClick={() => { setShowAdd(true); setNewType("poupanca"); }}>
-                <Plus className="h-4 w-4 mr-2" /> Adicionar à Poupança
-              </Button>
-            )}
-          </TabsContent>
-
-          {/* Gráfico */}
-          <TabsContent value="grafico">
-            <div className="bg-card rounded-2xl border border-border p-4 mt-3">
-              <div className="flex items-center gap-2 mb-4">
-                <TrendingUp className="h-4 w-4 text-gold" />
-                <h3 className="text-sm font-display font-semibold">Evolução Mensal — {currentYear}</h3>
-              </div>
-
-              <ChartContainer config={chartConfig} className="h-[250px] w-full">
-                <BarChart data={chartData} margin={{ top: 5, right: 5, left: -10, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="name" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
-                  <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Bar dataKey="renda" fill="hsl(142, 71%, 45%)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="gastos" fill="hsl(0, 72%, 50%)" radius={[4, 4, 0, 0]} />
-                  <Bar dataKey="poupanca" fill="hsl(210, 80%, 55%)" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ChartContainer>
-
-              {/* Legend */}
-              <div className="flex justify-center gap-4 mt-3">
-                <div className="flex items-center gap-1.5">
-                  <div className="h-2.5 w-2.5 rounded-sm bg-green-500" />
-                  <span className="text-[10px] font-body text-muted-foreground">Renda</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="h-2.5 w-2.5 rounded-sm bg-red-500" />
-                  <span className="text-[10px] font-body text-muted-foreground">Gastos</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="h-2.5 w-2.5 rounded-sm bg-blue-500" />
-                  <span className="text-[10px] font-body text-muted-foreground">Poupança</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Monthly comparison mini cards */}
-            <div className="grid grid-cols-3 gap-2 mt-3">
-              {chartData.filter((_, i) => i <= currentMonth).slice(-3).map(d => (
-                <div key={d.name} className="bg-card rounded-xl p-3 border border-border text-center">
-                  <p className="text-[10px] font-body text-muted-foreground uppercase">{d.name}</p>
-                  <p className="text-xs font-display font-bold text-green-500">+{d.renda.toLocaleString("pt-BR", { minimumFractionDigits: 0 })}</p>
-                  <p className="text-xs font-display font-bold text-red-400">-{d.gastos.toLocaleString("pt-BR", { minimumFractionDigits: 0 })}</p>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-          {/* Dicas Financeiras */}
-          <TabsContent value="dicas">
-            <div className="space-y-3 mt-3">
-              <div className="bg-card rounded-2xl border border-border p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <Lightbulb className="h-4 w-4 text-gold" />
-                  <h3 className="text-sm font-display font-semibold">Consultoria Comportamental Financeira ✨</h3>
-                </div>
-                <div className="space-y-3">
-                  {financeTips.map((tip, i) => (
-                    <div key={i} className="bg-muted/30 rounded-xl p-3 border border-border/50">
-                      <div className="flex items-start gap-2">
-                        <span className="text-lg shrink-0">{tip.icon}</span>
-                        <div>
-                          <p className="text-xs font-display font-semibold text-foreground">{tip.title}</p>
-                          <p className="text-[11px] font-body text-muted-foreground mt-1 leading-relaxed">{tip.desc}</p>
-                        </div>
+            {(() => {
+              const list = categoriasView === "minhas" ? userCategories : openFinanceCategories.map((c, i) => ({ id: `of-${i}`, ...c }));
+              const receitas = list.filter(c => c.kind === "receita");
+              const despesas = list.filter(c => c.kind === "despesa");
+              return (
+                <>
+                  <div>
+                    <p className="text-xs font-display font-semibold text-green-400 mb-2">💰 Receitas <span className="text-muted-foreground">({receitas.length})</span></p>
+                    {receitas.length === 0 ? <p className="text-[11px] text-muted-foreground font-body italic">Nenhuma categoria de receita.</p> : (
+                      <div className="flex flex-wrap gap-2">
+                        {receitas.map(c => (
+                          <div key={c.id} className="rounded-full px-3 py-1.5 text-[11px] font-body flex items-center gap-1.5 border" style={{ background: `${c.color}22`, borderColor: `${c.color}55`, color: c.color }}>
+                            <span>{c.icon}</span>{c.name}
+                            {categoriasView === "minhas" && <button onClick={() => deleteCategory(c.id)} className="ml-1 opacity-60 hover:opacity-100"><X className="h-3 w-3" /></button>}
+                          </div>
+                        ))}
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                    )}
+                  </div>
+                  <div>
+                    <p className="text-xs font-display font-semibold text-red-400 mb-2 mt-3">💸 Despesas <span className="text-muted-foreground">({despesas.length})</span></p>
+                    {despesas.length === 0 ? <p className="text-[11px] text-muted-foreground font-body italic">Nenhuma categoria de despesa.</p> : (
+                      <div className="flex flex-wrap gap-2">
+                        {despesas.map(c => (
+                          <div key={c.id} className="rounded-full px-3 py-1.5 text-[11px] font-body flex items-center gap-1.5 border" style={{ background: `${c.color}22`, borderColor: `${c.color}55`, color: c.color }}>
+                            <span>{c.icon}</span>{c.name}
+                            {categoriasView === "minhas" && <button onClick={() => deleteCategory(c.id)} className="ml-1 opacity-60 hover:opacity-100"><X className="h-3 w-3" /></button>}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </>
+              );
+            })()}
+          </TabsContent>
+
+          {/* ───── PLANEJAR ───── */}
+          <TabsContent value="planejar" className="space-y-3 mt-4">
+            <div className="flex justify-end">
+              <Button variant="outline" size="sm" className="text-[10px] gap-1" onClick={copyFromPreviousMonth}>
+                <Copy className="h-3 w-3" />Copiar do mês anterior
+              </Button>
             </div>
-          </TabsContent>
 
-          {/* IA Financeira */}
-          <TabsContent value="ia">
-            <FinanceAIChat userId={user.id} renda={renda} despFixas={despFixas} despVar={despVar} cartao={cartao} poupanca={poupanca} saldo={saldo} />
-          </TabsContent>
+            <div className="glass rounded-2xl p-4 border border-gold/15">
+              <h3 className="text-sm font-display font-semibold flex items-center gap-1.5"><Wallet className="h-4 w-4 text-gold" />Resumo do Orçamento</h3>
+              {Object.values(budgets).every(v => !v) ? (
+                <div className="text-center py-4">
+                  <p className="text-xs font-body text-muted-foreground">Nenhum orçamento definido ainda.</p>
+                  <p className="text-[10px] font-body text-muted-foreground/70 mt-1">Preencha a coluna "Teto de gasto" na tabela abaixo.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 gap-2 mt-3 text-center">
+                  <div><p className="text-[9px] font-body text-muted-foreground uppercase">Teto Total</p><p className="text-sm font-display font-bold text-gold">{money(Object.values(budgets).reduce((s,v) => s + v, 0))}</p></div>
+                  <div><p className="text-[9px] font-body text-muted-foreground uppercase">Realizado</p><p className="text-sm font-display font-bold text-red-400">{money(totalDespesas + cartao)}</p></div>
+                  <div><p className="text-[9px] font-body text-muted-foreground uppercase">Disponível</p><p className="text-sm font-display font-bold text-green-400">{money(Math.max(0, Object.values(budgets).reduce((s,v)=>s+v,0) - (totalDespesas + cartao)))}</p></div>
+                </div>
+              )}
+            </div>
 
-          {/* Quiz */}
-          {/* Planejar — Orçamento por categoria */}
-          <TabsContent value="planejar">
-            <div className="bg-card rounded-2xl border border-border overflow-hidden mt-3">
-              <div className="p-4 border-b border-border flex items-center gap-2">
-                <Target className="h-4 w-4 text-gold" />
-                <h3 className="text-sm font-display font-semibold">Planejar — Teto x Real</h3>
+            <div className="glass rounded-2xl p-4 border border-gold/15">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <h3 className="text-sm font-display font-semibold">Gastos por categoria</h3>
+                  <p className="text-[10px] font-body text-muted-foreground">Preencha apenas a coluna de "Teto de gasto", o resto é automático.</p>
+                </div>
+                <select value={planejarSort} onChange={e => setPlanejarSort(e.target.value as any)} className="bg-muted/40 border border-border rounded-lg px-2 py-1 text-[10px] font-body outline-none">
+                  <option value="padrao">↕ Padrão</option>
+                  <option value="maior">Maior gasto</option>
+                  <option value="pct">% usado</option>
+                  <option value="az">A → Z</option>
+                </select>
               </div>
-              <div className="divide-y divide-border">
-                {(["renda","fixa","variavel","cartao","poupanca"] as EntryType[]).map(t => {
-                  const teto = budgets[t] || 0;
-                  const real = realByType(t);
-                  const pct = teto > 0 ? Math.min(100, Math.round((real / teto) * 100)) : 0;
+
+              <div className="divide-y divide-border/40">
+                {planejarRows.map(({ type: t, teto, real, pct }) => {
                   const over = teto > 0 && real > teto;
                   return (
-                    <div key={t} className="p-3">
-                      <div className="flex items-center justify-between mb-1.5">
+                    <div key={t} className="py-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center gap-2 text-xs font-body font-semibold"><span className="text-base">{typeIcons[t]}</span>{typeLabels[t]}</span>
                         <div className="flex items-center gap-2">
-                          <span className="text-base">{typeIcons[t]}</span>
-                          <span className="text-xs font-body font-semibold">{typeLabels[t]}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <span className="text-[10px] text-muted-foreground font-body">R$</span>
-                          <input
-                            type="number"
-                            placeholder="0,00"
-                            defaultValue={teto || ""}
-                            onBlur={(e) => {
-                              const v = parseFloat(e.target.value) || 0;
-                              if (v !== teto) saveBudget(t, v);
-                            }}
-                            className="w-24 bg-muted rounded-lg px-2 py-1 text-xs font-body outline-none text-right"
-                          />
+                          <div className="flex items-center gap-1">
+                            <span className="text-[10px] text-muted-foreground">R$</span>
+                            <input type="number" placeholder="0,00" defaultValue={teto || ""} onBlur={(e) => { const v = parseFloat(e.target.value) || 0; if (v !== teto) saveBudget(t, v); }} className="w-20 bg-muted/40 rounded-lg px-2 py-1 text-xs font-body outline-none text-right" />
+                          </div>
+                          <span className="text-xs font-body text-muted-foreground w-16 text-right">{money(real)}</span>
+                          <span className={cn("text-[10px] font-body w-10 text-right", over ? "text-red-400" : teto > 0 ? "text-green-400" : "text-muted-foreground")}>{teto > 0 ? `${Math.round(pct)}%` : "—"}</span>
                         </div>
                       </div>
                       {teto > 0 && (
-                        <>
-                          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                            <div className={cn("h-full transition-all", over ? "bg-red-500" : "bg-gold")} style={{ width: `${pct}%` }} />
-                          </div>
-                          <div className="flex justify-between mt-1">
-                            <span className={cn("text-[10px] font-body", over ? "text-red-400" : "text-muted-foreground")}>
-                              Real: R$ {real.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-                            </span>
-                            <span className={cn("text-[10px] font-body", over ? "text-red-400" : "text-muted-foreground")}>
-                              {pct}% do teto
-                            </span>
-                          </div>
-                        </>
+                        <div className="h-1 bg-muted/40 rounded-full overflow-hidden mt-1.5">
+                          <div className={cn("h-full transition-all", over ? "bg-red-500" : "bg-gold")} style={{ width: `${Math.min(100, pct)}%` }} />
+                        </div>
                       )}
                     </div>
                   );
                 })}
               </div>
             </div>
-            <p className="text-[10px] text-muted-foreground text-center mt-2">💡 Defina o teto de gasto por categoria. O real é calculado automaticamente.</p>
           </TabsContent>
 
-          {/* Dívidas */}
-          <TabsContent value="dividas">
-            <div className="grid grid-cols-3 gap-2 mt-3">
-              <div className="bg-card rounded-xl p-3 border border-border">
-                <p className="text-[9px] font-body text-muted-foreground uppercase">Total Dívidas</p>
-                <p className="text-sm font-display font-bold text-red-400">R$ {totalDebt.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
-                <p className="text-[9px] font-body text-muted-foreground">{debts.length} ativa(s)</p>
-              </div>
-              <div className="bg-card rounded-xl p-3 border border-border">
-                <p className="text-[9px] font-body text-muted-foreground uppercase">Total Pago</p>
-                <p className="text-sm font-display font-bold text-green-500">R$ {totalPaid.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
-              </div>
-              <div className="bg-card rounded-xl p-3 border border-border">
-                <p className="text-[9px] font-body text-muted-foreground uppercase">Juros/mês</p>
-                <p className="text-sm font-display font-bold text-orange-400">R$ {monthlyInterest.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
-              </div>
+          {/* ───── INVESTIR ───── */}
+          <TabsContent value="investir" className="space-y-3 mt-4">
+            <div className="glass rounded-2xl p-5 border border-gold/15 text-center">
+              <Coins className="h-8 w-8 text-gold mx-auto mb-2" />
+              <h3 className="text-base font-display font-bold">Total guardado no mês</h3>
+              <p className="text-2xl font-display font-bold text-gold mt-1">{money(poupanca)}</p>
+              <p className="text-[10px] font-body text-muted-foreground mt-1">Construindo sua liberdade, rainha. ✨</p>
             </div>
 
-            <div className="mt-3 space-y-2">
-              {debts.length === 0 && (
-                <div className="bg-card rounded-2xl border border-border p-6 text-center">
-                  <AlertCircle className="h-8 w-8 text-muted-foreground mx-auto mb-2 opacity-40" />
-                  <p className="text-sm text-muted-foreground font-body">Nenhuma dívida cadastrada. ✨</p>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { name: "Renda Fixa", icon: "🏛️", color: "border-blue-400/40 text-blue-400" },
+                { name: "Renda Variável", icon: "📈", color: "border-green-400/40 text-green-400" },
+                { name: "Cripto", icon: "₿", color: "border-amber-400/40 text-amber-400" },
+              ].map(t => (
+                <div key={t.name} className={cn("glass rounded-xl p-3 border text-center", t.color)}>
+                  <p className="text-xl">{t.icon}</p>
+                  <p className="text-[10px] font-body font-semibold mt-1">{t.name}</p>
+                  <p className="text-[9px] font-body text-muted-foreground mt-0.5">Em breve</p>
                 </div>
-              )}
-              {debts.map(d => {
-                const restante = d.total_amount - d.paid_amount;
-                const pct = d.total_amount > 0 ? Math.round((d.paid_amount / d.total_amount) * 100) : 0;
-                return (
-                  <div key={d.id} className="bg-card rounded-xl border border-border p-3">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-body font-semibold truncate">{d.name}</p>
-                        <p className="text-[10px] text-muted-foreground font-body">
-                          {d.installments_total ? `${d.installments_paid}/${d.installments_total} parcelas` : "Sem parcelamento"}
-                          {d.due_date && ` • Vence ${new Date(d.due_date).toLocaleDateString("pt-BR")}`}
-                        </p>
-                      </div>
-                      <div className="flex gap-1">
-                        <button onClick={() => editDebt(d)} className="p-1 text-muted-foreground hover:text-gold"><Pencil className="h-3 w-3" /></button>
-                        <button onClick={() => deleteDebt(d.id)} className="p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3 w-3" /></button>
-                      </div>
-                    </div>
-                    <div className="mt-2 grid grid-cols-3 gap-1.5 text-[10px] font-body">
-                      <div><span className="text-muted-foreground">Total: </span><span className="text-foreground font-semibold">R$ {d.total_amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>
-                      <div><span className="text-muted-foreground">Pago: </span><span className="text-green-500 font-semibold">R$ {d.paid_amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>
-                      <div><span className="text-muted-foreground">Resta: </span><span className="text-red-400 font-semibold">R$ {restante.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</span></div>
-                    </div>
-                    <div className="mt-1.5 h-1.5 bg-muted rounded-full overflow-hidden">
-                      <div className="h-full bg-green-500 transition-all" style={{ width: `${pct}%` }} />
-                    </div>
-                    {d.monthly_interest > 0 && (
-                      <p className="text-[10px] text-orange-400 font-body mt-1">📈 Juros mensal: R$ {d.monthly_interest.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</p>
-                    )}
-                  </div>
-                );
-              })}
+              ))}
             </div>
 
-            {showDebtForm ? (
-              <div className="bg-card rounded-2xl p-4 border border-border space-y-2 mt-3 animate-fade-in">
-                <input value={debtForm.name} onChange={e => setDebtForm({...debtForm, name: e.target.value})} placeholder="Nome da dívida (ex: Cartão Nubank)" className="w-full bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" autoFocus />
+            <div className="glass rounded-2xl border border-gold/15 overflow-hidden">
+              <div className="p-3 border-b border-border/40 flex items-center gap-2">
+                <PiggyBank className="h-4 w-4 text-blue-400" />
+                <h3 className="text-xs font-display font-semibold">Aportes do mês</h3>
+              </div>
+              {renderEntryList(["poupanca"], "Nenhum aporte neste mês.")}
+            </div>
+
+            <Button className="w-full bg-gold text-background hover:bg-gold/90 font-semibold" onClick={() => { setShowAdd(true); setNewType("poupanca"); setActiveTab("transacoes"); }}>
+              <Plus className="h-4 w-4 mr-1.5" />Adicionar aporte
+            </Button>
+          </TabsContent>
+
+          {/* ───── METAS ───── */}
+          <TabsContent value="metas" className="space-y-3 mt-4">
+            <div className="glass rounded-2xl p-5 border border-gold/15 text-center">
+              <Trophy className="h-8 w-8 text-gold mx-auto mb-2" />
+              <h3 className="text-base font-display font-bold">Metas Financeiras</h3>
+              <p className="text-[11px] font-body text-muted-foreground mt-1 max-w-xs mx-auto">Gerencie suas metas SMART com progresso, marcos e manifestação diária no módulo dedicado.</p>
+              <Button className="bg-gold text-background hover:bg-gold/90 mt-3 gap-1" onClick={() => navigate("/metas")}>
+                <Target className="h-3.5 w-3.5" />Abrir Metas
+                <ChevronRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+
+            <div className="glass rounded-2xl p-4 border border-gold/15">
+              <h3 className="text-xs font-display font-semibold mb-2">💡 Sugestões de metas</h3>
+              <div className="space-y-1.5">
+                {["Reserva de emergência (6x despesas)", "Primeira viagem internacional", "R$ 10 mil em investimentos", "Quitar todas as dívidas em 12 meses"].map(s => (
+                  <div key={s} className="bg-muted/20 rounded-lg px-3 py-2 text-[11px] font-body flex items-center justify-between">
+                    {s}
+                    <button onClick={() => navigate("/metas")} className="text-gold text-[10px] hover:underline">Criar</button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* ───── DÍVIDAS ───── */}
+          <TabsContent value="dividas" className="space-y-3 mt-4">
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <h3 className="text-base font-display font-bold">Controle de Dívidas</h3>
+                <p className="text-[10px] font-body text-muted-foreground">Gerencie e acompanhe suas dívidas</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-muted/30 rounded-lg p-0.5">
+                  <button onClick={() => setDividasView("cards")} className={cn("px-2.5 py-1 rounded-md text-[10px] font-body flex items-center gap-1", dividasView === "cards" ? "bg-gold text-background font-semibold" : "text-muted-foreground")}><LayoutGrid className="h-3 w-3" />Cards</button>
+                  <button onClick={() => setDividasView("tabela")} className={cn("px-2.5 py-1 rounded-md text-[10px] font-body flex items-center gap-1", dividasView === "tabela" ? "bg-gold text-background font-semibold" : "text-muted-foreground")}><TableIcon className="h-3 w-3" />Tabela</button>
+                </div>
+                <Button className="bg-gold text-background hover:bg-gold/90 h-8 text-[11px] gap-1" onClick={() => setShowDebtForm(true)}>
+                  <Plus className="h-3 w-3" />Nova Dívida
+                </Button>
+              </div>
+            </div>
+
+            {/* 4 stat cards */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              <div className="glass rounded-xl p-3 border border-gold/15">
+                <p className="text-[10px] font-body text-muted-foreground">Total de Dívidas</p>
+                <p className="text-base font-display font-bold text-red-400 mt-0.5">{money(totalDebt)}</p>
+                <p className="text-[9px] font-body text-muted-foreground">{activeDebts.length} dívida(s) ativa(s)</p>
+              </div>
+              <div className="glass rounded-xl p-3 border border-gold/15">
+                <p className="text-[10px] font-body text-muted-foreground">Total Pago</p>
+                <p className="text-base font-display font-bold text-green-400 mt-0.5">{money(totalPaid)}</p>
+                <p className="text-[9px] font-body text-muted-foreground">Valor já quitado</p>
+              </div>
+              <div className="glass rounded-xl p-3 border border-gold/15">
+                <p className="text-[10px] font-body text-muted-foreground">Juros Mensais</p>
+                <p className="text-base font-display font-bold text-orange-400 mt-0.5">{money(monthlyInterest)}</p>
+                <p className="text-[9px] font-body text-muted-foreground">Custo mensal dos juros</p>
+              </div>
+              <div className="glass rounded-xl p-3 border border-gold/15">
+                <p className="text-[10px] font-body text-muted-foreground">Dívidas Vencidas</p>
+                <p className="text-base font-display font-bold text-red-500 mt-0.5">{overdueDebts.length}</p>
+                <p className="text-[9px] font-body text-muted-foreground">Requerem atenção urgente</p>
+              </div>
+            </div>
+
+            {/* Sub-tabs */}
+            <div className="flex gap-1 bg-muted/20 rounded-full p-0.5 overflow-x-auto no-scrollbar">
+              {[
+                { id: "todas", label: `Todas (${debts.length})` },
+                { id: "ativas", label: `Ativas (${activeDebts.length})` },
+                { id: "vencidas", label: `Vencidas (${overdueDebts.length})` },
+                { id: "pagas", label: `Pagas (${paidDebts.length})` },
+              ].map(f => (
+                <button key={f.id} onClick={() => setDividasFilter(f.id as any)} className={cn("shrink-0 px-3 py-1.5 rounded-full text-[10px] font-body whitespace-nowrap", dividasFilter === f.id ? "bg-gold text-background font-semibold" : "text-muted-foreground")}>{f.label}</button>
+              ))}
+            </div>
+
+            {/* Lista / tabela */}
+            {filteredDebts.length === 0 ? (
+              <div className="glass rounded-2xl border border-gold/15 p-8 text-center">
+                <AlertCircle className="h-10 w-10 text-muted-foreground/30 mx-auto mb-2" />
+                <p className="text-sm font-display font-semibold">Nenhuma dívida encontrada</p>
+                <p className="text-[11px] font-body text-muted-foreground mt-1">Comece adicionando sua primeira dívida.</p>
+                <Button className="bg-gold text-background hover:bg-gold/90 mt-3 gap-1" onClick={() => setShowDebtForm(true)}>
+                  <Plus className="h-3.5 w-3.5" />Adicionar Primeira Dívida
+                </Button>
+              </div>
+            ) : dividasView === "cards" ? (
+              <div className="space-y-2">
+                {filteredDebts.map(d => {
+                  const restante = d.total_amount - d.paid_amount;
+                  const pct = d.total_amount > 0 ? Math.round((d.paid_amount / d.total_amount) * 100) : 0;
+                  return (
+                    <div key={d.id} className="glass rounded-xl border border-gold/15 p-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-body font-semibold truncate">{d.name}</p>
+                          <p className="text-[10px] text-muted-foreground font-body">
+                            {d.installments_total ? `${d.installments_paid}/${d.installments_total} parcelas` : "Sem parcelamento"}
+                            {d.due_date && ` • Vence ${new Date(d.due_date).toLocaleDateString("pt-BR")}`}
+                          </p>
+                        </div>
+                        <div className="flex gap-1">
+                          <button onClick={() => editDebt(d)} className="p-1 text-muted-foreground hover:text-gold"><Pencil className="h-3 w-3" /></button>
+                          <button onClick={() => deleteDebt(d.id)} className="p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3 w-3" /></button>
+                        </div>
+                      </div>
+                      <div className="mt-2 grid grid-cols-3 gap-1.5 text-[10px] font-body">
+                        <div><span className="text-muted-foreground">Total: </span><span className="font-semibold">{money(d.total_amount)}</span></div>
+                        <div><span className="text-muted-foreground">Pago: </span><span className="text-green-400 font-semibold">{money(d.paid_amount)}</span></div>
+                        <div><span className="text-muted-foreground">Resta: </span><span className="text-red-400 font-semibold">{money(restante)}</span></div>
+                      </div>
+                      <div className="mt-1.5 h-1.5 bg-muted/40 rounded-full overflow-hidden"><div className="h-full bg-green-400 transition-all" style={{ width: `${pct}%` }} /></div>
+                      {d.monthly_interest > 0 && <p className="text-[10px] text-orange-400 font-body mt-1">📈 Juros mensal: {money(d.monthly_interest)}</p>}
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="glass rounded-xl border border-gold/15 overflow-x-auto">
+                <table className="w-full text-[11px] font-body">
+                  <thead className="bg-muted/20 text-muted-foreground">
+                    <tr><th className="text-left p-2">Nome</th><th className="text-right p-2">Total</th><th className="text-right p-2">Pago</th><th className="text-right p-2">Resta</th><th className="text-right p-2">Vence</th><th className="p-2"></th></tr>
+                  </thead>
+                  <tbody>
+                    {filteredDebts.map(d => (
+                      <tr key={d.id} className="border-t border-border/40">
+                        <td className="p-2 font-semibold">{d.name}</td>
+                        <td className="p-2 text-right">{money(d.total_amount)}</td>
+                        <td className="p-2 text-right text-green-400">{money(d.paid_amount)}</td>
+                        <td className="p-2 text-right text-red-400">{money(d.total_amount - d.paid_amount)}</td>
+                        <td className="p-2 text-right">{d.due_date ? new Date(d.due_date).toLocaleDateString("pt-BR") : "—"}</td>
+                        <td className="p-2 text-right">
+                          <button onClick={() => editDebt(d)} className="p-1 text-muted-foreground hover:text-gold"><Pencil className="h-3 w-3" /></button>
+                          <button onClick={() => deleteDebt(d.id)} className="p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3 w-3" /></button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            {showDebtForm && (
+              <div className="glass rounded-2xl p-4 border border-gold/30 space-y-2 animate-fade-in">
+                <input value={debtForm.name} onChange={e => setDebtForm({...debtForm, name: e.target.value})} placeholder="Nome da dívida (ex: Cartão Nubank)" className="w-full bg-muted/40 rounded-lg px-3 py-2 text-sm font-body outline-none" autoFocus />
                 <div className="grid grid-cols-2 gap-2">
-                  <input value={debtForm.total_amount} onChange={e => setDebtForm({...debtForm, total_amount: e.target.value})} type="number" placeholder="Valor total" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
-                  <input value={debtForm.paid_amount} onChange={e => setDebtForm({...debtForm, paid_amount: e.target.value})} type="number" placeholder="Já pago" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
-                  <input value={debtForm.monthly_interest} onChange={e => setDebtForm({...debtForm, monthly_interest: e.target.value})} type="number" placeholder="Juros mensal (R$)" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
-                  <input value={debtForm.due_date} onChange={e => setDebtForm({...debtForm, due_date: e.target.value})} type="date" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
-                  <input value={debtForm.installments_total} onChange={e => setDebtForm({...debtForm, installments_total: e.target.value})} type="number" placeholder="Total parcelas" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
-                  <input value={debtForm.installments_paid} onChange={e => setDebtForm({...debtForm, installments_paid: e.target.value})} type="number" placeholder="Parcelas pagas" className="bg-muted rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.total_amount} onChange={e => setDebtForm({...debtForm, total_amount: e.target.value})} type="number" placeholder="Valor total" className="bg-muted/40 rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.paid_amount} onChange={e => setDebtForm({...debtForm, paid_amount: e.target.value})} type="number" placeholder="Já pago" className="bg-muted/40 rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.monthly_interest} onChange={e => setDebtForm({...debtForm, monthly_interest: e.target.value})} type="number" placeholder="Juros mensal (R$)" className="bg-muted/40 rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.due_date} onChange={e => setDebtForm({...debtForm, due_date: e.target.value})} type="date" className="bg-muted/40 rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.installments_total} onChange={e => setDebtForm({...debtForm, installments_total: e.target.value})} type="number" placeholder="Total parcelas" className="bg-muted/40 rounded-lg px-3 py-2 text-sm font-body outline-none" />
+                  <input value={debtForm.installments_paid} onChange={e => setDebtForm({...debtForm, installments_paid: e.target.value})} type="number" placeholder="Parcelas pagas" className="bg-muted/40 rounded-lg px-3 py-2 text-sm font-body outline-none" />
                 </div>
                 <div className="flex gap-2">
                   <Button variant="gold" size="sm" onClick={submitDebt}>{editingDebtId ? "Salvar" : "Adicionar"}</Button>
                   <Button variant="ghost" size="sm" onClick={() => { setShowDebtForm(false); setEditingDebtId(null); setDebtForm({ name: "", total_amount: "", paid_amount: "", monthly_interest: "", installments_total: "", installments_paid: "", due_date: "" }); }}>Cancelar</Button>
                 </div>
               </div>
-            ) : (
-              <Button variant="outline" className="w-full border-dashed mt-3 border-red-500/30 text-red-400 hover:bg-red-500/10" onClick={() => setShowDebtForm(true)}>
-                <Plus className="h-4 w-4 mr-2" /> Nova Dívida
-              </Button>
             )}
-          </TabsContent>
-
-          <TabsContent value="quiz">
-            <FinanceProfileQuiz />
           </TabsContent>
         </Tabs>
 
-        {/* Notes */}
-        <div className="bg-card rounded-2xl border border-border p-4">
-          <h3 className="text-sm font-display font-semibold mb-2">📝 Bloco de Notas</h3>
+        {/* Bloco de notas (mantido) */}
+        <div className="glass rounded-2xl border border-gold/15 p-4">
+          <h3 className="text-sm font-display font-semibold mb-2">📝 Bloco de Notas Financeiras</h3>
           <textarea
             value={notes}
             onChange={e => setNotes(e.target.value)}
@@ -1072,9 +1278,34 @@ const FinancasPage = () => {
             {notesSaving ? "Salvando..." : "Salvar Notas"}
           </Button>
         </div>
+
+        {/* Quiz acessível inline (oculto até clicar) */}
+        <details className="glass rounded-2xl border border-gold/15 p-4">
+          <summary className="text-sm font-display font-semibold cursor-pointer flex items-center gap-2"><Brain className="h-4 w-4 text-gold" />Refazer quiz de perfil financeiro</summary>
+          <div className="mt-3"><FinanceProfileQuiz /></div>
+        </details>
+
+        {/* Dicas inline (oculto até clicar) */}
+        <details className="glass rounded-2xl border border-gold/15 p-4">
+          <summary className="text-sm font-display font-semibold cursor-pointer flex items-center gap-2"><Lightbulb className="h-4 w-4 text-gold" />Dicas comportamentais financeiras</summary>
+          <div className="space-y-2 mt-3">
+            {financeTips.map((tip, i) => (
+              <div key={i} className="bg-muted/20 rounded-xl p-3 border border-border/30">
+                <div className="flex items-start gap-2">
+                  <span className="text-lg shrink-0">{tip.icon}</span>
+                  <div>
+                    <p className="text-xs font-display font-semibold">{tip.title}</p>
+                    <p className="text-[11px] font-body text-muted-foreground mt-1 leading-relaxed">{tip.desc}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </details>
       </div>
     </div>
   );
 };
 
 export default FinancasPage;
+
