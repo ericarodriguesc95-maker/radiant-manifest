@@ -260,6 +260,18 @@ const FinancasPage = () => {
   const [showDebtForm, setShowDebtForm] = useState(false);
   const [debtForm, setDebtForm] = useState({ name: "", total_amount: "", paid_amount: "", monthly_interest: "", installments_total: "", installments_paid: "", due_date: "" });
   const [editingDebtId, setEditingDebtId] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  // ─── Novos estados da reformulação ─────────────────────────────────────
+  const [showValues, setShowValues] = useState(true);
+  const [dividasView, setDividasView] = useState<"cards" | "tabela">("cards");
+  const [dividasFilter, setDividasFilter] = useState<"todas" | "ativas" | "vencidas" | "pagas">("todas");
+  const [categoriasView, setCategoriasView] = useState<"minhas" | "open">("minhas");
+  const [planejarSort, setPlanejarSort] = useState<"padrao" | "maior" | "pct" | "az">("padrao");
+  const [userCategories, setUserCategories] = useState<Array<{ id: string; name: string; kind: string; icon: string; color: string }>>([]);
+  const [showCategoryForm, setShowCategoryForm] = useState(false);
+  const [categoryForm, setCategoryForm] = useState({ name: "", kind: "despesa", icon: "💼", color: "#D4AF37" });
+
 
   // Deep-link from floating IA Financeira bubble
   useEffect(() => {
