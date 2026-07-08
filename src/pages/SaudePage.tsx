@@ -245,6 +245,7 @@ export default function SaudePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("perfil");
+  useScrollTopOnChange(activeTab);
 
   // Profile
   const [profile, setProfile] = useState<HealthProfile>({ goal: "emagrecer", current_weight: null, target_weight: null, height_cm: null, age: null, sex: "feminino", activity_level: "moderado" });
