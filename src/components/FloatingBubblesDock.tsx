@@ -381,7 +381,7 @@ export default function FloatingBubblesDock() {
                   "h-12 w-12 md:h-14 md:w-14 rounded-full bg-background/90 backdrop-blur",
                   "flex items-center justify-center touch-none select-none cursor-grab active:cursor-grabbing",
                   "ring-2 ring-gold/60 shadow-[0_0_20px_rgba(212,175,55,0.55)]",
-                  "hover:scale-105 active:scale-95 transition-transform",
+                  "hover:scale-110 active:scale-90 transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]",
                   unread > 0 && "animate-pulse",
                   shouldShake && "animate-msn-shake"
                 )}
