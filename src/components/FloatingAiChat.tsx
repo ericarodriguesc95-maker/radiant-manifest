@@ -128,11 +128,11 @@ export default function FloatingAiChat({ persona, onClose }: Props) {
       <div
         ref={panelRef}
         style={defaultStyle}
-        className="fixed z-[55] animate-in fade-in slide-in-from-bottom-4 duration-300"
+        className="fixed z-[55] will-change-transform transform-gpu animate-in fade-in-0 zoom-in-90 slide-in-from-bottom-3 duration-250 ease-[cubic-bezier(0.22,1,0.36,1)]"
       >
         <button
           onClick={() => setMinimized(false)}
-          className="flex items-center gap-2 rounded-full pl-2 pr-3 py-1.5 bg-background/95 backdrop-blur border border-gold/50 shadow-[0_8px_24px_-8px_rgba(212,175,55,0.6)] hover:scale-105 transition"
+          className="flex items-center gap-2 rounded-full pl-2 pr-3 py-1.5 bg-background/95 backdrop-blur border border-gold/50 shadow-[0_8px_24px_-8px_rgba(212,175,55,0.6)] hover:scale-105 active:scale-95 transition-transform duration-200 ease-out"
         >
           <span className="h-7 w-7 rounded-full bg-gradient-to-br from-gold to-gold/60 flex items-center justify-center text-sm">
             {persona.emoji}
