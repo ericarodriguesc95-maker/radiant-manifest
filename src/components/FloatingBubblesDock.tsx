@@ -355,7 +355,7 @@ export default function FloatingBubblesDock() {
             key={b.id}
             style={inlineStyle}
             className={cn(
-              "fixed z-40",
+              "fixed z-40 will-change-transform transform-gpu",
               !customPos && "md:right-6",
               !customPos && `md:!bottom-[${stackOffsetDesktop}px]`
             )}
