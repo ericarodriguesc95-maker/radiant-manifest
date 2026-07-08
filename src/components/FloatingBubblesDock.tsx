@@ -374,7 +374,7 @@ export default function FloatingBubblesDock() {
               {b.id === "ia-hub" && aiMenuOpen && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setAiMenuOpen(false)} />
-                  <div className="absolute right-0 bottom-16 md:bottom-20 w-64 rounded-2xl glass-strong border border-gold/40 p-2 shadow-2xl space-y-1 animate-fade-in z-50">
+                  <div className="absolute right-0 bottom-16 md:bottom-20 w-64 rounded-2xl glass-strong border border-gold/40 p-2 shadow-2xl space-y-1 z-50 animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-2 duration-200 ease-out origin-bottom-right">
                     <div className="flex items-center gap-2 px-3 pt-2 pb-1.5">
                       <Sparkles className="h-3.5 w-3.5 text-gold" />
                       <p className="text-[10px] text-gold/90 uppercase tracking-wider font-semibold">Escolha sua IA</p>
