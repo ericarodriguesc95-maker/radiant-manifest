@@ -199,9 +199,11 @@ export default function FloatingBubblesDock() {
     const wasDrag = !!info?.moved;
     if (info) info.dragging = false;
     try { (e.currentTarget as HTMLButtonElement).releasePointerCapture(e.pointerId); } catch {}
-    if (wasDrag) persistPositions({ ...latestPositionsRef.current });
-    if (!wasDrag) navigate(href);
+    if (wasDrag) { persistPositions({ ...latestPositionsRef.current }); return; }
+    if (id === "ia-hub") { setAiMenuOpen((v) => !v); return; }
+    if (href) navigate(href);
   };
+
 
   const closeBubble = (id: BubbleId) => {
     persistHidden({ ...hidden, [id]: true });
