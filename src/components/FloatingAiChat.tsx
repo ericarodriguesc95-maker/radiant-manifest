@@ -153,7 +153,7 @@ export default function FloatingAiChat({ persona, onClose }: Props) {
         "rounded-2xl overflow-hidden flex flex-col",
         "bg-background/95 backdrop-blur-xl border border-gold/40",
         "shadow-[0_20px_60px_-15px_rgba(212,175,55,0.45)]",
-        "will-change-transform transform-gpu backface-hidden",
+        "will-change-transform transform-gpu",
         "animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
       )}
     >
