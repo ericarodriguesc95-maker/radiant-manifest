@@ -10,6 +10,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import FourPointStar from "@/components/FourPointStar";
 import SplashScreen from "@/components/SplashScreen";
 import NewVersionBanner from "@/components/NewVersionBanner";
+import ScrollToTop from "@/components/ScrollToTop";
 import AppLayout from "@/components/AppLayout";
 import HomePage from "@/pages/HomePage";
 import MetasPage from "@/pages/MetasPage";
