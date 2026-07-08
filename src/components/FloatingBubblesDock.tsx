@@ -1,48 +1,56 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { MessageCircle, Hash, Crown, Bot, Wallet, X, Plus, Clock } from "lucide-react";
+import { MessageCircle, Hash, Crown, Wallet, X, Plus, Clock, Sparkles, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 
 /**
  * Unified floating bubbles dock.
- * - 5 bubbles: DM, Salas, IA Assistente, Eu Superior, IA Financeira
- * - Each only appears AFTER the user uses it once (localStorage flags).
- * - Each bubble can be hidden via X — restorable via the small "+" hub button.
- * - Each bubble is independently draggable; position persisted per-user.
- * - DM bubble shows unread count + MSN-style shake when a new message arrives.
- * - Hidden on auth pages and on the page that owns the feature (avoid duplicates).
+ * - 3 bubbles: DM, Salas, IA (hub com seletor de qual IA usar)
+ * - Cada bolha pode ser escondida via X — restaurável pelo botão "+".
+ * - Cada bolha é arrastável; posição salva por usuário.
  */
 
-type BubbleId = "dm" | "salas" | "ia" | "eu-superior" | "financeira";
+type BubbleId = "dm" | "salas" | "ia-hub";
 
 interface BubbleDef {
   id: BubbleId;
   label: string;
   shortLabel: string;
   icon: React.ElementType;
-  /** Path to navigate to (or a special flag in route param). */
-  href: string;
-  /** Pages where this bubble should be hidden (already accessible there). */
+  href: string; // se vazio, abre menu no lugar de navegar
   hideOnPrefix: string[];
-  /** localStorage key set when the user has used this feature at least once. */
-  usedFlag: string;
+  usedFlag: string; // vazio = sempre visível
 }
+
+interface AiOption {
+  id: string;
+  label: string;
+  description: string;
+  icon: React.ElementType;
+  href: string;
+  hideOnPrefix: string[];
+}
+
+const AI_OPTIONS: AiOption[] = [
+  { id: "agenda", label: "Minha agenda do dia", description: "Organize sua rotina com IA", icon: Clock,
+    href: "/alta-performance?openAi=1", hideOnPrefix: ["/alta-performance"] },
+  { id: "eu-superior", label: "Falar com meu Eu Superior", description: "A melhor versão de você", icon: Crown,
+    href: "/metas?tab=manifestacao&openEuSuperior=1", hideOnPrefix: ["/metas"] },
+  { id: "financeira", label: "Consultora do meu dinheiro", description: "Analise suas finanças", icon: Wallet,
+    href: "/financas?openAi=1", hideOnPrefix: ["/financas"] },
+];
 
 const BUBBLES: BubbleDef[] = [
   { id: "dm", label: "Conversar em particular", shortLabel: "Conversas", icon: MessageCircle,
     href: "/comunidade?openDms=1", hideOnPrefix: ["/comunidade"], usedFlag: "dm-used" },
   { id: "salas", label: "Grupos por tema", shortLabel: "Grupos", icon: Hash,
     href: "/comunidade?openRooms=1", hideOnPrefix: ["/comunidade"], usedFlag: "chatrooms-used" },
-  // IAs: SEMPRE visíveis (não exigem uso prévio) — usedFlag vazio funciona como "sempre liberado"
-  { id: "ia", label: "Minha agenda do dia", shortLabel: "Agenda", icon: Clock,
-    href: "/alta-performance?openAi=1", hideOnPrefix: ["/alta-performance"], usedFlag: "" },
-  { id: "eu-superior", label: "Falar com a melhor versão de mim", shortLabel: "Eu+", icon: Crown,
-    href: "/metas?tab=manifestacao&openEuSuperior=1", hideOnPrefix: ["/metas"], usedFlag: "" },
-  { id: "financeira", label: "Consultora do meu dinheiro", shortLabel: "Dinheiro", icon: Wallet,
-    href: "/financas?openAi=1", hideOnPrefix: ["/financas"], usedFlag: "" },
+  { id: "ia-hub", label: "Assistentes de IA", shortLabel: "IA", icon: Sparkles,
+    href: "", hideOnPrefix: [], usedFlag: "" },
 ];
+
 
 const HIDDEN_GLOBAL_PREFIXES = ["/login", "/signup", "/forgot-password", "/reset-password"];
 
@@ -67,7 +75,9 @@ export default function FloatingBubblesDock() {
   const [showHub, setShowHub] = useState(false);
   const [unreadDm, setUnreadDm] = useState(0);
   const [shakeId, setShakeId] = useState<BubbleId | null>(null);
+  const [aiMenuOpen, setAiMenuOpen] = useState(false);
   const previousUnreadRef = useRef(0);
+
 
   const userId = user?.id;
   const hiddenKey = userId ? `bubbles-hidden-${userId}` : "";
@@ -189,9 +199,11 @@ export default function FloatingBubblesDock() {
     const wasDrag = !!info?.moved;
     if (info) info.dragging = false;
     try { (e.currentTarget as HTMLButtonElement).releasePointerCapture(e.pointerId); } catch {}
-    if (wasDrag) persistPositions({ ...latestPositionsRef.current });
-    if (!wasDrag) navigate(href);
+    if (wasDrag) { persistPositions({ ...latestPositionsRef.current }); return; }
+    if (id === "ia-hub") { setAiMenuOpen((v) => !v); return; }
+    if (href) navigate(href);
   };
+
 
   const closeBubble = (id: BubbleId) => {
     persistHidden({ ...hidden, [id]: true });
@@ -316,6 +328,49 @@ export default function FloatingBubblesDock() {
               <span className="absolute left-1/2 -translate-x-1/2 -bottom-4 text-[9px] font-body font-semibold text-gold/90 leading-none whitespace-nowrap pointer-events-none">
                 {b.shortLabel}
               </span>
+
+              {/* IA hub popover menu */}
+              {b.id === "ia-hub" && aiMenuOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setAiMenuOpen(false)} />
+                  <div className="absolute right-0 bottom-16 md:bottom-20 w-64 rounded-2xl glass-strong border border-gold/40 p-2 shadow-2xl space-y-1 animate-fade-in z-50">
+                    <div className="flex items-center gap-2 px-3 pt-2 pb-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-gold" />
+                      <p className="text-[10px] text-gold/90 uppercase tracking-wider font-semibold">Escolha sua IA</p>
+                    </div>
+                    {AI_OPTIONS.map((opt) => {
+                      const OptIcon = opt.icon;
+                      const onCurrent = opt.hideOnPrefix.some((p) => location.pathname.startsWith(p));
+                      return (
+                        <button
+                          key={opt.id}
+                          onClick={() => {
+                            setAiMenuOpen(false);
+                            navigate(opt.href);
+                          }}
+                          disabled={onCurrent}
+                          className={cn(
+                            "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all",
+                            "hover:bg-gold/10 active:scale-[0.98]",
+                            onCurrent && "opacity-50 cursor-not-allowed"
+                          )}
+                        >
+                          <div className="h-9 w-9 rounded-xl bg-gold/15 border border-gold/30 flex items-center justify-center flex-shrink-0">
+                            <OptIcon className="h-4 w-4 text-gold" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-display font-bold text-foreground leading-tight">{opt.label}</p>
+                            <p className="text-[10px] font-body text-muted-foreground leading-tight mt-0.5 truncate">
+                              {onCurrent ? "Você já está aqui" : opt.description}
+                            </p>
+                          </div>
+                          {!onCurrent && <ChevronRight className="h-3.5 w-3.5 text-gold/60 flex-shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         );
