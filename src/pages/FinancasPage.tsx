@@ -244,6 +244,12 @@ const FinancasPage = () => {
   const [editAmount, setEditAmount] = useState("");
   const [editType, setEditType] = useState<EntryType>("renda");
   const [activeTab, setActiveTab] = useState("geral");
+
+  // Scrolla pro topo sempre que trocar de aba
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [activeTab]);
+
   const [mode, setModeRaw] = useState<"pf" | "cnpj">(() => {
     try { return (localStorage.getItem("fin-mode") as any) === "cnpj" ? "cnpj" : "pf"; } catch { return "pf"; }
   });
