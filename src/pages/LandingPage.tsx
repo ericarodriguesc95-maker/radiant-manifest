@@ -265,7 +265,7 @@ const FAQ = [
   },
   {
     q: "Posso cancelar?",
-    a: "O pagamento é anual, pela Kiwify. Não há renovação automática. Você tem 7 dias de garantia caso queira reembolso.",
+    a: "R$ 97,90 no ano, pagamento único à vista ou em até 12x de R$ 10,13 no cartão. A sua assinatura é anual e a renovação é automática após 12 meses, mas você pode cancelar a renovação quando quiser direto na plataforma de pagamento.",
   },
   {
     q: "Recebo atualizações sem pagar mais?",
