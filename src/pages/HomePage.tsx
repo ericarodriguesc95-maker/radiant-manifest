@@ -94,12 +94,12 @@ const HomePage = () => {
   };
 
   const quickActions = [
-    { icon: Brain, label: "Reprogramar\na Mente", description: "Áudios e exercícios para trocar pensamentos que te travam", to: "/reprogramacao", gradient: "from-purple-900/40 to-purple-800/20" },
-    { icon: Zap, label: "Estudar e\nEvoluir", description: "Técnicas, podcasts e cursos para aprender mais rápido", to: "/alta-performance", gradient: "from-amber-900/40 to-amber-800/20" },
-    { icon: Target, label: "Metas &\nManifestação", description: "Defina o que quer e veja sua vida dos sonhos sair do papel", to: "/metas", gradient: "from-rose-900/40 to-rose-800/20" },
-    { icon: Heart, label: "Destravar\nFeminino", description: "14 aulas curtas para soltar o que está te prendendo", to: "/jornada", gradient: "from-emerald-900/40 to-emerald-800/20" },
-    { icon: Crown, label: "Autoestima\nde Rainha", description: "Construa uma confiança que ninguém consegue abalar", to: "/identidade-inabalavel", gradient: "from-gold/30 to-amber-900/20" },
-    { icon: Flame, label: "Reset 14.5\n(5 dias)", description: "5 dias com jejum de 14h por dia para resetar o corpo", to: "/protocolo-14-5", gradient: "from-zinc-900/60 to-amber-950/30" },
+    { icon: Brain, label: "Reprogramar\na Mente", description: "Áudios e exercícios para trocar pensamentos que te travam", to: "/reprogramacao", gradient: "from-violet-200 via-purple-100 to-fuchsia-100", iconBg: "bg-violet-500/15 border-violet-400/40", iconColor: "text-violet-700" },
+    { icon: Zap, label: "Estudar e\nEvoluir", description: "Técnicas, podcasts e cursos para aprender mais rápido", to: "/alta-performance", gradient: "from-amber-200 via-yellow-100 to-orange-100", iconBg: "bg-amber-500/15 border-amber-500/40", iconColor: "text-amber-700" },
+    { icon: Target, label: "Metas &\nManifestação", description: "Defina o que quer e veja sua vida dos sonhos sair do papel", to: "/metas", gradient: "from-rose-200 via-pink-100 to-red-100", iconBg: "bg-rose-500/15 border-rose-400/40", iconColor: "text-rose-700" },
+    { icon: Heart, label: "Destravar\nFeminino", description: "14 aulas curtas para soltar o que está te prendendo", to: "/jornada", gradient: "from-emerald-200 via-teal-100 to-green-100", iconBg: "bg-emerald-500/15 border-emerald-500/40", iconColor: "text-emerald-700" },
+    { icon: Crown, label: "Autoestima\nde Rainha", description: "Construa uma confiança que ninguém consegue abalar", to: "/identidade-inabalavel", gradient: "from-yellow-200 via-amber-100 to-yellow-50", iconBg: "bg-yellow-500/20 border-yellow-500/50", iconColor: "text-yellow-800" },
+    { icon: Flame, label: "Reset 14.5\n(5 dias)", description: "5 dias com jejum de 14h por dia para resetar o corpo", to: "/protocolo-14-5", gradient: "from-orange-200 via-red-100 to-amber-100", iconBg: "bg-orange-500/15 border-orange-500/40", iconColor: "text-orange-700" },
   ];
 
   return (
@@ -167,8 +167,8 @@ const HomePage = () => {
         >
           <div className="relative overflow-hidden rounded-3xl border border-gold/40 shadow-glow">
             {/* glow layers */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gold/25 via-amber-900/30 to-background" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,hsl(var(--gold)/0.35),transparent_55%)]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-gold/20 via-amber-100 to-background" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,hsl(var(--gold)/0.25),transparent_55%)]" />
             <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-gold/20 blur-3xl animate-pulse" />
 
             <div className="relative z-10 p-5 md:p-6">
@@ -187,7 +187,7 @@ const HomePage = () => {
 
               <button
                 onClick={() => navigate("/apresentacoes")}
-                className="mt-4 w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gold text-background font-display font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-lg"
+                className="mt-4 w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gold text-primary-foreground font-display font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-brand"
               >
                 <Heart className="h-4 w-4" />
                 Fazer minha apresentação agora
@@ -230,17 +230,17 @@ const HomePage = () => {
           className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-green-400/30"
           style={{ "--stagger": 1 } as React.CSSProperties}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/40 via-green-800/20 to-emerald-700/5" />
-          <div className="absolute inset-0 glass" />
-          <div className="relative z-10 h-12 w-12 rounded-2xl bg-green-500/15 flex items-center justify-center border border-green-400/30 group-hover:bg-green-500/25 transition-all">
-            <MessageCircle className="h-6 w-6 text-green-400" />
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-100 via-green-50 to-teal-50" />
+          <div className="absolute inset-0 border border-emerald-200/60 rounded-2xl" />
+          <div className="relative z-10 h-12 w-12 rounded-2xl bg-emerald-500/15 flex items-center justify-center border border-emerald-500/40 group-hover:bg-emerald-500/25 transition-all">
+            <MessageCircle className="h-6 w-6 text-emerald-700" />
           </div>
           <div className="relative z-10 flex-1 text-left">
             <p className="text-sm font-display font-bold text-foreground">Entre no grupo do WhatsApp</p>
             <p className="text-[11px] font-body text-muted-foreground mt-0.5">Conecte-se com outras rainhas, troque experiências e cresça junto 👑</p>
           </div>
-          <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-green-400 border border-green-400/40 rounded-full px-2 py-0.5">Entrar</span>
-          <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
+          <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-emerald-700 border border-emerald-500/50 rounded-full px-2 py-0.5">Entrar</span>
+          <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
         </a>
 
 
@@ -287,28 +287,28 @@ const HomePage = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            {quickActions.map(({ icon: Icon, label, description, to, gradient }, i) => (
+            {quickActions.map(({ icon: Icon, label, description, to, gradient, iconBg, iconColor }, i) => (
               <button
                 key={to}
                 onClick={() => navigate(to)}
                 className={cn(
                   "animate-stagger group relative overflow-hidden rounded-2xl p-4 flex flex-col items-start gap-2 transition-all duration-300 min-h-[140px]",
-                  "glass border border-gold/10 hover:border-gold/30",
-                  "hover:shadow-glow active:scale-[0.97]"
+                  "border border-white/60 shadow-card",
+                  "hover:shadow-glow hover:-translate-y-0.5 active:scale-[0.97]"
                 )}
                 style={{ "--stagger": 6 + i } as React.CSSProperties}
               >
                 {/* Background gradient */}
-                <div className={cn("absolute inset-0 bg-gradient-to-br opacity-60 transition-opacity group-hover:opacity-100", gradient)} />
+                <div className={cn("absolute inset-0 bg-gradient-to-br", gradient)} />
 
-                <div className="relative z-10 h-10 w-10 rounded-xl bg-gold/10 flex items-center justify-center border border-gold/20 group-hover:bg-gold/20 transition-colors">
-                  <Icon className="h-5 w-5 text-gold" />
+                <div className={cn("relative z-10 h-10 w-10 rounded-xl flex items-center justify-center border shadow-sm", iconBg)}>
+                  <Icon className={cn("h-5 w-5", iconColor)} />
                 </div>
-                <span className="relative z-10 text-xs font-body font-semibold text-foreground/90 leading-tight whitespace-pre-line text-left">{label}</span>
-                <span className="relative z-10 text-[10px] font-body text-foreground/60 leading-snug text-left line-clamp-3">{description}</span>
+                <span className="relative z-10 text-xs font-body font-bold text-foreground leading-tight whitespace-pre-line text-left">{label}</span>
+                <span className="relative z-10 text-[10px] font-body text-foreground/75 leading-snug text-left line-clamp-3">{description}</span>
 
                 {/* Corner accent */}
-                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-gold/5 to-transparent rounded-bl-3xl" />
+                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-white/40 to-transparent rounded-bl-3xl" />
               </button>
             ))}
           </div>
@@ -336,14 +336,14 @@ const HomePage = () => {
             onClick={() => navigate("/glow-move")}
             className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-gold/30"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-950 via-purple-900/80 to-fuchsia-950/60" />
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-200 via-fuchsia-100 to-pink-100" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.25),transparent_60%)]" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/40 group-hover:bg-gold/25 transition-all">
-              <Sparkles className="h-6 w-6 text-gold" />
+            <div className="relative z-10 h-12 w-12 rounded-2xl bg-purple-500/15 flex items-center justify-center border border-purple-500/40 group-hover:bg-purple-500/25 transition-all">
+              <Sparkles className="h-6 w-6 text-purple-700" />
             </div>
             <div className="relative z-10 flex-1 text-left">
               <p className="text-sm font-display font-bold text-foreground">Gloow Movimenta</p>
-              <p className="text-[11px] font-body text-foreground/70 mt-0.5">21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida</p>
+              <p className="text-[11px] font-body text-foreground/75 mt-0.5">21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida</p>
             </div>
             <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-gold border border-gold/40 rounded-full px-2 py-0.5">Iniciar</span>
             <ChevronRight className="relative z-10 h-5 w-5 text-gold/70 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
@@ -433,7 +433,7 @@ const HomePage = () => {
             onClick={() => navigate("/testes")}
             className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-violet-900/30 via-violet-800/15 to-violet-700/5" />
+            <div className="absolute inset-0 bg-gradient-to-r from-violet-100 via-violet-50 to-white" />
             <div className="absolute inset-0 glass-gold" />
             <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
               <ClipboardCheck className="h-6 w-6 text-gold" />

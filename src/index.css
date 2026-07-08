@@ -6,60 +6,61 @@
 
 @layer base {
   :root {
-    --background: 0 0% 5%;
-    --foreground: 40 20% 92%;
+    /* Light Mode Premium — Off-white pérola / marfim */
+    --background: 40 30% 97%;
+    --foreground: 30 15% 12%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 40 20% 92%;
+    --card: 40 40% 99%;
+    --card-foreground: 30 15% 12%;
 
-    --popover: 0 0% 7%;
-    --popover-foreground: 40 20% 92%;
+    --popover: 40 40% 99%;
+    --popover-foreground: 30 15% 12%;
 
-    --primary: 43 72% 52%;
-    --primary-foreground: 0 0% 4%;
+    --primary: 40 75% 45%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 40 20% 92%;
+    --secondary: 40 25% 93%;
+    --secondary-foreground: 30 15% 15%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 40 10% 55%;
+    --muted: 40 22% 90%;
+    --muted-foreground: 30 14% 28%;
 
-    --accent: 43 72% 52%;
-    --accent-foreground: 0 0% 4%;
+    --accent: 40 75% 45%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 50%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 43 30% 18%;
-    --input: 0 0% 14%;
-    --ring: 43 72% 52%;
+    --border: 40 20% 85%;
+    --input: 40 20% 90%;
+    --ring: 40 75% 45%;
 
     --radius: 0.75rem;
 
-    --brand: 43 72% 52%;
-    --brand-light: 43 55% 65%;
-    --brand-dark: 43 72% 38%;
-    --gold: 43 72% 52%;
-    --gold-light: 43 55% 65%;
-    --gold-dark: 43 72% 38%;
-    --offwhite: 40 20% 92%;
-    --charcoal: 0 0% 8%;
+    --brand: 40 75% 45%;
+    --brand-light: 43 78% 58%;
+    --brand-dark: 38 78% 38%;
+    --gold: 40 75% 45%;
+    --gold-light: 43 78% 58%;
+    --gold-dark: 38 78% 38%;
+    --offwhite: 40 30% 97%;
+    --charcoal: 30 15% 12%;
 
     /* Secondary palette — Bíblia 365 sections */
-    --serene-blue: 210 65% 62%;
-    --olive: 75 28% 55%;
-    --coral: 8 75% 68%;
+    --serene-blue: 210 65% 55%;
+    --olive: 75 32% 45%;
+    --coral: 8 78% 62%;
 
     --font-display: 'Playfair Display', serif;
     --font-body: 'Raleway', sans-serif;
 
-    --gradient-brand: linear-gradient(135deg, hsl(43 72% 52%), hsl(38 60% 42%));
-    --gradient-gold: linear-gradient(135deg, hsl(43 72% 52%), hsl(48 55% 65%));
-    --gradient-dark: linear-gradient(180deg, hsl(0 0% 4%), hsl(0 0% 10%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 9%), hsl(0 0% 6%));
-    --shadow-brand: 0 4px 24px -4px hsl(43 72% 52% / 0.25);
-    --shadow-card: 0 2px 16px -2px hsl(0 0% 0% / 0.4);
-    --shadow-glow: 0 0 20px hsl(43 72% 52% / 0.15);
+    --gradient-brand: linear-gradient(135deg, hsl(40 75% 45%), hsl(38 78% 38%));
+    --gradient-gold: linear-gradient(135deg, hsl(40 75% 45%), hsl(43 78% 58%));
+    --gradient-dark: linear-gradient(180deg, hsl(40 30% 98%), hsl(40 25% 94%));
+    --gradient-card: linear-gradient(145deg, hsl(40 40% 99%), hsl(40 30% 96%));
+    --shadow-brand: 0 6px 28px -6px hsl(40 75% 45% / 0.30);
+    --shadow-card: 0 4px 20px -6px hsl(30 20% 40% / 0.15);
+    --shadow-glow: 0 0 24px hsl(40 75% 45% / 0.22);
   }
 }
 
@@ -121,24 +122,24 @@
     border-color: hsl(var(--gold) / 0.2);
   }
 
-  /* Glassmorphism utilities */
+  /* Glassmorphism utilities — light mode premium */
   .glass {
-    background: hsl(0 0% 8% / 0.6);
+    background: hsl(40 40% 99% / 0.72);
     backdrop-filter: blur(16px) saturate(1.4);
     -webkit-backdrop-filter: blur(16px) saturate(1.4);
-    border: 1px solid hsl(43 72% 52% / 0.1);
+    border: 1px solid hsl(40 30% 80% / 0.5);
   }
   .glass-strong {
-    background: hsl(0 0% 6% / 0.75);
+    background: hsl(40 40% 99% / 0.88);
     backdrop-filter: blur(24px) saturate(1.6);
     -webkit-backdrop-filter: blur(24px) saturate(1.6);
-    border: 1px solid hsl(43 72% 52% / 0.15);
+    border: 1px solid hsl(40 30% 78% / 0.6);
   }
   .glass-gold {
-    background: hsl(43 72% 52% / 0.08);
+    background: hsl(40 75% 55% / 0.10);
     backdrop-filter: blur(20px) saturate(1.5);
     -webkit-backdrop-filter: blur(20px) saturate(1.5);
-    border: 1px solid hsl(43 72% 52% / 0.2);
+    border: 1px solid hsl(40 75% 45% / 0.28);
   }
 
   /* Premium hover glow */
