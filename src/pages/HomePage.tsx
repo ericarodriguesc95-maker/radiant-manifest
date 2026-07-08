@@ -167,8 +167,8 @@ const HomePage = () => {
         >
           <div className="relative overflow-hidden rounded-3xl border border-gold/40 shadow-glow">
             {/* glow layers */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gold/25 via-amber-900/30 to-background" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,hsl(var(--gold)/0.35),transparent_55%)]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-gold/20 via-amber-100 to-background" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,hsl(var(--gold)/0.25),transparent_55%)]" />
             <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-gold/20 blur-3xl animate-pulse" />
 
             <div className="relative z-10 p-5 md:p-6">
@@ -187,7 +187,7 @@ const HomePage = () => {
 
               <button
                 onClick={() => navigate("/apresentacoes")}
-                className="mt-4 w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gold text-background font-display font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-lg"
+                className="mt-4 w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gold text-primary-foreground font-display font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-brand"
               >
                 <Heart className="h-4 w-4" />
                 Fazer minha apresentação agora
