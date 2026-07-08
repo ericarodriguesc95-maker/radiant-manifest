@@ -75,6 +75,21 @@ export default function FloatingAiChat({ persona, onClose }: Props) {
   };
 
   // Drag handlers on header
+  // Drag using direct style writes + rAF (no state updates during move → no re-renders).
+  const rafRef = useRef<number | null>(null);
+  const pendingRef = useRef<{ x: number; y: number } | null>(null);
+
+  const flushDrag = () => {
+    rafRef.current = null;
+    const p = pendingRef.current;
+    const el = panelRef.current;
+    if (!p || !el) return;
+    el.style.left = `${p.x}px`;
+    el.style.top = `${p.y}px`;
+    el.style.right = "auto";
+    el.style.bottom = "auto";
+  };
+
   const onDown = (e: React.PointerEvent) => {
     const rect = panelRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -88,12 +103,21 @@ export default function FloatingAiChat({ persona, onClose }: Props) {
     const h = panelRef.current?.offsetHeight || 480;
     const x = Math.min(window.innerWidth - w - 8, Math.max(8, e.clientX - dragRef.current.ox));
     const y = Math.min(window.innerHeight - h - 8, Math.max(8, e.clientY - dragRef.current.oy));
-    setPos({ x, y });
+    pendingRef.current = { x, y };
+    if (rafRef.current == null) rafRef.current = requestAnimationFrame(flushDrag);
   };
   const onUp = (e: React.PointerEvent) => {
+    if (!dragRef.current.dragging) return;
     dragRef.current.dragging = false;
     try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch {}
+    if (rafRef.current != null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
+    if (pendingRef.current) setPos(pendingRef.current);
   };
+
+  useEffect(() => () => {
+    if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+  }, []);
+
 
   const defaultStyle: React.CSSProperties = pos
     ? { left: pos.x, top: pos.y, right: "auto", bottom: "auto" }
