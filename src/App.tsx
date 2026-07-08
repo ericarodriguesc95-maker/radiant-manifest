@@ -163,6 +163,7 @@ const App = () => {
           <NewVersionBanner />
           {!splashDone && <SplashScreen onFinish={() => setSplashDone(true)} />}
           <BrowserRouter>
+            <ScrollToTop />
             <AuthProvider>
               <ViewModeProvider>
                 <AppRoutes />
