@@ -74,6 +74,8 @@ const MetasPage = () => {
     const tab = new URLSearchParams(window.location.search).get("tab");
     return tab === "metas" ? "metas" : "manifestacao";
   });
+  useScrollTopOnChange(activeTab);
+
 
   const fetchGoals = async () => {
     if (!user) return;
