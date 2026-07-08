@@ -328,6 +328,49 @@ export default function FloatingBubblesDock() {
               <span className="absolute left-1/2 -translate-x-1/2 -bottom-4 text-[9px] font-body font-semibold text-gold/90 leading-none whitespace-nowrap pointer-events-none">
                 {b.shortLabel}
               </span>
+
+              {/* IA hub popover menu */}
+              {b.id === "ia-hub" && aiMenuOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setAiMenuOpen(false)} />
+                  <div className="absolute right-0 bottom-16 md:bottom-20 w-64 rounded-2xl glass-strong border border-gold/40 p-2 shadow-2xl space-y-1 animate-fade-in z-50">
+                    <div className="flex items-center gap-2 px-3 pt-2 pb-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-gold" />
+                      <p className="text-[10px] text-gold/90 uppercase tracking-wider font-semibold">Escolha sua IA</p>
+                    </div>
+                    {AI_OPTIONS.map((opt) => {
+                      const OptIcon = opt.icon;
+                      const onCurrent = opt.hideOnPrefix.some((p) => location.pathname.startsWith(p));
+                      return (
+                        <button
+                          key={opt.id}
+                          onClick={() => {
+                            setAiMenuOpen(false);
+                            navigate(opt.href);
+                          }}
+                          disabled={onCurrent}
+                          className={cn(
+                            "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all",
+                            "hover:bg-gold/10 active:scale-[0.98]",
+                            onCurrent && "opacity-50 cursor-not-allowed"
+                          )}
+                        >
+                          <div className="h-9 w-9 rounded-xl bg-gold/15 border border-gold/30 flex items-center justify-center flex-shrink-0">
+                            <OptIcon className="h-4 w-4 text-gold" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-display font-bold text-foreground leading-tight">{opt.label}</p>
+                            <p className="text-[10px] font-body text-muted-foreground leading-tight mt-0.5 truncate">
+                              {onCurrent ? "Você já está aqui" : opt.description}
+                            </p>
+                          </div>
+                          {!onCurrent && <ChevronRight className="h-3.5 w-3.5 text-gold/60 flex-shrink-0" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         );
