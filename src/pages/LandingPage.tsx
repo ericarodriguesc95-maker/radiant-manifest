@@ -98,7 +98,7 @@ const PrimaryCTA = ({
     style={{
       ...sans,
       background: C.gold,
-      color: C.bg,
+      color: "#FFFFFF",
       letterSpacing: "0.08em",
       borderRadius: 50,
     }}
