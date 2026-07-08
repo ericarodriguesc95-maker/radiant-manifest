@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import ManifestacaoHub from "@/components/manifestacao/ManifestacaoHub";
+import { useScrollTopOnChange } from "@/hooks/useScrollTopOnChange";
 
 interface GoalTask {
   id: string;
@@ -73,6 +74,8 @@ const MetasPage = () => {
     const tab = new URLSearchParams(window.location.search).get("tab");
     return tab === "metas" ? "metas" : "manifestacao";
   });
+  useScrollTopOnChange(activeTab);
+
 
   const fetchGoals = async () => {
     if (!user) return;
