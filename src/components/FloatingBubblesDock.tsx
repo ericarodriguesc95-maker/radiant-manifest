@@ -75,7 +75,9 @@ export default function FloatingBubblesDock() {
   const [showHub, setShowHub] = useState(false);
   const [unreadDm, setUnreadDm] = useState(0);
   const [shakeId, setShakeId] = useState<BubbleId | null>(null);
+  const [aiMenuOpen, setAiMenuOpen] = useState(false);
   const previousUnreadRef = useRef(0);
+
 
   const userId = user?.id;
   const hiddenKey = userId ? `bubbles-hidden-${userId}` : "";
