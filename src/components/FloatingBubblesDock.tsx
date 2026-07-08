@@ -213,6 +213,24 @@ export default function FloatingBubblesDock() {
     latestPositionsRef.current = positions;
   }, [positions]);
 
+  // rAF-batched drag: write style directly during move, commit to state on pointerup.
+  const rafByIdRef = useRef<Record<string, number | null>>({});
+  const pendingByIdRef = useRef<Record<string, { x: number; y: number } | undefined>>({});
+
+  const flushBubbleDrag = (id: BubbleId, el: HTMLElement) => {
+    rafByIdRef.current[id] = null;
+    const p = pendingByIdRef.current[id];
+    if (!p || !el) return;
+    const parent = el.parentElement as HTMLElement | null; // wrapper div holds positioning
+    const container = parent?.parentElement as HTMLElement | null;
+    if (container) {
+      container.style.left = `${p.x}px`;
+      container.style.top = `${p.y}px`;
+      container.style.right = "auto";
+      container.style.bottom = "auto";
+    }
+  };
+
   const onPointerDown = (e: React.PointerEvent, id: BubbleId) => {
     e.preventDefault();
     const target = e.currentTarget as HTMLButtonElement;
@@ -231,19 +249,30 @@ export default function FloatingBubblesDock() {
     const size = window.innerWidth >= 768 ? 56 : 48;
     const x = Math.min(window.innerWidth - size - 8, Math.max(8, e.clientX - info.offsetX));
     const y = Math.min(window.innerHeight - size - 8, Math.max(8, e.clientY - info.offsetY));
-    const next = { ...latestPositionsRef.current, [id]: { x, y } };
-    latestPositionsRef.current = next;
-    setPositions(next);
+    pendingByIdRef.current[id] = { x, y };
+    const target = e.currentTarget as HTMLElement;
+    if (rafByIdRef.current[id] == null) {
+      rafByIdRef.current[id] = requestAnimationFrame(() => flushBubbleDrag(id, target));
+    }
   };
   const onPointerUp = (e: React.PointerEvent, id: BubbleId, href: string) => {
     const info = dragRefs.current[id];
     const wasDrag = !!info?.moved;
     if (info) info.dragging = false;
     try { (e.currentTarget as HTMLButtonElement).releasePointerCapture(e.pointerId); } catch {}
-    if (wasDrag) { persistPositions({ ...latestPositionsRef.current }); return; }
+    const rafId = rafByIdRef.current[id];
+    if (rafId != null) { cancelAnimationFrame(rafId); rafByIdRef.current[id] = null; }
+    const pending = pendingByIdRef.current[id];
+    if (wasDrag) {
+      const next = { ...latestPositionsRef.current, ...(pending ? { [id]: pending } : {}) };
+      latestPositionsRef.current = next;
+      persistPositions(next);
+      return;
+    }
     if (id === "ia-hub") { setAiMenuOpen((v) => !v); return; }
     if (href) navigate(href);
   };
+
 
 
   const closeBubble = (id: BubbleId) => {
