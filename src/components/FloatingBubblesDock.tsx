@@ -116,6 +116,7 @@ export default function FloatingBubblesDock() {
   const [unreadDm, setUnreadDm] = useState(0);
   const [shakeId, setShakeId] = useState<BubbleId | null>(null);
   const [aiMenuOpen, setAiMenuOpen] = useState(false);
+  const [activePersona, setActivePersona] = useState<AiPersona | null>(null);
   const previousUnreadRef = useRef(0);
 
 
