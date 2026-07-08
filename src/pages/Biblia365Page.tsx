@@ -55,6 +55,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import BibleHistoryCalendar from "@/components/bible/BibleHistoryCalendar";
 import { cn } from "@/lib/utils";
+import { useScrollTopOnChange } from "@/hooks/useScrollTopOnChange";
 
 const Biblia365Page = () => {
   const { user } = useAuth();
