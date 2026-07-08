@@ -433,7 +433,7 @@ const HomePage = () => {
             onClick={() => navigate("/testes")}
             className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-violet-900/30 via-violet-800/15 to-violet-700/5" />
+            <div className="absolute inset-0 bg-gradient-to-r from-violet-100 via-violet-50 to-white" />
             <div className="absolute inset-0 glass-gold" />
             <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
               <ClipboardCheck className="h-6 w-6 text-gold" />
