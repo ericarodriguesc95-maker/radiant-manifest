@@ -1,48 +1,56 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { MessageCircle, Hash, Crown, Bot, Wallet, X, Plus, Clock } from "lucide-react";
+import { MessageCircle, Hash, Crown, Wallet, X, Plus, Clock, Sparkles, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 
 /**
  * Unified floating bubbles dock.
- * - 5 bubbles: DM, Salas, IA Assistente, Eu Superior, IA Financeira
- * - Each only appears AFTER the user uses it once (localStorage flags).
- * - Each bubble can be hidden via X — restorable via the small "+" hub button.
- * - Each bubble is independently draggable; position persisted per-user.
- * - DM bubble shows unread count + MSN-style shake when a new message arrives.
- * - Hidden on auth pages and on the page that owns the feature (avoid duplicates).
+ * - 3 bubbles: DM, Salas, IA (hub com seletor de qual IA usar)
+ * - Cada bolha pode ser escondida via X — restaurável pelo botão "+".
+ * - Cada bolha é arrastável; posição salva por usuário.
  */
 
-type BubbleId = "dm" | "salas" | "ia" | "eu-superior" | "financeira";
+type BubbleId = "dm" | "salas" | "ia-hub";
 
 interface BubbleDef {
   id: BubbleId;
   label: string;
   shortLabel: string;
   icon: React.ElementType;
-  /** Path to navigate to (or a special flag in route param). */
-  href: string;
-  /** Pages where this bubble should be hidden (already accessible there). */
+  href: string; // se vazio, abre menu no lugar de navegar
   hideOnPrefix: string[];
-  /** localStorage key set when the user has used this feature at least once. */
-  usedFlag: string;
+  usedFlag: string; // vazio = sempre visível
 }
+
+interface AiOption {
+  id: string;
+  label: string;
+  description: string;
+  icon: React.ElementType;
+  href: string;
+  hideOnPrefix: string[];
+}
+
+const AI_OPTIONS: AiOption[] = [
+  { id: "agenda", label: "Minha agenda do dia", description: "Organize sua rotina com IA", icon: Clock,
+    href: "/alta-performance?openAi=1", hideOnPrefix: ["/alta-performance"] },
+  { id: "eu-superior", label: "Falar com meu Eu Superior", description: "A melhor versão de você", icon: Crown,
+    href: "/metas?tab=manifestacao&openEuSuperior=1", hideOnPrefix: ["/metas"] },
+  { id: "financeira", label: "Consultora do meu dinheiro", description: "Analise suas finanças", icon: Wallet,
+    href: "/financas?openAi=1", hideOnPrefix: ["/financas"] },
+];
 
 const BUBBLES: BubbleDef[] = [
   { id: "dm", label: "Conversar em particular", shortLabel: "Conversas", icon: MessageCircle,
     href: "/comunidade?openDms=1", hideOnPrefix: ["/comunidade"], usedFlag: "dm-used" },
   { id: "salas", label: "Grupos por tema", shortLabel: "Grupos", icon: Hash,
     href: "/comunidade?openRooms=1", hideOnPrefix: ["/comunidade"], usedFlag: "chatrooms-used" },
-  // IAs: SEMPRE visíveis (não exigem uso prévio) — usedFlag vazio funciona como "sempre liberado"
-  { id: "ia", label: "Minha agenda do dia", shortLabel: "Agenda", icon: Clock,
-    href: "/alta-performance?openAi=1", hideOnPrefix: ["/alta-performance"], usedFlag: "" },
-  { id: "eu-superior", label: "Falar com a melhor versão de mim", shortLabel: "Eu+", icon: Crown,
-    href: "/metas?tab=manifestacao&openEuSuperior=1", hideOnPrefix: ["/metas"], usedFlag: "" },
-  { id: "financeira", label: "Consultora do meu dinheiro", shortLabel: "Dinheiro", icon: Wallet,
-    href: "/financas?openAi=1", hideOnPrefix: ["/financas"], usedFlag: "" },
+  { id: "ia-hub", label: "Assistentes de IA", shortLabel: "IA", icon: Sparkles,
+    href: "", hideOnPrefix: [], usedFlag: "" },
 ];
+
 
 const HIDDEN_GLOBAL_PREFIXES = ["/login", "/signup", "/forgot-password", "/reset-password"];
 
