@@ -415,6 +415,10 @@ export default function FloatingBubblesDock() {
           </div>
         );
       })}
+
+      {activePersona && (
+        <FloatingAiChat persona={activePersona} onClose={() => setActivePersona(null)} />
+      )}
     </>
   );
 }
