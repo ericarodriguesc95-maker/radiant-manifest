@@ -230,17 +230,17 @@ const HomePage = () => {
           className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-green-400/30"
           style={{ "--stagger": 1 } as React.CSSProperties}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/40 via-green-800/20 to-emerald-700/5" />
-          <div className="absolute inset-0 glass" />
-          <div className="relative z-10 h-12 w-12 rounded-2xl bg-green-500/15 flex items-center justify-center border border-green-400/30 group-hover:bg-green-500/25 transition-all">
-            <MessageCircle className="h-6 w-6 text-green-400" />
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-100 via-green-50 to-teal-50" />
+          <div className="absolute inset-0 border border-emerald-200/60 rounded-2xl" />
+          <div className="relative z-10 h-12 w-12 rounded-2xl bg-emerald-500/15 flex items-center justify-center border border-emerald-500/40 group-hover:bg-emerald-500/25 transition-all">
+            <MessageCircle className="h-6 w-6 text-emerald-700" />
           </div>
           <div className="relative z-10 flex-1 text-left">
             <p className="text-sm font-display font-bold text-foreground">Entre no grupo do WhatsApp</p>
             <p className="text-[11px] font-body text-muted-foreground mt-0.5">Conecte-se com outras rainhas, troque experiências e cresça junto 👑</p>
           </div>
-          <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-green-400 border border-green-400/40 rounded-full px-2 py-0.5">Entrar</span>
-          <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
+          <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-emerald-700 border border-emerald-500/50 rounded-full px-2 py-0.5">Entrar</span>
+          <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
         </a>
 
 
