@@ -31,6 +31,7 @@ import { ptBR } from "date-fns/locale";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import WeightEvolutionChart from "@/components/health/WeightEvolutionChart";
+import { useScrollTopOnChange } from "@/hooks/useScrollTopOnChange";
 
 // ============ TYPES ============
 interface HealthProfile {
