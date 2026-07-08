@@ -122,16 +122,16 @@ const GhostLink = ({
   const style = {
     ...sans,
     color: C.creamDim,
-    borderBottom: `1px solid rgba(245,237,224,0.20)`,
+    borderBottom: `1px solid ${C.border}`,
   };
   if (to)
     return (
-      <Link to={to} style={style} className={`${cls} hover:text-[#F5EDE0]`}>
+      <Link to={to} style={style} className={`${cls} hover:text-[#2A2317]`}>
         {children}
       </Link>
     );
   return (
-    <a href={href} style={style} className={`${cls} hover:text-[#F5EDE0]`}>
+    <a href={href} style={style} className={`${cls} hover:text-[#2A2317]`}>
       {children}
     </a>
   );
