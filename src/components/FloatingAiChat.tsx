@@ -75,6 +75,21 @@ export default function FloatingAiChat({ persona, onClose }: Props) {
   };
 
   // Drag handlers on header
+  // Drag using direct style writes + rAF (no state updates during move → no re-renders).
+  const rafRef = useRef<number | null>(null);
+  const pendingRef = useRef<{ x: number; y: number } | null>(null);
+
+  const flushDrag = () => {
+    rafRef.current = null;
+    const p = pendingRef.current;
+    const el = panelRef.current;
+    if (!p || !el) return;
+    el.style.left = `${p.x}px`;
+    el.style.top = `${p.y}px`;
+    el.style.right = "auto";
+    el.style.bottom = "auto";
+  };
+
   const onDown = (e: React.PointerEvent) => {
     const rect = panelRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -88,12 +103,21 @@ export default function FloatingAiChat({ persona, onClose }: Props) {
     const h = panelRef.current?.offsetHeight || 480;
     const x = Math.min(window.innerWidth - w - 8, Math.max(8, e.clientX - dragRef.current.ox));
     const y = Math.min(window.innerHeight - h - 8, Math.max(8, e.clientY - dragRef.current.oy));
-    setPos({ x, y });
+    pendingRef.current = { x, y };
+    if (rafRef.current == null) rafRef.current = requestAnimationFrame(flushDrag);
   };
   const onUp = (e: React.PointerEvent) => {
+    if (!dragRef.current.dragging) return;
     dragRef.current.dragging = false;
     try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch {}
+    if (rafRef.current != null) { cancelAnimationFrame(rafRef.current); rafRef.current = null; }
+    if (pendingRef.current) setPos(pendingRef.current);
   };
+
+  useEffect(() => () => {
+    if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+  }, []);
+
 
   const defaultStyle: React.CSSProperties = pos
     ? { left: pos.x, top: pos.y, right: "auto", bottom: "auto" }
@@ -104,11 +128,11 @@ export default function FloatingAiChat({ persona, onClose }: Props) {
       <div
         ref={panelRef}
         style={defaultStyle}
-        className="fixed z-[55] animate-in fade-in slide-in-from-bottom-4 duration-300"
+        className="fixed z-[55] will-change-transform transform-gpu animate-in fade-in-0 zoom-in-90 slide-in-from-bottom-3 duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]"
       >
         <button
           onClick={() => setMinimized(false)}
-          className="flex items-center gap-2 rounded-full pl-2 pr-3 py-1.5 bg-background/95 backdrop-blur border border-gold/50 shadow-[0_8px_24px_-8px_rgba(212,175,55,0.6)] hover:scale-105 transition"
+          className="flex items-center gap-2 rounded-full pl-2 pr-3 py-1.5 bg-background/95 backdrop-blur border border-gold/50 shadow-[0_8px_24px_-8px_rgba(212,175,55,0.6)] hover:scale-105 active:scale-95 transition-transform duration-200 ease-out"
         >
           <span className="h-7 w-7 rounded-full bg-gradient-to-br from-gold to-gold/60 flex items-center justify-center text-sm">
             {persona.emoji}
@@ -129,7 +153,8 @@ export default function FloatingAiChat({ persona, onClose }: Props) {
         "rounded-2xl overflow-hidden flex flex-col",
         "bg-background/95 backdrop-blur-xl border border-gold/40",
         "shadow-[0_20px_60px_-15px_rgba(212,175,55,0.45)]",
-        "animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300 ease-out"
+        "will-change-transform transform-gpu",
+        "animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-4 duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
       )}
     >
       {/* Header (drag handle) */}
