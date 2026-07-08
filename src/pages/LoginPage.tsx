@@ -303,11 +303,11 @@ export default function LoginPage() {
           <div className="text-center pt-2">
             <p className="text-[10px]" style={{ color: C.inkDim }}>
               ✦ Ainda não é membro?{" "}
-              <a href="https://pay.kiwify.com.br/gfzob11" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: C.gold }}>
+              <a href="https://pay.kiwify.com.br/zJaiYCQ" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: C.gold }}>
                 Assine agora
               </a>{" "}
-              por <strong style={{ color: C.gold }}>R$ 49,90/ano</strong> ou em até{" "}
-              <strong style={{ color: C.gold }}>12x de R$ 5,16</strong>
+              por <strong style={{ color: C.gold }}>R$ 97,90/ano</strong> ou em até{" "}
+              <strong style={{ color: C.gold }}>12x de R$ 10,13</strong>
             </p>
           </div>
         </div>
