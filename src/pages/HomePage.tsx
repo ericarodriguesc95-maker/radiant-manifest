@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sparkles, Brain, ChevronRight, Bell, Zap, Settings, Gift, MapPin, Shield, Trophy, Crown, Star, Heart, Target, BookOpen, ClipboardCheck, Flame, MessageCircle } from "lucide-react";
+import { Sparkles, Brain, ChevronRight, Bell, Zap, Settings, MapPin, Shield, Trophy, Crown, Star, Heart, Target, BookOpen, ClipboardCheck, Flame, MessageCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
@@ -122,21 +122,8 @@ const HomePage = () => {
                 <Shield className="h-4 w-4 text-gold" />
               </button>
             )}
-            <button onClick={() => navigate("/bem-vindo")} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all" title="Primeiros passos">
-              <Crown className="h-4 w-4 text-muted-foreground" />
-            </button>
-            <button onClick={() => navigate("/apresentacoes")} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all" title="Apresentações">
-              <Heart className="h-4 w-4 text-muted-foreground" />
-            </button>
-            <button onClick={() => navigate("/ranking-mensal")} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all" title="Top clubbers">
-              <Trophy className="h-4 w-4 text-muted-foreground" />
-            </button>
             <button onClick={() => (window as any).__startGlowTour?.()} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all" title="Tour guiado">
               <MapPin className="h-4 w-4 text-muted-foreground" />
-            </button>
-            <button onClick={() => setShowUpdates(true)} className="relative p-2.5 rounded-xl hover:bg-muted/30 transition-all" title="Novidades">
-              <Gift className="h-4 w-4 text-muted-foreground" />
-              {hasUnreadUpdates && <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-gold animate-pulse" />}
             </button>
             <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2.5 rounded-xl hover:bg-muted/30 transition-all">
               <Bell className="h-4 w-4 text-muted-foreground" />
