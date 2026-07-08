@@ -40,6 +40,12 @@ const AI_OPTIONS: AiOption[] = [
     href: "/metas?tab=manifestacao&openEuSuperior=1", hideOnPrefix: ["/metas"] },
   { id: "financeira", label: "Consultora do meu dinheiro", description: "Analise suas finanças", icon: Wallet,
     href: "/financas?openAi=1", hideOnPrefix: ["/financas"] },
+  { id: "nutri", label: "Nutricionista IA", description: "Cardápios e dicas de alimentação", icon: Apple,
+    href: "/saude?openNutri=1", hideOnPrefix: ["/saude"] },
+  { id: "sono", label: "Regulador do sono", description: "Ajuste sua rotina de descanso", icon: Moon,
+    href: "/sono?openSleepAi=1", hideOnPrefix: ["/sono"] },
+  { id: "biblia", label: "Estudo Bíblico IA", description: "Reflexões e interpretações", icon: BookOpen,
+    href: "/biblia-365?openBibleAi=1", hideOnPrefix: ["/biblia-365"] },
 ];
 
 const BUBBLES: BubbleDef[] = [
