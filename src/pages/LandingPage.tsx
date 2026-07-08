@@ -292,7 +292,7 @@ export default function LandingPage() {
       {/* HEADER */}
       <header
         style={{
-          background: scrolled ? "rgba(10,7,5,0.90)" : "transparent",
+          background: scrolled ? "rgba(250,247,240,0.90)" : "transparent",
           backdropFilter: scrolled ? "blur(14px)" : "none",
           borderBottom: scrolled ? `1px solid ${C.borderSoft}` : "1px solid transparent",
         }}
