@@ -128,7 +128,7 @@ export default function FloatingAiChat({ persona, onClose }: Props) {
       <div
         ref={panelRef}
         style={defaultStyle}
-        className="fixed z-[55] will-change-transform transform-gpu animate-in fade-in-0 zoom-in-90 slide-in-from-bottom-3 duration-250 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        className="fixed z-[55] will-change-transform transform-gpu animate-in fade-in-0 zoom-in-90 slide-in-from-bottom-3 duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]"
       >
         <button
           onClick={() => setMinimized(false)}
