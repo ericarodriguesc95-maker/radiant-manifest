@@ -22,18 +22,19 @@ const TESTIMONIALS = [
 const KIWIFY_URL = "https://pay.kiwify.com.br/gfzob11";
 
 // ===== Design tokens (inline to keep this page self-contained) =====
+// Light premium palette — off-white pérola + gold (matches app theme)
 const C = {
-  bg: "#0A0705",
-  bgSoft: "#111008",
-  bgCard: "#1E1208",
-  border: "rgba(201,164,90,0.20)",
-  borderSoft: "rgba(201,164,90,0.10)",
-  gold: "#C9A45A",
-  goldLight: "#E8C97A",
-  goldMuted: "#A07840",
-  cream: "#F5EDE0",
-  creamDim: "rgba(245,237,224,0.60)",
-  creamFaint: "rgba(245,237,224,0.35)",
+  bg: "#FAF7F0",
+  bgSoft: "#F3EDE0",
+  bgCard: "#FFFFFF",
+  border: "rgba(201,148,41,0.28)",
+  borderSoft: "rgba(201,148,41,0.14)",
+  gold: "#C99429",
+  goldLight: "#E0B85A",
+  goldMuted: "#8A6820",
+  cream: "#2A2317",
+  creamDim: "rgba(42,35,23,0.70)",
+  creamFaint: "rgba(42,35,23,0.45)",
 };
 
 const serif = { fontFamily: "'Cormorant Garamond', serif" };
