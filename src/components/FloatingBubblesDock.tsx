@@ -380,19 +380,18 @@ export default function FloatingBubblesDock() {
                     </div>
                     {AI_OPTIONS.map((opt) => {
                       const OptIcon = opt.icon;
-                      const onCurrent = opt.hideOnPrefix.some((p) => location.pathname.startsWith(p));
+                      const isActive = activePersona?.id === opt.persona.id;
                       return (
                         <button
                           key={opt.id}
                           onClick={() => {
                             setAiMenuOpen(false);
-                            navigate(opt.href);
+                            setActivePersona(opt.persona);
                           }}
-                          disabled={onCurrent}
                           className={cn(
                             "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all",
                             "hover:bg-gold/10 active:scale-[0.98]",
-                            onCurrent && "opacity-50 cursor-not-allowed"
+                            isActive && "bg-gold/10 ring-1 ring-gold/40"
                           )}
                         >
                           <div className="h-9 w-9 rounded-xl bg-gold/15 border border-gold/30 flex items-center justify-center flex-shrink-0">
@@ -401,10 +400,10 @@ export default function FloatingBubblesDock() {
                           <div className="flex-1 min-w-0">
                             <p className="text-xs font-display font-bold text-foreground leading-tight">{opt.label}</p>
                             <p className="text-[10px] font-body text-muted-foreground leading-tight mt-0.5 truncate">
-                              {onCurrent ? "Você já está aqui" : opt.description}
+                              {isActive ? "Aberta agora" : opt.description}
                             </p>
                           </div>
-                          {!onCurrent && <ChevronRight className="h-3.5 w-3.5 text-gold/60 flex-shrink-0" />}
+                          <ChevronRight className="h-3.5 w-3.5 text-gold/60 flex-shrink-0" />
                         </button>
                       );
                     })}
