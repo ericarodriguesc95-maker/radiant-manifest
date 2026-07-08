@@ -22,18 +22,19 @@ const TESTIMONIALS = [
 const KIWIFY_URL = "https://pay.kiwify.com.br/gfzob11";
 
 // ===== Design tokens (inline to keep this page self-contained) =====
+// Light premium palette — off-white pérola + gold (matches app theme)
 const C = {
-  bg: "#0A0705",
-  bgSoft: "#111008",
-  bgCard: "#1E1208",
-  border: "rgba(201,164,90,0.20)",
-  borderSoft: "rgba(201,164,90,0.10)",
-  gold: "#C9A45A",
-  goldLight: "#E8C97A",
-  goldMuted: "#A07840",
-  cream: "#F5EDE0",
-  creamDim: "rgba(245,237,224,0.60)",
-  creamFaint: "rgba(245,237,224,0.35)",
+  bg: "#FAF7F0",
+  bgSoft: "#F3EDE0",
+  bgCard: "#FFFFFF",
+  border: "rgba(201,148,41,0.28)",
+  borderSoft: "rgba(201,148,41,0.14)",
+  gold: "#C99429",
+  goldLight: "#E0B85A",
+  goldMuted: "#8A6820",
+  cream: "#2A2317",
+  creamDim: "rgba(42,35,23,0.70)",
+  creamFaint: "rgba(42,35,23,0.45)",
 };
 
 const serif = { fontFamily: "'Cormorant Garamond', serif" };
@@ -97,7 +98,7 @@ const PrimaryCTA = ({
     style={{
       ...sans,
       background: C.gold,
-      color: C.bg,
+      color: "#FFFFFF",
       letterSpacing: "0.08em",
       borderRadius: 50,
     }}
@@ -121,16 +122,16 @@ const GhostLink = ({
   const style = {
     ...sans,
     color: C.creamDim,
-    borderBottom: `1px solid rgba(245,237,224,0.20)`,
+    borderBottom: `1px solid ${C.border}`,
   };
   if (to)
     return (
-      <Link to={to} style={style} className={`${cls} hover:text-[#F5EDE0]`}>
+      <Link to={to} style={style} className={`${cls} hover:text-[#2A2317]`}>
         {children}
       </Link>
     );
   return (
-    <a href={href} style={style} className={`${cls} hover:text-[#F5EDE0]`}>
+    <a href={href} style={style} className={`${cls} hover:text-[#2A2317]`}>
       {children}
     </a>
   );
@@ -291,7 +292,7 @@ export default function LandingPage() {
       {/* HEADER */}
       <header
         style={{
-          background: scrolled ? "rgba(10,7,5,0.90)" : "transparent",
+          background: scrolled ? "rgba(250,247,240,0.90)" : "transparent",
           backdropFilter: scrolled ? "blur(14px)" : "none",
           borderBottom: scrolled ? `1px solid ${C.borderSoft}` : "1px solid transparent",
         }}
@@ -315,7 +316,7 @@ export default function LandingPage() {
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at 50% 30%, rgba(201,164,90,0.08), transparent 60%)",
+              "radial-gradient(ellipse at 50% 30%, rgba(201,148,41,0.12), transparent 60%)",
           }}
         />
         <div className="relative max-w-[1080px] mx-auto text-center">
