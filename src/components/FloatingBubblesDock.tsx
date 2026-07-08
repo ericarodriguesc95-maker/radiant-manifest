@@ -4,6 +4,7 @@ import { MessageCircle, Hash, Crown, Wallet, X, Plus, Clock, Sparkles, ChevronRi
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
+import FloatingAiChat, { type AiPersona } from "./FloatingAiChat";
 
 /**
  * Unified floating bubbles dock.
