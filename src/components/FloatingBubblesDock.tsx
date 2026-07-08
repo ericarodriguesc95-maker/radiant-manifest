@@ -4,6 +4,7 @@ import { MessageCircle, Hash, Crown, Wallet, X, Plus, Clock, Sparkles, ChevronRi
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
+import FloatingAiChat, { type AiPersona } from "./FloatingAiChat";
 
 /**
  * Unified floating bubbles dock.
@@ -29,23 +30,56 @@ interface AiOption {
   label: string;
   description: string;
   icon: React.ElementType;
-  href: string;
-  hideOnPrefix: string[];
+  persona: AiPersona;
 }
 
 const AI_OPTIONS: AiOption[] = [
-  { id: "agenda", label: "Minha agenda do dia", description: "Organize sua rotina com IA", icon: Clock,
-    href: "/alta-performance?openAi=1", hideOnPrefix: ["/alta-performance"] },
-  { id: "eu-superior", label: "Falar com meu Eu Superior", description: "A melhor versão de você", icon: Crown,
-    href: "/metas?tab=manifestacao&openEuSuperior=1", hideOnPrefix: ["/metas"] },
-  { id: "financeira", label: "Consultora do meu dinheiro", description: "Analise suas finanças", icon: Wallet,
-    href: "/financas?openAi=1", hideOnPrefix: ["/financas"] },
-  { id: "nutri", label: "Nutricionista IA", description: "Cardápios e dicas de alimentação", icon: Apple,
-    href: "/saude?openNutri=1", hideOnPrefix: ["/saude"] },
-  { id: "sono", label: "Regulador do sono", description: "Ajuste sua rotina de descanso", icon: Moon,
-    href: "/sono?openSleepAi=1", hideOnPrefix: ["/sono"] },
-  { id: "biblia", label: "Estudo Bíblico IA", description: "Reflexões e interpretações", icon: BookOpen,
-    href: "/biblia-365?openBibleAi=1", hideOnPrefix: ["/biblia-365"] },
+  {
+    id: "agenda", label: "Minha agenda do dia", description: "Organize sua rotina com IA", icon: Clock,
+    persona: {
+      id: "agenda", label: "Agenda IA", emoji: "🗓️", functionName: "ai-assistant",
+      greeting: "Oi, rainha! 👑 Vamos organizar seu dia? Me conta o que você precisa fazer hoje ou me pergunte por onde começar.",
+      systemOverride: "Você é uma assistente pessoal de alta performance para mulheres. Ajude a usuária a planejar sua agenda, priorizar tarefas e organizar rotinas com foco em produtividade elite. Responda em português do Brasil, com carinho e clareza. Use emojis com moderação.",
+    },
+  },
+  {
+    id: "eu-superior", label: "Falar com meu Eu Superior", description: "A melhor versão de você", icon: Crown,
+    persona: {
+      id: "eu-superior", label: "Eu Superior", emoji: "👑", functionName: "ai-assistant",
+      greeting: "Olá, sou você — a versão mais elevada e consciente. ✨ Sobre o que você precisa de clareza agora?",
+      systemOverride: "Você é o Eu Superior da usuária: a versão mais elevada, sábia e consciente dela mesma. Responda em primeira pessoa, com amor, sabedoria e verdade. Use linguagem poética e espiritual, mas prática. Português do Brasil.",
+    },
+  },
+  {
+    id: "financeira", label: "Consultora do meu dinheiro", description: "Analise suas finanças", icon: Wallet,
+    persona: {
+      id: "financeira", label: "Consultora Financeira", emoji: "💎", functionName: "ai-assistant",
+      greeting: "Oi, rainha do próprio dinheiro! 💎 Me conta sua dúvida ou o que quer melhorar nas finanças hoje.",
+      systemOverride: "Você é uma consultora financeira feminina especialista em educação financeira, investimentos, orçamento e mindset de prosperidade para mulheres. Responda em português do Brasil, prática e empática.",
+    },
+  },
+  {
+    id: "nutri", label: "Nutricionista IA", description: "Jejum, dieta e autofagia", icon: Apple,
+    persona: {
+      id: "nutri", label: "Dra. Luna", emoji: "🥗", functionName: "nutricionista-ai",
+      greeting: "Oi, rainha! 👑 Sou a **Dra. Luna**, nutricionista funcional. Me pergunte sobre jejum intermitente, cardápios, autofagia ou seu ciclo hormonal. ✨",
+    },
+  },
+  {
+    id: "sono", label: "Regulador do sono", description: "Ajuste sua rotina de descanso", icon: Moon,
+    persona: {
+      id: "sono", label: "Sono IA", emoji: "🌙", functionName: "sleep-chat",
+      greeting: "Oi! 🌙 Vamos regular seu sono? Me conta como está sua rotina ou o que quer melhorar.",
+    },
+  },
+  {
+    id: "biblia", label: "Estudo Bíblico IA", description: "Reflexões e interpretações", icon: BookOpen,
+    persona: {
+      id: "biblia", label: "Estudo Bíblico", emoji: "📖", functionName: "bible-study-ai",
+      greeting: "Paz, rainha! 📖 Sobre qual passagem ou tema bíblico você quer refletir hoje?",
+      buildBody: (messages) => ({ messages, dayContext: null }),
+    },
+  },
 ];
 
 const BUBBLES: BubbleDef[] = [
@@ -82,6 +116,7 @@ export default function FloatingBubblesDock() {
   const [unreadDm, setUnreadDm] = useState(0);
   const [shakeId, setShakeId] = useState<BubbleId | null>(null);
   const [aiMenuOpen, setAiMenuOpen] = useState(false);
+  const [activePersona, setActivePersona] = useState<AiPersona | null>(null);
   const previousUnreadRef = useRef(0);
 
 
@@ -339,26 +374,25 @@ export default function FloatingBubblesDock() {
               {b.id === "ia-hub" && aiMenuOpen && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setAiMenuOpen(false)} />
-                  <div className="absolute right-0 bottom-16 md:bottom-20 w-64 rounded-2xl glass-strong border border-gold/40 p-2 shadow-2xl space-y-1 animate-fade-in z-50">
+                  <div className="absolute right-0 bottom-16 md:bottom-20 w-64 rounded-2xl glass-strong border border-gold/40 p-2 shadow-2xl space-y-1 z-50 animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-2 duration-200 ease-out origin-bottom-right">
                     <div className="flex items-center gap-2 px-3 pt-2 pb-1.5">
                       <Sparkles className="h-3.5 w-3.5 text-gold" />
                       <p className="text-[10px] text-gold/90 uppercase tracking-wider font-semibold">Escolha sua IA</p>
                     </div>
                     {AI_OPTIONS.map((opt) => {
                       const OptIcon = opt.icon;
-                      const onCurrent = opt.hideOnPrefix.some((p) => location.pathname.startsWith(p));
+                      const isActive = activePersona?.id === opt.persona.id;
                       return (
                         <button
                           key={opt.id}
                           onClick={() => {
                             setAiMenuOpen(false);
-                            navigate(opt.href);
+                            setActivePersona(opt.persona);
                           }}
-                          disabled={onCurrent}
                           className={cn(
                             "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all",
                             "hover:bg-gold/10 active:scale-[0.98]",
-                            onCurrent && "opacity-50 cursor-not-allowed"
+                            isActive && "bg-gold/10 ring-1 ring-gold/40"
                           )}
                         >
                           <div className="h-9 w-9 rounded-xl bg-gold/15 border border-gold/30 flex items-center justify-center flex-shrink-0">
@@ -367,10 +401,10 @@ export default function FloatingBubblesDock() {
                           <div className="flex-1 min-w-0">
                             <p className="text-xs font-display font-bold text-foreground leading-tight">{opt.label}</p>
                             <p className="text-[10px] font-body text-muted-foreground leading-tight mt-0.5 truncate">
-                              {onCurrent ? "Você já está aqui" : opt.description}
+                              {isActive ? "Aberta agora" : opt.description}
                             </p>
                           </div>
-                          {!onCurrent && <ChevronRight className="h-3.5 w-3.5 text-gold/60 flex-shrink-0" />}
+                          <ChevronRight className="h-3.5 w-3.5 text-gold/60 flex-shrink-0" />
                         </button>
                       );
                     })}
@@ -381,6 +415,10 @@ export default function FloatingBubblesDock() {
           </div>
         );
       })}
+
+      {activePersona && (
+        <FloatingAiChat persona={activePersona} onClose={() => setActivePersona(null)} />
+      )}
     </>
   );
 }
