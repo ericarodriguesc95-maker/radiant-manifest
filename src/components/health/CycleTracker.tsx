@@ -41,8 +41,9 @@ const moodOptions = [
 const phaseInfo = [
   {
     name: "Menstrual (Dias 1-5)",
-    icon: <Droplets className="h-5 w-5 text-red-400" />,
-    color: "text-red-400",
+    icon: <Droplets className="h-5 w-5 text-violet-500" />,
+    color: "text-violet-600",
+    bg: "bg-gradient-to-r from-violet-100 to-slate-100 border border-violet-200/50",
     desc: "Queda de estrogênio e progesterona. Momento de introspecção e descanso.",
     tips: [
       "Prefira exercícios leves como caminhada e yoga",
