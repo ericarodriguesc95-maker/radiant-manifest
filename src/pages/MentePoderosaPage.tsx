@@ -453,10 +453,10 @@ export default function MentePoderosaPage() {
 
         {/* Stats: Level + XP + Progress */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div className="rounded-2xl border border-gold/30 bg-zinc-950/60 p-4">
+          <div className="rounded-2xl border border-gold/30 bg-gradient-card p-4">
             <div className="flex items-center gap-2 mb-1">
               <Award className="h-4 w-4 text-gold" />
-              <p className="text-[10px] uppercase tracking-wider text-gold/70 font-semibold">Nível</p>
+              <p className="text-[10px] uppercase tracking-wider text-gold/80 font-semibold">Nível</p>
             </div>
             <p className={`font-display text-lg ${level.color}`}>{level.name}</p>
             {nextLevel ? (
@@ -470,18 +470,18 @@ export default function MentePoderosaPage() {
               <p className="text-[10px] text-gold mt-2">Nível máximo atingido 👑</p>
             )}
           </div>
-          <div className="rounded-2xl border border-gold/30 bg-zinc-950/60 p-4">
+          <div className="rounded-2xl border border-gold/30 bg-gradient-card p-4">
             <div className="flex items-center gap-2 mb-1">
               <Trophy className="h-4 w-4 text-gold" />
-              <p className="text-[10px] uppercase tracking-wider text-gold/70 font-semibold">XP Total</p>
+              <p className="text-[10px] uppercase tracking-wider text-gold/80 font-semibold">XP Total</p>
             </div>
             <p className="font-display text-2xl text-foreground">{progress.xp}<span className="text-sm text-muted-foreground"> / {TOTAL_XP}</span></p>
             <p className="text-[10px] text-muted-foreground mt-1">Pontos de experiência conquistados</p>
           </div>
-          <div className="rounded-2xl border border-gold/30 bg-zinc-950/60 p-4">
+          <div className="rounded-2xl border border-gold/30 bg-gradient-card p-4">
             <div className="flex items-center gap-2 mb-1">
               <Target className="h-4 w-4 text-gold" />
-              <p className="text-[10px] uppercase tracking-wider text-gold/70 font-semibold">Tarefas</p>
+              <p className="text-[10px] uppercase tracking-wider text-gold/80 font-semibold">Tarefas</p>
             </div>
             <p className="font-display text-2xl text-foreground">{completedCount}<span className="text-sm text-muted-foreground"> / {ALL_TASKS_COUNT}</span></p>
             <Progress value={overallPct} className="h-1.5 mt-2" />
