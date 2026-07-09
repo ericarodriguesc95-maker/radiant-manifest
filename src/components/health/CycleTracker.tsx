@@ -529,7 +529,7 @@ export default function CycleTracker() {
             </div>
             {/* Legend */}
             <div className="flex flex-wrap gap-2 mt-7">
-              <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-red-400/70" /><span className="text-[9px] text-muted-foreground">Menstrual</span></div>
+              <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-violet-200 to-slate-200" /><span className="text-[9px] text-muted-foreground">Menstrual</span></div>
               <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-emerald-400/70" /><span className="text-[9px] text-muted-foreground">Folicular</span></div>
               <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-pink-400/80" /><span className="text-[9px] text-muted-foreground">Fértil</span></div>
               <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-violet-400/70" /><span className="text-[9px] text-muted-foreground">Lútea</span></div>
