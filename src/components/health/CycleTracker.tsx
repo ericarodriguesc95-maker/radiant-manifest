@@ -95,6 +95,7 @@ const phaseInfo = [
     ],
     neuro: "Progesterona atua como ansiolítico natural via GABA. Quando cai no final da fase, causa irritabilidade e ansiedade (TPM). Serotonina reduz — por isso a compulsão por doces e carboidratos.",
   },
+];
 
 // Daily cycle guide: mood, symptoms, tips per day range
 const dailyCycleGuide: Record<string, { days: string; moods: string[]; symptoms: string[]; tips: string[]; energy: string; libido: string }> = {
