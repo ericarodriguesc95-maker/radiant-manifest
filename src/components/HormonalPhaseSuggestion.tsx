@@ -25,7 +25,7 @@ const SUGGESTIONS: Record<Phase, Suggestion> = {
     message: "Energia em recolhimento. Priorize introspecção, descanso ativo e áudios de regulação emocional.",
     ctaLabel: "Reprogramação Mental",
     ctaTo: "/reprogramacao",
-    gradient: "from-rose-950/60 via-rose-900/30 to-zinc-950/40",
+    gradient: "from-violet-100 via-slate-100 to-violet-200",
   },
   folicular: {
     phase: "folicular",
@@ -34,7 +34,7 @@ const SUGGESTIONS: Record<Phase, Suggestion> = {
     message: "Estrogênio subindo: criatividade, foco e memória em alta. Hora ideal para estudar e iniciar projetos.",
     ctaLabel: "Alta Performance",
     ctaTo: "/alta-performance",
-    gradient: "from-amber-900/40 via-amber-800/20 to-zinc-950/40",
+    gradient: "from-amber-50 via-yellow-50 to-amber-100",
   },
   ovulatoria: {
     phase: "fase ovulatória" as any,
@@ -43,7 +43,7 @@ const SUGGESTIONS: Record<Phase, Suggestion> = {
     message: "Pico de energia, comunicação e magnetismo. Use para gravar conteúdos, conversas difíceis e treinos intensos.",
     ctaLabel: "Metas & Manifestação",
     ctaTo: "/metas",
-    gradient: "from-fuchsia-900/40 via-pink-900/20 to-zinc-950/40",
+    gradient: "from-pink-50 via-rose-50 to-pink-100",
   },
   lutea: {
     phase: "lutea",
@@ -52,7 +52,7 @@ const SUGGESTIONS: Record<Phase, Suggestion> = {
     message: "Progesterona alta = introspecção e sensibilidade. Priorize Neurociência & PNL para regular emoções, em vez de cobrança.",
     ctaLabel: "Reprogramação Mental",
     ctaTo: "/reprogramacao",
-    gradient: "from-violet-950/60 via-purple-900/30 to-zinc-950/40",
+    gradient: "from-violet-50 via-purple-50 to-purple-100",
   },
 };
 
