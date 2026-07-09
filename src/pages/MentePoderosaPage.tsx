@@ -506,7 +506,7 @@ export default function MentePoderosaPage() {
             const modPct = Math.round((modDone / mod.tasks.length) * 100);
             const isOpen = openModule === mod.id;
             return (
-              <div key={mod.id} className="rounded-2xl border border-gold/20 bg-zinc-950/40 overflow-hidden">
+              <div key={mod.id} className="rounded-2xl border border-gold/20 bg-gradient-card overflow-hidden">
                 <button
                   onClick={() => setOpenModule(isOpen ? null : mod.id)}
                   className="w-full p-4 flex items-center gap-3 text-left hover:bg-gold/5 transition-colors"
@@ -519,20 +519,20 @@ export default function MentePoderosaPage() {
                     <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{mod.tagline}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <Progress value={modPct} className="h-1 flex-1" />
-                      <span className="text-[10px] text-gold/70 font-mono">{modDone}/{mod.tasks.length}</span>
+                      <span className="text-[10px] text-gold/80 font-mono">{modDone}/{mod.tasks.length}</span>
                     </div>
                   </div>
                 </button>
 
                 {isOpen && (
-                  <div className="border-t border-gold/15 p-3 space-y-2 bg-muted/40">
+                  <div className="border-t border-gold/15 p-3 space-y-2 bg-card/80">
                     {mod.tasks.map((task) => {
                       const done = !!progress.completed[task.id];
                       return (
                         <div
                           key={task.id}
                           className={`rounded-xl border p-3 transition-all ${
-                            done ? "border-gold/40 bg-gold/5" : "border-gold/15 bg-zinc-900/40"
+                            done ? "border-gold/40 bg-gold/5" : "border-gold/15 bg-card"
                           }`}
                         >
                           <button
