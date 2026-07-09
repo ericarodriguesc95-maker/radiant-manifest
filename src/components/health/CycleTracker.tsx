@@ -57,6 +57,7 @@ const phaseInfo = [
     name: "Folicular (Dias 6-13)",
     icon: <Sparkles className="h-5 w-5 text-emerald-400" />,
     color: "text-emerald-400",
+    bg: "",
     desc: "Estrogênio em alta. Fase de energia, criatividade e motivação.",
     tips: [
       "Melhor fase para treinos intensos e HIIT",
