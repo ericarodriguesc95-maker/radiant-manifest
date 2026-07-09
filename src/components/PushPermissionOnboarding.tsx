@@ -51,10 +51,10 @@ export default function PushPermissionOnboarding() {
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) handleLater(); }}>
-      <DialogContent className="max-w-md border border-[#D4AF37]/30 bg-card text-white">
+      <DialogContent className="max-w-md border border-[#D4AF37]/30 bg-card text-foreground">
         <button
           onClick={handleLater}
-          className="absolute right-3 top-3 text-muted-foreground hover:text-white"
+          className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
           aria-label="Fechar"
         >
           <X className="h-4 w-4" />
@@ -81,7 +81,7 @@ export default function PushPermissionOnboarding() {
 
         <div className="rounded-lg border border-[#D4AF37]/20 bg-[#D4AF37]/5 p-3 text-xs text-muted-foreground">
           <strong className="text-[#D4AF37]">Como funciona:</strong> seu navegador vai abrir
-          uma caixinha pedindo permissão. Toque em <span className="text-white">"Permitir"</span> para receber.
+          uma caixinha pedindo permissão. Toque em <span className="text-foreground">"Permitir"</span> para receber.
         </div>
 
         <div className="mt-4 flex flex-col gap-2">
@@ -96,7 +96,7 @@ export default function PushPermissionOnboarding() {
           <Button
             onClick={handleLater}
             variant="ghost"
-            className="w-full text-muted-foreground hover:bg-muted/40 hover:text-white"
+            className="w-full text-muted-foreground hover:bg-muted/40 hover:text-foreground"
           >
             Agora não
           </Button>
