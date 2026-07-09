@@ -305,11 +305,11 @@ const TOTAL_XP = MODULES.reduce((s, m) => s + m.tasks.reduce((t, k) => t + k.xp,
 
 // ───────────────────────── Levels ─────────────────────────
 const LEVELS = [
-  { name: "Despertar", min: 0, color: "text-zinc-300" },
-  { name: "Aprendiz da Mente", min: 100, color: "text-amber-300" },
-  { name: "Estrategista Emocional", min: 250, color: "text-amber-200" },
+  { name: "Despertar", min: 0, color: "text-foreground" },
+  { name: "Aprendiz da Mente", min: 100, color: "text-amber-600" },
+  { name: "Estrategista Emocional", min: 250, color: "text-amber-600" },
   { name: "Mestra da Influência", min: 450, color: "text-gold" },
-  { name: "Soberana da Mente", min: 650, color: "text-yellow-300" },
+  { name: "Soberana da Mente", min: 650, color: "text-amber-600" },
 ];
 
 function levelFromXp(xp: number) {
@@ -453,10 +453,10 @@ export default function MentePoderosaPage() {
 
         {/* Stats: Level + XP + Progress */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          <div className="rounded-2xl border border-gold/30 bg-zinc-950/60 p-4">
+          <div className="rounded-2xl border border-gold/30 bg-gradient-card p-4">
             <div className="flex items-center gap-2 mb-1">
               <Award className="h-4 w-4 text-gold" />
-              <p className="text-[10px] uppercase tracking-wider text-gold/70 font-semibold">Nível</p>
+              <p className="text-[10px] uppercase tracking-wider text-gold/80 font-semibold">Nível</p>
             </div>
             <p className={`font-display text-lg ${level.color}`}>{level.name}</p>
             {nextLevel ? (
@@ -470,18 +470,18 @@ export default function MentePoderosaPage() {
               <p className="text-[10px] text-gold mt-2">Nível máximo atingido 👑</p>
             )}
           </div>
-          <div className="rounded-2xl border border-gold/30 bg-zinc-950/60 p-4">
+          <div className="rounded-2xl border border-gold/30 bg-gradient-card p-4">
             <div className="flex items-center gap-2 mb-1">
               <Trophy className="h-4 w-4 text-gold" />
-              <p className="text-[10px] uppercase tracking-wider text-gold/70 font-semibold">XP Total</p>
+              <p className="text-[10px] uppercase tracking-wider text-gold/80 font-semibold">XP Total</p>
             </div>
             <p className="font-display text-2xl text-foreground">{progress.xp}<span className="text-sm text-muted-foreground"> / {TOTAL_XP}</span></p>
             <p className="text-[10px] text-muted-foreground mt-1">Pontos de experiência conquistados</p>
           </div>
-          <div className="rounded-2xl border border-gold/30 bg-zinc-950/60 p-4">
+          <div className="rounded-2xl border border-gold/30 bg-gradient-card p-4">
             <div className="flex items-center gap-2 mb-1">
               <Target className="h-4 w-4 text-gold" />
-              <p className="text-[10px] uppercase tracking-wider text-gold/70 font-semibold">Tarefas</p>
+              <p className="text-[10px] uppercase tracking-wider text-gold/80 font-semibold">Tarefas</p>
             </div>
             <p className="font-display text-2xl text-foreground">{completedCount}<span className="text-sm text-muted-foreground"> / {ALL_TASKS_COUNT}</span></p>
             <Progress value={overallPct} className="h-1.5 mt-2" />
@@ -506,7 +506,7 @@ export default function MentePoderosaPage() {
             const modPct = Math.round((modDone / mod.tasks.length) * 100);
             const isOpen = openModule === mod.id;
             return (
-              <div key={mod.id} className="rounded-2xl border border-gold/20 bg-zinc-950/40 overflow-hidden">
+              <div key={mod.id} className="rounded-2xl border border-gold/20 bg-gradient-card overflow-hidden">
                 <button
                   onClick={() => setOpenModule(isOpen ? null : mod.id)}
                   className="w-full p-4 flex items-center gap-3 text-left hover:bg-gold/5 transition-colors"
@@ -519,20 +519,20 @@ export default function MentePoderosaPage() {
                     <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{mod.tagline}</p>
                     <div className="flex items-center gap-2 mt-2">
                       <Progress value={modPct} className="h-1 flex-1" />
-                      <span className="text-[10px] text-gold/70 font-mono">{modDone}/{mod.tasks.length}</span>
+                      <span className="text-[10px] text-gold/80 font-mono">{modDone}/{mod.tasks.length}</span>
                     </div>
                   </div>
                 </button>
 
                 {isOpen && (
-                  <div className="border-t border-gold/15 p-3 space-y-2 bg-muted/40">
+                  <div className="border-t border-gold/15 p-3 space-y-2 bg-card/80">
                     {mod.tasks.map((task) => {
                       const done = !!progress.completed[task.id];
                       return (
                         <div
                           key={task.id}
                           className={`rounded-xl border p-3 transition-all ${
-                            done ? "border-gold/40 bg-gold/5" : "border-gold/15 bg-zinc-900/40"
+                            done ? "border-gold/40 bg-gold/5" : "border-gold/15 bg-card"
                           }`}
                         >
                           <button
@@ -580,7 +580,7 @@ export default function MentePoderosaPage() {
           ) : (
             <div className="space-y-2">
               {history.slice(0, 20).map((h) => (
-                <div key={h.id} className="rounded-xl border border-gold/15 bg-zinc-950/50 p-3">
+                <div key={h.id} className="rounded-xl border border-gold/15 bg-gradient-card p-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
                       <p className="text-sm text-foreground font-medium">{h.taskTitle}</p>
