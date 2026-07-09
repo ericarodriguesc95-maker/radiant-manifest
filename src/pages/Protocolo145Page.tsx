@@ -312,7 +312,7 @@ function CelebrationOverlay({ onClose, onArchive, runStats }: {
 }) {
   const msg = celebrationMessages[Math.floor(Math.random() * celebrationMessages.length)];
   return (
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 backdrop-blur-md animate-fade-in p-4">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-card/90 backdrop-blur-md animate-fade-in p-4">
       {/* Confetti-like sparkles */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {Array.from({ length: 18 }).map((_, i) => (
@@ -330,7 +330,7 @@ function CelebrationOverlay({ onClose, onArchive, runStats }: {
         ))}
       </div>
 
-      <div className="relative max-w-md w-full rounded-3xl border border-gold/50 bg-gradient-to-br from-black via-zinc-950 to-black p-7 text-center animate-scale-in shadow-[0_0_60px_-10px_hsl(var(--gold)/0.5)]">
+      <div className="relative max-w-md w-full rounded-3xl border border-gold/50 bg-gradient-to-br from-card via-background to-card p-7 text-center animate-scale-in shadow-[0_0_60px_-10px_hsl(var(--gold)/0.5)]">
         <button onClick={onClose} className="absolute top-3 right-3 h-8 w-8 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-muted-foreground">
           <X className="h-4 w-4" />
         </button>
@@ -576,7 +576,7 @@ export default function Protocolo145Page() {
       </button>
 
       {/* HERO */}
-      <div className="relative overflow-hidden rounded-2xl border border-gold/30 bg-gradient-to-br from-black via-zinc-950 to-black p-6 mb-4">
+      <div className="relative overflow-hidden rounded-2xl border border-gold/30 bg-gradient-to-br from-card via-background to-card p-6 mb-4">
         <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-gold/10 blur-3xl" aria-hidden />
         <div className="relative">
           <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.2em] text-gold border border-gold/40 rounded-full px-2.5 py-1 mb-3">
@@ -608,14 +608,14 @@ export default function Protocolo145Page() {
 
         {/* STREAK + SCORE */}
         <div className="mt-3 grid grid-cols-2 gap-2">
-          <div className="rounded-xl border border-gold/20 bg-black/40 p-3">
+          <div className="rounded-xl border border-gold/20 bg-muted/50 p-3">
             <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold/80">
               <Flame className="h-3 w-3" /> Streak
             </div>
             <p className="mt-1 text-2xl font-display font-bold text-gold leading-none">{streak.current}<span className="text-xs text-muted-foreground font-normal ml-1">dias</span></p>
             <p className="text-[10px] text-muted-foreground mt-1">Recorde: {streak.best} dias</p>
           </div>
-          <div className="rounded-xl border border-gold/20 bg-black/40 p-3">
+          <div className="rounded-xl border border-gold/20 bg-muted/50 p-3">
             <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold/80">
               <Trophy className="h-3 w-3" /> Pontuação do ciclo
             </div>
@@ -714,7 +714,7 @@ export default function Protocolo145Page() {
               </div>
             ))}
           </div>
-          <div className="rounded-lg border border-gold/30 bg-black/30 p-3 mt-2">
+          <div className="rounded-lg border border-gold/30 bg-muted/40 p-3 mt-2">
             <p className="text-xs"><span className="text-gold font-semibold">Eletrólitos no jejum:</span> 1g de sal rosa + magnésio 400mg + potássio. Sem isso, fadiga e dor de cabeça aparecem por mineral, não por fome.</p>
           </div>
         </SectionCard>
@@ -737,7 +737,7 @@ export default function Protocolo145Page() {
                   l.target ? "ring-2 ring-gold ring-inset" : ""
                 } ${l.line ? "border-y-2 border-gold/60" : ""}`}
               >
-                <span className={`font-mono font-bold ${l.low ? "text-white/90" : "text-black"}`}>{l.range}</span>
+                <span className={`font-mono font-bold ${l.low ? "text-foreground" : "text-black"}`}>{l.range}</span>
                 <span className={`font-semibold ${l.low ? "text-white" : "text-black"}`}>{l.name}</span>
                 {l.target && <span className="text-[10px] uppercase tracking-wider bg-black text-gold px-1.5 py-0.5 rounded">DESTINO</span>}
                 {l.current && <span className="text-[10px] uppercase tracking-wider bg-white/10 text-white px-1.5 py-0.5 rounded">SAÍDA</span>}

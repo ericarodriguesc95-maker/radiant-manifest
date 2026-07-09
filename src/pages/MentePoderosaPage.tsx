@@ -425,7 +425,7 @@ export default function MentePoderosaPage() {
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-black/80 backdrop-blur-xl border-b border-gold/20">
+      <header className="sticky top-0 z-30 bg-card/90 backdrop-blur-xl border-b border-gold/20">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={() => navigate("/")} className="text-gold">
             <ArrowLeft className="h-5 w-5" />
@@ -443,7 +443,7 @@ export default function MentePoderosaPage() {
 
       <main className="max-w-3xl mx-auto px-4 py-6 space-y-6">
         {/* Intro */}
-        <section className="rounded-2xl border border-gold/30 bg-gradient-to-br from-zinc-950 via-black to-amber-950/10 p-5">
+        <section className="rounded-2xl border border-gold/30 bg-gradient-to-br from-card via-background to-amber-50 p-5">
           <p className="text-xs tracking-[0.25em] uppercase text-gold/70 font-semibold mb-2">Bom dia, rainha</p>
           <h2 className="font-display text-xl text-foreground mb-2">Treine sua mente. Conquiste o que quer.</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
@@ -525,7 +525,7 @@ export default function MentePoderosaPage() {
                 </button>
 
                 {isOpen && (
-                  <div className="border-t border-gold/15 p-3 space-y-2 bg-black/30">
+                  <div className="border-t border-gold/15 p-3 space-y-2 bg-muted/40">
                     {mod.tasks.map((task) => {
                       const done = !!progress.completed[task.id];
                       return (
@@ -611,7 +611,7 @@ export default function MentePoderosaPage() {
                         onChange={(e) => setNoteText(e.target.value)}
                         rows={2}
                         placeholder="Como foi praticar essa tarefa? O que sentiu?"
-                        className="w-full bg-black/40 border border-gold/20 rounded-lg px-2 py-1.5 text-xs text-foreground focus:outline-none focus:border-gold/50"
+                        className="w-full bg-muted/50 border border-gold/20 rounded-lg px-2 py-1.5 text-xs text-foreground focus:outline-none focus:border-gold/50"
                       />
                       <div className="flex gap-2">
                         <Button size="sm" onClick={() => saveNote(h.id)} className="bg-gold hover:bg-gold/90 text-black h-7 text-xs">

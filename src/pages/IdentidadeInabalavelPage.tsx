@@ -361,7 +361,7 @@ export default function IdentidadeInabalavelPage() {
                 </button>
               </div>
 
-              <div className="rounded-xl bg-black/30 border border-gold/15 p-3 flex gap-3">
+              <div className="rounded-xl bg-muted/40 border border-gold/15 p-3 flex gap-3">
                 <Quote className="h-4 w-4 text-gold shrink-0 mt-0.5" />
                 <div>
                   <p className="text-xs font-body italic text-foreground/90 leading-relaxed">
@@ -377,7 +377,7 @@ export default function IdentidadeInabalavelPage() {
                 {(["espirito", "alma", "corpo"] as Pilar[]).map((p) => (
                   <div
                     key={p}
-                    className="rounded-xl bg-black/30 border border-gold/10 p-2 text-center"
+                    className="rounded-xl bg-muted/40 border border-gold/10 p-2 text-center"
                   >
                     <p className="text-[9px] font-body tracking-[0.2em] uppercase text-gold/70">
                       {PILAR_INFO[p].nome}
@@ -513,7 +513,7 @@ export default function IdentidadeInabalavelPage() {
                           ))}
                         </ul>
 
-                        <div className="rounded-xl bg-black/25 border border-gold/15 p-3 flex gap-2">
+                        <div className="rounded-xl bg-muted/40 border border-gold/15 p-3 flex gap-2">
                           <Quote className="h-3.5 w-3.5 text-gold shrink-0 mt-0.5" />
                           <div>
                             <p className="text-[11px] font-body italic text-foreground/90 leading-relaxed">
