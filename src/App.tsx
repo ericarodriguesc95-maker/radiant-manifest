@@ -52,6 +52,7 @@ import LandingPage from "@/pages/LandingPage";
 import RankingMensalPage from "@/pages/RankingMensalPage";
 import ApresentacoesPage from "@/pages/ApresentacoesPage";
 import BemVindoPage from "@/pages/BemVindoPage";
+import DiretrizesPage from "@/pages/DiretrizesPage";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();

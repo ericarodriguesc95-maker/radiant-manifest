@@ -19,7 +19,7 @@ const steps = [
   {
     n: 4, icon: BookOpen, title: "Conheça nossas diretrizes",
     body: "Aqui a gente cultiva respeito, sororidade e elegância. Dá uma olhada nas regrinhas pra manter o clube leve e seguro pra todas.",
-    cta: { label: "Ver diretrizes", to: "/sugestoes" },
+    cta: { label: "Ver diretrizes", to: "/diretrizes" },
   },
   {
     n: 5, icon: Compass, title: "Comece a explorar tudo",
