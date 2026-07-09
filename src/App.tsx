@@ -52,6 +52,7 @@ import LandingPage from "@/pages/LandingPage";
 import RankingMensalPage from "@/pages/RankingMensalPage";
 import ApresentacoesPage from "@/pages/ApresentacoesPage";
 import BemVindoPage from "@/pages/BemVindoPage";
+import DiretrizesPage from "@/pages/DiretrizesPage";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
@@ -142,6 +143,7 @@ const AppRoutes = () => (
       <Route path="/ranking-mensal" element={<ErrorBoundary><RankingMensalPage /></ErrorBoundary>} />
       <Route path="/apresentacoes" element={<ErrorBoundary><ApresentacoesPage /></ErrorBoundary>} />
       <Route path="/bem-vindo" element={<ErrorBoundary><BemVindoPage /></ErrorBoundary>} />
+      <Route path="/diretrizes" element={<ErrorBoundary><DiretrizesPage /></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>
