@@ -41,8 +41,9 @@ const moodOptions = [
 const phaseInfo = [
   {
     name: "Menstrual (Dias 1-5)",
-    icon: <Droplets className="h-5 w-5 text-red-400" />,
-    color: "text-red-400",
+    icon: <Droplets className="h-5 w-5 text-violet-500" />,
+    color: "text-violet-600",
+    bg: "bg-gradient-to-r from-violet-100 to-slate-100 border border-violet-200/50",
     desc: "Queda de estrogênio e progesterona. Momento de introspecção e descanso.",
     tips: [
       "Prefira exercícios leves como caminhada e yoga",
@@ -56,6 +57,7 @@ const phaseInfo = [
     name: "Folicular (Dias 6-13)",
     icon: <Sparkles className="h-5 w-5 text-emerald-400" />,
     color: "text-emerald-400",
+    bg: "",
     desc: "Estrogênio em alta. Fase de energia, criatividade e motivação.",
     tips: [
       "Melhor fase para treinos intensos e HIIT",
@@ -69,6 +71,7 @@ const phaseInfo = [
     name: "Ovulatória (Dias 14-16)",
     icon: <Heart className="h-5 w-5 text-pink-400" />,
     color: "text-pink-400",
+    bg: "",
     desc: "Pico de estrogênio e LH. Máxima energia e sociabilidade.",
     tips: [
       "Pico de força e performance física",
@@ -82,6 +85,7 @@ const phaseInfo = [
     name: "Lútea (Dias 17-28)",
     icon: <Moon className="h-5 w-5 text-violet-400" />,
     color: "text-violet-400",
+    bg: "",
     desc: "Progesterona sobe e depois cai. Fase de TPM e introspecção.",
     tips: [
       "Reduza intensidade dos treinos gradualmente",
@@ -377,7 +381,7 @@ export default function CycleTracker() {
 
               {/* Current Phase */}
               {currentPhaseIndex !== null && (
-                <div className="flex items-center gap-2 bg-muted/30 rounded-lg p-3">
+                <div className={`flex items-center gap-2 rounded-lg p-3 ${phaseInfo[currentPhaseIndex].bg || "bg-muted/30"}`}>
                   {phaseInfo[currentPhaseIndex].icon}
                   <div>
                     <p className={`text-sm font-semibold ${phaseInfo[currentPhaseIndex].color}`}>
@@ -496,8 +500,8 @@ export default function CycleTracker() {
             <div className="relative">
               {/* Phase bar */}
               <div className="flex rounded-full overflow-hidden h-6 bg-muted/30">
-                <div className="bg-red-400/70 flex items-center justify-center" style={{ width: `${(5 / avgCycleLength) * 100}%` }}>
-                  <span className="text-[8px] text-white font-medium">Menstrual</span>
+                <div className="bg-gradient-to-r from-violet-200 to-slate-200 flex items-center justify-center" style={{ width: `${(5 / avgCycleLength) * 100}%` }}>
+                  <span className="text-[8px] text-violet-900 font-medium">Menstrual</span>
                 </div>
                 <div className="bg-emerald-400/70 flex items-center justify-center" style={{ width: `${((fertileStart - 6) / avgCycleLength) * 100}%` }}>
                   <span className="text-[8px] text-white font-medium">Folicular</span>
@@ -525,7 +529,7 @@ export default function CycleTracker() {
             </div>
             {/* Legend */}
             <div className="flex flex-wrap gap-2 mt-7">
-              <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-red-400/70" /><span className="text-[9px] text-muted-foreground">Menstrual</span></div>
+              <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-gradient-to-r from-violet-200 to-slate-200" /><span className="text-[9px] text-muted-foreground">Menstrual</span></div>
               <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-emerald-400/70" /><span className="text-[9px] text-muted-foreground">Folicular</span></div>
               <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-pink-400/80" /><span className="text-[9px] text-muted-foreground">Fértil</span></div>
               <div className="flex items-center gap-1"><div className="h-2.5 w-2.5 rounded-full bg-violet-400/70" /><span className="text-[9px] text-muted-foreground">Lútea</span></div>
