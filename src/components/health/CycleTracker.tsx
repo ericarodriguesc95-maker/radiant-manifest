@@ -500,8 +500,8 @@ export default function CycleTracker() {
             <div className="relative">
               {/* Phase bar */}
               <div className="flex rounded-full overflow-hidden h-6 bg-muted/30">
-                <div className="bg-red-400/70 flex items-center justify-center" style={{ width: `${(5 / avgCycleLength) * 100}%` }}>
-                  <span className="text-[8px] text-white font-medium">Menstrual</span>
+                <div className="bg-gradient-to-r from-violet-200 to-slate-200 flex items-center justify-center" style={{ width: `${(5 / avgCycleLength) * 100}%` }}>
+                  <span className="text-[8px] text-violet-900 font-medium">Menstrual</span>
                 </div>
                 <div className="bg-emerald-400/70 flex items-center justify-center" style={{ width: `${((fertileStart - 6) / avgCycleLength) * 100}%` }}>
                   <span className="text-[8px] text-white font-medium">Folicular</span>
