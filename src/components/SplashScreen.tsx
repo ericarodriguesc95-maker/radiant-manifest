@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import FourPointStar from "./FourPointStar";
+import brandLogo from "@/assets/gloow-up-club-logo.png";
 
 const PARTICLE_COUNT = 28;
 const SPLASH_DURATION = 2800;
@@ -45,14 +45,14 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background overflow-hidden transition-opacity duration-500 ${phase === "exit" ? "opacity-0" : "opacity-100"}`}
-      style={{ background: "linear-gradient(180deg, hsl(0 0% 3%), hsl(0 0% 7%) 50%, hsl(0 0% 3%))" }}
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden transition-opacity duration-500 ${phase === "exit" ? "opacity-0" : "opacity-100"}`}
+      style={{ background: "linear-gradient(180deg, #FAF7F0, #F3EDE0 50%, #FAF7F0)" }}
     >
       {/* Gold radial glow */}
       <div
         className="absolute w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{
-          background: "radial-gradient(circle, hsl(43 72% 52% / 0.12) 0%, transparent 70%)",
+          background: "radial-gradient(circle, hsl(43 72% 52% / 0.18) 0%, transparent 70%)",
           animation: "splash-pulse 2.5s ease-in-out infinite",
         }}
       />
@@ -67,7 +67,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
             top: `${p.y}%`,
             width: p.size,
             height: p.size,
-            backgroundColor: `hsl(43 72% ${50 + Math.random() * 20}%)`,
+            backgroundColor: `hsl(43 72% ${45 + Math.random() * 15}%)`,
             opacity: 0,
             animation: `splash-particle-float ${p.duration}s ${p.delay}s ease-in-out infinite`,
             ["--drift" as string]: `${p.drift}px`,
@@ -81,47 +81,27 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
           phase === "enter" ? "scale-90 opacity-0 translate-y-4" : "scale-100 opacity-100 translate-y-0"
         }`}
       >
-        {/* Star with glow ring */}
+        {/* Logo with glow ring */}
         <div className="relative">
           <div
-            className="absolute inset-0 -m-4 rounded-full"
+            className="absolute inset-0 -m-6 rounded-full"
             style={{
-              background: "radial-gradient(circle, hsl(43 72% 52% / 0.25) 0%, transparent 70%)",
+              background: "radial-gradient(circle, hsl(43 72% 52% / 0.3) 0%, transparent 70%)",
               animation: "splash-ring 2s ease-in-out infinite",
             }}
           />
-          <FourPointStar
-            size={56}
-            animate="spin"
-            className="text-gold drop-shadow-[0_0_20px_hsl(43_72%_52%_/_0.6)]"
-            fill="hsl(43 72% 52%)"
+          <img
+            src={brandLogo}
+            alt="Gloow Up Club"
+            className="relative h-32 w-32 object-contain rounded-2xl"
+            style={{
+              boxShadow: "0 15px 50px -10px rgba(201,148,41,0.4)",
+            }}
           />
         </div>
 
-        {/* Brand text */}
-        <div className="text-center">
-          <h1
-            className="font-display text-3xl tracking-wider"
-            style={{
-              background: "linear-gradient(135deg, hsl(43 55% 65%), hsl(43 72% 52%), hsl(38 60% 42%))",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              animation: "splash-shimmer 3s ease-in-out infinite",
-              backgroundSize: "200% 100%",
-            }}
-          >
-            GLOOW UP
-          </h1>
-          <p
-            className="font-body text-sm tracking-[0.4em] mt-1"
-            style={{ color: "hsl(43 30% 55%)" }}
-          >
-            CLUB
-          </p>
-        </div>
-
         {/* Loading bar */}
-        <div className="w-32 h-[2px] rounded-full overflow-hidden mt-3" style={{ background: "hsl(0 0% 15%)" }}>
+        <div className="w-32 h-[2px] rounded-full overflow-hidden mt-3" style={{ background: "rgba(42,35,23,0.10)" }}>
           <div
             className="h-full rounded-full"
             style={{
@@ -137,7 +117,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         className={`absolute bottom-12 font-body text-xs tracking-widest transition-opacity duration-700 ${
           phase === "enter" ? "opacity-0" : "opacity-100"
         }`}
-        style={{ color: "hsl(43 20% 40%)" }}
+        style={{ color: "hsl(43 40% 40%)" }}
       >
         SUA TRANSFORMAÇÃO COMEÇA AQUI
       </p>
