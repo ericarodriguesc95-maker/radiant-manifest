@@ -381,7 +381,7 @@ export default function CycleTracker() {
 
               {/* Current Phase */}
               {currentPhaseIndex !== null && (
-                <div className="flex items-center gap-2 bg-muted/30 rounded-lg p-3">
+                <div className={`flex items-center gap-2 rounded-lg p-3 ${phaseInfo[currentPhaseIndex].bg || "bg-muted/30"}`}>
                   {phaseInfo[currentPhaseIndex].icon}
                   <div>
                     <p className={`text-sm font-semibold ${phaseInfo[currentPhaseIndex].color}`}>
