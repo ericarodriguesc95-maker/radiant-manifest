@@ -129,7 +129,7 @@ export default function MentePoderosaChat() {
   };
 
   return (
-    <div className="rounded-2xl border border-gold/40 bg-gradient-to-br from-zinc-950 via-black to-zinc-950 overflow-hidden">
+    <div className="rounded-2xl border border-gold/40 bg-gradient-to-br from-card via-background to-card overflow-hidden">
       <button
         onClick={() => setOpen((o) => !o)}
         className="w-full flex items-center gap-3 p-4 text-left hover:bg-gold/5 transition-colors"
@@ -150,7 +150,7 @@ export default function MentePoderosaChat() {
       </button>
 
       {open && (
-        <div className="border-t border-gold/20 bg-black/40">
+        <div className="border-t border-gold/20 bg-muted/50">
           <div ref={scrollRef} className="max-h-[420px] overflow-y-auto p-4 space-y-3">
             {messages.length === 0 && (
               <div className="space-y-3">
@@ -198,7 +198,7 @@ export default function MentePoderosaChat() {
 
           <form
             onSubmit={(e) => { e.preventDefault(); send(input); }}
-            className="flex items-center gap-2 p-3 border-t border-gold/20 bg-black/60"
+            className="flex items-center gap-2 p-3 border-t border-gold/20 bg-muted/60"
           >
             <input
               type="text"
