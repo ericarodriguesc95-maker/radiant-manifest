@@ -85,6 +85,7 @@ const phaseInfo = [
     name: "Lútea (Dias 17-28)",
     icon: <Moon className="h-5 w-5 text-violet-400" />,
     color: "text-violet-400",
+    bg: "",
     desc: "Progesterona sobe e depois cai. Fase de TPM e introspecção.",
     tips: [
       "Reduza intensidade dos treinos gradualmente",
@@ -94,7 +95,6 @@ const phaseInfo = [
     ],
     neuro: "Progesterona atua como ansiolítico natural via GABA. Quando cai no final da fase, causa irritabilidade e ansiedade (TPM). Serotonina reduz — por isso a compulsão por doces e carboidratos.",
   },
-];
 
 // Daily cycle guide: mood, symptoms, tips per day range
 const dailyCycleGuide: Record<string, { days: string; moods: string[]; symptoms: string[]; tips: string[]; energy: string; libido: string }> = {
