@@ -71,6 +71,7 @@ const phaseInfo = [
     name: "Ovulatória (Dias 14-16)",
     icon: <Heart className="h-5 w-5 text-pink-400" />,
     color: "text-pink-400",
+    bg: "",
     desc: "Pico de estrogênio e LH. Máxima energia e sociabilidade.",
     tips: [
       "Pico de força e performance física",
