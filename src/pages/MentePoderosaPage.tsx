@@ -305,11 +305,11 @@ const TOTAL_XP = MODULES.reduce((s, m) => s + m.tasks.reduce((t, k) => t + k.xp,
 
 // ───────────────────────── Levels ─────────────────────────
 const LEVELS = [
-  { name: "Despertar", min: 0, color: "text-zinc-300" },
-  { name: "Aprendiz da Mente", min: 100, color: "text-amber-300" },
-  { name: "Estrategista Emocional", min: 250, color: "text-amber-200" },
+  { name: "Despertar", min: 0, color: "text-foreground" },
+  { name: "Aprendiz da Mente", min: 100, color: "text-amber-600" },
+  { name: "Estrategista Emocional", min: 250, color: "text-amber-600" },
   { name: "Mestra da Influência", min: 450, color: "text-gold" },
-  { name: "Soberana da Mente", min: 650, color: "text-yellow-300" },
+  { name: "Soberana da Mente", min: 650, color: "text-amber-600" },
 ];
 
 function levelFromXp(xp: number) {
