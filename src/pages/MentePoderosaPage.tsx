@@ -580,7 +580,7 @@ export default function MentePoderosaPage() {
           ) : (
             <div className="space-y-2">
               {history.slice(0, 20).map((h) => (
-                <div key={h.id} className="rounded-xl border border-gold/15 bg-zinc-950/50 p-3">
+                <div key={h.id} className="rounded-xl border border-gold/15 bg-gradient-card p-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
                       <p className="text-sm text-foreground font-medium">{h.taskTitle}</p>
