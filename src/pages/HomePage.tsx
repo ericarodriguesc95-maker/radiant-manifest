@@ -169,7 +169,7 @@ const HomePage = () => {
                 Apresente-se para o <span className="italic text-gold">clube</span> 👑
               </h2>
               <p className="mt-1.5 text-xs md:text-sm font-body text-muted-foreground max-w-md">
-                Esse é o seu primeiro passo. Conte quem você é, conecte-se com outras rainhas e ative seu lugar na comunidade.
+                Esse é o seu primeiro passo. Conte quem você é, conecte-se com outras extraordinárias e ative o seu lugar na comunidade.
               </p>
 
               <button

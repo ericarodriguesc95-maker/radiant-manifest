@@ -160,13 +160,34 @@ export default function LoginPage() {
 
       {/* Main content */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-8">
+        {/* Welcome headline */}
+        <div className="mb-4 text-center max-w-md px-4">
+          <h1
+            className="text-[22px] md:text-[26px] leading-tight"
+            style={{
+              color: C.ink,
+              fontFamily: "'Georgia', serif",
+              fontWeight: 400,
+            }}
+          >
+            Bem-vinda de volta,{" "}
+            <em style={{ color: C.gold, fontStyle: "italic" }}>Extraordinária</em>.
+          </h1>
+          <p
+            className="mt-2 text-sm italic"
+            style={{ color: C.inkDim, fontFamily: "'Georgia', serif" }}
+          >
+            Pronta para viver mais um dia intencional?
+          </p>
+        </div>
+
         {/* Rotating quote */}
-        <div className="mb-6 text-center max-w-sm px-4 h-14 flex items-center justify-center">
+        <div className="mb-6 text-center max-w-sm px-4 h-10 flex items-center justify-center">
           <p
             key={currentQuote}
-            className="text-sm italic animate-fade-in"
+            className="text-xs italic animate-fade-in"
             style={{
-              color: C.inkDim,
+              color: C.inkFaint,
               fontFamily: "'Georgia', serif",
               letterSpacing: "0.02em",
             }}
@@ -192,8 +213,11 @@ export default function LoginPage() {
               className="mx-auto h-28 w-auto object-contain rounded-2xl"
               style={{ boxShadow: "0 10px 40px -10px rgba(201,148,41,0.3)" }}
             />
-            <p className="text-xs tracking-[0.3em] uppercase mt-1" style={{ color: C.gold }}>
-              Exclusivo para mulheres de elite
+            <p className="text-[10px] tracking-[0.25em] uppercase mt-1" style={{ color: C.gold }}>
+              O ecossistema de alta performance
+            </p>
+            <p className="text-[10px] tracking-[0.25em] uppercase" style={{ color: C.gold }}>
+              para mulheres extraordinárias
             </p>
           </div>
 

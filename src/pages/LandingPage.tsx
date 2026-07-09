@@ -185,8 +185,8 @@ const MODULES = [
   },
   {
     n: "08",
-    title: "Girls Community",
-    desc: "Uma rede social privada completa, exclusiva para membras do Club. Networking feminino real, ranking de streak e um ambiente onde crescer juntas é o padrão. Você não precisa mais caminhar sozinha.",
+    title: "Comunidade das Extraordinárias",
+    desc: "Uma rede social privada completa e exclusiva para membras do Club. Networking feminino real, ranking de streak e um ambiente para crescerem juntas. Você não precisa mais caminhar sozinha.",
   },
   {
     n: "09",
@@ -387,6 +387,46 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* FUNDADORA — movida para logo após a primeira dobra */}
+      <section className="py-24 md:py-32 px-5 md:px-12">
+        <div className="max-w-[1080px] mx-auto grid md:grid-cols-[420px_1fr] gap-12 md:gap-16 items-center">
+          <div
+            style={{ border: `1px solid ${C.border}`, borderRadius: 16, overflow: "hidden" }}
+            className="aspect-[3/4] w-full max-w-[420px] mx-auto"
+          >
+            <img
+              src={ericaFounder}
+              alt="Érica Carvalho, fundadora do Gloow Up Club"
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          <div>
+            <SectionLabel>Quem está do outro lado</SectionLabel>
+            <h2
+              style={{ ...serif, color: C.cream, lineHeight: 1.1 }}
+              className="text-[34px] md:text-[48px] font-light tracking-tight"
+            >
+              Quem criou o <em style={{ color: C.gold, fontStyle: "italic" }}>Club</em>
+            </h2>
+            <div className="mt-8 space-y-4">
+              <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="text-[16px] font-light">
+                <span style={{ color: C.cream, fontWeight: 400 }}>Érica Carvalho</span> é a criadora do Gloow Up Club, graduanda em Gestão de Recursos Humanos, apaixonada por performance feminina e desenvolvimento pessoal com base em neurociência.
+              </p>
+              <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="text-[16px] font-light">
+                Supervisora de Atendimento em uma das maiores empresas de educação jurídica do Brasil, ela entendeu na prática o que separa as mulheres que performam em alto nível das que vivem no ciclo de começar e parar: não é talento, não é força de vontade. É estrutura.
+              </p>
+              <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="text-[16px] font-light">
+                O Gloow Up Club nasceu dessa percepção. Foi construído do zero, com neurociência, neuromarketing e muita vivência real. Não é teoria. É o sistema que ela mesma precisava e não existia.
+              </p>
+              <p style={{ ...serif, color: C.gold }} className="italic text-[18px] pt-2">
+                Por @erica.carvalhor
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* A VIRADA */}
       <section className="py-24 md:py-32 px-5 md:px-12">
         <div className="max-w-[820px] mx-auto text-center">
@@ -527,45 +567,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* FUNDADORA */}
-      <section className="py-24 md:py-32 px-5 md:px-12">
-        <div className="max-w-[1080px] mx-auto grid md:grid-cols-[420px_1fr] gap-12 md:gap-16 items-center">
-          <div
-            style={{ border: `1px solid ${C.border}`, borderRadius: 16, overflow: "hidden" }}
-            className="aspect-[3/4] w-full max-w-[420px] mx-auto"
-          >
-            <img
-              src={ericaFounder}
-              alt="Érica Carvalho, fundadora do Gloow Up Club"
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-          </div>
-          <div>
-            <SectionLabel>Quem está do outro lado</SectionLabel>
-            <h2
-              style={{ ...serif, color: C.cream, lineHeight: 1.1 }}
-              className="text-[34px] md:text-[48px] font-light tracking-tight"
-            >
-              Quem criou o <em style={{ color: C.gold, fontStyle: "italic" }}>Club</em>
-            </h2>
-            <div className="mt-8 space-y-4">
-              <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="text-[16px] font-light">
-                <span style={{ color: C.cream, fontWeight: 400 }}>Érica Carvalho</span> é a criadora do Gloow Up Club, graduanda em Gestão de Recursos Humanos, apaixonada por performance feminina e desenvolvimento pessoal com base em neurociência.
-              </p>
-              <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="text-[16px] font-light">
-                Supervisora de Atendimento em uma das maiores empresas de educação jurídica do Brasil, ela entendeu na prática o que separa as mulheres que performam em alto nível das que vivem no ciclo de começar e parar: não é talento, não é força de vontade. É estrutura.
-              </p>
-              <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="text-[16px] font-light">
-                O Gloow Up Club nasceu dessa percepção. Foi construído do zero, com neurociência, neuromarketing e muita vivência real. Não é teoria. É o sistema que ela mesma precisava e não existia.
-              </p>
-              <p style={{ ...serif, color: C.gold }} className="italic text-[18px] pt-2">
-                Por @erica.carvalhor
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* DEPOIMENTOS */}
       <section className="py-24 md:py-32 px-5 md:px-12">
@@ -786,7 +787,7 @@ export default function LandingPage() {
             </span>
           </div>
           <div style={{ color: C.creamFaint }} className="text-[12px] font-light text-center">
-            Criado por @erica.carvalhor · gloowupclub.com · @gloowupclub
+            Gloow Up Club — Feito para Mulheres Extraordinárias · @gloowupclub
           </div>
           <div style={{ color: C.creamFaint }} className="text-[12px] font-light">
             © 2026 Gloow Up Club

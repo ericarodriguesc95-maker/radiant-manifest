@@ -693,9 +693,14 @@ const ComunidadePage = () => {
       {/* Instagram-style header */}
       <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b border-border/30">
         <div className="px-4 py-3 flex items-center justify-between">
-          <h1 className="text-xl font-display font-bold tracking-tight">
-            Girls <span className="text-gold">✦</span>
-          </h1>
+          <div className="flex flex-col">
+            <h1 className="text-xl font-display font-bold tracking-tight leading-none">
+              Extraordinárias <span className="text-gold">✦</span>
+            </h1>
+            <span className="text-[9px] font-body tracking-[0.2em] uppercase text-gold/70 mt-0.5">
+              Feed das Extraordinárias
+            </span>
+          </div>
           <div className="flex items-end gap-1">
             <button
               onClick={() => { setShowDMs(true); try { localStorage.setItem("dm-used", "1"); } catch {} }}
