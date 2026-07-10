@@ -206,6 +206,8 @@ export default function CycleTracker() {
   const [logs, setLogs] = useState<CycleLog[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const startDateRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
   const [form, setForm] = useState({
     period_start: format(new Date(), "yyyy-MM-dd"),
     period_end: "",
