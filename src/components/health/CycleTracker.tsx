@@ -439,6 +439,120 @@ export default function CycleTracker() {
         </CardContent>
       </Card>
 
+      {/* Form - logo abaixo do botão Registrar */}
+      <div ref={formRef}>
+        {showForm && (
+          <Card className="border-primary/20">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">{editingId ? "Editar" : "Novo"} Registro</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-xs text-muted-foreground">Início</label>
+                  <Input ref={startDateRef} type="date" value={form.period_start} onChange={e => setForm(f => ({ ...f, period_start: e.target.value }))} />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground">Fim (opcional)</label>
+                  <Input type="date" value={form.period_end} onChange={e => setForm(f => ({ ...f, period_end: e.target.value }))} />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs text-muted-foreground">Intensidade do fluxo</label>
+                <Select value={form.flow_intensity} onValueChange={v => setForm(f => ({ ...f, flow_intensity: v }))}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="leve">🩸 Leve</SelectItem>
+                    <SelectItem value="medio">🩸🩸 Médio</SelectItem>
+                    <SelectItem value="intenso">🩸🩸🩸 Intenso</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-xs text-muted-foreground">Humor</label>
+                <Select value={form.mood} onValueChange={v => setForm(f => ({ ...f, mood: v }))}>
+                  <SelectTrigger><SelectValue placeholder="Selecionar" /></SelectTrigger>
+                  <SelectContent>
+                    {moodOptions.map(m => <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-xs text-muted-foreground mb-1 block">Sintomas</label>
+                <div className="flex flex-wrap gap-1.5">
+                  {symptomOptions.map(s => (
+                    <Badge
+                      key={s}
+                      variant={form.symptoms.includes(s) ? "default" : "outline"}
+                      className="cursor-pointer text-[10px]"
+                      onClick={() => toggleSymptom(s)}
+                    >
+                      {s}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              <Textarea
+                placeholder="Observações..."
+                value={form.notes}
+                onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
+                rows={2}
+              />
+
+              <div className="flex gap-2">
+                <Button onClick={saveLog} size="sm" className="flex-1">
+                  <Check className="h-4 w-4 mr-1" /> Salvar
+                </Button>
+                <Button variant="outline" onClick={resetForm} size="sm">
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* History - logo abaixo do formulário */}
+      {logs.length > 0 && (
+        <Card className="border-primary/20">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">Histórico de Registros</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {logs.slice(0, 6).map(log => (
+              <div key={log.id} className="flex items-center justify-between bg-muted/30 rounded-lg p-3">
+                <div>
+                  <p className="text-sm font-medium">
+                    {format(new Date(log.period_start + "T12:00:00"), "dd MMM yyyy", { locale: ptBR })}
+                    {log.period_end && ` — ${format(new Date(log.period_end + "T12:00:00"), "dd MMM", { locale: ptBR })}`}
+                  </p>
+                  <div className="flex gap-1 mt-1 flex-wrap">
+                    <Badge variant="outline" className="text-[9px]">
+                      {log.flow_intensity === "leve" ? "🩸 Leve" : log.flow_intensity === "intenso" ? "🩸🩸🩸 Intenso" : "🩸🩸 Médio"}
+                    </Badge>
+                    {log.mood && <Badge variant="outline" className="text-[9px]">{moodOptions.find(m => m.value === log.mood)?.label || log.mood}</Badge>}
+                    {log.symptoms?.slice(0, 2).map(s => <Badge key={s} variant="outline" className="text-[9px]">{s}</Badge>)}
+                  </div>
+                </div>
+                <div className="flex gap-1">
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => startEdit(log)}>
+                    <Edit2 className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={() => deleteLog(log.id)}>
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
+
+
       {/* Daily Guide Card */}
       {dailyGuide && currentDay && (
         <Card className="border-primary/20">
