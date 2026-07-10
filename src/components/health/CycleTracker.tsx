@@ -219,6 +219,15 @@ export default function CycleTracker() {
 
   useEffect(() => { if (user) loadLogs(); }, [user]);
 
+  useEffect(() => {
+    if (showForm) {
+      setTimeout(() => {
+        formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        startDateRef.current?.focus();
+      }, 50);
+    }
+  }, [showForm]);
+
   async function loadLogs() {
     if (!user) return;
     const { data } = await supabase
