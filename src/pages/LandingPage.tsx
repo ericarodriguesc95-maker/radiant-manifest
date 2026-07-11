@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
+import agendaLivesJulho from "@/assets/agenda-lives-julho.png.asset.json";
 import ericaFounder from "@/assets/erica-founder.jpg";
 import brandLogo from "@/assets/gloow-up-club-logo.png";
 import depoimentoNayara from "@/assets/depoimento-nayara.png";
@@ -795,15 +796,33 @@ export default function LandingPage() {
             <SectionLabel>Conecte-se com o Club</SectionLabel>
             <H2 highlight="antes mesmo de entrar.">Conheça o universo Gloow Up</H2>
             <p style={{ color: C.creamDim }} className="mt-5 text-[15px] font-light max-w-[560px] mx-auto">
-              Acompanhe conteúdos, agenda de lives com convidadas especiais e fale direto com a fundadora.
+              Acompanhe conteúdos, veja a agenda de lives do mês com convidadas especiais e fale direto com a fundadora.
             </p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+          {/* Agenda de lives do mês */}
+          <div className="mb-10 max-w-[560px] mx-auto">
+            <div
+              style={{ background: C.bgCard, border: `1px solid ${C.border}`, borderRadius: 18 }}
+              className="p-4 md:p-5"
+            >
+              <img
+                src={agendaLivesJulho.url}
+                alt="Agenda de lives do mês, Gloow Up Club"
+                className="w-full h-auto rounded-xl"
+                loading="lazy"
+              />
+              <p style={{ color: C.creamDim }} className="mt-4 text-center text-[13px] font-light">
+                Como foi a agenda de lives do mês para as Extraordinárias do Club.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-4">
             {[
               { title: "YouTube", desc: "Canal oficial com conteúdos, aulas e cortes", href: "https://youtube.com/@guclubapp?si=yzjSHrcwIKf892Xz", label: "Assinar canal", icon: "▶" },
-              { title: "Instagram", desc: "Bastidores, inspirações e novidades diárias", href: "https://www.instagram.com/guclub.app", label: "Seguir @guclub.app", icon: "◎" },
-              { title: "Agenda de Lives", desc: "Lives exclusivas para as Extraordinárias do app", href: "https://www.instagram.com/p/DaS_SGPuYpX/?igsh=MXhqaG9qaDN6bXJxdg==", label: "Ver agenda", icon: "✦" },
-              { title: "Fale com a fundadora", desc: "Tirar dúvidas ou conversar direto no WhatsApp", href: "https://wa.me/message/M64TKGTEYIZRK1", label: "Chamar no WhatsApp", icon: "✉" },
+              { title: "Instagram", desc: "Bastidores, inspirações e novidades diárias", href: "https://www.instagram.com/guclub.app/", label: "Seguir @guclub.app", icon: "◎" },
+              { title: "Fale com a fundadora", desc: "Tirar dúvidas ou conversar direto no WhatsApp", href: "https://wa.me/message/M64TKGTEYIZRK1", label: "Chamar no WhatsApp", icon: "whatsapp" },
             ].map((item) => (
               <a
                 key={item.title}
@@ -817,7 +836,13 @@ export default function LandingPage() {
                   style={{ background: `${C.gold}18`, color: C.gold, border: `1px solid ${C.gold}44` }}
                   className="h-10 w-10 rounded-full flex items-center justify-center text-lg"
                 >
-                  {item.icon}
+                  {item.icon === "whatsapp" ? (
+                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.966-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.019-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.695.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.004a9.87 9.87 0 01-5.03-1.378l-.36-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.99c-.003 5.45-4.437 9.888-9.887 9.888zM20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.335.101 11.892c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652a11.882 11.882 0 005.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.893 0-3.176-1.24-6.165-3.495-8.413z" />
+                    </svg>
+                  ) : (
+                    item.icon
+                  )}
                 </div>
                 <div style={{ ...serif, color: C.cream }} className="text-[18px]">{item.title}</div>
                 <p style={{ color: C.creamDim, lineHeight: 1.55 }} className="text-[13px] font-light flex-1">
