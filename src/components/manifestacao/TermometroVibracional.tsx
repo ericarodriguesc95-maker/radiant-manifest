@@ -26,7 +26,7 @@ interface HawkinsLevel {
 }
 
 const hawkinsScale: HawkinsLevel[] = [
-  { id: 1, emotion: "Vergonha", frequency: 20, level: "Humilhação", emoji: "😔", color: "bg-gray-700", textColor: "text-gray-400", description: "Sentimento de insignificância. Respire fundo — você merece estar aqui." },
+  { id: 1, emotion: "Vergonha", frequency: 20, level: "Humilhação", emoji: "😔", color: "bg-gray-700", textColor: "text-gray-400", description: "Sentimento de insignificância. Respire fundo, você merece estar aqui." },
   { id: 2, emotion: "Culpa", frequency: 30, level: "Destruição", emoji: "😢", color: "bg-gray-600", textColor: "text-gray-400", description: "Culpa excessiva bloqueia o crescimento. Pratique o autoperdão." },
   { id: 3, emotion: "Apatia", frequency: 50, level: "Desespero", emoji: "😶", color: "bg-gray-500", textColor: "text-gray-400", description: "Sensação de vazio. Um pequeno passo já é uma vitória." },
   { id: 4, emotion: "Tristeza", frequency: 75, level: "Arrependimento", emoji: "😞", color: "bg-blue-800", textColor: "text-blue-400", description: "A tristeza é passageira. Permita-se sentir, mas não se instale nela." },
@@ -70,7 +70,7 @@ const emotionPicker = [
 const emotionTips: Record<string, { tip: string; neuroscience: string }> = {
   Vergonha: {
     tip: "A vergonha ativa o sistema nervoso simpático. Pratique autocompaixão: coloque a mão no peito e diga 'Eu me aceito como sou'. Isso ativa o nervo vago e reduz o cortisol.",
-    neuroscience: "A vergonha ativa a ínsula anterior e o córtex cingulado — áreas ligadas à dor social. Estudos da Dra. Brené Brown mostram que nomear a vergonha reduz seu poder em até 50%.",
+    neuroscience: "A vergonha ativa a ínsula anterior e o córtex cingulado, áreas ligadas à dor social. Estudos da Dra. Brené Brown mostram que nomear a vergonha reduz seu poder em até 50%.",
   },
   Culpa: {
     tip: "Escreva uma carta de perdão para si mesma. A neurociência mostra que o autoperdão libera ocitocina e reduz inflamação no corpo.",
@@ -78,22 +78,22 @@ const emotionTips: Record<string, { tip: string; neuroscience: string }> = {
   },
   Apatia: {
     tip: "Comece com micro-ações: beba um copo de água, abra uma janela, sinta o sol. Pequenos estímulos sensoriais reativam o sistema de recompensa.",
-    neuroscience: "A apatia está ligada à baixa atividade no núcleo accumbens (centro de motivação). Dopamina é liberada não pela conquista, mas pela antecipação — planejar algo pequeno já ativa o circuito.",
+    neuroscience: "A apatia está ligada à baixa atividade no núcleo accumbens (centro de motivação). Dopamina é liberada não pela conquista, mas pela antecipação, planejar algo pequeno já ativa o circuito.",
   },
   Tristeza: {
-    tip: "Permita-se chorar — lágrimas emocionais contêm leucina-encefalina, um analgésico natural. Depois, ouça uma música que te conecte com um momento feliz.",
+    tip: "Permita-se chorar, lágrimas emocionais contêm leucina-encefalina, um analgésico natural. Depois, ouça uma música que te conecte com um momento feliz.",
     neuroscience: "A tristeza reduz a atividade no córtex pré-frontal esquerdo (associado a emoções positivas). Exercício físico de apenas 20 minutos equilibra essa assimetria hemisférica.",
   },
   Medo: {
     tip: "Use a técnica 5-4-3-2-1: nomeie 5 coisas que vê, 4 que toca, 3 que ouve, 2 que cheira, 1 que saboreia. Isso ancora seu cérebro no presente.",
-    neuroscience: "O medo ativa a amígdala em 12ms — mais rápido que a consciência. A técnica de grounding ativa o córtex pré-frontal, que inibe a resposta da amígdala em segundos.",
+    neuroscience: "O medo ativa a amígdala em 12ms, mais rápido que a consciência. A técnica de grounding ativa o córtex pré-frontal, que inibe a resposta da amígdala em segundos.",
   },
   Ansiedade: {
     tip: "Respiração 4-7-8: inspire por 4s, segure 7s, expire por 8s. Repita 4 vezes. Isso ativa o sistema nervoso parassimpático imediatamente.",
     neuroscience: "A ansiedade é uma hiperativação da rede de modo padrão (DMN). A respiração lenta aumenta a variabilidade da frequência cardíaca (HRV) e reduz cortisol em até 23%.",
   },
   Raiva: {
-    tip: "Canalize a energia: faça 20 polichinelos ou escreva tudo que sente em um papel (pode rasgar depois). A raiva é energia — redirecione-a.",
+    tip: "Canalize a energia: faça 20 polichinelos ou escreva tudo que sente em um papel (pode rasgar depois). A raiva é energia, redirecione-a.",
     neuroscience: "A raiva libera noradrenalina e aumenta o fluxo sanguíneo no córtex pré-frontal dorsolateral. Exercício físico metaboliza esses hormônios em 20 minutos.",
   },
   Frustração: {
@@ -106,7 +106,7 @@ const emotionTips: Record<string, { tip: string; neuroscience: string }> = {
   },
   Coragem: {
     tip: "Você está no ponto de virada de Hawkins! Acima de 200Hz, a energia se torna construtiva. Tome uma decisão que tem adiado.",
-    neuroscience: "A coragem não é ausência de medo — é ativação simultânea da amígdala (medo) e do córtex pré-frontal (decisão). Quanto mais pratica, mais forte fica essa conexão.",
+    neuroscience: "A coragem não é ausência de medo, é ativação simultânea da amígdala (medo) e do córtex pré-frontal (decisão). Quanto mais pratica, mais forte fica essa conexão.",
   },
   Confiança: {
     tip: "Mantenha essa frequência: adote uma postura expansiva por 2 minutos. A linguagem corporal retroalimenta o cérebro.",
@@ -117,7 +117,7 @@ const emotionTips: Record<string, { tip: string; neuroscience: string }> = {
     neuroscience: "A esperança ativa o córtex pré-frontal e o sistema dopaminérgico mesolímbico. Estudos mostram que pessoas esperançosas têm 14% mais chances de atingir suas metas.",
   },
   Aceitação: {
-    tip: "A aceitação não é resignação — é sabedoria. Ao aceitar o que é, você libera energia para criar o que será.",
+    tip: "A aceitação não é resignação, é sabedoria. Ao aceitar o que é, você libera energia para criar o que será.",
     neuroscience: "A aceitação reduz a atividade na amígdala e aumenta no córtex pré-frontal ventromedial. Praticantes de mindfulness mostram essa mudança em apenas 8 semanas (Harvard, 2011).",
   },
   Força: {
@@ -133,11 +133,11 @@ const emotionTips: Record<string, { tip: string; neuroscience: string }> = {
     neuroscience: "Robert Emmons (UC Davis) provou que 21 dias de gratidão diária aumentam o bem-estar em 25%, melhoram o sono e reduzem visitas ao médico em 35%.",
   },
   Alegria: {
-    tip: "Celebre! Dance, cante, pule! A alegria é contagiante — quando você vibra alto, eleva todos ao redor. Esse é o efeito de campo.",
+    tip: "Celebre! Dance, cante, pule! A alegria é contagiante, quando você vibra alto, eleva todos ao redor. Esse é o efeito de campo.",
     neuroscience: "A alegria ativa o nucleus accumbens e libera endorfinas naturais. O cérebro em estado de alegria tem neuroplasticidade 31% maior (Shawn Achor, Harvard).",
   },
   Paz: {
-    tip: "Você está em estado de beatitude (600Hz). Medite, contemple a natureza, ou simplesmente SEJA. Nenhuma ação é necessária — sua presença já transforma.",
+    tip: "Você está em estado de beatitude (600Hz). Medite, contemple a natureza, ou simplesmente SEJA. Nenhuma ação é necessária, sua presença já transforma.",
     neuroscience: "A paz profunda produz ondas cerebrais gama (40Hz+), associadas à iluminação e insight. Monges tibetanos em meditação profunda mostram atividade gama 30x acima do normal.",
   },
 };
@@ -343,7 +343,7 @@ export default function TermometroVibracional() {
                 {currentHawkins.frequency} Hz
               </p>
               <p className={cn("text-sm font-body font-semibold", currentHawkins.textColor)}>
-                {currentHawkins.emotion} — {currentHawkins.level}
+                {currentHawkins.emotion}, {currentHawkins.level}
               </p>
             </div>
             {Array.from({ length: 12 }).map((_, i) => (
@@ -598,7 +598,7 @@ export default function TermometroVibracional() {
           {[
             {
               title: "Seu cérebro muda com suas emoções",
-              text: "Cada emoção ativa circuitos neurais específicos. Emoções de alta frequência (amor, gratidão, paz) fortalecem o córtex pré-frontal — responsável por decisões, criatividade e autoconsciência.",
+              text: "Cada emoção ativa circuitos neurais específicos. Emoções de alta frequência (amor, gratidão, paz) fortalecem o córtex pré-frontal, responsável por decisões, criatividade e autoconsciência.",
             },
             {
               title: "A Escala de Hawkins é mensurável",

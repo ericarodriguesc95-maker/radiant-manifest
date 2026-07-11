@@ -72,7 +72,7 @@ export default function MentePoderosaChat() {
 
       if (!resp.ok || !resp.body) {
         const errJson = await resp.json().catch(() => ({}));
-        if (resp.status === 429) toast.error("Calma, rainha — muitas perguntas. Aguarde alguns segundos.");
+        if (resp.status === 429) toast.error("Calma, rainha, muitas perguntas. Aguarde alguns segundos.");
         else if (resp.status === 402) toast.error("Créditos de IA esgotados. Adicione créditos no workspace.");
         else toast.error(errJson.error || "Erro ao chamar a IA.");
         setIsLoading(false);

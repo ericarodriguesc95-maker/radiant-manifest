@@ -58,20 +58,20 @@ const typeIcons: Record<EntryType, string> = {
 
 const financeTips = [
   // Consultoria Comportamental Financeira
-  { icon: "🧠", title: "Gatilhos Emocionais de Compra", desc: "Identifique quando você compra por ansiedade, tédio ou recompensa emocional. Antes de comprar, espere 48h — se ainda quiser, é desejo real. A neurociência mostra que 70% das compras impulsivas são motivadas por dopamina, não necessidade." },
+  { icon: "🧠", title: "Gatilhos Emocionais de Compra", desc: "Identifique quando você compra por ansiedade, tédio ou recompensa emocional. Antes de comprar, espere 48h, se ainda quiser, é desejo real. A neurociência mostra que 70% das compras impulsivas são motivadas por dopamina, não necessidade." },
   { icon: "💔", title: "Síndrome da Impostora Financeira", desc: "Muitas mulheres sentem que 'não merecem' ter dinheiro ou investir. Isso vem de crenças limitantes da infância. Reprograme: 'Eu mereço abundância e sei administrar meu dinheiro com sabedoria.'" },
   { icon: "🪞", title: "Autoconhecimento Financeiro", desc: "Qual seu perfil: gastadora emocional, acumuladora ansiosa ou equilibrada? Entender seu padrão comportamental é o primeiro passo para transformar sua relação com dinheiro." },
   { icon: "⚡", title: "Efeito Manada nas Finanças", desc: "Não compre algo só porque 'todo mundo tem'. Comparação social é o maior sabotador financeiro. Mulheres de elite definem seu próprio padrão de vida baseado em seus valores, não nos dos outros." },
   { icon: "🎯", title: "Metas com Propósito Emocional", desc: "Metas financeiras genéricas falham. Conecte cada meta a um 'porquê' emocional forte: 'Quero R$50 mil para nunca mais depender de ninguém'. O cérebro se motiva mais com significado do que com números." },
   { icon: "💎", title: "Regra 50/30/20 Consciente", desc: "50% necessidades, 30% desejos, 20% investimentos. Mas o segredo comportamental é: pague-se primeiro. Transfira os 20% no dia que receber, antes de gastar qualquer centavo." },
-  { icon: "🏦", title: "Reserva = Liberdade Emocional", desc: "6 meses de despesas guardados não é só segurança financeira — é saúde mental. Pesquisas mostram que ter reserva reduz ansiedade em 40% e melhora qualidade do sono." },
+  { icon: "🏦", title: "Reserva = Liberdade Emocional", desc: "6 meses de despesas guardados não é só segurança financeira, é saúde mental. Pesquisas mostram que ter reserva reduz ansiedade em 40% e melhora qualidade do sono." },
   { icon: "💳", title: "Desintoxicação do Cartão", desc: "Se você usa o cartão compulsivamente, faça um 'detox': 30 dias só com dinheiro/débito. Isso ativa a 'dor de pagar' no cérebro, tornando você mais consciente de cada gasto." },
-  { icon: "👑", title: "Mentalidade de CEO da Sua Vida", desc: "Trate suas finanças como uma empresa. Faça reuniões semanais consigo mesma: analise receitas, despesas e investimentos. CEOs não ignoram o financeiro — você também não deveria." },
+  { icon: "👑", title: "Mentalidade de CEO da Sua Vida", desc: "Trate suas finanças como uma empresa. Faça reuniões semanais consigo mesma: analise receitas, despesas e investimentos. CEOs não ignoram o financeiro, você também não deveria." },
   { icon: "🌙", title: "Ritual Financeiro Noturno", desc: "Antes de dormir, revise seus gastos do dia em 2 minutos. Esse hábito ativa o córtex pré-frontal e cria consciência financeira automática em 21 dias." },
   { icon: "🦋", title: "Perdoe Seus Erros Financeiros", desc: "Culpa por dívidas passadas paralisa. Perdoe-se, aprenda e siga em frente. Neurociência comprova: autocrítica excessiva ativa o modo de sobrevivência e leva a mais gastos compulsivos." },
   { icon: "🔥", title: "Inflação do Estilo de Vida", desc: "Ganhou aumento? Não aumente seus gastos na mesma proporção. Invista pelo menos 50% de cada aumento. Esse é o segredo silencioso das mulheres que constroem riqueza real." },
   { icon: "🛡️", title: "Proteção x Autossabotagem", desc: "Adiar seguro de vida e previdência é autossabotagem disfarçada de 'depois eu vejo'. Mulheres inteligentes protegem o que constroem HOJE, não amanhã." },
-  { icon: "🌟", title: "Abundância é Decisão", desc: "Escassez é um programa mental, não uma realidade. Troque 'não tenho dinheiro' por 'como posso gerar mais?'. Seu cérebro responde às perguntas que você faz — faça as certas." },
+  { icon: "🌟", title: "Abundância é Decisão", desc: "Escassez é um programa mental, não uma realidade. Troque 'não tenho dinheiro' por 'como posso gerar mais?'. Seu cérebro responde às perguntas que você faz, faça as certas." },
 ];
 
 // ─── Finance AI Chat Component ─────────────────────────────────────────────
@@ -662,7 +662,7 @@ const FinancasPage = () => {
   const balanco = renda - despFixas - despVar - cartao;
   const totalDespesas = despFixas + despVar;
 
-  // Gastos por categoria (a partir das descrições — agrupando pelos tipos)
+  // Gastos por categoria (a partir das descrições, agrupando pelos tipos)
   const gastosPorCategoria = useMemo(() => {
     const map: Record<string, { value: number; color: string; icon: string }> = {
       "Despesas Fixas": { value: despFixas, color: "#ef4444", icon: "📌" },
@@ -1055,7 +1055,7 @@ const FinancasPage = () => {
                             <input type="number" placeholder="0,00" defaultValue={teto || ""} onBlur={(e) => { const v = parseFloat(e.target.value) || 0; if (v !== teto) saveBudget(t, v); }} className="w-20 bg-muted/40 rounded-lg px-2 py-1 text-xs font-body outline-none text-right" />
                           </div>
                           <span className="text-xs font-body text-muted-foreground w-16 text-right">{money(real)}</span>
-                          <span className={cn("text-[10px] font-body w-10 text-right", over ? "text-red-400" : teto > 0 ? "text-green-400" : "text-muted-foreground")}>{teto > 0 ? `${Math.round(pct)}%` : "—"}</span>
+                          <span className={cn("text-[10px] font-body w-10 text-right", over ? "text-red-400" : teto > 0 ? "text-green-400" : "text-muted-foreground")}>{teto > 0 ? `${Math.round(pct)}%` : "-"}</span>
                         </div>
                       </div>
                       {teto > 0 && (
@@ -1239,7 +1239,7 @@ const FinancasPage = () => {
                         <td className="p-2 text-right">{money(d.total_amount)}</td>
                         <td className="p-2 text-right text-green-400">{money(d.paid_amount)}</td>
                         <td className="p-2 text-right text-red-400">{money(d.total_amount - d.paid_amount)}</td>
-                        <td className="p-2 text-right">{d.due_date ? new Date(d.due_date).toLocaleDateString("pt-BR") : "—"}</td>
+                        <td className="p-2 text-right">{d.due_date ? new Date(d.due_date).toLocaleDateString("pt-BR") : "-"}</td>
                         <td className="p-2 text-right">
                           <button onClick={() => editDebt(d)} className="p-1 text-muted-foreground hover:text-gold"><Pencil className="h-3 w-3" /></button>
                           <button onClick={() => deleteDebt(d.id)} className="p-1 text-muted-foreground hover:text-destructive"><Trash2 className="h-3 w-3" /></button>

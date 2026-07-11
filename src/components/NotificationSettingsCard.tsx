@@ -114,7 +114,7 @@ export default function NotificationSettingsCard() {
           {permStatus === "unsupported"
             ? "Seu navegador não suporta notificações"
             : permStatus === "denied"
-            ? "Permissão negada — ative nas configurações do navegador"
+            ? "Permissão negada, ative nas configurações do navegador"
             : isGranted
             ? "✅ Ativadas! Afirmação e Palavra do Dia às 08:00 · Hábitos às 20:00"
             : "Receba lembretes diários na barra de notificação"}
@@ -150,7 +150,7 @@ export default function NotificationSettingsCard() {
               {sendingPush ? "Enviando..." : "Testar Web Push real (servidor)"}
             </Button>
             <p className="text-xs text-muted-foreground text-center">
-              O teste real envia push do servidor — funciona com app fechado.
+              O teste real envia push do servidor, funciona com app fechado.
             </p>
           </>
         )}

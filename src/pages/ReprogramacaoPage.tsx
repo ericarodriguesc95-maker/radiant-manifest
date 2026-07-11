@@ -23,27 +23,27 @@ const fundamentos = [
     icon: "🧘‍♀️",
     what: "A meditação é uma prática milenar de foco atencional que treina o cérebro a regular emoções e pensamentos. Não é 'esvaziar a mente', mas sim direcionar a atenção de forma intencional.",
     neuro: "Estudos de Harvard (2011) mostraram que 8 semanas de meditação aumentam a densidade de massa cinzenta no hipocampo (memória e aprendizado) e reduzem o volume da amígdala (centro do medo e estresse). A prática regular diminui cortisol em até 23% e aumenta GABA, o neurotransmissor calmante natural do corpo.",
-    tip: "Comece com 5 min no Uber ou antes do café. Não precisa de silêncio perfeito — use fones e feche os olhos."
+    tip: "Comece com 5 min no Uber ou antes do café. Não precisa de silêncio perfeito, use fones e feche os olhos."
   },
   {
     title: "Ho'oponopono",
     icon: "💜",
     what: "Prática havaiana ancestral de reconciliação e perdão baseada em 4 frases: 'Sinto muito, Me perdoe, Eu te amo, Sou grata'. É uma técnica de limpeza de memórias e crenças subconscientes.",
     neuro: "A repetição de mantras ativa o córtex pré-frontal e reduz a atividade da Default Mode Network (rede neural do 'piloto automático' e ruminação). Estudos mostram que a prática de perdão reduz inflamação crônica (marcador IL-6) e melhora a variabilidade cardíaca (HRV), indicador de resiliência emocional.",
-    tip: "Repita mentalmente as 4 frases durante banho quente ou antes de dormir — momentos em que o subconsciente está mais receptivo."
+    tip: "Repita mentalmente as 4 frases durante banho quente ou antes de dormir, momentos em que o subconsciente está mais receptivo."
   },
   {
     title: "Lei da Atração & RAS",
     icon: "✨",
-    what: "A Lei da Atração, sob a ótica da neurociência, é explicada pelo Sistema Ativador Reticular (RAS) — um filtro no tronco cerebral que decide quais informações chegam à consciência. Quando você define um foco claro (meta, desejo), o RAS começa a filtrar oportunidades alinhadas.",
-    neuro: "O RAS processa ~11 milhões de bits de informação por segundo, mas só ~50 bits chegam à consciência. Ao praticar visualização e journaling, você 'programa' o RAS para priorizar informações relevantes às suas metas. É como quando você decide comprar um carro vermelho e começa a ver carros vermelhos em todo lugar — não é 'atração', é atenção seletiva neurocientificamente comprovada.",
+    what: "A Lei da Atração, sob a ótica da neurociência, é explicada pelo Sistema Ativador Reticular (RAS), um filtro no tronco cerebral que decide quais informações chegam à consciência. Quando você define um foco claro (meta, desejo), o RAS começa a filtrar oportunidades alinhadas.",
+    neuro: "O RAS processa ~11 milhões de bits de informação por segundo, mas só ~50 bits chegam à consciência. Ao praticar visualização e journaling, você 'programa' o RAS para priorizar informações relevantes às suas metas. É como quando você decide comprar um carro vermelho e começa a ver carros vermelhos em todo lugar, não é 'atração', é atenção seletiva neurocientificamente comprovada.",
     tip: "Escreva suas metas em detalhes sensoriais toda manhã. O RAS precisa de repetição e emoção para recalibrar seus filtros."
   },
   {
     title: "PNL (Programação Neurolinguística)",
     icon: "🧠",
     what: "A PNL estuda como a linguagem e os padrões mentais influenciam o comportamento. Técnicas como Ancoragem, Reenquadramento e Modelagem permitem reprogramar respostas automáticas e crenças limitantes.",
-    neuro: "A neuroplasticidade comprova que o cérebro forma novos caminhos neurais a cada repetição de pensamento ou comportamento. A Ancoragem funciona por condicionamento pavloviano — associar estímulo (gesto) a resposta (estado emocional). O Reenquadramento ativa o córtex pré-frontal dorsolateral, responsável pela reavaliação cognitiva, literalmente 'reconstruindo' a interpretação de eventos.",
+    neuro: "A neuroplasticidade comprova que o cérebro forma novos caminhos neurais a cada repetição de pensamento ou comportamento. A Ancoragem funciona por condicionamento pavloviano, associar estímulo (gesto) a resposta (estado emocional). O Reenquadramento ativa o córtex pré-frontal dorsolateral, responsável pela reavaliação cognitiva, literalmente 'reconstruindo' a interpretação de eventos.",
     tip: "Use Ancoragem 5 min antes de uma apresentação ou reunião importante. Pressione polegar+indicador lembrando de um momento de confiança máxima."
   },
   {

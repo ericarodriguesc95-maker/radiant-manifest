@@ -284,7 +284,7 @@ const Biblia365Page = () => {
                 <SelectItem key={v.value} value={v.value}>
                   <span className="font-body">
                     <strong className="text-gold">{v.label}</strong>{" "}
-                    <span className="text-muted-foreground text-xs">— {v.full}</span>
+                    <span className="text-muted-foreground text-xs">- {v.full}</span>
                   </span>
                 </SelectItem>
               ))}
@@ -357,7 +357,7 @@ const Biblia365Page = () => {
                 <SelectItem key={v.value} value={v.value}>
                   <span className="text-xs">
                     <strong>{v.label}</strong>{" "}
-                    <span className="text-muted-foreground">— {v.full}</span>
+                    <span className="text-muted-foreground">- {v.full}</span>
                   </span>
                 </SelectItem>
               ))}
@@ -577,7 +577,7 @@ const Biblia365Page = () => {
                 <div className="relative w-full aspect-video rounded-xl overflow-hidden border border-olive/20 bg-muted/30">
                   <img
                     src={biblicalJourneyMap}
-                    alt={`Mapa da jornada bíblica — ${enrichment.regiao}`}
+                    alt={`Mapa da jornada bíblica, ${enrichment.regiao}`}
                     loading="lazy"
                     width={1280}
                     height={736}
@@ -687,7 +687,7 @@ const Biblia365Page = () => {
               </Button>
             </div>
 
-            {/* Mark as read — final action */}
+            {/* Mark as read, final action */}
             <button
               onClick={() => toggleDay(selectedDay)}
               className={cn(
@@ -738,7 +738,7 @@ const Biblia365Page = () => {
               </div>
             </div>
 
-            {/* Navegação de dias — fixa ao final da aba, proporcional à largura do conteúdo */}
+            {/* Navegação de dias, fixa ao final da aba, proporcional à largura do conteúdo */}
             <div className="pt-2">
               <div className="flex items-center justify-between gap-2 bg-background/95 backdrop-blur-xl border border-gold/20 rounded-full px-2 py-1.5 shadow-lg shadow-black/20">
                 <button

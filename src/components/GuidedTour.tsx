@@ -208,7 +208,7 @@ const TOUR_STEPS: TourStep[] = [
     description: "Personalize foto, capa arrastável, bio com links clicáveis e gerencie seguidores.",
     tips: [
       "Arraste a capa para reposicionar",
-      "Cole links na bio — viram clicáveis automaticamente",
+      "Cole links na bio, viram clicáveis automaticamente",
       "Notificações push 5x/dia: 08h, 12h, 16h30, 20h, 23h30 🔔",
       "Visite perfis de outras girls pela comunidade 💖",
     ],

@@ -97,7 +97,7 @@ const affirmations = [
   {
     text: "Minha paz interior é inabalável.",
     focus: "Direcionada para equilíbrio emocional, serenidade e ancoragem interna.",
-    exercise: "Exercício prático: Medite por 5 minutos focando apenas na respiração — a cada pensamento invasor, volte ao ar.",
+    exercise: "Exercício prático: Medite por 5 minutos focando apenas na respiração, a cada pensamento invasor, volte ao ar.",
   },
   {
     text: "Eu sou suficiente exatamente como estou agora.",
@@ -135,7 +135,7 @@ const affirmations = [
     exercise: "Exercício prático: Reserve 30 minutos hoje exclusivamente para algo prazeroso, sem celular e sem culpa.",
   },
   {
-    text: "Eu atraio pessoas e situações que elevam minha vida — dia 27.",
+    text: "Eu atraio pessoas e situações que elevam minha vida, dia 27.",
     focus: "Direcionada para Lei da Atração e frequência vibracional.",
     exercise: "Exercício prático: Visualize por 5 minutos a vida que deseja, sentindo as emoções como se já fosse real.",
   },
@@ -155,7 +155,7 @@ const affirmations = [
     exercise: "Exercício prático: Identifique em qual fase do ciclo você está e adapte sua agenda a essa energia.",
   },
   {
-    text: "Eu me amo e me aceito exatamente como sou — dia 31.",
+    text: "Eu me amo e me aceito exatamente como sou, dia 31.",
     focus: "Direcionada para fortalecer autoestima e quebrar padrões de autossabotagem.",
     exercise: "Exercício prático: Liste 10 qualidades suas que você admira e mantenha a lista visível durante o dia.",
   },
@@ -167,7 +167,7 @@ const affirmations = [
   {
     text: "Eu sou um ímã de prosperidade.",
     focus: "Direcionada para mentalidade de abundância e prosperidade financeira.",
-    exercise: "Exercício prático: Organize uma área da sua casa hoje — abundância gosta de espaço claro.",
+    exercise: "Exercício prático: Organize uma área da sua casa hoje, abundância gosta de espaço claro.",
   },
   {
     text: "A gratidão amplia tudo o que toca.",
@@ -217,12 +217,12 @@ const affirmations = [
   {
     text: "Eu confio na voz que mora dentro de mim.",
     focus: "Direcionada para autoconfiança intuitiva, escuta interna e clareza de decisão.",
-    exercise: "Exercício prático: Anote uma decisão recente em que sua intuição acertou — relembre como foi a sensação no corpo.",
+    exercise: "Exercício prático: Anote uma decisão recente em que sua intuição acertou, relembre como foi a sensação no corpo.",
   },
   {
     text: "Meu amor por mim é incondicional.",
     focus: "Direcionada para autoaceitação radical e amor-próprio.",
-    exercise: "Exercício prático: Faça um programa solo hoje — um café, um passeio, um cinema sozinha.",
+    exercise: "Exercício prático: Faça um programa solo hoje, um café, um passeio, um cinema sozinha.",
   },
   {
     text: "Eu sou merecedora de relacionamentos saudáveis e amorosos.",
@@ -292,7 +292,7 @@ const affirmations = [
   {
     text: "Eu danço com o que vem em vez de lutar contra.",
     focus: "Direcionada para confiança no fluxo, leveza e desapego do controle.",
-    exercise: "Exercício prático: Por 24h, evite reclamar do imprevisto — apenas adapte-se.",
+    exercise: "Exercício prático: Por 24h, evite reclamar do imprevisto, apenas adapte-se.",
   },
   {
     text: "Eu protejo minha atenção como capital escasso.",
@@ -305,7 +305,7 @@ const affirmations = [
     exercise: "Exercício prático: Use uma roupa, joia ou ritual que conecte com sua feminilidade hoje.",
   },
   {
-    text: "Eu sou suficiente exatamente como estou agora — dia 61.",
+    text: "Eu sou suficiente exatamente como estou agora, dia 61.",
     focus: "Direcionada para fortalecer autoestima e quebrar padrões de autossabotagem.",
     exercise: "Exercício prático: Anote uma cobrança interna excessiva e a solte conscientemente, dizendo 'eu já sou suficiente'.",
   },
@@ -337,7 +337,7 @@ const affirmations = [
   {
     text: "Eu sou digna de relacionamentos saudáveis e amorosos.",
     focus: "Direcionada para prosperidade, merecimento e expansão emocional/financeira.",
-    exercise: "Exercício prático: Aceite um elogio hoje sem desconversar — apenas diga 'obrigada'.",
+    exercise: "Exercício prático: Aceite um elogio hoje sem desconversar, apenas diga 'obrigada'.",
   },
   {
     text: "Eu confio que o que é meu não me perde.",
@@ -357,12 +357,12 @@ const affirmations = [
   {
     text: "Eu honro meu corpo com escolhas conscientes.",
     focus: "Direcionada para autoestima corporal e hábitos saudáveis.",
-    exercise: "Exercício prático: Movimente-se por 20 minutos hoje — caminhada, dança ou alongamento.",
+    exercise: "Exercício prático: Movimente-se por 20 minutos hoje, caminhada, dança ou alongamento.",
   },
   {
     text: "Eu solto o velho com gratidão.",
     focus: "Direcionada para desapego emocional, renovação de ciclos e recomeços.",
-    exercise: "Exercício prático: Limpe uma gaveta ou pasta digital — entregue espaço para o novo entrar.",
+    exercise: "Exercício prático: Limpe uma gaveta ou pasta digital, entregue espaço para o novo entrar.",
   },
   {
     text: "Eu escuto meu coração antes de seguir.",
@@ -500,7 +500,7 @@ const affirmations = [
     exercise: "Exercício prático: Coloque um lembrete no celular com uma crença nova para olhar 3x ao dia.",
   },
   {
-    text: "Eu não espero — eu crio.",
+    text: "Eu não espero, eu crio.",
     focus: "Direcionada para empoderamento pessoal e responsabilidade sobre a própria vida.",
     exercise: "Exercício prático: Identifique uma área onde você se vê como vítima e reescreva como criadora.",
   },
@@ -527,7 +527,7 @@ const affirmations = [
   {
     text: "Eu valorizo quem me valoriza.",
     focus: "Direcionada para vínculos afetivos, limites emocionais e qualidade das relações.",
-    exercise: "Exercício prático: Pratique escuta profunda em uma conversa hoje — sem interromper, sem aconselhar.",
+    exercise: "Exercício prático: Pratique escuta profunda em uma conversa hoje, sem interromper, sem aconselhar.",
   },
   {
     text: "Eu me orgulho da minha trajetória.",
@@ -587,7 +587,7 @@ const affirmations = [
   {
     text: "Aquilo que cultivo dentro, atraio para fora.",
     focus: "Direcionada para Lei da Atração e frequência vibracional.",
-    exercise: "Exercício prático: Crie uma 'evidência futura' — um objeto, foto ou frase que represente o que vem.",
+    exercise: "Exercício prático: Crie uma 'evidência futura', um objeto, foto ou frase que represente o que vem.",
   },
   {
     text: "O imprevisto também faz parte do plano.",
@@ -632,7 +632,7 @@ const affirmations = [
   {
     text: "O presente é onde minha força acontece.",
     focus: "Direcionada para elevar presença pessoal, atenção plena e abertura para oportunidades.",
-    exercise: "Exercício prático: Antes de cada tarefa, pare e respire 3 vezes — só depois comece.",
+    exercise: "Exercício prático: Antes de cada tarefa, pare e respire 3 vezes, só depois comece.",
   },
   {
     text: "Eu mereço ser cuidada com a mesma intensidade com que cuido.",
@@ -652,12 +652,12 @@ const affirmations = [
   {
     text: "Eu sou autora, diretora e atriz da minha jornada.",
     focus: "Direcionada para empoderamento pessoal e responsabilidade sobre a própria vida.",
-    exercise: "Exercício prático: Visualize por 5 minutos o final do seu dia ideal — depois aja para que aconteça.",
+    exercise: "Exercício prático: Visualize por 5 minutos o final do seu dia ideal, depois aja para que aconteça.",
   },
   {
     text: "Eu agradeço meu corpo por tudo que ele faz por mim.",
     focus: "Direcionada para autoestima corporal e hábitos saudáveis.",
-    exercise: "Exercício prático: Durma com 8 horas de janela hoje — coloque um alarme para começar a se preparar.",
+    exercise: "Exercício prático: Durma com 8 horas de janela hoje, coloque um alarme para começar a se preparar.",
   },
   {
     text: "Eu sou um ciclo de renovação constante.",
@@ -682,12 +682,12 @@ const affirmations = [
   {
     text: "Eu honro cada passo dado.",
     focus: "Direcionada para reconhecimento pessoal e gratidão por conquistas.",
-    exercise: "Exercício prático: Celebre uma micro-meta com uma pausa especial — música, dança, café.",
+    exercise: "Exercício prático: Celebre uma micro-meta com uma pausa especial, música, dança, café.",
   },
   {
     text: "Eu permito a alegria ser comum no meu dia.",
     focus: "Direcionada para cultivar positividade, leveza e prazer no dia a dia.",
-    exercise: "Exercício prático: Sorria sem motivo por 60 segundos — observe o efeito no seu humor.",
+    exercise: "Exercício prático: Sorria sem motivo por 60 segundos, observe o efeito no seu humor.",
   },
   {
     text: "Limites saudáveis criam relações saudáveis.",
@@ -847,7 +847,7 @@ const affirmations = [
   {
     text: "Eu não permito que o externo decida minha paz.",
     focus: "Direcionada para equilíbrio emocional, serenidade e ancoragem interna.",
-    exercise: "Exercício prático: Medite por 5 minutos focando apenas na respiração — a cada pensamento invasor, volte ao ar.",
+    exercise: "Exercício prático: Medite por 5 minutos focando apenas na respiração, a cada pensamento invasor, volte ao ar.",
   },
   {
     text: "Minha voz tem valor mesmo entre vozes mais experientes.",
@@ -905,7 +905,7 @@ const affirmations = [
     exercise: "Exercício prático: Identifique em qual fase do ciclo você está e adapte sua agenda a essa energia.",
   },
   {
-    text: "Eu honro a mulher poderosa que vive em mim — dia 181.",
+    text: "Eu honro a mulher poderosa que vive em mim, dia 181.",
     focus: "Direcionada para fortalecer autoestima e quebrar padrões de autossabotagem.",
     exercise: "Exercício prático: Liste 10 qualidades suas que você admira e mantenha a lista visível durante o dia.",
   },
@@ -917,7 +917,7 @@ const affirmations = [
   {
     text: "Quanto mais eu prospero, mais eu posso servir.",
     focus: "Direcionada para mentalidade de abundância e prosperidade financeira.",
-    exercise: "Exercício prático: Organize uma área da sua casa hoje — abundância gosta de espaço claro.",
+    exercise: "Exercício prático: Organize uma área da sua casa hoje, abundância gosta de espaço claro.",
   },
   {
     text: "Gratidão é o portal da minha próxima conquista.",
@@ -967,12 +967,12 @@ const affirmations = [
   {
     text: "Eu confio nas mensagens que recebo.",
     focus: "Direcionada para autoconfiança intuitiva, escuta interna e clareza de decisão.",
-    exercise: "Exercício prático: Anote uma decisão recente em que sua intuição acertou — relembre como foi a sensação no corpo.",
+    exercise: "Exercício prático: Anote uma decisão recente em que sua intuição acertou, relembre como foi a sensação no corpo.",
   },
   {
     text: "Eu escolho me colocar em primeiro lugar quando preciso.",
     focus: "Direcionada para autoaceitação radical e amor-próprio.",
-    exercise: "Exercício prático: Faça um programa solo hoje — um café, um passeio, um cinema sozinha.",
+    exercise: "Exercício prático: Faça um programa solo hoje, um café, um passeio, um cinema sozinha.",
   },
   {
     text: "Eu honro minhas amizades como tesouros.",
@@ -1042,7 +1042,7 @@ const affirmations = [
   {
     text: "Eu encontro graça nos desvios.",
     focus: "Direcionada para confiança no fluxo, leveza e desapego do controle.",
-    exercise: "Exercício prático: Por 24h, evite reclamar do imprevisto — apenas adapte-se.",
+    exercise: "Exercício prático: Por 24h, evite reclamar do imprevisto, apenas adapte-se.",
   },
   {
     text: "Eu finalizo projetos com excelência.",
@@ -1087,7 +1087,7 @@ const affirmations = [
   {
     text: "Eu reconheço meu valor e cobro o que mereço.",
     focus: "Direcionada para prosperidade, merecimento e expansão emocional/financeira.",
-    exercise: "Exercício prático: Aceite um elogio hoje sem desconversar — apenas diga 'obrigada'.",
+    exercise: "Exercício prático: Aceite um elogio hoje sem desconversar, apenas diga 'obrigada'.",
   },
   {
     text: "Eu honro meu ritmo sem culpa.",
@@ -1107,12 +1107,12 @@ const affirmations = [
   {
     text: "Eu escuto os sinais do meu corpo com respeito.",
     focus: "Direcionada para autoestima corporal e hábitos saudáveis.",
-    exercise: "Exercício prático: Movimente-se por 20 minutos hoje — caminhada, dança ou alongamento.",
+    exercise: "Exercício prático: Movimente-se por 20 minutos hoje, caminhada, dança ou alongamento.",
   },
   {
     text: "Eu solto o que pesa e voo mais alto.",
     focus: "Direcionada para desapego emocional, renovação de ciclos e recomeços.",
-    exercise: "Exercício prático: Limpe uma gaveta ou pasta digital — entregue espaço para o novo entrar.",
+    exercise: "Exercício prático: Limpe uma gaveta ou pasta digital, entregue espaço para o novo entrar.",
   },
   {
     text: "Eu sinto antes de pensar e isso me guia bem.",
@@ -1277,7 +1277,7 @@ const affirmations = [
   {
     text: "Eu atraio pessoas alinhadas com a minha frequência.",
     focus: "Direcionada para vínculos afetivos, limites emocionais e qualidade das relações.",
-    exercise: "Exercício prático: Pratique escuta profunda em uma conversa hoje — sem interromper, sem aconselhar.",
+    exercise: "Exercício prático: Pratique escuta profunda em uma conversa hoje, sem interromper, sem aconselhar.",
   },
   {
     text: "Celebrar é gasolina para o que vem.",
@@ -1337,7 +1337,7 @@ const affirmations = [
   {
     text: "Eu sintonizo com meus desejos com fé.",
     focus: "Direcionada para Lei da Atração e frequência vibracional.",
-    exercise: "Exercício prático: Crie uma 'evidência futura' — um objeto, foto ou frase que represente o que vem.",
+    exercise: "Exercício prático: Crie uma 'evidência futura', um objeto, foto ou frase que represente o que vem.",
   },
   {
     text: "Eu sou flexível e firme ao mesmo tempo.",
@@ -1382,7 +1382,7 @@ const affirmations = [
   {
     text: "Eu sou inteira aqui, agora.",
     focus: "Direcionada para elevar presença pessoal, atenção plena e abertura para oportunidades.",
-    exercise: "Exercício prático: Antes de cada tarefa, pare e respire 3 vezes — só depois comece.",
+    exercise: "Exercício prático: Antes de cada tarefa, pare e respire 3 vezes, só depois comece.",
   },
   {
     text: "Eu mereço amor recíproco e profundo.",
@@ -1402,12 +1402,12 @@ const affirmations = [
   {
     text: "Eu desenho minha próxima fase.",
     focus: "Direcionada para empoderamento pessoal e responsabilidade sobre a própria vida.",
-    exercise: "Exercício prático: Visualize por 5 minutos o final do seu dia ideal — depois aja para que aconteça.",
+    exercise: "Exercício prático: Visualize por 5 minutos o final do seu dia ideal, depois aja para que aconteça.",
   },
   {
     text: "Eu sou amiga do meu corpo, não algoz.",
     focus: "Direcionada para autoestima corporal e hábitos saudáveis.",
-    exercise: "Exercício prático: Durma com 8 horas de janela hoje — coloque um alarme para começar a se preparar.",
+    exercise: "Exercício prático: Durma com 8 horas de janela hoje, coloque um alarme para começar a se preparar.",
   },
   {
     text: "Eu acolho mudanças como aliadas.",
@@ -1432,12 +1432,12 @@ const affirmations = [
   {
     text: "Eu não minimizo o que conquistei.",
     focus: "Direcionada para reconhecimento pessoal e gratidão por conquistas.",
-    exercise: "Exercício prático: Celebre uma micro-meta com uma pausa especial — música, dança, café.",
+    exercise: "Exercício prático: Celebre uma micro-meta com uma pausa especial, música, dança, café.",
   },
   {
     text: "Eu rio com facilidade e profundidade.",
     focus: "Direcionada para cultivar positividade, leveza e prazer no dia a dia.",
-    exercise: "Exercício prático: Sorria sem motivo por 60 segundos — observe o efeito no seu humor.",
+    exercise: "Exercício prático: Sorria sem motivo por 60 segundos, observe o efeito no seu humor.",
   },
   {
     text: "Meu bem-estar é meu compromisso primeiro.",
@@ -1597,7 +1597,7 @@ const affirmations = [
   {
     text: "Tranquilidade é meu padrão emocional.",
     focus: "Direcionada para equilíbrio emocional, serenidade e ancoragem interna.",
-    exercise: "Exercício prático: Medite por 5 minutos focando apenas na respiração — a cada pensamento invasor, volte ao ar.",
+    exercise: "Exercício prático: Medite por 5 minutos focando apenas na respiração, a cada pensamento invasor, volte ao ar.",
   },
   {
     text: "Eu cresço e isso não me torna fraude.",
@@ -1667,7 +1667,7 @@ const affirmations = [
   {
     text: "Prosperidade é meu estado natural.",
     focus: "Direcionada para mentalidade de abundância e prosperidade financeira.",
-    exercise: "Exercício prático: Organize uma área da sua casa hoje — abundância gosta de espaço claro.",
+    exercise: "Exercício prático: Organize uma área da sua casa hoje, abundância gosta de espaço claro.",
   },
   {
     text: "Gratidão é minha frequência base.",
@@ -1717,12 +1717,12 @@ const affirmations = [
   {
     text: "Eu honro minhas percepções sutis.",
     focus: "Direcionada para autoconfiança intuitiva, escuta interna e clareza de decisão.",
-    exercise: "Exercício prático: Anote uma decisão recente em que sua intuição acertou — relembre como foi a sensação no corpo.",
+    exercise: "Exercício prático: Anote uma decisão recente em que sua intuição acertou, relembre como foi a sensação no corpo.",
   },
   {
     text: "Eu sou suficiente, com ou sem aplausos.",
     focus: "Direcionada para autoaceitação radical e amor-próprio.",
-    exercise: "Exercício prático: Faça um programa solo hoje — um café, um passeio, um cinema sozinha.",
+    exercise: "Exercício prático: Faça um programa solo hoje, um café, um passeio, um cinema sozinha.",
   },
   {
     text: "Eu sou amada de formas reais, profundas e respeitosas.",
@@ -1792,7 +1792,7 @@ const affirmations = [
   {
     text: "Eu me deixo levar quando é seguro me deixar levar.",
     focus: "Direcionada para confiança no fluxo, leveza e desapego do controle.",
-    exercise: "Exercício prático: Por 24h, evite reclamar do imprevisto — apenas adapte-se.",
+    exercise: "Exercício prático: Por 24h, evite reclamar do imprevisto, apenas adapte-se.",
   },
   {
     text: "Foco é o que separa eu da minha versão maior.",
@@ -1805,27 +1805,27 @@ const affirmations = [
     exercise: "Exercício prático: Use uma roupa, joia ou ritual que conecte com sua feminilidade hoje.",
   },
   {
-    text: "Eu sou digna de amor, sucesso e abundância — dia 361.",
+    text: "Eu sou digna de amor, sucesso e abundância, dia 361.",
     focus: "Direcionada para fortalecer autoestima e quebrar padrões de autossabotagem.",
     exercise: "Exercício prático: Anote uma cobrança interna excessiva e a solte conscientemente, dizendo 'eu já sou suficiente'.",
   },
   {
-    text: "Eu sou forte, capaz e corajosa — dia 362.",
+    text: "Eu sou forte, capaz e corajosa, dia 362.",
     focus: "Direcionada para momentos de insegurança, medo de decisão e procrastinação por ansiedade.",
     exercise: "Exercício prático: Anote o pior cenário possível, releia e veja que você sobreviveria a ele.",
   },
   {
-    text: "A abundância flui naturalmente para mim — dia 363.",
+    text: "A abundância flui naturalmente para mim, dia 363.",
     focus: "Direcionada para mentalidade de abundância e prosperidade financeira.",
     exercise: "Exercício prático: Defina 1 meta financeira e a primeira ação concreta para esta semana.",
   },
   {
-    text: "Eu sou grata por tudo que tenho e tudo que está a caminho — dia 364.",
+    text: "Eu sou grata por tudo que tenho e tudo que está a caminho, dia 364.",
     focus: "Direcionada para gratidão profunda e reconhecimento das bênçãos do presente.",
     exercise: "Exercício prático: Antes de dormir, liste mentalmente 5 coisas boas do dia.",
   },
   {
-    text: "Eu perdoo, me liberto e sigo em paz — dia 365.",
+    text: "Eu perdoo, me liberto e sigo em paz, dia 365.",
     focus: "Direcionada para cura emocional, perdão e leveza interior.",
     exercise: "Exercício prático: Identifique uma mágoa e pergunte: o que essa dor veio me ensinar?",
   },

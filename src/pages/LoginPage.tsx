@@ -7,21 +7,21 @@ import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import brandLogo from "@/assets/gloow-up-club-logo.png";
 
 const eliteQuotes = [
-  "Mulheres fortes não esperam oportunidades — elas as criam.",
+  "Mulheres fortes não esperam oportunidades, elas as criam.",
   "Sua energia é seu maior investimento.",
   "Disciplina é liberdade disfarçada.",
   "O luxo começa com uma mente organizada.",
   "Silêncio e estratégia vencem qualquer ruído.",
   "Você não precisa de permissão para brilhar.",
   "Elegância é a forma mais poderosa de autoridade.",
-  "Invista em você — o retorno é garantido.",
+  "Invista em você, o retorno é garantido.",
   "A mulher que se conhece, governa o mundo.",
   "Consistência transforma o ordinário em extraordinário.",
   "Seu próximo nível exige uma nova versão de você.",
   "Grandes mulheres constroem em silêncio e surpreendem em público.",
 ];
 
-// Light premium palette — matches app theme
+// Light premium palette, matches app theme
 const C = {
   bg: "#FAF7F0",
   bgSoft: "#F3EDE0",

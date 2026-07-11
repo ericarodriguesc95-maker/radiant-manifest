@@ -135,7 +135,7 @@ const WhatsAppAIAssistant = () => {
       (k) => k.startsWith("glow-habit-") && localStorage.getItem(k) === "true"
     ).length;
 
-    const message = `📊 *Resumo do Dia — Glow Up* 📊\n\n🔥 Streak: ${streak} dia${streak !== 1 ? "s" : ""} consecutivo${streak !== 1 ? "s" : ""}\n✅ Hábitos completados: ${completedHabits}\n🎯 Metas ativas: ${goalsCount}\n\n${streak >= 7 ? "🏆 Incrível! Você está arrasando!" : streak >= 3 ? "💪 Continue assim, rainha!" : "🌱 Cada dia conta. Comece agora!"}\n\n_Sua IA Glow Up 👑_`;
+    const message = `📊 *Resumo do Dia, Glow Up* 📊\n\n🔥 Streak: ${streak} dia${streak !== 1 ? "s" : ""} consecutivo${streak !== 1 ? "s" : ""}\n✅ Hábitos completados: ${completedHabits}\n🎯 Metas ativas: ${goalsCount}\n\n${streak >= 7 ? "🏆 Incrível! Você está arrasando!" : streak >= 3 ? "💪 Continue assim, rainha!" : "🌱 Cada dia conta. Comece agora!"}\n\n_Sua IA Glow Up 👑_`;
     openWhatsApp(phone, message);
     setLoading(false);
   };
@@ -194,7 +194,7 @@ const WhatsAppAIAssistant = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-green-600/15 to-emerald-500/5" />
         <div className="relative z-10 flex items-center gap-2">
           <Brain className="h-4 w-4 text-green-400" />
-          <h3 className="text-xs font-display font-bold text-foreground">IA Glow Up — WhatsApp</h3>
+          <h3 className="text-xs font-display font-bold text-foreground">IA Glow Up, WhatsApp</h3>
         </div>
         <button onClick={() => setIsOpen(false)} className="relative z-10 p-1 rounded-lg hover:bg-muted/30 transition-colors">
           <X className="h-4 w-4 text-muted-foreground" />

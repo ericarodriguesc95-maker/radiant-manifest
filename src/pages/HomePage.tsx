@@ -146,7 +146,7 @@ const HomePage = () => {
 
       <div className="px-5 space-y-7 pb-8">
         {/* ═══════════════════════════════════════════ */}
-        {/* WELCOME BANNER — Primeira ação da rainha */}
+        {/* WELCOME BANNER, Primeira ação da rainha */}
         {/* ═══════════════════════════════════════════ */}
         <section
           className="animate-stagger"
@@ -208,7 +208,7 @@ const HomePage = () => {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* COMUNIDADE — WhatsApp group CTA (logo abaixo do Comece por aqui) */}
+        {/* COMUNIDADE, WhatsApp group CTA (logo abaixo do Comece por aqui) */}
         {/* ═══════════════════════════════════════════ */}
         <a
           href="https://chat.whatsapp.com/KqwvIi2Ht238RoSMVCS7J0"
@@ -232,21 +232,21 @@ const HomePage = () => {
 
 
         {/* ═══════════════════════════════════════════ */}
-        {/* STREAK — Premium glass card */}
+        {/* STREAK, Premium glass card */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 1 } as React.CSSProperties}>
           <DailyStreak completedHabits={completedHabits} requiredHabits={["meditate", "goals"]} />
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* MEDALS — Elegant showcase */}
+        {/* MEDALS, Elegant showcase */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 1 } as React.CSSProperties}>
           <StreakMedals streak={streakCount} />
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* DAILY INSPIRATION — Cinematic section */}
+        {/* DAILY INSPIRATION, Cinematic section */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4">
           <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 2 } as React.CSSProperties}>
@@ -264,7 +264,7 @@ const HomePage = () => {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* QUICK ACTIONS — Netflix-style cards */}
+        {/* QUICK ACTIONS, Netflix-style cards */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4">
           <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 5 } as React.CSSProperties}>
@@ -302,21 +302,21 @@ const HomePage = () => {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* HORMONAL PHASE — personalização biológica */}
+        {/* HORMONAL PHASE, personalização biológica */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 8 } as React.CSSProperties}>
           <HormonalPhaseSuggestion />
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* PROGRESS PULSE — Metas + Finanças (dopamina visual) */}
+        {/* PROGRESS PULSE, Metas + Finanças (dopamina visual) */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 8 } as React.CSSProperties}>
           <ProgressPulseWidget />
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* GLOW MOVE — 21 dias · 7 pilares (purple CTA) */}
+        {/* GLOW MOVE, 21 dias · 7 pilares (purple CTA) */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 9 } as React.CSSProperties}>
           <button
@@ -338,7 +338,7 @@ const HomePage = () => {
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* BIBLE 365 — Premium CTA */}
+        {/* BIBLE 365, Premium CTA */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
           <button
@@ -359,7 +359,7 @@ const HomePage = () => {
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* MENTE PODEROSA — IE + Psicologia + Neuro + Neuromarketing */}
+        {/* MENTE PODEROSA, IE + Psicologia + Neuro + Neuromarketing */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
           <button
@@ -380,7 +380,7 @@ const HomePage = () => {
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* CHAVES DO SUCESSO — 3 cards de mentalidade */}
+        {/* CHAVES DO SUCESSO, 3 cards de mentalidade */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4">
           <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
@@ -392,7 +392,7 @@ const HomePage = () => {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* JORNADA ELITE — Programa premium CTA */}
+        {/* JORNADA ELITE, Programa premium CTA */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
           <button
@@ -413,7 +413,7 @@ const HomePage = () => {
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* TESTS — Autoconhecimento CTA */}
+        {/* TESTS, Autoconhecimento CTA */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
           <button
@@ -434,7 +434,7 @@ const HomePage = () => {
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* CHALLENGES — Premium CTA */}
+        {/* CHALLENGES, Premium CTA */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
           <button
@@ -458,7 +458,7 @@ const HomePage = () => {
 
 
         {/* ═══════════════════════════════════════════ */}
-        {/* MONTHLY CALENDAR — Elegant section */}
+        {/* MONTHLY CALENDAR, Elegant section */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4 animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
           <div className="flex items-center gap-2">
@@ -470,7 +470,7 @@ const HomePage = () => {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* HABIT TRACKER — Refined section */}
+        {/* HABIT TRACKER, Refined section */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4 animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
           <div className="flex items-center gap-2">

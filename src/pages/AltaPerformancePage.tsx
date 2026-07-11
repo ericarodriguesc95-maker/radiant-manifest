@@ -139,9 +139,9 @@ export default function AltaPerformancePage() {
                   <p>Criado pelo físico Richard Feynman, este método tem 4 passos:</p>
                   <ol className="list-decimal list-inside space-y-1">
                     <li><strong className="text-foreground">Escolha um conceito</strong> e estude-o</li>
-                    <li><strong className="text-foreground">Explique como se ensinasse a uma criança</strong> — use linguagem simples</li>
-                    <li><strong className="text-foreground">Identifique lacunas</strong> — onde travou? Volte e estude mais</li>
-                    <li><strong className="text-foreground">Simplifique e use analogias</strong> — refine sua explicação</li>
+                    <li><strong className="text-foreground">Explique como se ensinasse a uma criança</strong>, use linguagem simples</li>
+                    <li><strong className="text-foreground">Identifique lacunas</strong>, onde travou? Volte e estude mais</li>
+                    <li><strong className="text-foreground">Simplifique e use analogias</strong>, refine sua explicação</li>
                   </ol>
                   <p className="text-xs italic">💡 Gravar áudios explicando o assunto é uma ótima forma de praticar.</p>
                 </AccordionContent>

@@ -360,7 +360,7 @@ export default function SonoPage() {
           <Card className="border-gold/30 bg-card/60 backdrop-blur">
             <CardHeader>
               <CardTitle className="text-gold font-serif text-2xl">Diagnóstico Circadiano</CardTitle>
-              <CardDescription>Responda com sinceridade — esses dados alimentam seu plano.</CardDescription>
+              <CardDescription>Responda com sinceridade, esses dados alimentam seu plano.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid sm:grid-cols-2 gap-4">
@@ -390,7 +390,7 @@ export default function SonoPage() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-foreground">4. Cafeína / álcool — horário do último consumo</Label>
+                <Label className="text-foreground">4. Cafeína / álcool, horário do último consumo</Label>
                 <Textarea
                   value={caffeineAlcohol}
                   onChange={(e) => setCaffeineAlcohol(e.target.value)}
@@ -479,7 +479,7 @@ export default function SonoPage() {
                               <strong className="text-gold">TIB</strong> (Time In Bed): tempo total na cama, desde que se deita até levantar.
                             </p>
                             <p className="text-[11px] leading-relaxed mt-1.5 text-foreground/70">
-                              Eficiência ideal: ≥ 85% (Excelente) · 70–84% (Razoável) · &lt; 70% (Baixa).
+                              Eficiência ideal: ≥ 85% (Excelente) · 70-84% (Razoável) · &lt; 70% (Baixa).
                             </p>
                           </PopoverContent>
                         </Popover>
@@ -535,7 +535,7 @@ export default function SonoPage() {
             {/* Plan content split into themed sections */}
             <PlanSections plan={currentDiagnostic.ai_plan} />
 
-            {/* AI CHAT — Specialist follow-up */}
+            {/* AI CHAT, Specialist follow-up */}
             <Card className="border-gold/30 bg-card/60 backdrop-blur overflow-hidden relative">
               <div className="absolute top-0 right-0 h-40 w-40 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
               <CardHeader className="relative">

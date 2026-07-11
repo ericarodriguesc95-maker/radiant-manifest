@@ -48,7 +48,7 @@ export function usePushNotificationListener() {
       )
       .subscribe();
 
-    // Listen for new app updates — push + in-app toast
+    // Listen for new app updates, push + in-app toast
     const updatesChannel = supabase
       .channel("push-app-updates")
       .on(

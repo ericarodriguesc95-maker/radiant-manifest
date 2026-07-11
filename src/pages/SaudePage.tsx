@@ -529,7 +529,7 @@ export default function SaudePage() {
       }
 
       const desc = items
-        .map((it: any) => `• ${it.name}${it.portion ? ` (${it.portion})` : ""} — ${Math.round(it.calories || 0)} kcal`)
+        .map((it: any) => `• ${it.name}${it.portion ? ` (${it.portion})` : ""}, ${Math.round(it.calories || 0)} kcal`)
         .join("\n");
 
       const total = data.total || items.reduce(
@@ -551,7 +551,7 @@ export default function SaudePage() {
         fat: String(Math.round((total.fat || 0) * 10) / 10),
       }));
 
-      toast.success(`✨ ${items.length} alimento(s) identificado(s) — ${Math.round(total.calories || 0)} kcal`);
+      toast.success(`✨ ${items.length} alimento(s) identificado(s), ${Math.round(total.calories || 0)} kcal`);
     } catch (e: any) {
       toast.error(e?.message || "Erro ao analisar foto");
     } finally {
@@ -1069,22 +1069,22 @@ export default function SaudePage() {
                     </span>
                     {bmi && (
                       <span className={`px-3 py-1 rounded-full bg-muted text-xs font-semibold ${bmiColor}`}>
-                        IMC: {bmi} — {bmiLabel}
+                        IMC: {bmi}, {bmiLabel}
                       </span>
                     )}
                     {profile.age && <span className="px-3 py-1 rounded-full bg-muted text-muted-foreground text-xs">{profile.age} anos</span>}
                   </div>
                   <div className="grid grid-cols-3 gap-3 text-center">
                     <div className="p-2 rounded-lg bg-muted/50">
-                      <p className="text-lg font-bold text-foreground">{profile.current_weight || "—"}</p>
+                      <p className="text-lg font-bold text-foreground">{profile.current_weight || "-"}</p>
                       <p className="text-[10px] text-muted-foreground">Peso Atual</p>
                     </div>
                     <div className="p-2 rounded-lg bg-muted/50">
-                      <p className="text-lg font-bold text-foreground">{profile.target_weight || "—"}</p>
+                      <p className="text-lg font-bold text-foreground">{profile.target_weight || "-"}</p>
                       <p className="text-[10px] text-muted-foreground">Meta</p>
                     </div>
                     <div className="p-2 rounded-lg bg-muted/50">
-                      <p className="text-lg font-bold text-foreground">{profile.height_cm || "—"}</p>
+                      <p className="text-lg font-bold text-foreground">{profile.height_cm || "-"}</p>
                       <p className="text-[10px] text-muted-foreground">Altura cm</p>
                     </div>
                   </div>
@@ -1109,7 +1109,7 @@ export default function SaudePage() {
             </CardContent>
           </Card>
 
-          {/* Progresso do objetivo — Dashboard de peso */}
+          {/* Progresso do objetivo, Dashboard de peso */}
           {profile.current_weight && profile.target_weight && weightProgress !== null && (() => {
             const initialWeight = weightRecords.length > 0
               ? weightRecords[weightRecords.length - 1].weight
@@ -1131,7 +1131,7 @@ export default function SaudePage() {
               try {
                 const d = new Date(iso);
                 return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
-              } catch { return "—"; }
+              } catch { return "-"; }
             };
             return (
               <>
@@ -1331,7 +1331,7 @@ export default function SaudePage() {
                           <div>
                             <span className="font-semibold text-foreground text-sm">{Number(r.weight).toFixed(1)} kg</span>
                             <span className="text-muted-foreground text-xs ml-2">{formatDateLabel(r.recorded_at)}</span>
-                            {r.note && <span className="text-xs text-muted-foreground ml-2">— {r.note}</span>}
+                            {r.note && <span className="text-xs text-muted-foreground ml-2">- {r.note}</span>}
                           </div>
                           <div className="flex gap-1">
                             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => startEditWeight(r)}><Edit2 className="h-3 w-3 text-primary" /></Button>

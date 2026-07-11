@@ -69,7 +69,7 @@ export default function PushPermissionOnboarding() {
           </DialogTitle>
           <DialogDescription className="text-center text-muted-foreground leading-relaxed">
             Ative as notificações para receber sua devocional, afirmação do dia, lembretes
-            de hábitos e gratidão direto no seu celular — mesmo com o app fechado.
+            de hábitos e gratidão direto no seu celular, mesmo com o app fechado.
           </DialogDescription>
         </DialogHeader>
 

@@ -106,7 +106,7 @@ export async function sendNotification(title: string, body: string, tag: string)
   };
 }
 
-/** Send social notification (like, comment, follow, etc.) — always sends */
+/** Send social notification (like, comment, follow, etc.), always sends */
 export function sendSocialNotification(fromName: string, type: string, commentText?: string) {
   let title = "Gloow Up Club 🦋";
   let body = "";
@@ -259,37 +259,37 @@ function getAffirmationForDate(date: Date): string {
 
 function getDevotionalForDate(date: Date): string {
   const devotionals = [
-    "Porque eu sei os planos que tenho para vocês — Jeremias 29:11",
-    "Tudo posso naquele que me fortalece — Filipenses 4:13",
-    "Confie no Senhor de todo o coração — Provérbios 3:5",
-    "O Senhor é meu pastor, nada me faltará — Salmos 23:1",
-    "Sede fortes e corajosos — Josué 1:9",
-    "Deus é o nosso refúgio e fortaleza — Salmos 46:1",
-    "Entrega o teu caminho ao Senhor — Salmos 37:5",
-    "O amor é paciente, o amor é bondoso — 1 Coríntios 13:4",
-    "Busquem primeiro o Reino de Deus — Mateus 6:33",
-    "Não temas, porque eu sou contigo — Isaías 41:10",
-    "Alegrem-se sempre no Senhor — Filipenses 4:4",
-    "Lâmpada para os meus pés é a tua palavra — Salmos 119:105",
-    "Deus é amor — 1 João 4:8",
-    "A fé é a certeza das coisas que se esperam — Hebreus 11:1",
-    "Em tudo dai graças — 1 Tessalonicenses 5:18",
-    "Eu sou o caminho, a verdade e a vida — João 14:6",
-    "O Senhor é a minha luz e a minha salvação — Salmos 27:1",
-    "Tudo tem o seu tempo — Eclesiastes 3:1",
-    "Não se amoldem ao padrão deste mundo — Romanos 12:2",
-    "A esperança não nos decepciona — Romanos 5:5",
-    "Bem-aventurados os que têm fome de justiça — Mateus 5:6",
-    "O Senhor é bom para todos — Salmos 145:9",
-    "Pedi e vos será dado — Mateus 7:7",
-    "Porque Deus amou o mundo de tal maneira — João 3:16",
-    "Descansem em mim — Mateus 11:28",
-    "Tudo coopera para o bem — Romanos 8:28",
-    "Quem está em Cristo, nova criatura é — 2 Coríntios 5:17",
-    "O Senhor é fiel — 2 Tessalonicenses 3:3",
-    "Sejam fortes e não desanimem — 2 Crônicas 15:7",
-    "A paz vos deixo, a minha paz vos dou — João 14:27",
-    "Grandes coisas fez o Senhor — Salmos 126:3",
+    "Porque eu sei os planos que tenho para vocês, Jeremias 29:11",
+    "Tudo posso naquele que me fortalece, Filipenses 4:13",
+    "Confie no Senhor de todo o coração, Provérbios 3:5",
+    "O Senhor é meu pastor, nada me faltará, Salmos 23:1",
+    "Sede fortes e corajosos, Josué 1:9",
+    "Deus é o nosso refúgio e fortaleza, Salmos 46:1",
+    "Entrega o teu caminho ao Senhor, Salmos 37:5",
+    "O amor é paciente, o amor é bondoso, 1 Coríntios 13:4",
+    "Busquem primeiro o Reino de Deus, Mateus 6:33",
+    "Não temas, porque eu sou contigo, Isaías 41:10",
+    "Alegrem-se sempre no Senhor, Filipenses 4:4",
+    "Lâmpada para os meus pés é a tua palavra, Salmos 119:105",
+    "Deus é amor, 1 João 4:8",
+    "A fé é a certeza das coisas que se esperam, Hebreus 11:1",
+    "Em tudo dai graças, 1 Tessalonicenses 5:18",
+    "Eu sou o caminho, a verdade e a vida, João 14:6",
+    "O Senhor é a minha luz e a minha salvação, Salmos 27:1",
+    "Tudo tem o seu tempo, Eclesiastes 3:1",
+    "Não se amoldem ao padrão deste mundo, Romanos 12:2",
+    "A esperança não nos decepciona, Romanos 5:5",
+    "Bem-aventurados os que têm fome de justiça, Mateus 5:6",
+    "O Senhor é bom para todos, Salmos 145:9",
+    "Pedi e vos será dado, Mateus 7:7",
+    "Porque Deus amou o mundo de tal maneira, João 3:16",
+    "Descansem em mim, Mateus 11:28",
+    "Tudo coopera para o bem, Romanos 8:28",
+    "Quem está em Cristo, nova criatura é, 2 Coríntios 5:17",
+    "O Senhor é fiel, 2 Tessalonicenses 3:3",
+    "Sejam fortes e não desanimem, 2 Crônicas 15:7",
+    "A paz vos deixo, a minha paz vos dou, João 14:27",
+    "Grandes coisas fez o Senhor, Salmos 126:3",
   ];
   const start = new Date(date.getFullYear(), 0, 0);
   const dayOfYear = Math.floor((date.getTime() - start.getTime()) / 86400000);
@@ -324,7 +324,7 @@ function scheduleAllNotifications() {
 }
 
 /**
- * Initialize notification system — requests permission, subscribes to push, schedules local.
+ * Initialize notification system, requests permission, subscribes to push, schedules local.
  */
 export async function initNotifications(userId?: string) {
   const granted = await requestNotificationPermission();

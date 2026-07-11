@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    /* Light Mode Premium — Off-white pérola / marfim */
+    /* Light Mode Premium, Off-white pérola / marfim */
     --background: 40 30% 97%;
     --foreground: 30 15% 12%;
 
@@ -46,7 +46,7 @@
     --offwhite: 40 30% 97%;
     --charcoal: 30 15% 12%;
 
-    /* Secondary palette — Bíblia 365 sections */
+    /* Secondary palette, Bíblia 365 sections */
     --serene-blue: 210 65% 55%;
     --olive: 75 32% 45%;
     --coral: 8 78% 62%;
@@ -122,7 +122,7 @@
     border-color: hsl(var(--gold) / 0.2);
   }
 
-  /* Glassmorphism utilities — light mode premium */
+  /* Glassmorphism utilities, light mode premium */
   .glass {
     background: hsl(40 40% 99% / 0.72);
     backdrop-filter: blur(16px) saturate(1.4);

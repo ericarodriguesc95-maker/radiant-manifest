@@ -135,7 +135,7 @@ export default function GlowMovePillarPage() {
       setTimeout(() => setParticles(false), 1600);
 
       if (phaseComplete && progress.current_phase < 4) {
-        toast.success(`Fase ${newPhase} desbloqueada — ${PHASES[newPhase - 1].nome}`);
+        toast.success(`Fase ${newPhase} desbloqueada, ${PHASES[newPhase - 1].nome}`);
         setReflection("");
         loadMission(newPhase);
       } else {

@@ -181,7 +181,7 @@ export default function ManifestacaoHub() {
         <div className="space-y-2.5">
           {[
             "Escrever intenções ativa o Sistema Ativador Reticular (SAR), fazendo seu cérebro filtrar oportunidades alinhadas aos seus objetivos.",
-            "A prática diária de visualização cria as mesmas conexões neurais que a experiência real — seu cérebro não diferencia o imaginado do vivido.",
+            "A prática diária de visualização cria as mesmas conexões neurais que a experiência real, seu cérebro não diferencia o imaginado do vivido.",
             "Registrar emoções aumenta a inteligência emocional e reduz a reatividade da amígdala em até 50%.",
           ].map((text, i) => (
             <div key={i} className="flex gap-2.5 items-start">

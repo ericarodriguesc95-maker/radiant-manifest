@@ -22,7 +22,7 @@ const TESTIMONIALS = [
 const KIWIFY_URL = "https://pay.kiwify.com.br/zJaiYCQ";
 
 // ===== Design tokens (inline to keep this page self-contained) =====
-// Light premium palette — off-white pérola + gold (matches app theme)
+// Light premium palette, off-white pérola + gold (matches app theme)
 const C = {
   bg: "#FAF7F0",
   bgSoft: "#F3EDE0",
@@ -176,7 +176,7 @@ const MODULES = [
   {
     n: "06",
     title: "Espiritualidade e Diário",
-    desc: "Nutra sua alma com a mesma intencionalidade que nutre seu corpo. Cronograma personalizado de leitura em 365 dias, devocional diário e diário pessoal com reflexões. Dentro do app você escolhe entre 22 orientações religiosas — cristã, católica, espírita, umbanda, candomblé, judaica, budista e mais. Respeitamos todas.",
+    desc: "Nutra sua alma com a mesma intencionalidade que nutre seu corpo. Cronograma personalizado de leitura em 365 dias, devocional diário e diário pessoal com reflexões. Dentro do app você escolhe entre 22 orientações religiosas, cristã, católica, espírita, umbanda, candomblé, judaica, budista e mais. Respeitamos todas.",
   },
   {
     n: "07",
@@ -226,7 +226,7 @@ const JOURNEY = [
 const BENEFITS = [
   "Acesso completo aos 10+ módulos",
   "App no celular e site no computador",
-  "Comunidade das Extraordinárias — rede social privada exclusiva",
+  "Comunidade das Extraordinárias, rede social privada exclusiva",
   "IA Assistente, IA Nutri Luna, IA do Sono, IA do Eu Superior, IA de Finanças",
   "Reprogramação Mental e Alta Performance",
   "Desafios progressivos de 7 a 90 dias",
@@ -253,7 +253,7 @@ const FAQ = [
   },
   {
     q: "Tem leitura da Bíblia? E quem não é cristã?",
-    a: "Sim, com cronograma personalizado de 365 dias e devocional diário. E dentro do app você escolhe entre 22 orientações religiosas — cristã, católica, espírita, umbanda, candomblé, judaica, budista, entre outras. O conteúdo se adapta à sua crença. Respeitamos todas.",
+    a: "Sim, com cronograma personalizado de 365 dias e devocional diário. E dentro do app você escolhe entre 22 orientações religiosas, cristã, católica, espírita, umbanda, candomblé, judaica, budista, entre outras. O conteúdo se adapta à sua crença. Respeitamos todas.",
   },
   {
     q: "Tem IA?",
@@ -379,7 +379,7 @@ export default function LandingPage() {
                 style={{ color: C.cream, borderBottom: `1px solid ${C.borderSoft}` }}
                 className="pb-5 text-[16px] md:text-[17px] font-light flex gap-4"
               >
-                <span style={{ color: C.gold }} className="shrink-0">—</span>
+                <span style={{ color: C.gold }} className="shrink-0">-</span>
                 <span style={{ color: C.creamDim, lineHeight: 1.75 }}>{t}</span>
               </li>
             ))}
@@ -387,7 +387,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* FUNDADORA — movida para logo após a primeira dobra */}
+      {/* FUNDADORA, movida para logo após a primeira dobra */}
       <section className="py-24 md:py-32 px-5 md:px-12">
         <div className="max-w-[1080px] mx-auto grid md:grid-cols-[420px_1fr] gap-12 md:gap-16 items-center">
           <div
@@ -646,7 +646,7 @@ export default function LandingPage() {
           >
             <div className="text-center">
               <p style={{ ...sans, color: C.gold, letterSpacing: "0.2em" }} className="text-[11px] font-medium uppercase mb-4">
-                ✦ Plano Anual — Preço de lançamento
+                ✦ Plano Anual, Preço de lançamento
               </p>
               <div style={{ ...serif, color: C.cream }} className="text-[64px] md:text-[80px] font-light leading-none">
                 R$97<span style={{ color: C.goldMuted }}>,90</span>
@@ -787,7 +787,7 @@ export default function LandingPage() {
             </span>
           </div>
           <div style={{ color: C.creamFaint }} className="text-[12px] font-light text-center">
-            Gloow Up Club — Feito para Mulheres Extraordinárias · @gloowupclub
+            Gloow Up Club, Feito para Mulheres Extraordinárias · @gloowupclub
           </div>
           <div style={{ color: C.creamFaint }} className="text-[12px] font-light">
             © 2026 Gloow Up Club

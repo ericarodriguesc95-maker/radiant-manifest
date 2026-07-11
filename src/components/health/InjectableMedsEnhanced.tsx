@@ -91,7 +91,7 @@ const medications = {
   },
   liraglutida: {
     name: "Liraglutida (Saxenda)",
-    description: "Agonista GLP-1 para controle de peso — aplicação diária",
+    description: "Agonista GLP-1 para controle de peso, aplicação diária",
     interval: 1,
     doses: [
       { dose: "0.6 mg", phase: "Início", duration: "Semana 1", note: "Dose de adaptação" },
@@ -333,7 +333,7 @@ export default function InjectableMedsEnhanced({ weightRecords, onRegisterSupple
                 <p className="text-xs font-semibold text-primary">Próxima Dose Agendada</p>
               </div>
               <p className="text-sm font-bold text-foreground">
-                {schedule.currentDose} — {format(new Date(schedule.nextDoseDate), "dd/MM/yyyy (EEEE)", { locale: ptBR })}
+                {schedule.currentDose}, {format(new Date(schedule.nextDoseDate), "dd/MM/yyyy (EEEE)", { locale: ptBR })}
               </p>
               <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
                 <Bell className="h-3 w-3" />
@@ -345,7 +345,7 @@ export default function InjectableMedsEnhanced({ weightRecords, onRegisterSupple
           {/* Dose Escalation */}
           <div>
             <p className="text-xs font-semibold text-foreground mb-2 flex items-center gap-1">
-              📋 Escalonamento — clique na dose atual:
+              📋 Escalonamento, clique na dose atual:
             </p>
             <div className="space-y-1">
               {med.doses.map((d, i) => {

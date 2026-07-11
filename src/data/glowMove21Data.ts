@@ -88,7 +88,7 @@ export const TOTAL_DAYS = 21;
 export const TASKS_PER_DAY = 5;
 
 export const DAYS: DayData[] = [
-  // SEMANA 1 — DESPERTAR
+  // SEMANA 1, DESPERTAR
   {
     dia: 1,
     tema: "Ponto zero",
@@ -103,7 +103,7 @@ export const DAYS: DayData[] = [
       },
       mente: {
         titulo: "Mapa mental do que pesa",
-        descricao: "Escreva tudo o que está pesando na sua mente agora — preocupações, dívidas mentais, pensamentos repetitivos.",
+        descricao: "Escreva tudo o que está pesando na sua mente agora, preocupações, dívidas mentais, pensamentos repetitivos.",
         porque: "Despejar no papel libera memória de trabalho do cérebro e reduz cortisol em até 30%.",
         dica: "Não filtre. Escreva por 7 minutos sem parar, mesmo se virar bagunça.",
         tempo: "7 min",
@@ -272,7 +272,7 @@ export const DAYS: DayData[] = [
       mente: {
         titulo: "Diário das 3 perguntas",
         descricao: "Escreva: O que estou sentindo? Por quê? Do que eu preciso agora?",
-        porque: "Nomear emoção reduz sua intensidade em 50% (estudo UCLA — affect labeling).",
+        porque: "Nomear emoção reduz sua intensidade em 50% (estudo UCLA, affect labeling).",
         dica: "Vai além de 'mal' ou 'bem'. Use palavras precisas: frustrada, decepcionada, eufórica.",
         tempo: "10 min",
       },
@@ -309,7 +309,7 @@ export const DAYS: DayData[] = [
         descricao: "Inclua pelo menos uma refeição com 30g de proteína (ovo, frango, peixe, tofu, whey).",
         porque: "Proteína mantém saciedade por 4h e preserva massa magra essencial para metabolismo feminino.",
         dica: "Café da manhã proteico = menos vontade de doce à tarde.",
-        tempo: "—",
+        tempo: "-",
       },
       mente: {
         titulo: "Leia 10 páginas",
@@ -383,7 +383,7 @@ export const DAYS: DayData[] = [
       },
     },
   },
-  // SEMANA 2 — EXPANSÃO
+  // SEMANA 2, EXPANSÃO
   {
     dia: 8,
     tema: "Vibração mais alta",
@@ -407,7 +407,7 @@ export const DAYS: DayData[] = [
         titulo: "Afirmação no espelho (3x)",
         descricao: "Olhe nos seus olhos no espelho e diga 3x: 'Eu sou aquela que escolho ser hoje.'",
         porque: "Auto-contato visual + afirmação verbal grava no inconsciente bem mais forte que pensar.",
-        dica: "Sem rir. Olhos firmes. A voz pode tremer no início — é normal.",
+        dica: "Sem rir. Olhos firmes. A voz pode tremer no início, é normal.",
         tempo: "3 min",
       },
       externo: {
@@ -457,7 +457,7 @@ export const DAYS: DayData[] = [
         descricao: "Em uma conversa hoje, ouça sem cortar, dar conselho ou planejar resposta.",
         porque: "Presença plena é o presente raro que constrói confiança real em qualquer relação.",
         dica: "Olhe nos olhos. Repita o que ouviu antes de responder.",
-        tempo: "—",
+        tempo: "-",
       },
       financas: {
         titulo: "Liste 5 fontes de renda poss\u00edveis",
@@ -645,7 +645,7 @@ export const DAYS: DayData[] = [
         titulo: "Foto de checkpoint",
         descricao: "Tire uma nova foto nas mesmas condições do Dia 1 e compare.",
         porque: "Você muda mais rápido do que percebe. Comparação visual desbloqueia continuidade.",
-        dica: "Compare sem julgar. Olhe brilho dos olhos, postura — não só forma.",
+        dica: "Compare sem julgar. Olhe brilho dos olhos, postura, não só forma.",
         tempo: "5 min",
       },
       mente: {
@@ -678,7 +678,7 @@ export const DAYS: DayData[] = [
       },
     },
   },
-  // SEMANA 3 — ENRAIZAMENTO
+  // SEMANA 3, ENRAIZAMENTO
   {
     dia: 15,
     tema: "Identidade nova",
@@ -710,7 +710,7 @@ export const DAYS: DayData[] = [
         descricao: "Faça 1 escolha do dia COMO a mulher que você acabou de descrever faria.",
         porque: "Identidade só vira realidade através de evidência. Cada ação alinhada é prova.",
         dica: "Pode ser uma resposta, uma compra, um pedido. Pequeno conta.",
-        tempo: "—",
+        tempo: "-",
       },
       financas: {
         titulo: "Abra ou organize sua reserva de emerg\u00eancia",
@@ -787,7 +787,7 @@ export const DAYS: DayData[] = [
         descricao: "Quebre 1 padrão antigo hoje. Algo que pareceria 'fora de você'.",
         porque: "Identidade nova precisa de evidência ousada. Repetir sempre o mesmo te mantém igual.",
         dica: "Pode ser jantar sozinha, falar em público, vestir cor diferente.",
-        tempo: "—",
+        tempo: "-",
       },
       externo: {
         titulo: "Inicie 1 conversa nova",
@@ -836,7 +836,7 @@ export const DAYS: DayData[] = [
         descricao: "Compre algo pequeno (flor, doce favorito, livro) só para celebrar você.",
         porque: "Auto-presente sem culpa reprograma a relação com merecimento.",
         dica: "Valor não importa. Intenção importa. Embrulhe pra você se quiser.",
-        tempo: "—",
+        tempo: "-",
       },
       financas: {
         titulo: "Invista em voc\u00ea (curso, livro, sess\u00e3o)",

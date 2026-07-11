@@ -36,7 +36,7 @@ export default function SmartWatchConnect() {
 
     if (bluetoothSupported) {
       try {
-        // @ts-ignore — Web Bluetooth API
+        // @ts-ignore, Web Bluetooth API
         const device = await navigator.bluetooth.requestDevice({
           acceptAllDevices: true,
           optionalServices: ["heart_rate", "battery_service"],

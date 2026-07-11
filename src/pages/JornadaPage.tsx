@@ -207,7 +207,7 @@ export default function JornadaPage() {
             O problema não é a sua vida. É a identidade que você tá vivendo. Você foi construindo uma versão de si mesma em cima do que te disseram pra ser. Do que esperavam de você, do que parecia seguro.
           </p>
           <p className="text-xs font-body text-muted-foreground leading-relaxed">
-            E essa versão não dá conta. Ela trava nos relacionamentos. Compensa no trabalho. Se sabota com dinheiro. Porque não é você de verdade. É uma identidade montada — e identidade montada não sustenta uma vida próspera.
+            E essa versão não dá conta. Ela trava nos relacionamentos. Compensa no trabalho. Se sabota com dinheiro. Porque não é você de verdade. É uma identidade montada, e identidade montada não sustenta uma vida próspera.
           </p>
           <div className="pt-2 border-t border-gold/20">
             <p className="text-sm font-display font-bold text-center text-foreground italic">
