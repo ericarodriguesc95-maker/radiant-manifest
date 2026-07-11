@@ -56,6 +56,7 @@ import DiretrizesPage from "@/pages/DiretrizesPage";
 import TermometroRotinaPage from "@/pages/TermometroRotinaPage";
 import PerfilDoMesPage from "@/pages/PerfilDoMesPage";
 import EvolucaoPage from "@/pages/EvolucaoPage";
+import RitualFechamentoPage from "@/pages/RitualFechamentoPage";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
