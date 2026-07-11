@@ -1366,6 +1366,42 @@ export type Database = {
         }
         Relationships: []
       }
+      monthly_routine_checkins: {
+        Row: {
+          answer_1: string
+          answer_2: string
+          answer_3: string
+          created_at: string
+          id: string
+          month_start: string
+          profile: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answer_1: string
+          answer_2: string
+          answer_3: string
+          created_at?: string
+          id?: string
+          month_start: string
+          profile: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answer_1?: string
+          answer_2?: string
+          answer_3?: string
+          created_at?: string
+          id?: string
+          month_start?: string
+          profile?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           comment_text: string | null

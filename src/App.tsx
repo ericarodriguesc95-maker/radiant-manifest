@@ -53,6 +53,7 @@ import RankingMensalPage from "@/pages/RankingMensalPage";
 import ApresentacoesPage from "@/pages/ApresentacoesPage";
 import BemVindoPage from "@/pages/BemVindoPage";
 import DiretrizesPage from "@/pages/DiretrizesPage";
+import TermometroRotinaPage from "@/pages/TermometroRotinaPage";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
@@ -144,6 +145,7 @@ const AppRoutes = () => (
       <Route path="/apresentacoes" element={<ErrorBoundary><ApresentacoesPage /></ErrorBoundary>} />
       <Route path="/bem-vindo" element={<ErrorBoundary><BemVindoPage /></ErrorBoundary>} />
       <Route path="/diretrizes" element={<ErrorBoundary><DiretrizesPage /></ErrorBoundary>} />
+      <Route path="/meu-mes" element={<ErrorBoundary><TermometroRotinaPage /></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>
