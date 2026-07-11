@@ -9,6 +9,13 @@ import depoimentoKamila from "@/assets/depoimento-kamila.png";
 import depoimentoGabrielly from "@/assets/depoimento-gabrielly.png";
 import depoimentoWpp1 from "@/assets/depoimento-wpp1.png";
 import depoimentoWpp2 from "@/assets/depoimento-wpp2.png";
+import depoimentoNat from "@/assets/depoimento-nat.jpeg";
+import depoimentoNat2 from "@/assets/depoimento-nat2.jpeg";
+import depoimentoNayara2 from "@/assets/depoimento-nayara2.jpeg";
+import depoimentoDaiane from "@/assets/depoimento-daiane.jpeg";
+import depoimentoPatricia from "@/assets/depoimento-patricia.jpeg";
+import depoimentoCristiane from "@/assets/depoimento-cristiane.jpeg";
+import depoimentoNatalia from "@/assets/depoimento-natalia.jpeg";
 
 const TESTIMONIALS = [
   { name: "Nayara Moraes", img: depoimentoNayara },
@@ -17,6 +24,13 @@ const TESTIMONIALS = [
   { name: "Gabrielly Rosa", img: depoimentoGabrielly },
   { name: "Larissa Pereira", img: depoimentoWpp1 },
   { name: "Larissa Pereira", img: depoimentoWpp2 },
+  { name: "Nat, Psicóloga", img: depoimentoNat },
+  { name: "Nayara, Analista de Operações", img: depoimentoNayara2 },
+  { name: "Daiane, Asunción/PY", img: depoimentoDaiane },
+  { name: "Patrícia, CEO RBL", img: depoimentoPatricia },
+  { name: "Cristiane, Rio de Janeiro", img: depoimentoCristiane },
+  { name: "Natália, Psicóloga", img: depoimentoNatalia },
+  { name: "Nat, sobre as dinâmicas", img: depoimentoNat2 },
 ];
 
 const KIWIFY_URL = "https://pay.kiwify.com.br/zJaiYCQ";
