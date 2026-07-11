@@ -26,6 +26,8 @@ const APP_SCREENS = [
   { img: appScreen8.url, title: "Minhas finanças", desc: "PF, CNPJ, Open Finance e visão completa do seu mês." },
   { img: appScreen9.url, title: "Consultora Financeira IA", desc: "Mentora de finanças 24h com dicas comportamentais." },
   { img: appScreen10.url, title: "Feed das Extraordinárias", desc: "Comunidade viva com stories, ranking e conexões reais." },
+  { img: appScreen11.url, title: "Seu mês de relance", desc: "Calendário com hábitos, metas, saúde, finanças e desafios." },
+  { img: appScreen12.url, title: "Saúde e Fitness", desc: "Peso, dieta, treinos, água, ciclo, sono e remédios num só lugar." },
 ];
 import ericaFounder from "@/assets/erica-founder.jpg";
 import brandLogo from "@/assets/gloow-up-club-logo.png";
