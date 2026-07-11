@@ -2,6 +2,29 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import agendaLivesJulho from "@/assets/agenda-lives-julho.png.asset.json";
+import appScreen1 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.23.26.jpeg.asset.json";
+import appScreen2 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.23.42.jpeg.asset.json";
+import appScreen3 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.23.55.jpeg.asset.json";
+import appScreen4 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.24.13.jpeg.asset.json";
+import appScreen5 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.24.25.jpeg.asset.json";
+import appScreen6 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.24.35.jpeg.asset.json";
+import appScreen7 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.24.46.jpeg.asset.json";
+import appScreen8 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.24.55.jpeg.asset.json";
+import appScreen9 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.25.06.jpeg.asset.json";
+import appScreen10 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.25.16.jpeg.asset.json";
+
+const APP_SCREENS = [
+  { img: appScreen1.url, title: "Home da rainha", desc: "Boas-vindas, presentação e mensagem da sua versão do futuro." },
+  { img: appScreen2.url, title: "Termômetro do mês", desc: "Ajusta o app pro seu momento com 3 perguntas rápidas." },
+  { img: appScreen3.url, title: "Palavra do dia", desc: "Devocional personalizado com reflexão, estudo e prática." },
+  { img: appScreen4.url, title: "Comece por aqui", desc: "Reprogramação, estudos, metas, Destravar Feminino e mais." },
+  { img: appScreen5.url, title: "Fase menstrual", desc: "Sugestões conforme sua fase e pulso semanal da sua evolução." },
+  { img: appScreen6.url, title: "3 chaves para destravar", desc: "Direção Certa, Controle Interno e Jogo da Ambiência." },
+  { img: appScreen7.url, title: "Metas e Manifestação", desc: "Escreva, marque progresso e veja acontecer." },
+  { img: appScreen8.url, title: "Minhas finanças", desc: "PF, CNPJ, Open Finance e visão completa do seu mês." },
+  { img: appScreen9.url, title: "Consultora Financeira IA", desc: "Mentora de finanças 24h com dicas comportamentais." },
+  { img: appScreen10.url, title: "Feed das Extraordinárias", desc: "Comunidade viva com stories, ranking e conexões reais." },
+];
 import ericaFounder from "@/assets/erica-founder.jpg";
 import brandLogo from "@/assets/gloow-up-club-logo.png";
 import depoimentoNayara from "@/assets/depoimento-nayara.png";
