@@ -149,8 +149,25 @@ export default function TermometroRotinaPage() {
       toast.error("Não consegui salvar. Tente novamente.");
       return;
     }
-    toast.success("Termômetro salvo! Aqui está o seu perfil deste mês.");
-    navigate("/perfil-do-mes", { replace: true });
+    toast.success("Termômetro salvo! Vamos fechar o mês anterior com consciência.");
+
+    // Guided sequence: if previous month has no closure ritual yet, go to it.
+    const prev = new Date();
+    prev.setDate(1);
+    prev.setMonth(prev.getMonth() - 1);
+    const prevISO = prev.toISOString().slice(0, 10);
+    const { data: existingRitual } = await supabase
+      .from("monthly_closure_rituals" as any)
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("month_start", prevISO)
+      .maybeSingle();
+
+    if (existingRitual) {
+      navigate("/perfil-do-mes", { replace: true });
+    } else {
+      navigate(`/ritual-fechamento?month=${prevISO}`, { replace: true });
+    }
   };
 
   if (loading) {

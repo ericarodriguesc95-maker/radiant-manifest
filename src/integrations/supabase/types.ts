@@ -1366,6 +1366,36 @@ export type Database = {
         }
         Relationships: []
       }
+      monthly_closure_rituals: {
+        Row: {
+          adjustment: string
+          biggest_win: string
+          created_at: string
+          id: string
+          month_start: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          adjustment: string
+          biggest_win: string
+          created_at?: string
+          id?: string
+          month_start: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          adjustment?: string
+          biggest_win?: string
+          created_at?: string
+          id?: string
+          month_start?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       monthly_routine_checkins: {
         Row: {
           answer_1: string
