@@ -255,6 +255,16 @@ export default function PerfilDoMesPage() {
         </button>
       </div>
 
+      {/* Evolution link */}
+      <button
+        type="button"
+        onClick={() => navigate("/evolucao")}
+        className="w-full h-12 rounded-xl border border-gold/40 bg-gradient-to-r from-amber-50 to-yellow-50 text-foreground font-display font-bold text-sm flex items-center justify-center gap-2 hover:brightness-[0.98] active:scale-[0.99] transition"
+      >
+        Ver minha evolução mensal
+        <ArrowRight className="h-4 w-4 text-gold" />
+      </button>
+
       {/* Your answers */}
       <div className="rounded-2xl border border-border bg-card shadow-card p-5 space-y-3">
         <h3 className="text-sm font-display font-bold text-foreground uppercase tracking-wider">
