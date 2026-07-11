@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Loader2, Sparkles, RefreshCw, ShoppingBasket, ChefHat, Flame } from "lucide-react";
 import { toast } from "sonner";
-import useScrollTopOnChange from "@/hooks/useScrollTopOnChange";
+import { useScrollTopOnChange } from "@/hooks/useScrollTopOnChange";
 
 const DAYS = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 const MEAL_ORDER = ["cafe_manha", "lanche_manha", "almoco", "lanche_tarde", "jantar"];
