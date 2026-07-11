@@ -9,6 +9,13 @@ import depoimentoKamila from "@/assets/depoimento-kamila.png";
 import depoimentoGabrielly from "@/assets/depoimento-gabrielly.png";
 import depoimentoWpp1 from "@/assets/depoimento-wpp1.png";
 import depoimentoWpp2 from "@/assets/depoimento-wpp2.png";
+import depoimentoNat from "@/assets/depoimento-nat.jpeg";
+import depoimentoNat2 from "@/assets/depoimento-nat2.jpeg";
+import depoimentoNayara2 from "@/assets/depoimento-nayara2.jpeg";
+import depoimentoDaiane from "@/assets/depoimento-daiane.jpeg";
+import depoimentoPatricia from "@/assets/depoimento-patricia.jpeg";
+import depoimentoCristiane from "@/assets/depoimento-cristiane.jpeg";
+import depoimentoNatalia from "@/assets/depoimento-natalia.jpeg";
 
 const TESTIMONIALS = [
   { name: "Nayara Moraes", img: depoimentoNayara },
@@ -17,6 +24,13 @@ const TESTIMONIALS = [
   { name: "Gabrielly Rosa", img: depoimentoGabrielly },
   { name: "Larissa Pereira", img: depoimentoWpp1 },
   { name: "Larissa Pereira", img: depoimentoWpp2 },
+  { name: "Nat, Psicóloga", img: depoimentoNat },
+  { name: "Nayara, Analista de Operações", img: depoimentoNayara2 },
+  { name: "Daiane, Asunción/PY", img: depoimentoDaiane },
+  { name: "Patrícia, CEO RBL", img: depoimentoPatricia },
+  { name: "Cristiane, Rio de Janeiro", img: depoimentoCristiane },
+  { name: "Natália, Psicóloga", img: depoimentoNatalia },
+  { name: "Nat, sobre as dinâmicas", img: depoimentoNat2 },
 ];
 
 const KIWIFY_URL = "https://pay.kiwify.com.br/zJaiYCQ";
@@ -773,6 +787,52 @@ export default function LandingPage() {
           </p>
         </div>
       </section>
+
+      {/* CONECTE-SE */}
+      <section className="py-20 md:py-24 px-5 md:px-12">
+        <div className="max-w-[980px] mx-auto">
+          <div className="text-center mb-10">
+            <SectionLabel>Conecte-se com o Club</SectionLabel>
+            <H2 highlight="antes mesmo de entrar.">Conheça o universo Gloow Up</H2>
+            <p style={{ color: C.creamDim }} className="mt-5 text-[15px] font-light max-w-[560px] mx-auto">
+              Acompanhe conteúdos, agenda de lives com convidadas especiais e fale direto com a fundadora.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { title: "YouTube", desc: "Canal oficial com conteúdos, aulas e cortes", href: "https://youtube.com/@guclubapp?si=yzjSHrcwIKf892Xz", label: "Assinar canal", icon: "▶" },
+              { title: "Instagram", desc: "Bastidores, inspirações e novidades diárias", href: "https://www.instagram.com/guclub.app", label: "Seguir @guclub.app", icon: "◎" },
+              { title: "Agenda de Lives", desc: "Lives exclusivas para as Extraordinárias do app", href: "https://www.instagram.com/p/DaS_SGPuYpX/?igsh=MXhqaG9qaDN6bXJxdg==", label: "Ver agenda", icon: "✦" },
+              { title: "Fale com a fundadora", desc: "Tirar dúvidas ou conversar direto no WhatsApp", href: "https://wa.me/message/M64TKGTEYIZRK1", label: "Chamar no WhatsApp", icon: "✉" },
+            ].map((item) => (
+              <a
+                key={item.title}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ background: C.bgCard, border: `1px solid ${C.border}`, borderRadius: 14 }}
+                className="p-5 flex flex-col gap-3 transition-all hover:-translate-y-0.5 hover:border-[color:var(--gold-h)]"
+              >
+                <div
+                  style={{ background: `${C.gold}18`, color: C.gold, border: `1px solid ${C.gold}44` }}
+                  className="h-10 w-10 rounded-full flex items-center justify-center text-lg"
+                >
+                  {item.icon}
+                </div>
+                <div style={{ ...serif, color: C.cream }} className="text-[18px]">{item.title}</div>
+                <p style={{ color: C.creamDim, lineHeight: 1.55 }} className="text-[13px] font-light flex-1">
+                  {item.desc}
+                </p>
+                <span style={{ color: C.gold }} className="text-[12px] uppercase tracking-[0.15em] font-light inline-flex items-center gap-1">
+                  {item.label} <ArrowRight className="h-3 w-3" />
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
 
       {/* FOOTER */}
       <footer
