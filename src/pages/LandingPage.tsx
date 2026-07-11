@@ -606,6 +606,59 @@ export default function LandingPage() {
       </section>
 
 
+      {/* CONHEÇA O APP */}
+      <section className="py-20 md:py-28 px-5 md:px-12" style={{ background: `linear-gradient(180deg, transparent, ${C.gold}08, transparent)` }}>
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-14">
+            <SectionLabel>Conheça nosso app</SectionLabel>
+            <H2 highlight="por dentro do Club.">Um tour visual</H2>
+            <p style={{ color: C.creamDim }} className="mt-5 text-[15px] font-light max-w-[600px] mx-auto">
+              Veja como é a experiência real das Extraordinárias dentro do aplicativo.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 md:gap-7">
+            {APP_SCREENS.map((s, i) => (
+              <div key={i} className="flex flex-col items-center text-center group">
+                <div
+                  style={{
+                    borderRadius: 42,
+                    padding: 8,
+                    background: `linear-gradient(160deg, ${C.gold}55, ${C.gold}15)`,
+                    boxShadow: `0 20px 40px -20px ${C.gold}55, 0 0 0 1px ${C.border}`,
+                  }}
+                  className="w-full transition-transform duration-500 group-hover:-translate-y-2"
+                >
+                  <div
+                    style={{
+                      borderRadius: 36,
+                      overflow: "hidden",
+                      background: C.bg,
+                      aspectRatio: "9 / 19.5",
+                      border: `2px solid ${C.gold}88`,
+                    }}
+                    className="w-full relative"
+                  >
+                    <img
+                      src={s.img}
+                      alt={s.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                </div>
+                <div style={{ ...serif, color: C.cream }} className="mt-5 text-[15px]">{s.title}</div>
+                <p style={{ color: C.creamDim }} className="mt-1.5 text-[12px] font-light leading-relaxed px-1">
+                  {s.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-14">
+            <PrimaryCTA href={KIWIFY_URL}>Quero acessar o app ✦</PrimaryCTA>
+          </div>
+        </div>
+      </section>
+
       {/* DEPOIMENTOS */}
       <section className="py-24 md:py-32 px-5 md:px-12">
         <div className="max-w-[1080px] mx-auto">
