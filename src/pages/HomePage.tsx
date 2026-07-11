@@ -15,6 +15,7 @@ import AppUpdatesModal from "@/components/AppUpdatesModal";
 import SuccessKeysCards from "@/components/SuccessKeysCards";
 import HormonalPhaseSuggestion from "@/components/HormonalPhaseSuggestion";
 import ProgressPulseWidget from "@/components/ProgressPulseWidget";
+import FutureSelfMessage from "@/components/FutureSelfMessage";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -206,6 +207,11 @@ const HomePage = () => {
             </div>
           </div>
         </section>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* MENSAGEM DA VERSÃO FUTURA (Bloco 6) */}
+        {/* ═══════════════════════════════════════════ */}
+        <FutureSelfMessage />
 
         {/* ═══════════════════════════════════════════ */}
         {/* COMUNIDADE, WhatsApp group CTA (logo abaixo do Comece por aqui) */}
