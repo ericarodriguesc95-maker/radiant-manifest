@@ -291,6 +291,29 @@ const HomePage = () => {
           );
         })()}
 
+        {/* ═══════════════════════════════════════════ */}
+        {/* PLANO ALIMENTAR SEMANAL, IA nutricional */}
+        {/* ═══════════════════════════════════════════ */}
+        <button
+          onClick={() => navigate("/plano-alimentar")}
+          className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-emerald-200"
+          style={{ "--stagger": 3 } as React.CSSProperties}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-50 via-lime-50 to-amber-50" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.18),transparent_60%)]" />
+          <div className="relative z-10 h-12 w-12 rounded-2xl bg-emerald-100 flex items-center justify-center border border-emerald-200">
+            <span className="text-2xl">🥗</span>
+          </div>
+          <div className="relative z-10 flex-1 text-left">
+            <p className="text-sm font-display font-bold text-foreground">Plano alimentar da semana</p>
+            <p className="text-[11px] font-body text-muted-foreground mt-0.5">
+              7 dias, 5 refeições, lista de compras pronta.
+            </p>
+          </div>
+          <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-emerald-700 border border-emerald-300 rounded-full px-2 py-0.5">IA</span>
+          <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
+        </button>
+
 
 
 
