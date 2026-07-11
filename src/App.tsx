@@ -54,6 +54,7 @@ import ApresentacoesPage from "@/pages/ApresentacoesPage";
 import BemVindoPage from "@/pages/BemVindoPage";
 import DiretrizesPage from "@/pages/DiretrizesPage";
 import TermometroRotinaPage from "@/pages/TermometroRotinaPage";
+import PerfilDoMesPage from "@/pages/PerfilDoMesPage";
 import { useSubscription } from "@/hooks/useSubscription";
 
 const queryClient = new QueryClient();
