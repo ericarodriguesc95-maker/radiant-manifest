@@ -100,7 +100,7 @@ export default function EvolucaoPage() {
           .gte("created_at", firstOfCurrentMonth().toISOString()),
       ]);
 
-      setRows(((checkins ?? []) as unknown as CheckinRow[]) ?? []);
+      setRows(((checkins ?? []) as unknown as CheckinRow[]));
 
       const counts = new Map<string, number>();
       (activity ?? []).forEach((r: any) => {
