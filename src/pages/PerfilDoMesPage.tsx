@@ -117,7 +117,7 @@ export default function PerfilDoMesPage() {
         .eq("user_id", user.id)
         .eq("month_start", currentMonth)
         .maybeSingle();
-      setRow(data as CheckinRow | null);
+      setRow((data as unknown as CheckinRow | null) ?? null);
       setLoading(false);
     })();
   }, [user, currentMonth]);
