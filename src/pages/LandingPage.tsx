@@ -657,6 +657,39 @@ export default function LandingPage() {
                 </p>
               </div>
             ))}
+            {/* Banner standalone — sem moldura de celular */}
+            <div className="flex flex-col items-center text-center group md:col-span-1 lg:col-span-2">
+              <div
+                style={{
+                  borderRadius: 24,
+                  padding: 8,
+                  background: `linear-gradient(160deg, ${C.gold}55, ${C.gold}15)`,
+                  boxShadow: `0 20px 40px -20px ${C.gold}55, 0 0 0 1px ${C.border}`,
+                }}
+                className="w-full transition-transform duration-500 group-hover:-translate-y-2"
+              >
+                <div
+                  style={{
+                    borderRadius: 18,
+                    overflow: "hidden",
+                    background: C.bg,
+                    border: `2px solid ${C.gold}88`,
+                  }}
+                  className="w-full relative"
+                >
+                  <img
+                    src={bannerConheca.url}
+                    alt="Gloow Up Club - Sua melhor versão começa aqui"
+                    loading="lazy"
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              </div>
+              <div style={{ ...serif, color: C.cream }} className="mt-5 text-[15px]">Bem-vinda ao Club</div>
+              <p style={{ color: C.creamDim }} className="mt-1.5 text-[12px] font-light leading-relaxed px-1">
+                Sua melhor versão começa aqui: comunidade, app e desenvolvimento pessoal feminino.
+              </p>
+            </div>
           </div>
           <div className="text-center mt-14">
             <PrimaryCTA href={KIWIFY_URL}>Quero acessar o app ✦</PrimaryCTA>
