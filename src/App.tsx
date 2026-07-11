@@ -151,6 +151,7 @@ const AppRoutes = () => (
       <Route path="/meu-mes" element={<ErrorBoundary><TermometroRotinaPage /></ErrorBoundary>} />
       <Route path="/perfil-do-mes" element={<ErrorBoundary><PerfilDoMesPage /></ErrorBoundary>} />
       <Route path="/evolucao" element={<ErrorBoundary><EvolucaoPage /></ErrorBoundary>} />
+      <Route path="/ritual-fechamento" element={<ErrorBoundary><RitualFechamentoPage /></ErrorBoundary>} />
     </Route>
     <Route path="*" element={<NotFound />} />
   </Routes>
