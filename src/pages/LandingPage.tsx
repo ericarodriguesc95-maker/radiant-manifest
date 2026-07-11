@@ -14,6 +14,7 @@ import appScreen9 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.25.
 import appScreen10 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.25.16.jpeg.asset.json";
 import appScreen11 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.25.44.jpeg.asset.json";
 import appScreen12 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.26.01.jpeg.asset.json";
+import appScreen13 from "@/assets/app-screens/image-60.png.asset.json";
 
 const APP_SCREENS = [
   { img: appScreen1.url, title: "Home da rainha", desc: "Boas-vindas, presentação e mensagem da sua versão do futuro." },
@@ -28,6 +29,7 @@ const APP_SCREENS = [
   { img: appScreen10.url, title: "Feed das Extraordinárias", desc: "Comunidade viva com stories, ranking e conexões reais." },
   { img: appScreen11.url, title: "Seu mês de relance", desc: "Calendário com hábitos, metas, saúde, finanças e desafios." },
   { img: appScreen12.url, title: "Saúde e Fitness", desc: "Peso, dieta, treinos, água, ciclo, sono e remédios num só lugar." },
+  { img: appScreen13.url, title: "Sua melhor versão", desc: "Bem-vinda ao Gloow Up Club: comunidade, app e desenvolvimento pessoal feminino." },
 ];
 import ericaFounder from "@/assets/erica-founder.jpg";
 import brandLogo from "@/assets/gloow-up-club-logo.png";
