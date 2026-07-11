@@ -149,8 +149,8 @@ export default function TermometroRotinaPage() {
       toast.error("Não consegui salvar. Tente novamente.");
       return;
     }
-    toast.success("Termômetro salvo!");
-    navigate("/meu-mes/perfil", { replace: true });
+    toast.success(`Termômetro salvo! Seu perfil deste mês: ${profile}`);
+    navigate("/", { replace: true });
   };
 
   if (loading) {
