@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Plus, Clock, Bell, Check, Trash2, Pencil, CalendarDays, Repeat } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, Clock, Bell, Check, Trash2, Pencil, Repeat, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -15,14 +15,16 @@ const monthNames = [
   "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 ];
 
-const EVENT_COLORS = [
-  { value: "#C8A45C", label: "Dourado" },
-  { value: "#E87461", label: "Coral" },
-  { value: "#7C5CBF", label: "Roxo" },
-  { value: "#4ECDC4", label: "Turquesa" },
-  { value: "#FF6B9D", label: "Rosa" },
-  { value: "#45B7D1", label: "Azul" },
-];
+type CategoryKey = "habitos" | "metas" | "saude" | "financas" | "espiritual" | "outros";
+
+const CATEGORIES: Record<CategoryKey, { label: string; color: string; text: string }> = {
+  habitos:    { label: "Hábitos",             color: "#E8C97A", text: "#5a4416" },
+  metas:      { label: "Metas",               color: "#C9A45A", text: "#4a3810" },
+  saude:      { label: "Saúde",               color: "#8CA068", text: "#2f3a1e" },
+  financas:   { label: "Finanças",            color: "#8B5A2B", text: "#ffffff" },
+  espiritual: { label: "Espiritual / Diário", color: "#7A6080", text: "#ffffff" },
+  outros:     { label: "Outros",              color: "#6A5040", text: "#ffffff" },
+};
 
 const REMINDER_OPTIONS = [
   { value: "0", label: "Na hora" },
@@ -49,13 +51,17 @@ interface CalendarEvent {
   start_time: string | null;
   end_time: string | null;
   color: string;
+  category: CategoryKey;
   reminder_minutes: number | null;
   is_completed: boolean;
   recurrence: string | null;
   recurrence_parent_id: string | null;
 }
 
-// Generate recurring event instances for a given month
+function normalizeCategory(c: any): CategoryKey {
+  return (c && (CATEGORIES as any)[c]) ? c as CategoryKey : "outros";
+}
+
 function generateRecurringInstances(events: CalendarEvent[], year: number, month: number): CalendarEvent[] {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const monthStart = new Date(year, month, 1);
@@ -64,9 +70,7 @@ function generateRecurringInstances(events: CalendarEvent[], year: number, month
 
   for (const evt of events) {
     result.push(evt);
-
     if (!evt.recurrence || evt.recurrence === "none" || evt.recurrence_parent_id) continue;
-
     const eventDate = new Date(evt.event_date + "T00:00:00");
 
     if (evt.recurrence === "daily") {
@@ -96,7 +100,6 @@ function generateRecurringInstances(events: CalendarEvent[], year: number, month
       }
     }
   }
-
   return result;
 }
 
@@ -107,14 +110,17 @@ export default function MonthlyCalendar() {
   const [rawEvents, setRawEvents] = useState<CalendarEvent[]>([]);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showDayDialog, setShowDayDialog] = useState(false);
+  const [dayDialogDay, setDayDialogDay] = useState<number | null>(null);
   const [editingEvent, setEditingEvent] = useState<CalendarEvent | null>(null);
   const { user } = useAuth();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [eventDate, setEventDate] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [color, setColor] = useState("#C8A45C");
+  const [category, setCategory] = useState<CategoryKey>("outros");
   const [reminderMinutes, setReminderMinutes] = useState("none");
   const [recurrence, setRecurrence] = useState("none");
 
@@ -132,7 +138,6 @@ export default function MonthlyCalendar() {
     if (user) fetchEvents();
   }, [user, currentMonth, currentYear]);
 
-  // Push reminder checker
   useEffect(() => {
     if (!user) return;
     const checkReminders = () => {
@@ -156,15 +161,10 @@ export default function MonthlyCalendar() {
         }
       }
 
-      // Clean old entries daily
-      if (sent.length > 200) {
-        localStorage.setItem(sentKey, JSON.stringify(sent.slice(-50)));
-      }
+      if (sent.length > 200) localStorage.setItem(sentKey, JSON.stringify(sent.slice(-50)));
     };
 
-    // Request permission on mount
     requestNotificationPermission();
-
     const interval = setInterval(checkReminders, 30_000);
     checkReminders();
     return () => clearInterval(interval);
@@ -172,7 +172,6 @@ export default function MonthlyCalendar() {
 
   const fetchEvents = async () => {
     if (!user) return;
-    // Fetch current month events + all recurring parent events
     const startDate = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-01`;
     const endDate = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(daysInMonth).padStart(2, "0")}`;
 
@@ -184,7 +183,10 @@ export default function MonthlyCalendar() {
       .order("event_date", { ascending: true })
       .order("start_time", { ascending: true });
 
-    if (data) setRawEvents(data as CalendarEvent[]);
+    if (data) {
+      const normalized = (data as any[]).map(e => ({ ...e, category: normalizeCategory(e.category) })) as CalendarEvent[];
+      setRawEvents(normalized);
+    }
   };
 
   const handlePrevMonth = () => {
@@ -197,57 +199,72 @@ export default function MonthlyCalendar() {
     else setCurrentMonth(m => m + 1);
   };
 
+  const dateStrFor = (day: number) =>
+    `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
   const getEventsForDay = useCallback((day: number) => {
-    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    const dateStr = dateStrFor(day);
     return events.filter(e => e.event_date === dateStr);
   }, [events, currentYear, currentMonth]);
 
-  const daysWithEvents = [...new Set(events.map(e => parseInt(e.event_date.split("-")[2])))].sort((a, b) => a - b);
+  const resetForm = () => {
+    setTitle(""); setDescription(""); setStartTime(""); setEndTime("");
+    setCategory("outros"); setReminderMinutes("none"); setRecurrence("none");
+  };
 
   const openCreateForDay = (day?: number) => {
-    setSelectedDay(day ?? (isCurrentMonth ? today : 1));
+    const d = day ?? (isCurrentMonth ? today : 1);
+    setSelectedDay(d);
     setEditingEvent(null);
     resetForm();
+    setEventDate(dateStrFor(d));
     setShowCreateDialog(true);
   };
 
-  const resetForm = () => {
-    setTitle(""); setDescription(""); setStartTime(""); setEndTime("");
-    setColor("#C8A45C"); setReminderMinutes("none"); setRecurrence("none");
+  const openDayDetail = (day: number) => {
+    const dayEvts = getEventsForDay(day);
+    if (dayEvts.length === 0) {
+      openCreateForDay(day);
+      return;
+    }
+    setDayDialogDay(day);
+    setShowDayDialog(true);
   };
 
   const openEditEvent = (event: CalendarEvent) => {
-    // Don't edit virtual recurring instances directly
     if (event.id.includes("_r_")) {
       toast.info("Edite o evento original para alterar todas as repetições");
       return;
     }
     setEditingEvent(event);
     setSelectedDay(parseInt(event.event_date.split("-")[2]));
+    setEventDate(event.event_date);
     setTitle(event.title);
     setDescription(event.description || "");
     setStartTime(event.start_time?.slice(0, 5) || "");
     setEndTime(event.end_time?.slice(0, 5) || "");
-    setColor(event.color);
+    setCategory(normalizeCategory(event.category));
     setReminderMinutes(event.reminder_minutes !== null ? String(event.reminder_minutes) : "none");
     setRecurrence(event.recurrence || "none");
+    setShowDayDialog(false);
     setShowCreateDialog(true);
   };
 
   const handleSaveEvent = async () => {
-    if (!user || !title.trim() || selectedDay === null) return;
-    const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`;
+    if (!user || !title.trim() || !eventDate) return;
     const reminder = reminderMinutes === "none" ? null : parseInt(reminderMinutes);
+    const cat = CATEGORIES[category];
 
-    const payload = {
+    const payload: any = {
       title: title.trim(),
       description: description.trim() || null,
-      event_date: dateStr,
+      event_date: eventDate,
       start_time: startTime || null,
       end_time: endTime || null,
-      color,
+      color: cat.color,
+      category,
       reminder_minutes: reminder,
-      recurrence: recurrence,
+      recurrence,
     };
 
     if (editingEvent) {
@@ -259,6 +276,14 @@ export default function MonthlyCalendar() {
       if (error) { toast.error("Erro ao criar evento"); return; }
       toast.success("Evento criado!");
     }
+
+    // If saved into a different month, navigate to it
+    const [y, m] = eventDate.split("-").map(Number);
+    if (y !== currentYear || m - 1 !== currentMonth) {
+      setCurrentYear(y);
+      setCurrentMonth(m - 1);
+    }
+
     setShowCreateDialog(false);
     resetForm();
     fetchEvents();
@@ -266,7 +291,6 @@ export default function MonthlyCalendar() {
 
   const toggleComplete = async (event: CalendarEvent) => {
     if (event.id.includes("_r_")) {
-      // Materialize the recurring instance
       if (!user) return;
       const { error } = await supabase.from("calendar_events").insert({
         user_id: user.id,
@@ -276,6 +300,7 @@ export default function MonthlyCalendar() {
         start_time: event.start_time,
         end_time: event.end_time,
         color: event.color,
+        category: event.category,
         reminder_minutes: event.reminder_minutes,
         is_completed: true,
         recurrence: "none",
@@ -300,144 +325,99 @@ export default function MonthlyCalendar() {
 
   const formatTime = (time: string | null) => time ? time.slice(0, 5) : "";
   const selectedDateStr = selectedDay ? `${selectedDay} de ${monthNames[currentMonth]}` : "";
-
-  const recurrenceLabel = (r: string | null) => {
-    if (!r || r === "none") return null;
-    return RECURRENCE_OPTIONS.find(o => o.value === r)?.label;
-  };
+  const dayDialogEvts = dayDialogDay !== null ? getEventsForDay(dayDialogDay) : [];
 
   return (
     <>
       <div className="bg-card rounded-2xl p-4 shadow-card">
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <button onClick={handlePrevMonth} className="p-1">
             <ChevronLeft className="h-4 w-4 text-muted-foreground" />
           </button>
           <span className="text-sm font-display font-semibold">
             {monthNames[currentMonth]} {currentYear}
           </span>
-          <button onClick={handleNextMonth} className="p-1">
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button onClick={() => openCreateForDay()} className="p-1 text-gold hover:text-gold/80" title="Agendar evento">
+              <Plus className="h-4 w-4" />
+            </button>
+            <button onClick={handleNextMonth} className="p-1">
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </button>
+          </div>
         </div>
 
-        {/* Calendar Grid */}
-        <div className="grid grid-cols-7 gap-1 text-center">
+        {/* Weekday headers */}
+        <div className="grid grid-cols-7 gap-1 text-center mb-1">
           {["D", "S", "T", "Q", "Q", "S", "S"].map((d, i) => (
             <span key={i} className="text-[10px] font-body text-muted-foreground font-medium py-1">{d}</span>
           ))}
-          {blanks.map(i => <span key={`blank-${i}`} />)}
+        </div>
+
+        {/* Calendar Grid — Google Calendar style */}
+        <div className="grid grid-cols-7 gap-1">
+          {blanks.map(i => <div key={`blank-${i}`} className="min-h-[74px]" />)}
           {days.map(day => {
             const isToday = isCurrentMonth && day === today;
             const dayEvts = getEventsForDay(day);
-            const hasEvents = dayEvts.length > 0;
-            const allCompleted = hasEvents && dayEvts.every(e => e.is_completed);
+            const visible = dayEvts.slice(0, 3);
+            const extra = dayEvts.length - visible.length;
 
             return (
               <button
                 key={day}
-                onClick={() => openCreateForDay(day)}
-                className={`relative text-xs font-body py-1.5 rounded-lg transition-colors ${
-                  isToday ? "bg-gold text-primary-foreground font-bold"
-                  : hasEvents
-                    ? allCompleted ? "bg-emerald-500/15 text-emerald-600 font-semibold" : "bg-accent/60 font-semibold text-foreground"
-                    : "text-foreground hover:bg-muted"
+                onClick={() => openDayDetail(day)}
+                className={`relative min-h-[74px] p-1 rounded-lg text-left transition-colors border ${
+                  isToday
+                    ? "border-gold/60 bg-gold/5"
+                    : "border-transparent hover:bg-muted/50"
                 }`}
               >
-                {day}
-                {hasEvents && (
-                  <div className="flex justify-center gap-[2px] mt-0.5">
-                    {dayEvts.slice(0, 3).map((evt, i) => (
-                      <span key={i} className="block w-1.5 h-1.5 rounded-full" style={{ backgroundColor: allCompleted ? "#22c55e" : evt.color }} />
-                    ))}
-                  </div>
-                )}
+                <span className={`block text-[11px] font-body font-semibold leading-none mb-1 ${
+                  isToday ? "text-gold" : "text-foreground"
+                }`}>
+                  {day}
+                </span>
+                <div className="space-y-[2px]">
+                  {visible.map(evt => {
+                    const cat = CATEGORIES[normalizeCategory(evt.category)];
+                    return (
+                      <div
+                        key={evt.id}
+                        className="truncate rounded-[3px] px-1 text-[9px] leading-[13px] font-body font-medium"
+                        style={{
+                          backgroundColor: cat.color,
+                          color: cat.text,
+                          textDecoration: evt.is_completed ? "line-through" : "none",
+                          opacity: evt.is_completed ? 0.7 : 1,
+                        }}
+                        title={evt.title}
+                      >
+                        {evt.title}
+                      </div>
+                    );
+                  })}
+                  {extra > 0 && (
+                    <div className="text-[9px] leading-[13px] font-body text-muted-foreground px-1">
+                      +{extra} mais
+                    </div>
+                  )}
+                </div>
               </button>
             );
           })}
         </div>
 
-        {/* Inline Events List */}
-        {events.length > 0 && (
-          <div className="mt-4 space-y-1">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-xs font-display font-semibold text-muted-foreground uppercase tracking-wider">Agenda</p>
-              <button onClick={() => openCreateForDay()} className="text-gold hover:text-gold/80 transition-colors">
-                <Plus className="h-4 w-4" />
-              </button>
-            </div>
-
-            {daysWithEvents.map(day => {
-              const dayEvts = getEventsForDay(day);
-              const isToday = isCurrentMonth && day === today;
-              return (
-                <div key={day} className="mb-2">
-                  <p className={`text-[11px] font-body font-semibold mb-1 ${isToday ? "text-gold" : "text-muted-foreground"}`}>
-                    {isToday ? "Hoje" : `${day} ${monthNames[currentMonth].slice(0, 3)}`}
-                  </p>
-                  {dayEvts.map(evt => (
-                    <div
-                      key={evt.id}
-                      className={`flex items-center gap-2 py-1.5 px-2 rounded-lg mb-0.5 group transition-all ${
-                        evt.is_completed ? "bg-emerald-500/10" : "bg-muted/40 hover:bg-muted/70"
-                      }`}
-                    >
-                      <button
-                        onClick={() => toggleComplete(evt)}
-                        className={`flex-shrink-0 rounded-full border-2 flex items-center justify-center transition-all ${
-                          evt.is_completed ? "bg-emerald-500 border-emerald-500" : "border-muted-foreground/40 hover:border-gold"
-                        }`}
-                        style={{ width: 18, height: 18 }}
-                      >
-                        {evt.is_completed && <Check className="h-2.5 w-2.5 text-white" />}
-                      </button>
-
-                      <span className="w-0.5 h-5 rounded-full flex-shrink-0" style={{ backgroundColor: evt.is_completed ? "#22c55e" : evt.color }} />
-
-                      <div className="flex-1 min-w-0">
-                        <p className={`text-xs font-body font-medium leading-tight truncate ${
-                          evt.is_completed ? "line-through text-emerald-600" : "text-foreground"
-                        }`}>
-                          {evt.title}
-                        </p>
-                        <div className="flex items-center gap-2 flex-wrap">
-                          {evt.start_time && (
-                            <p className={`text-[10px] flex items-center gap-0.5 ${evt.is_completed ? "text-emerald-500/70" : "text-muted-foreground"}`}>
-                              <Clock className="h-2.5 w-2.5" />
-                              {formatTime(evt.start_time)}{evt.end_time && ` – ${formatTime(evt.end_time)}`}
-                            </p>
-                          )}
-                          {recurrenceLabel(evt.recurrence) && (
-                            <p className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-                              <Repeat className="h-2.5 w-2.5" />
-                              {recurrenceLabel(evt.recurrence)}
-                            </p>
-                          )}
-                          {evt.reminder_minutes !== null && (
-                            <p className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-                              <Bell className="h-2.5 w-2.5" />
-                              {REMINDER_OPTIONS.find(r => r.value === String(evt.reminder_minutes))?.label}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => openEditEvent(evt)} className="p-1 text-muted-foreground hover:text-gold">
-                          <Pencil className="h-3 w-3" />
-                        </button>
-                        <button onClick={() => deleteEvent(evt.id)} className="p-1 text-muted-foreground hover:text-destructive">
-                          <Trash2 className="h-3 w-3" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              );
-            })}
-          </div>
-        )}
+        {/* Category legend */}
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          {(Object.keys(CATEGORIES) as CategoryKey[]).map(k => (
+            <span key={k} className="inline-flex items-center gap-1 text-[10px] font-body text-muted-foreground">
+              <span className="w-2 h-2 rounded-sm" style={{ backgroundColor: CATEGORIES[k].color }} />
+              {CATEGORIES[k].label}
+            </span>
+          ))}
+        </div>
 
         {events.length === 0 && (
           <button
@@ -450,9 +430,84 @@ export default function MonthlyCalendar() {
         )}
       </div>
 
+      {/* Day detail dialog */}
+      <Dialog open={showDayDialog} onOpenChange={setShowDayDialog}>
+        <DialogContent className="max-w-sm mx-auto max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="font-display text-base">
+              {dayDialogDay} de {monthNames[currentMonth]}
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-2">
+            {dayDialogEvts.map(evt => {
+              const cat = CATEGORIES[normalizeCategory(evt.category)];
+              return (
+                <div key={evt.id} className="flex items-center gap-2 p-2 rounded-lg bg-muted/40 group">
+                  <button
+                    onClick={() => toggleComplete(evt)}
+                    className={`flex-shrink-0 rounded-full border-2 flex items-center justify-center transition-all ${
+                      evt.is_completed ? "bg-emerald-500 border-emerald-500" : "border-muted-foreground/40 hover:border-gold"
+                    }`}
+                    style={{ width: 18, height: 18 }}
+                  >
+                    {evt.is_completed && <Check className="h-2.5 w-2.5 text-white" />}
+                  </button>
+                  <span className="w-1 h-8 rounded-full flex-shrink-0" style={{ backgroundColor: cat.color }} />
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-xs font-body font-semibold truncate ${evt.is_completed ? "line-through text-muted-foreground" : "text-foreground"}`}>
+                      {evt.title}
+                    </p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-[10px] font-body px-1.5 py-0.5 rounded" style={{ backgroundColor: cat.color, color: cat.text }}>
+                        {cat.label}
+                      </span>
+                      {evt.start_time && (
+                        <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                          <Clock className="h-2.5 w-2.5" />
+                          {formatTime(evt.start_time)}{evt.end_time && ` – ${formatTime(evt.end_time)}`}
+                        </span>
+                      )}
+                      {evt.recurrence && evt.recurrence !== "none" && (
+                        <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                          <Repeat className="h-2.5 w-2.5" />
+                          {RECURRENCE_OPTIONS.find(o => o.value === evt.recurrence)?.label}
+                        </span>
+                      )}
+                      {evt.reminder_minutes !== null && (
+                        <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                          <Bell className="h-2.5 w-2.5" />
+                          {REMINDER_OPTIONS.find(r => r.value === String(evt.reminder_minutes))?.label}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    <button onClick={() => openEditEvent(evt)} className="p-1 text-muted-foreground hover:text-gold">
+                      <Pencil className="h-3 w-3" />
+                    </button>
+                    <button onClick={() => deleteEvent(evt.id)} className="p-1 text-muted-foreground hover:text-destructive">
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+
+            <Button
+              onClick={() => { setShowDayDialog(false); openCreateForDay(dayDialogDay ?? undefined); }}
+              variant="outline"
+              className="w-full font-body"
+            >
+              <Plus className="h-4 w-4 mr-1" /> Adicionar evento neste dia
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Create/Edit Event Dialog */}
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-        <DialogContent className="max-w-sm mx-auto max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-sm mx-auto max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="font-display text-base">
               {editingEvent ? "Editar Evento" : `Agendar — ${selectedDateStr}`}
@@ -462,6 +517,11 @@ export default function MonthlyCalendar() {
           <div className="space-y-3">
             <Input placeholder="Título do evento" value={title} onChange={e => setTitle(e.target.value)} className="font-body" />
             <Textarea placeholder="Descrição (opcional)" value={description} onChange={e => setDescription(e.target.value)} className="font-body resize-none" rows={2} />
+
+            <div>
+              <label className="text-xs text-muted-foreground font-body mb-1 block">Data</label>
+              <Input type="date" value={eventDate} onChange={e => setEventDate(e.target.value)} className="font-body text-sm" />
+            </div>
 
             <div className="grid grid-cols-2 gap-2">
               <div>
@@ -474,7 +534,23 @@ export default function MonthlyCalendar() {
               </div>
             </div>
 
-            {/* Recurrence */}
+            <div>
+              <label className="text-xs text-muted-foreground font-body mb-1 block">Categoria</label>
+              <Select value={category} onValueChange={(v) => setCategory(v as CategoryKey)}>
+                <SelectTrigger className="font-body text-sm"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(CATEGORIES) as CategoryKey[]).map(k => (
+                    <SelectItem key={k} value={k} className="font-body">
+                      <span className="inline-flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: CATEGORIES[k].color }} />
+                        {CATEGORIES[k].label}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             <div>
               <label className="text-xs text-muted-foreground font-body mb-1 flex items-center gap-1">
                 <Repeat className="h-3 w-3" /> Repetir
@@ -487,17 +563,6 @@ export default function MonthlyCalendar() {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-
-            <div>
-              <label className="text-xs text-muted-foreground font-body mb-1.5 block">Cor</label>
-              <div className="flex gap-2">
-                {EVENT_COLORS.map(c => (
-                  <button key={c.value} onClick={() => setColor(c.value)}
-                    className={`w-7 h-7 rounded-full border-2 transition-all ${color === c.value ? "border-foreground scale-110" : "border-transparent"}`}
-                    style={{ backgroundColor: c.value }} />
-                ))}
-              </div>
             </div>
 
             <div>
@@ -514,7 +579,7 @@ export default function MonthlyCalendar() {
               </Select>
             </div>
 
-            <Button onClick={handleSaveEvent} disabled={!title.trim()} className="w-full bg-gold hover:bg-gold/90 text-primary-foreground font-display">
+            <Button onClick={handleSaveEvent} disabled={!title.trim() || !eventDate} className="w-full bg-gold hover:bg-gold/90 text-primary-foreground font-display">
               {editingEvent ? "Salvar Alterações" : "Agendar Evento"}
             </Button>
           </div>
