@@ -29,6 +29,7 @@ const APP_SCREENS = [
   { img: appScreen10.url, title: "Feed das Extraordinárias", desc: "Comunidade viva com stories, ranking e conexões reais." },
   { img: appScreen11.url, title: "Seu mês de relance", desc: "Calendário com hábitos, metas, saúde, finanças e desafios." },
   { img: appScreen12.url, title: "Saúde e Fitness", desc: "Peso, dieta, treinos, água, ciclo, sono e remédios num só lugar." },
+  { img: appScreen13.url, title: "Sua melhor versão", desc: "Bem-vinda ao Gloow Up Club: comunidade, app e desenvolvimento pessoal feminino." },
 ];
 import ericaFounder from "@/assets/erica-founder.jpg";
 import brandLogo from "@/assets/gloow-up-club-logo.png";
