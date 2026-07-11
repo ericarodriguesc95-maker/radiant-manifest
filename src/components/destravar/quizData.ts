@@ -44,7 +44,7 @@ export const lessonContent: Record<string, LessonContent[]> = {
           ],
           correctIndex: 1,
           explanation:
-            "Reconhecer os padrões é o primeiro passo. Sem consciência, não há transformação — você continua repetindo o que não enxerga.",
+            "Reconhecer os padrões é o primeiro passo. Sem consciência, não há transformação, você continua repetindo o que não enxerga.",
         },
       ],
     },
@@ -77,7 +77,7 @@ export const lessonContent: Record<string, LessonContent[]> = {
           ],
           correctIndex: 2,
           explanation:
-            "A feminilidade bíblica integra força com delicadeza, sabedoria com ousadia — sem extremos, vivendo a partir do design de Deus.",
+            "A feminilidade bíblica integra força com delicadeza, sabedoria com ousadia, sem extremos, vivendo a partir do design de Deus.",
         },
       ],
     },
@@ -98,7 +98,7 @@ export const lessonContent: Record<string, LessonContent[]> = {
           ],
           correctIndex: 1,
           explanation:
-            "A mulher reativa vive no modo automático, reagindo sem intencionalidade — apagando incêndios em vez de construir com propósito.",
+            "A mulher reativa vive no modo automático, reagindo sem intencionalidade, apagando incêndios em vez de construir com propósito.",
         },
         {
           question: "O que é governo espiritual?",
@@ -141,7 +141,7 @@ export const lessonContent: Record<string, LessonContent[]> = {
     {
       // Crenças vs Verdade
       reading:
-        "Muitas crenças que carregamos não são verdades — são mentiras que acreditamos por repetição. 'Eu não sou boa o suficiente', 'Eu não mereço', 'Sempre vai dar errado'. A Palavra de Deus é o filtro para separar crença de verdade. Renovar a mente é trocar essas mentiras pela verdade que liberta.",
+        "Muitas crenças que carregamos não são verdades, são mentiras que acreditamos por repetição. 'Eu não sou boa o suficiente', 'Eu não mereço', 'Sempre vai dar errado'. A Palavra de Deus é o filtro para separar crença de verdade. Renovar a mente é trocar essas mentiras pela verdade que liberta.",
       verse: "E conhecereis a verdade, e a verdade vos libertará.",
       verseRef: "João 8:32",
       quiz: [
@@ -155,14 +155,14 @@ export const lessonContent: Record<string, LessonContent[]> = {
           ],
           correctIndex: 1,
           explanation:
-            "Crenças limitantes se instalam pela repetição — ouvimos tantas vezes que passamos a acreditar como se fossem fatos, sem questionar.",
+            "Crenças limitantes se instalam pela repetição, ouvimos tantas vezes que passamos a acreditar como se fossem fatos, sem questionar.",
         },
       ],
     },
     {
       // Postura de solteira x postura de casada
       reading:
-        "A postura de solteira não é sobre estado civil, é sobre mentalidade. É viver centrada em si mesma, nas próprias vontades, sem considerar aliança. A postura de casada — mesmo para quem é solteira — é sobre maturidade: pensar em aliança, em legado, em construir algo maior que você mesma.",
+        "A postura de solteira não é sobre estado civil, é sobre mentalidade. É viver centrada em si mesma, nas próprias vontades, sem considerar aliança. A postura de casada, mesmo para quem é solteira, é sobre maturidade: pensar em aliança, em legado, em construir algo maior que você mesma.",
       verse: "Há uma diferença entre a mulher casada e a virgem: a solteira cuida das coisas do Senhor, para ser santa no corpo e no espírito.",
       verseRef: "1 Coríntios 7:34",
       quiz: [
@@ -183,7 +183,7 @@ export const lessonContent: Record<string, LessonContent[]> = {
     {
       // Vocação
       reading:
-        "Vocação não é só profissão — é chamado. Muitas mulheres estão ocupadas demais fazendo coisas boas, mas não estão fazendo o que Deus as chamou para fazer. Alinhar vocação com obediência significa perguntar: 'Senhor, onde Tu queres que eu invista meu tempo e energia?'",
+        "Vocação não é só profissão, é chamado. Muitas mulheres estão ocupadas demais fazendo coisas boas, mas não estão fazendo o que Deus as chamou para fazer. Alinhar vocação com obediência significa perguntar: 'Senhor, onde Tu queres que eu invista meu tempo e energia?'",
       verse: "Porque somos feitura sua, criados em Cristo Jesus para as boas obras, as quais Deus preparou para que andássemos nelas.",
       verseRef: "Efésios 2:10",
       quiz: [
@@ -197,7 +197,7 @@ export const lessonContent: Record<string, LessonContent[]> = {
           ],
           correctIndex: 1,
           explanation:
-            "Vocação vai além de trabalho — é o chamado de Deus para sua vida. Você pode ter uma profissão sem estar vivendo sua vocação.",
+            "Vocação vai além de trabalho, é o chamado de Deus para sua vida. Você pode ter uma profissão sem estar vivendo sua vocação.",
         },
       ],
     },
@@ -225,7 +225,7 @@ export const lessonContent: Record<string, LessonContent[]> = {
     {
       // Mente renovada
       reading:
-        "Renovar a mente não é pensar positivo — é pensar como alguém transformada por Deus. É trocar a lente pela qual você enxerga a vida. Quando a mente é renovada, as decisões mudam, os padrões mudam, os resultados mudam. Não é esforço humano, é rendição ao processo de Deus.",
+        "Renovar a mente não é pensar positivo, é pensar como alguém transformada por Deus. É trocar a lente pela qual você enxerga a vida. Quando a mente é renovada, as decisões mudam, os padrões mudam, os resultados mudam. Não é esforço humano, é rendição ao processo de Deus.",
       verse: "E não vos conformeis com este mundo, mas transformai-vos pela renovação da vossa mente.",
       verseRef: "Romanos 12:2",
       quiz: [
@@ -233,13 +233,13 @@ export const lessonContent: Record<string, LessonContent[]> = {
           question: "Renovar a mente é o mesmo que pensamento positivo?",
           options: [
             "Sim, é a mesma coisa",
-            "Não — é pensar como alguém transformada por Deus, não apenas positivismo",
+            "Não, é pensar como alguém transformada por Deus, não apenas positivismo",
             "É ignorar problemas",
             "É meditar em silêncio",
           ],
           correctIndex: 1,
           explanation:
-            "Mente renovada vai além de positivismo. É uma transformação profunda na forma de pensar, ver e decidir — a partir da verdade de Deus.",
+            "Mente renovada vai além de positivismo. É uma transformação profunda na forma de pensar, ver e decidir, a partir da verdade de Deus.",
         },
       ],
     },
@@ -249,7 +249,7 @@ export const lessonContent: Record<string, LessonContent[]> = {
     {
       // Governo na prática
       reading:
-        "Governar na prática é organizar sua vida como um ato de obediência. Isso inclui sua rotina, suas finanças, seu tempo e suas prioridades. Não é sobre ser perfeita, é sobre ser intencional. Uma vida governada tem estrutura, tem ordem e tem direção — porque reflete o caráter de Deus.",
+        "Governar na prática é organizar sua vida como um ato de obediência. Isso inclui sua rotina, suas finanças, seu tempo e suas prioridades. Não é sobre ser perfeita, é sobre ser intencional. Uma vida governada tem estrutura, tem ordem e tem direção, porque reflete o caráter de Deus.",
       verse: "Tudo, porém, seja feito com decência e ordem.",
       verseRef: "1 Coríntios 14:40",
       quiz: [
@@ -263,14 +263,14 @@ export const lessonContent: Record<string, LessonContent[]> = {
           ],
           correctIndex: 1,
           explanation:
-            "Governo na prática é viver com intencionalidade — organizando rotina, finanças e prioridades como reflexo de obediência a Deus.",
+            "Governo na prática é viver com intencionalidade, organizando rotina, finanças e prioridades como reflexo de obediência a Deus.",
         },
       ],
     },
     {
       // Relacionamentos
       reading:
-        "Relacionamentos saudáveis exigem posicionamento. Isso significa saber dizer não sem culpa, estabelecer limites com amor e parar de aceitar menos do que Deus preparou para você. Sabedoria relacional é entender que nem todo relacionamento é para toda a vida — e tudo bem.",
+        "Relacionamentos saudáveis exigem posicionamento. Isso significa saber dizer não sem culpa, estabelecer limites com amor e parar de aceitar menos do que Deus preparou para você. Sabedoria relacional é entender que nem todo relacionamento é para toda a vida, e tudo bem.",
       verse: "O homem que tem muitos amigos pode congratular-se, mas há amigo mais chegado do que um irmão.",
       verseRef: "Provérbios 18:24",
       quiz: [
@@ -284,14 +284,14 @@ export const lessonContent: Record<string, LessonContent[]> = {
           ],
           correctIndex: 2,
           explanation:
-            "Posicionamento é ter firmeza com amor — saber dizer não, estabelecer limites saudáveis e não aceitar menos do que Deus planejou.",
+            "Posicionamento é ter firmeza com amor, saber dizer não, estabelecer limites saudáveis e não aceitar menos do que Deus planejou.",
         },
       ],
     },
     {
       // Direção profissional
       reading:
-        "Carreira e chamado nem sempre coincidem — e isso gera frustração. Muitas mulheres estão em carreiras que pagam as contas mas não alimentam a alma. Alinhar direção profissional com propósito exige coragem: às vezes é mudar de rota, às vezes é florescer onde está com uma nova perspectiva.",
+        "Carreira e chamado nem sempre coincidem, e isso gera frustração. Muitas mulheres estão em carreiras que pagam as contas mas não alimentam a alma. Alinhar direção profissional com propósito exige coragem: às vezes é mudar de rota, às vezes é florescer onde está com uma nova perspectiva.",
       verse: "Confia ao Senhor as tuas obras, e os teus pensamentos serão estabelecidos.",
       verseRef: "Provérbios 16:3",
       quiz: [
@@ -312,7 +312,7 @@ export const lessonContent: Record<string, LessonContent[]> = {
     {
       // Ordem espiritual na rotina
       reading:
-        "Sua rotina revela suas prioridades reais. Se Deus não está na sua agenda, Ele não está no governo da sua vida. Ordem espiritual na rotina é colocar Deus no centro de cada dia — não como um item a mais na lista, mas como o fundamento de tudo que você faz.",
+        "Sua rotina revela suas prioridades reais. Se Deus não está na sua agenda, Ele não está no governo da sua vida. Ordem espiritual na rotina é colocar Deus no centro de cada dia, não como um item a mais na lista, mas como o fundamento de tudo que você faz.",
       verse: "Buscai primeiro o Reino de Deus e a sua justiça, e todas essas coisas vos serão acrescentadas.",
       verseRef: "Mateus 6:33",
       quiz: [

@@ -145,7 +145,7 @@ export default function DailyStreak({ completedHabits }: DailyStreakProps) {
               return (
                 <div
                   key={dateStr}
-                  title={`${format(new Date(dateStr), "dd/MM")} — ${record?.all_completed ? "✅ Completo" : record ? `${record.completed_count}/${record.total_count}` : "Sem registro"}`}
+                  title={`${format(new Date(dateStr), "dd/MM")}, ${record?.all_completed ? "✅ Completo" : record ? `${record.completed_count}/${record.total_count}` : "Sem registro"}`}
                   className={cn(
                     "aspect-square rounded-md flex items-center justify-center text-[8px] font-body font-semibold transition-all",
                     record?.all_completed
@@ -204,7 +204,7 @@ export default function DailyStreak({ completedHabits }: DailyStreakProps) {
                     "text-[10px] font-semibold",
                     record?.all_completed ? "text-gold" : "text-muted-foreground"
                   )}>
-                    {record ? `${record.completed_count}/${record.total_count}` : "—"}
+                    {record ? `${record.completed_count}/${record.total_count}` : "-"}
                   </span>
                 </div>
               );

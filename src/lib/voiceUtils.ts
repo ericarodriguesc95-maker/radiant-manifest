@@ -8,7 +8,7 @@
 let voicesLoaded = false;
 let cachedVoices: SpeechSynthesisVoice[] = [];
 
-// Safe accessor — avoids "Cannot read properties of undefined (reading 'getVoices')"
+// Safe accessor, avoids "Cannot read properties of undefined (reading 'getVoices')"
 // on SSR, web workers, or older browsers without Web Speech API.
 function getSynth(): SpeechSynthesis | null {
   if (typeof window === "undefined") return null;
@@ -89,7 +89,7 @@ export function saveVoicePrefs(patch: Partial<VoicePrefs>): VoicePrefs {
   return next;
 }
 
-// Elite voice names — prioritize Natural/Neural/Premium quality voices
+// Elite voice names, prioritize Natural/Neural/Premium quality voices
 const FEMALE_PREFERRED = [
   "microsoft francisca online",
   "microsoft francisca",

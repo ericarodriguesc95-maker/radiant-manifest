@@ -68,7 +68,7 @@ export default function BlockBadges({ completedBlocks }: BlockBadgesProps) {
 
       let text: string;
       if (allComplete) {
-        text = `${MASTER_BADGE.emoji} Completei a Jornada do Destravar Feminino! ${MASTER_BADGE.emoji}\n\n${badgeEmojis} Todas as conquistas desbloqueadas: ${badgeNames}\n\n"${MASTER_BADGE.verse}" — ${MASTER_BADGE.verseRef}\n\n#DestravadaFeminino #JornadaCompleta ✨`;
+        text = `${MASTER_BADGE.emoji} Completei a Jornada do Destravar Feminino! ${MASTER_BADGE.emoji}\n\n${badgeEmojis} Todas as conquistas desbloqueadas: ${badgeNames}\n\n"${MASTER_BADGE.verse}", ${MASTER_BADGE.verseRef}\n\n#DestravadaFeminino #JornadaCompleta ✨`;
       } else {
         text = `${badgeEmojis} Desbloqueei ${unlockedBadges.length === 1 ? "uma conquista" : `${unlockedBadges.length} conquistas`} na Jornada do Destravar Feminino!\n\n🏆 ${badgeNames}\n\n#DestravadaFeminino #GlowUp ✨`;
       }
@@ -150,7 +150,7 @@ export default function BlockBadges({ completedBlocks }: BlockBadgesProps) {
             <p className="text-[11px] font-body text-foreground italic leading-relaxed">
               "{MASTER_BADGE.verse}"
             </p>
-            <p className="text-[10px] font-body font-semibold text-gold">— {MASTER_BADGE.verseRef}</p>
+            <p className="text-[10px] font-body font-semibold text-gold">- {MASTER_BADGE.verseRef}</p>
           </div>
         </div>
       )}
@@ -209,7 +209,7 @@ export function BadgeCelebration({ blockId, onClose }: BadgeCelebrationProps) {
             <p className="text-[11px] font-body text-foreground italic leading-relaxed">
               "{MASTER_BADGE.verse}"
             </p>
-            <p className="text-[10px] font-body font-semibold text-gold">— {MASTER_BADGE.verseRef}</p>
+            <p className="text-[10px] font-body font-semibold text-gold">- {MASTER_BADGE.verseRef}</p>
           </div>
         )}
       </div>

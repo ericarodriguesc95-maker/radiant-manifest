@@ -21,7 +21,7 @@ const questions: Question[] = [
   {
     q: "Você vê uma promoção incrível de algo que não precisava. O que faz?",
     options: [
-      { text: "Compro na hora — promoção assim não volta! 🔥", type: "impulsiva" },
+      { text: "Compro na hora, promoção assim não volta! 🔥", type: "impulsiva" },
       { text: "Ignoro completamente, promoção é armadilha 🚫", type: "acumuladora" },
       { text: "Avalio se cabe no orçamento e se realmente preciso 🤔", type: "equilibrada" },
       { text: "Compro e me sinto culpada depois 😅", type: "gastadora" },
@@ -40,7 +40,7 @@ const questions: Question[] = [
     q: "Uma amiga te convida para um jantar caro. Sua reação:",
     options: [
       { text: "Vou sem pensar, a vida é curta! 🥂", type: "gastadora" },
-      { text: "Recuso — prefiro economizar esse dinheiro 💰", type: "acumuladora" },
+      { text: "Recuso, prefiro economizar esse dinheiro 💰", type: "acumuladora" },
       { text: "Aceito se estiver dentro do meu orçamento do mês 📅", type: "equilibrada" },
       { text: "Vou e parcelo no cartão sem pensar muito 💳", type: "impulsiva" },
     ],
@@ -50,7 +50,7 @@ const questions: Question[] = [
     options: [
       { text: "Dinheiro foi feito pra gastar e aproveitar a vida 🌴", type: "gastadora" },
       { text: "Cada centavo guardado é um passo para a segurança 🔐", type: "acumuladora" },
-      { text: "Dinheiro é ferramenta — uso com consciência e prazer 🎯", type: "equilibrada" },
+      { text: "Dinheiro é ferramenta, uso com consciência e prazer 🎯", type: "equilibrada" },
       { text: "Dinheiro some da minha mão, não sei como 🌪️", type: "impulsiva" },
     ],
   },
@@ -58,7 +58,7 @@ const questions: Question[] = [
     q: "Como você lida com dívidas?",
     options: [
       { text: "Tenho várias e finjo que não existem 😶", type: "impulsiva" },
-      { text: "NUNCA faço dívida — pago tudo à vista 💵", type: "acumuladora" },
+      { text: "NUNCA faço dívida, pago tudo à vista 💵", type: "acumuladora" },
       { text: "Uso crédito estrategicamente e pago em dia 📈", type: "equilibrada" },
       { text: "Às vezes parcelo mais do que deveria, mas dou um jeito 🤞", type: "gastadora" },
     ],
@@ -67,7 +67,7 @@ const questions: Question[] = [
     q: "Quando algo te deixa triste ou estressada, você:",
     options: [
       { text: "Faço compras para me sentir melhor 🛒", type: "gastadora" },
-      { text: "Fico mais restritiva ainda com gastos — medo de perder controle 😰", type: "acumuladora" },
+      { text: "Fico mais restritiva ainda com gastos, medo de perder controle 😰", type: "acumuladora" },
       { text: "Busco atividades que não envolvem gastar 🧘‍♀️", type: "equilibrada" },
       { text: "Compro por impulso e depois me arrependo 😩", type: "impulsiva" },
     ],
@@ -103,7 +103,7 @@ const profiles: Record<ProfileType, { emoji: string; title: string; color: strin
     ],
     tips: [
       "Crie uma 'conta de prazer' com valor fixo mensal para gastar sem culpa",
-      "Antes de comprar, espere 48h — se ainda quiser, compre",
+      "Antes de comprar, espere 48h, se ainda quiser, compre",
       "Automatize transferências para investimento no dia do pagamento",
       "Identifique seus gatilhos emocionais de compra e crie alternativas",
     ],
@@ -125,9 +125,9 @@ const profiles: Record<ProfileType, { emoji: string; title: string; color: strin
     ],
     tips: [
       "Reserve um valor mensal OBRIGATÓRIO para autocuidado e prazer",
-      "Lembre-se: dinheiro parado perde valor com a inflação — invista!",
+      "Lembre-se: dinheiro parado perde valor com a inflação, invista!",
       "Pratique gratidão pelo que já conquistou financeiramente",
-      "Permita-se gastar com experiências — memórias valem mais que números",
+      "Permita-se gastar com experiências, memórias valem mais que números",
     ],
   },
   equilibrada: {
@@ -172,7 +172,7 @@ const profiles: Record<ProfileType, { emoji: string; title: string; color: strin
       "Delete apps de compra do celular por 1 mês",
       "Congele o cartão de crédito (literalmente, no freezer!)",
       "Estabeleça 1 meta financeira simples: guardar R$100 este mês",
-      "Busque apoio — fale sobre dinheiro com alguém de confiança",
+      "Busque apoio, fale sobre dinheiro com alguém de confiança",
     ],
   },
 };

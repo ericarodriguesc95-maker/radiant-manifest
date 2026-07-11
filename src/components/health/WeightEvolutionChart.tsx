@@ -41,7 +41,7 @@ function weekRangeLabel(d: Date) {
   sunday.setDate(monday.getDate() + 6);
   const fmt = (x: Date) =>
     x.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
-  return `${fmt(monday)}–${fmt(sunday)}`;
+  return `${fmt(monday)}-${fmt(sunday)}`;
 }
 
 const monthLabel = (d: Date) =>

@@ -68,7 +68,7 @@ function formatIsoDuration(iso: string): string | null {
 async function fetchYouTubeDuration(ytId: string): Promise<string | null> {
   if (ytDurationCache.has(ytId)) return ytDurationCache.get(ytId)!;
   try {
-    // yt.lemnoslife.com — public CORS-friendly YouTube API (no key required)
+    // yt.lemnoslife.com, public CORS-friendly YouTube API (no key required)
     const res = await fetch(`https://yt.lemnoslife.com/videos?part=contentDetails&id=${ytId}`);
     if (!res.ok) return null;
     const data = await res.json();
@@ -340,7 +340,7 @@ export default function AdminBibliotecaElitePage() {
           </ul>
         </div>
 
-        {/* Track tabs — wrap em 2 linhas para todas aparecerem */}
+        {/* Track tabs, wrap em 2 linhas para todas aparecerem */}
         <div className="flex flex-wrap gap-2">
           {VIDEO_TRACKS.map((t) => {
             const trackOverrides = t.videos.filter((v) => overrides[v.id]).length;
@@ -477,7 +477,7 @@ export default function AdminBibliotecaElitePage() {
                     </div>
                     {((realTitles[v.id] && realTitles[v.id] !== v.title) || (realDurations[v.id] && realDurations[v.id] !== v.duration)) && (
                       <p className="text-[10px] text-amber-400/90 italic">
-                        💡 Cadastrado: "<span className="text-foreground">{v.title}</span>" · {v.duration}. Real: "<span className="text-emerald-400">{realTitles[v.id] || "—"}</span>" · {realDurations[v.id] || "—"}.
+                        💡 Cadastrado: "<span className="text-foreground">{v.title}</span>" · {v.duration}. Real: "<span className="text-emerald-400">{realTitles[v.id] || "-"}</span>" · {realDurations[v.id] || "-"}.
                       </p>
                     )}
                   </div>

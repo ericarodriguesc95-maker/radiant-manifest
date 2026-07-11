@@ -67,7 +67,7 @@ export default function LessonQuiz({ content, lessonTitle, onComplete, isComplet
           <p className="text-xs font-body text-foreground italic leading-relaxed">
             "{content.verse}"
           </p>
-          <p className="text-[10px] font-body font-semibold text-gold">— {content.verseRef}</p>
+          <p className="text-[10px] font-body font-semibold text-gold">- {content.verseRef}</p>
         </div>
 
         <button

@@ -160,7 +160,7 @@ export const EXERCICIOS: Record<Pilar, ExercicioSemanal[]> = {
   ],
   corpo: [
     {
-      titulo: "Rotina Leve – 1 Hábito Inegociável",
+      titulo: "Rotina Leve, 1 Hábito Inegociável",
       resumo:
         "Escolha 1 hábito (15 min de leitura, 2L de água, 20 min de caminhada) e segure por 7 dias.",
       passos: [

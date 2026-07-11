@@ -55,7 +55,7 @@ function formatWeekLabel(iso: string): string {
     `${x.getDate().toString().padStart(2, "0")}/${(x.getMonth() + 1)
       .toString()
       .padStart(2, "0")}`;
-  return `${fmt(d)} – ${fmt(end)}`;
+  return `${fmt(d)}, ${fmt(end)}`;
 }
 
 export default function IdentidadeInabalavelPage() {
@@ -241,7 +241,7 @@ export default function IdentidadeInabalavelPage() {
               Qual peso você está carregando?
             </h2>
             <p className="text-sm font-body text-muted-foreground max-w-md mx-auto">
-              4 perguntas para descobrir qual pilar — Espírito, Alma ou Corpo —
+              4 perguntas para descobrir qual pilar, Espírito, Alma ou Corpo -
               precisa do seu cuidado prioritário esta semana.
             </p>
           </div>
@@ -306,7 +306,7 @@ export default function IdentidadeInabalavelPage() {
 
           <div className="text-center text-[11px] font-body italic text-muted-foreground/80 px-4">
             "Sonda-me, ó Deus, e conhece o meu coração; prova-me e conhece os meus
-            pensamentos." — Salmos 139:23
+            pensamentos.", Salmos 139:23
           </div>
         </div>
       </div>
@@ -368,7 +368,7 @@ export default function IdentidadeInabalavelPage() {
                     {focoInfo.versiculo}
                   </p>
                   <p className="text-[10px] font-body text-gold/80 mt-1 tracking-wide">
-                    — {focoInfo.referencia}
+                   , {focoInfo.referencia}
                   </p>
                 </div>
               </div>
@@ -520,7 +520,7 @@ export default function IdentidadeInabalavelPage() {
                               {ex.versiculo}
                             </p>
                             <p className="text-[9px] font-body text-gold/80 mt-0.5 tracking-wide">
-                              — {ex.referencia}
+                             , {ex.referencia}
                             </p>
                           </div>
                         </div>
@@ -626,7 +626,7 @@ export default function IdentidadeInabalavelPage() {
                 </p>
               </div>
               <p className="text-[11px] font-body text-muted-foreground italic">
-                "Cada dia uma nova misericórdia." — Lamentações 3:22-23
+                "Cada dia uma nova misericórdia.", Lamentações 3:22-23
               </p>
             </div>
 

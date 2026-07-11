@@ -51,7 +51,7 @@ const phaseInfo = [
       "Chá de gengibre ajuda com cólicas",
       "Magnésio reduz dor e melhora o humor",
     ],
-    neuro: "O cérebro tem queda de serotonina e dopamina, explicando a menor energia e possível irritabilidade. O córtex pré-frontal tem atividade reduzida — seja gentil consigo mesma.",
+    neuro: "O cérebro tem queda de serotonina e dopamina, explicando a menor energia e possível irritabilidade. O córtex pré-frontal tem atividade reduzida, seja gentil consigo mesma.",
   },
   {
     name: "Folicular (Dias 6-13)",
@@ -61,11 +61,11 @@ const phaseInfo = [
     desc: "Estrogênio em alta. Fase de energia, criatividade e motivação.",
     tips: [
       "Melhor fase para treinos intensos e HIIT",
-      "Planeje projetos e metas — criatividade em alta",
+      "Planeje projetos e metas, criatividade em alta",
       "Ótimo momento para iniciar novos hábitos",
       "Alimentos com fibras e proteínas para sustentar energia",
     ],
-    neuro: "Estrogênio aumenta serotonina, dopamina e BDNF (fator neurotrófico), melhorando memória, aprendizado e humor. O hipocampo está mais ativo — aproveite para estudar.",
+    neuro: "Estrogênio aumenta serotonina, dopamina e BDNF (fator neurotrófico), melhorando memória, aprendizado e humor. O hipocampo está mais ativo, aproveite para estudar.",
   },
   {
     name: "Ovulatória (Dias 14-16)",
@@ -76,10 +76,10 @@ const phaseInfo = [
     tips: [
       "Pico de força e performance física",
       "Ótimo para compromissos sociais e apresentações",
-      "Atenção à hidratação — temperatura corporal aumenta",
+      "Atenção à hidratação, temperatura corporal aumenta",
       "Inclua vegetais crucíferos para metabolizar estrogênio",
     ],
-    neuro: "Pico de estrogênio potencializa a comunicação verbal e empatia. A amígdala está mais responsiva — você se conecta melhor com outras pessoas. Ocitocina em alta.",
+    neuro: "Pico de estrogênio potencializa a comunicação verbal e empatia. A amígdala está mais responsiva, você se conecta melhor com outras pessoas. Ocitocina em alta.",
   },
   {
     name: "Lútea (Dias 17-28)",
@@ -91,9 +91,9 @@ const phaseInfo = [
       "Reduza intensidade dos treinos gradualmente",
       "Carboidratos complexos ajudam com compulsão",
       "Vitamina B6 e magnésio aliviam sintomas de TPM",
-      "Priorize sono — melatonina pode estar desregulada",
+      "Priorize sono, melatonina pode estar desregulada",
     ],
-    neuro: "Progesterona atua como ansiolítico natural via GABA. Quando cai no final da fase, causa irritabilidade e ansiedade (TPM). Serotonina reduz — por isso a compulsão por doces e carboidratos.",
+    neuro: "Progesterona atua como ansiolítico natural via GABA. Quando cai no final da fase, causa irritabilidade e ansiedade (TPM). Serotonina reduz, por isso a compulsão por doces e carboidratos.",
   },
 ];
 
@@ -103,7 +103,7 @@ const dailyCycleGuide: Record<string, { days: string; moods: string[]; symptoms:
     days: "Dias 1-2",
     moods: ["😢 Sensível", "😴 Cansada", "😤 Irritada"],
     symptoms: ["Cólica forte", "Fadiga intensa", "Dor lombar", "Inchaço"],
-    tips: ["Descanse sem culpa — seu corpo está trabalhando", "Bolsa de água quente na barriga", "Chá de camomila ou gengibre para cólica", "Evite cafeína em excesso"],
+    tips: ["Descanse sem culpa, seu corpo está trabalhando", "Bolsa de água quente na barriga", "Chá de camomila ou gengibre para cólica", "Evite cafeína em excesso"],
     energy: "🔋 Muito baixa",
     libido: "❄️ Baixa",
   },
@@ -119,7 +119,7 @@ const dailyCycleGuide: Record<string, { days: string; moods: string[]; symptoms:
     days: "Dias 6-9 (Folicular inicial)",
     moods: ["😊 Animada", "✨ Motivada", "🧠 Focada"],
     symptoms: ["Poucos ou nenhum", "Energia crescente", "Pele melhorando"],
-    tips: ["Comece projetos novos — criatividade em alta!", "Ótimo momento para treinos mais intensos", "Planeje compromissos sociais", "Estrogênio sobe = serotonina sobe = humor ótimo"],
+    tips: ["Comece projetos novos, criatividade em alta!", "Ótimo momento para treinos mais intensos", "Planeje compromissos sociais", "Estrogênio sobe = serotonina sobe = humor ótimo"],
     energy: "🔋🔋 Média-alta",
     libido: "🌡️ Crescente",
   },
@@ -127,7 +127,7 @@ const dailyCycleGuide: Record<string, { days: string; moods: string[]; symptoms:
     days: "Dias 10-13 (Folicular tardio)",
     moods: ["🤩 Confiante", "💪 Empoderada", "🗣️ Comunicativa"],
     symptoms: ["Muco cervical aumentando", "Energia no pico", "Pele brilhante"],
-    tips: ["Pico de performance física — melhor fase para HIIT e musculação", "Estrogênio alto = memória e aprendizado no máximo", "Tome decisões importantes agora", "Apresentações e reuniões: você está no seu melhor verbal"],
+    tips: ["Pico de performance física, melhor fase para HIIT e musculação", "Estrogênio alto = memória e aprendizado no máximo", "Tome decisões importantes agora", "Apresentações e reuniões: você está no seu melhor verbal"],
     energy: "🔋🔋🔋 Alta",
     libido: "🔥 Alta",
   },
@@ -135,7 +135,7 @@ const dailyCycleGuide: Record<string, { days: string; moods: string[]; symptoms:
     days: "Dias 14-16 (Ovulação)",
     moods: ["🥰 Sociável", "💃 Atraente", "😊 Eufórica"],
     symptoms: ["Dor leve no ovário (mittelschmerz)", "Muco cervical 'clara de ovo'", "Temperatura basal subindo", "Libido no pico"],
-    tips: ["Pico de fertilidade — atenção se não deseja engravidar", "Ocitocina e dopamina em alta = maior conexão social", "Beba bastante água — temperatura corporal sobe", "Vegetais crucíferos ajudam a metabolizar o estrogênio extra"],
+    tips: ["Pico de fertilidade, atenção se não deseja engravidar", "Ocitocina e dopamina em alta = maior conexão social", "Beba bastante água, temperatura corporal sobe", "Vegetais crucíferos ajudam a metabolizar o estrogênio extra"],
     energy: "🔋🔋🔋 Máxima",
     libido: "🔥🔥 Pico",
   },
@@ -148,7 +148,7 @@ const dailyCycleGuide: Record<string, { days: string; moods: string[]; symptoms:
     libido: "🌡️ Diminuindo",
   },
   "22-25": {
-    days: "Dias 22-25 (Lútea média — TPM)",
+    days: "Dias 22-25 (Lútea média, TPM)",
     moods: ["😤 Irritável", "😢 Emotiva", "😰 Ansiosa", "🤬 Frustrada"],
     symptoms: ["Inchaço", "Compulsão por doces", "Sensibilidade nos seios", "Dor de cabeça", "Acne", "Retenção de líquido"],
     tips: ["Serotonina caindo = compulsão por carboidratos é biológica, não fraqueza", "Magnésio (400mg) reduz irritabilidade e cólica", "Vitamina B6 ajuda com retenção e humor", "Chocolate amargo 70%+ libera endorfina sem excesso de açúcar"],
@@ -159,7 +159,7 @@ const dailyCycleGuide: Record<string, { days: string; moods: string[]; symptoms:
     days: "Dias 26-28 (Pré-menstrual)",
     moods: ["😔 Melancólica", "😤 Impaciente", "😢 Chorosa"],
     symptoms: ["Cólica antecipada", "Fadiga", "Insônia", "Inchaço máximo", "Mudança de apetite"],
-    tips: ["Progesterona e estrogênio caem juntos = maior desregulação emocional", "Priorize sono — melatonina pode estar desregulada", "Evite álcool e ultraprocessados", "Isso vai passar — seu cérebro estará renovado em 2-3 dias"],
+    tips: ["Progesterona e estrogênio caem juntos = maior desregulação emocional", "Priorize sono, melatonina pode estar desregulada", "Evite álcool e ultraprocessados", "Isso vai passar, seu cérebro estará renovado em 2-3 dias"],
     energy: "🔋 Muito baixa",
     libido: "❄️ Muito baixa",
   },
@@ -187,7 +187,7 @@ const neuroscienceFacts = [
   {
     title: "Serotonina e Ciclo",
     icon: <Sparkles className="h-5 w-5 text-primary" />,
-    content: "O estrogênio é o maior aliado da serotonina. Quando cai na fase lútea/menstrual, a serotonina cai junto — por isso a tristeza, compulsão alimentar e irritabilidade da TPM. Exercício e luz solar ajudam a compensar.",
+    content: "O estrogênio é o maior aliado da serotonina. Quando cai na fase lútea/menstrual, a serotonina cai junto, por isso a tristeza, compulsão alimentar e irritabilidade da TPM. Exercício e luz solar ajudam a compensar.",
   },
   {
     title: "Dor e Neuroplasticidade",
@@ -381,7 +381,7 @@ export default function CycleTracker() {
                 <div className="bg-muted/50 rounded-lg p-2.5 text-center">
                   <p className="text-[10px] text-muted-foreground">Próx. menstruação</p>
                   <p className="text-lg font-bold text-primary">
-                    {daysUntilNext !== null ? (daysUntilNext > 0 ? `${daysUntilNext}d` : "Hoje!") : "—"}
+                    {daysUntilNext !== null ? (daysUntilNext > 0 ? `${daysUntilNext}d` : "Hoje!") : "-"}
                   </p>
                 </div>
                 <div className="bg-muted/50 rounded-lg p-2.5 text-center">
@@ -410,7 +410,7 @@ export default function CycleTracker() {
                     <Baby className="h-5 w-5 text-pink-500" />
                     <div>
                       <p className="text-sm font-semibold text-pink-500">
-                        {isOvulationNow ? "🔴 Dia da Ovulação — Pico de fertilidade" : "Período Fértil"}
+                        {isOvulationNow ? "🔴 Dia da Ovulação, Pico de fertilidade" : "Período Fértil"}
                       </p>
                       <p className="text-xs text-muted-foreground">Dias {fertileStart}-{fertileEnd} do ciclo (você está no dia {currentDay})</p>
                     </div>
@@ -528,7 +528,7 @@ export default function CycleTracker() {
                 <div>
                   <p className="text-sm font-medium">
                     {format(new Date(log.period_start + "T12:00:00"), "dd MMM yyyy", { locale: ptBR })}
-                    {log.period_end && ` — ${format(new Date(log.period_end + "T12:00:00"), "dd MMM", { locale: ptBR })}`}
+                    {log.period_end && `, ${format(new Date(log.period_end + "T12:00:00"), "dd MMM", { locale: ptBR })}`}
                   </p>
                   <div className="flex gap-1 mt-1 flex-wrap">
                     <Badge variant="outline" className="text-[9px]">
@@ -561,7 +561,7 @@ export default function CycleTracker() {
               <Sparkles className="h-5 w-5 text-primary" />
               Guia do Dia {currentDay}
             </CardTitle>
-            <CardDescription>{dailyGuide.days} — O que esperar hoje</CardDescription>
+            <CardDescription>{dailyGuide.days}, O que esperar hoje</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
             {/* Energy & Libido */}

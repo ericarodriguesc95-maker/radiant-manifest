@@ -6,7 +6,7 @@ import { ensureVoicesLoaded, speakWithPauses, hasMaleVoice, loadVoicePrefs, save
 const mantras = [
   {
     phrase: "Sinto muito",
-    meaning: "Reconhecimento: você reconhece que uma memória dolorosa está ativa dentro de você. Não é culpa — é consciência. Na neurociência, esse ato de reconhecimento ativa o córtex cingulado anterior, reduzindo a reatividade emocional automática.",
+    meaning: "Reconhecimento: você reconhece que uma memória dolorosa está ativa dentro de você. Não é culpa, é consciência. Na neurociência, esse ato de reconhecimento ativa o córtex cingulado anterior, reduzindo a reatividade emocional automática.",
     duration: 6000,
   },
   {
@@ -58,7 +58,7 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
     });
   }, []);
 
-  // Background ambient tone (gentle 396Hz — frequency of liberation)
+  // Background ambient tone (gentle 396Hz, frequency of liberation)
   useEffect(() => {
     if (isPlaying && bgMusicOn) {
       const ctx = new AudioContext();
@@ -228,7 +228,7 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
                </button>
             ))}
             {voiceGender === "male" && noMaleVoice && (
-              <p className="text-[9px] text-amber-400 flex items-center gap-1 mt-1"><AlertCircle className="w-3 h-3" /> Voz masculina nativa não disponível — usando tom ajustado</p>
+              <p className="text-[9px] text-amber-400 flex items-center gap-1 mt-1"><AlertCircle className="w-3 h-3" /> Voz masculina nativa não disponível, usando tom ajustado</p>
             )}
             <button onClick={() => setVoiceEnabled(!voiceEnabled)} className="p-1.5 rounded-full hover:bg-muted transition-colors">
               {voiceEnabled ? <Volume2 className="h-4 w-4 text-gold" /> : <VolumeX className="h-4 w-4 text-muted-foreground" />}
@@ -259,7 +259,7 @@ export default function HooponoponoPlayer({ onBack }: { onBack: () => void }) {
         <div className="mt-6 bg-gold/5 rounded-2xl border border-gold/10 p-4 w-full">
           <p className="text-[11px] font-body font-semibold text-gold uppercase tracking-wider mb-1">💡 Dica prática</p>
           <p className="text-xs font-body text-muted-foreground leading-relaxed">
-            Repita durante o banho quente ou antes de dormir — momentos em que o subconsciente está mais receptivo. Pesquisas mostram que a prática consistente de Ho'oponopono por 21 dias reduz marcadores de inflamação e melhora a qualidade do sono em até 40%.
+            Repita durante o banho quente ou antes de dormir, momentos em que o subconsciente está mais receptivo. Pesquisas mostram que a prática consistente de Ho'oponopono por 21 dias reduz marcadores de inflamação e melhora a qualidade do sono em até 40%.
           </p>
         </div>
       </div>

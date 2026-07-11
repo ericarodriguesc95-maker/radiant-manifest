@@ -213,7 +213,7 @@ export default function ModuloElitePage() {
             <textarea
               value={reflection}
               onChange={(e) => setReflection(e.target.value)}
-              placeholder={loading ? "Carregando..." : "Escreva aqui sem filtro. Ninguém mais lê isso — é só entre você e você."}
+              placeholder={loading ? "Carregando..." : "Escreva aqui sem filtro. Ninguém mais lê isso, é só entre você e você."}
               disabled={loading}
               rows={6}
               className="w-full p-3 rounded-xl bg-background/60 border border-gold/15 focus:border-gold/50 focus:outline-none text-sm font-body text-foreground placeholder:text-muted-foreground/60 leading-relaxed resize-y transition-colors"

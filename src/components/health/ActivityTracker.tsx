@@ -188,7 +188,7 @@ export default function ActivityTracker() {
             </Button>
             {!geoSupported && (
               <p className="text-[10px] text-muted-foreground text-center">
-                📍 GPS indisponível — insira a distância manualmente ao finalizar
+                📍 GPS indisponível, insira a distância manualmente ao finalizar
               </p>
             )}
           </>

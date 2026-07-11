@@ -164,10 +164,10 @@ const fastingMeta: Record<FastingWindow, {
     pitch: "Base do protocolo. Estabiliza insulina e ativa autofagia leve.",
     tips: [
       "Hoje o foco é só fechar a janela. Não force, hidrate (3L + sal rosa).",
-      "Quebre o jejum com proteína + gordura boa — evita pico de fome às 11h.",
+      "Quebre o jejum com proteína + gordura boa, evita pico de fome às 11h.",
       "Janela 14h + café preto pela manhã = clareza extra para o deep work.",
       "Repita a mesma janela. Constância > intensidade nesta fase.",
-      "Mantenha 14h durante o fim de semana — não perca o platô conquistado.",
+      "Mantenha 14h durante o fim de semana, não perca o platô conquistado.",
     ],
   },
   "16h": {
@@ -176,11 +176,11 @@ const fastingMeta: Record<FastingWindow, {
     jejumTask: "Janela 16h fechada (ex.: 20:00 → 12:00)",
     pitch: "Autofagia consistente, queima de gordura visceral.",
     tips: [
-      "Adiar 2h o café da manhã. Beba água com limão e sal — corta fissura.",
+      "Adiar 2h o café da manhã. Beba água com limão e sal, corta fissura.",
       "Treino em jejum leve (caminhada/força) acelera lipólise nesta janela.",
-      "Comer dentro de 8h: 2 refeições densas com 30–40g proteína cada.",
+      "Comer dentro de 8h: 2 refeições densas com 30-40g proteína cada.",
       "Cuidado com o pico de fome falsa às 11h: é hábito, não fome real.",
-      "16:8 já é hábito ao final da semana — você acabou de subir um nível.",
+      "16:8 já é hábito ao final da semana, você acabou de subir um nível.",
     ],
   },
   "18h": {
@@ -190,8 +190,8 @@ const fastingMeta: Record<FastingWindow, {
     pitch: "Cetose leve, picos de BDNF, foco intenso para execução.",
     tips: [
       "Sintoma comum: névoa leve nas primeiras 24h. Eletrólitos resolvem.",
-      "Pico de BDNF entre 16–18h de jejum: agende deep work mais difícil aí.",
-      "Quebre o jejum com proteína primeiro, carbo só depois — evita sonolência.",
+      "Pico de BDNF entre 16-18h de jejum: agende deep work mais difícil aí.",
+      "Quebre o jejum com proteína primeiro, carbo só depois, evita sonolência.",
       "Magnésio 400mg + potássio antes de dormir = sono profundo mesmo em jejum.",
       "Mantenha 18h só nos dias de alta demanda cognitiva. Não é diário.",
     ],
@@ -204,7 +204,7 @@ const fastingMeta: Record<FastingWindow, {
     tips: [
       "Dia mais duro. Hidratação + sal rosa a cada 3h. Sem treino pesado.",
       "Autofagia em pico: o corpo limpa células danificadas. Foco mental sobe.",
-      "Refeição única densa: 600–800 kcal · proteína alta · vegetais · gordura boa.",
+      "Refeição única densa: 600-800 kcal · proteína alta · vegetais · gordura boa.",
       "Não estenda além de 24h sem orientação. Voltar para 16h amanhã.",
       "Sente energia limpa? É o reset funcionando. Documente no diário.",
     ],
@@ -242,13 +242,13 @@ const fiveDays: { day: string; title: string; body: string; tasks: DayTask[] }[]
       { id: "deep", label: "90 min de deep work sem celular por perto" },
       { id: "treino", label: "Treino de força (BDNF + IGF-1)" },
       { id: "decisao", label: "Tomar 1 decisão estratégica adiada" },
-      { id: "escrita", label: "5 min de journaling — clarear o ruído mental" },
+      { id: "escrita", label: "5 min de journaling, clarear o ruído mental" },
       { id: "afirm", label: "Afirmação Teta antes de dormir" },
     ],
   },
   {
     day: "Quinta", title: "Reset Dopaminérgico",
-    body: "Receptores resensibilizados. Tarefas simples voltam a dar prazer. Procrastinação some — o tédio vira combustível.",
+    body: "Receptores resensibilizados. Tarefas simples voltam a dar prazer. Procrastinação some, o tédio vira combustível.",
     tasks: [
       { id: "tedio", label: "30 min de tédio consciente (sem input)" },
       { id: "caminhada", label: "Caminhada de 30 min ao ar livre" },
@@ -265,7 +265,7 @@ const fiveDays: { day: string; title: string; body: string; tasks: DayTask[] }[]
       { id: "pacto", label: "Definir pacto da próxima semana" },
       { id: "frio2", label: "Banho frio completo 2 min" },
       { id: "subli", label: "Áudio Teta + afirmações (20 min)" },
-      { id: "celebra", label: "Celebrar — você atravessou a linha 200" },
+      { id: "celebra", label: "Celebrar, você atravessou a linha 200" },
     ],
   },
 ];
@@ -301,7 +301,7 @@ function formatDate(iso: string) {
 const celebrationMessages = [
   "Você acaba de reescrever seu código operacional. Razão 400+ instalada.",
   "Cinco dias. Cinco vitórias químicas. Sua dopamina agora trabalha para você.",
-  "Linha 200 atravessada. De agora em diante, você gera energia — não a drena.",
+  "Linha 200 atravessada. De agora em diante, você gera energia, não a drena.",
   "Identidade de alta performance: salva no sistema 1. Bem-vinda à soberania.",
 ];
 
@@ -631,7 +631,7 @@ export default function Protocolo145Page() {
           <Clock className="h-4 w-4 text-gold" />
           <p className="text-xs uppercase tracking-[0.18em] text-gold font-semibold">Sua janela de jejum</p>
         </div>
-        <p className="text-[11px] text-muted-foreground mb-3">Escolha sua janela — os hábitos e dicas de cada dia se ajustam automaticamente.</p>
+        <p className="text-[11px] text-muted-foreground mb-3">Escolha sua janela, os hábitos e dicas de cada dia se ajustam automaticamente.</p>
         <div className="grid grid-cols-4 gap-1.5">
           {(["14h", "16h", "18h", "24h"] as FastingWindow[]).map((w) => {
             const active = progress.fastingWindow === w;
@@ -651,27 +651,27 @@ export default function Protocolo145Page() {
           })}
         </div>
         <div className="mt-3 rounded-lg border border-gold/20 bg-gold/5 p-2.5">
-          <p className="text-[11px] text-foreground"><span className="text-gold font-semibold">{currentMeta.label}</span> — {currentMeta.pitch}</p>
+          <p className="text-[11px] text-foreground"><span className="text-gold font-semibold">{currentMeta.label}</span>, {currentMeta.pitch}</p>
         </div>
       </div>
 
       <div className="space-y-5">
-        {/* 1 — TESE */}
+        {/* 1, TESE */}
         <SectionCard id="tese" icon={<Brain className="h-4 w-4" />} title="1. A Tese do Bio-Hack" subtitle="O corpo é um sistema otimizável">
-          <p>Seu organismo não é frágil — é <span className="text-foreground font-semibold">programável</span>. Cada caloria vazia, cada scroll infinito, cada estímulo de dopamina barata acumula <span className="text-foreground font-semibold">lixo sistêmico</span> que consome largura de banda do córtex pré-frontal.</p>
+          <p>Seu organismo não é frágil, é <span className="text-foreground font-semibold">programável</span>. Cada caloria vazia, cada scroll infinito, cada estímulo de dopamina barata acumula <span className="text-foreground font-semibold">lixo sistêmico</span> que consome largura de banda do córtex pré-frontal.</p>
           <p>O Protocolo 14.5 é uma <span className="text-foreground font-semibold">desfragmentação operacional</span>: remover o ruído metabólico e digital para liberar o processamento cerebral que sustenta foco, clareza e decisão estratégica.</p>
           <p className="text-xs text-foreground/70">Resultado mensurável: ↑ BDNF · ↑ sensibilidade à dopamina · ↓ inflamação · ↑ tempo em fluxo.</p>
         </SectionCard>
 
-        {/* 2 — NEUROCIÊNCIA APROFUNDADA */}
+        {/* 2, NEUROCIÊNCIA APROFUNDADA */}
         <SectionCard id="neurociencia" icon={<Activity className="h-4 w-4" />} title="2. Neurociência Aplicada" subtitle="Os 6 mecanismos que o protocolo ativa">
           <div className="grid sm:grid-cols-2 gap-2">
             {[
-              { icon: <Brain className="h-4 w-4 text-gold" />, t: "BDNF", d: "Fator Neurotrófico Derivado do Cérebro. Jejum + exercício + frio elevam BDNF em até 200% — combustível direto para neuroplasticidade e memória." },
-              { icon: <Star className="h-4 w-4 text-gold" />, t: "Dopamina D2", d: "Receptores ressensibilizam em 5–7 dias sem scroll. A vontade de executar volta sem esforço — não é força de vontade, é química." },
-              { icon: <Sunrise className="h-4 w-4 text-gold" />, t: "Cortisol Awakening", d: "Pico natural entre 06–09h. Acordar 05:00 + luz solar = você ancora o relógio biológico no estado de alerta máximo." },
-              { icon: <Moon className="h-4 w-4 text-gold" />, t: "Glinfático", d: "Sistema de limpeza cerebral ativo no sono profundo. Dormir 22:30–05:00 maximiza a remoção de beta-amiloide." },
-              { icon: <Snowflake className="h-4 w-4 text-gold" />, t: "Norepinefrina", d: "Banho frio 1–2 min eleva noradrenalina em 530%. Foco e humor pelas 4h seguintes." },
+              { icon: <Brain className="h-4 w-4 text-gold" />, t: "BDNF", d: "Fator Neurotrófico Derivado do Cérebro. Jejum + exercício + frio elevam BDNF em até 200%, combustível direto para neuroplasticidade e memória." },
+              { icon: <Star className="h-4 w-4 text-gold" />, t: "Dopamina D2", d: "Receptores ressensibilizam em 5-7 dias sem scroll. A vontade de executar volta sem esforço, não é força de vontade, é química." },
+              { icon: <Sunrise className="h-4 w-4 text-gold" />, t: "Cortisol Awakening", d: "Pico natural entre 06-09h. Acordar 05:00 + luz solar = você ancora o relógio biológico no estado de alerta máximo." },
+              { icon: <Moon className="h-4 w-4 text-gold" />, t: "Glinfático", d: "Sistema de limpeza cerebral ativo no sono profundo. Dormir 22:30-05:00 maximiza a remoção de beta-amiloide." },
+              { icon: <Snowflake className="h-4 w-4 text-gold" />, t: "Norepinefrina", d: "Banho frio 1-2 min eleva noradrenalina em 530%. Foco e humor pelas 4h seguintes." },
               { icon: <Eye className="h-4 w-4 text-gold" />, t: "Córtex pré-frontal", d: "Sede da decisão estratégica. Sem inflamação sistêmica + dopamina regulada, ele ganha banda de processamento." },
             ].map((b) => (
               <div key={b.t} className="rounded-lg border border-gold/15 bg-muted/20 p-3">
@@ -682,25 +682,25 @@ export default function Protocolo145Page() {
           </div>
         </SectionCard>
 
-        {/* 3 — CÓDIGO 14.5 */}
+        {/* 3, CÓDIGO 14.5 */}
         <SectionCard id="codigo" icon={<Target className="h-4 w-4" />} title="3. O Código 14.5" subtitle="As duas variáveis fundadoras">
           <div className="rounded-xl border border-gold/20 bg-gold/5 p-4 space-y-1">
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-gold" />
-              <p className="text-sm font-semibold text-foreground">Variável 14 — Jejum Metabólico</p>
+              <p className="text-sm font-semibold text-foreground">Variável 14, Jejum Metabólico</p>
             </div>
             <p>Janela de <span className="text-foreground font-semibold">14 horas sem ingestão calórica</span> (18:40 → 08:40). Ativa <span className="text-foreground font-semibold">autofagia celular</span>, estabiliza insulina e reduz inflamação de baixo grau.</p>
           </div>
           <div className="rounded-xl border border-gold/20 bg-gold/5 p-4 space-y-1">
             <div className="flex items-center gap-2">
               <Sunrise className="h-4 w-4 text-gold" />
-              <p className="text-sm font-semibold text-foreground">Variável 5 — Despertar Estratégico</p>
+              <p className="text-sm font-semibold text-foreground">Variável 5, Despertar Estratégico</p>
             </div>
             <p>Acordar às <span className="text-foreground font-semibold">05:00</span> sincroniza o ritmo circadiano com o pico natural de cortisol. Você ganha <span className="text-foreground font-semibold">3h de vantagem operacional</span> sobre um mundo que ainda dorme.</p>
           </div>
         </SectionCard>
 
-        {/* 4 — JEJUNS */}
+        {/* 4, JEJUNS */}
         <SectionCard id="jejuns" icon={<Droplet className="h-4 w-4" />} title="4. Mapa dos Jejuns" subtitle="Do iniciante ao reset metabólico">
           <p>O 14.5 começa em 14h, mas a estrada continua. Cada janela ativa uma camada diferente do organismo:</p>
           <div className="space-y-2">
@@ -719,16 +719,16 @@ export default function Protocolo145Page() {
           </div>
         </SectionCard>
 
-        {/* 5 — FIREWALL */}
+        {/* 5, FIREWALL */}
         <SectionCard id="firewall" icon={<ShieldOff className="h-4 w-4" />} title="5. Firewall de Atenção" subtitle="Bloqueio total · Instagram · TikTok · Facebook">
-          <p>Redes sociais são <span className="text-foreground font-semibold">máquinas de regulação negativa</span> de receptores D2. Cada deslize é uma microdose de dopamina que rebaixa o limiar — tarefas reais passam a parecer entediantes.</p>
+          <p>Redes sociais são <span className="text-foreground font-semibold">máquinas de regulação negativa</span> de receptores D2. Cada deslize é uma microdose de dopamina que rebaixa o limiar, tarefas reais passam a parecer entediantes.</p>
           <p>Em <span className="text-foreground font-semibold">5 dias completos</span> sem o estímulo, o cérebro ressensibiliza os receptores. A procrastinação não é fraqueza de caráter: é química.</p>
           <p className="text-xs text-foreground/70">Tática: desinstale os apps. Use bloqueador (One Sec, Opal, Screen Zen). Sem exceção.</p>
         </SectionCard>
 
-        {/* 6 — HAWKINS */}
+        {/* 6, HAWKINS */}
         <SectionCard id="hawkins" icon={<TrendingUp className="h-4 w-4" />} title="6. Escala de Hawkins" subtitle="Mapa de Consciência · Dr. David R. Hawkins">
-          <p className="mb-3">O protocolo move sua frequência operacional do território da <span className="text-foreground font-semibold">Prostração e Desejo</span> (abaixo de 200 — o homem-massa) para o nível da <span className="text-gold font-semibold">Razão e Inteligência Estratégica</span> (400+).</p>
+          <p className="mb-3">O protocolo move sua frequência operacional do território da <span className="text-foreground font-semibold">Prostração e Desejo</span> (abaixo de 200, o homem-massa) para o nível da <span className="text-gold font-semibold">Razão e Inteligência Estratégica</span> (400+).</p>
           <div className="rounded-xl border border-gold/20 overflow-hidden">
             {hawkinsLevels.map((l) => (
               <div
@@ -747,9 +747,9 @@ export default function Protocolo145Page() {
           <p className="text-xs text-foreground/70 mt-3">Acima de 200 você gera energia. Abaixo, você drena.</p>
         </SectionCard>
 
-        {/* 7 — MASLOW */}
+        {/* 7, MASLOW */}
         <SectionCard id="maslow" icon={<Layers className="h-4 w-4" />} title="7. Pirâmide de Maslow" subtitle="Da fisiologia à autorrealização">
-          <p className="mb-3">Hawkins mede <span className="text-foreground font-semibold">frequência</span>. Maslow mapeia <span className="text-foreground font-semibold">necessidade</span>. O 14.5 ataca a <span className="text-gold font-semibold">base</span> — sem fisiologia regulada, nenhum nível superior se sustenta.</p>
+          <p className="mb-3">Hawkins mede <span className="text-foreground font-semibold">frequência</span>. Maslow mapeia <span className="text-foreground font-semibold">necessidade</span>. O 14.5 ataca a <span className="text-gold font-semibold">base</span>, sem fisiologia regulada, nenhum nível superior se sustenta.</p>
           <div className="space-y-1.5 flex flex-col items-center">
             {maslowLevels.map((m) => (
               <div key={m.name} className={`${m.width} ${m.color} ${m.text} rounded-lg px-3 py-2.5 transition-all hover:scale-[1.02]`}>
@@ -761,18 +761,18 @@ export default function Protocolo145Page() {
           <p className="text-xs text-foreground/70 mt-3">Quem pula a base e tenta operar no topo entra em colapso. O 14.5 reconstrói a pirâmide de baixo para cima.</p>
         </SectionCard>
 
-        {/* 8 — HACK SUBLIMINAL */}
+        {/* 8, HACK SUBLIMINAL */}
         <SectionCard id="subliminal" icon={<Moon className="h-4 w-4" />} title="8. Hack Subliminal" subtitle="Reprogramação durante o sono · ondas Delta/Teta">
-          <p>Entre 22:00 e 02:00 o cérebro entra em <span className="text-foreground font-semibold">ondas Delta</span> — janela natural de consolidação de memória implícita. Antes de dormir, sintonize <span className="text-foreground font-semibold">Teta (4–8 Hz)</span> por 20 min para induzir hipnagogia.</p>
+          <p>Entre 22:00 e 02:00 o cérebro entra em <span className="text-foreground font-semibold">ondas Delta</span>, janela natural de consolidação de memória implícita. Antes de dormir, sintonize <span className="text-foreground font-semibold">Teta (4-8 Hz)</span> por 20 min para induzir hipnagogia.</p>
           <ul className="list-disc list-inside space-y-1 text-xs">
-            <li>22:30 — fone de ouvido, áudio Teta + afirmações em primeira pessoa.</li>
+            <li>22:30, fone de ouvido, áudio Teta + afirmações em primeira pessoa.</li>
             <li>"Eu sou foco. Eu opero acima de 400. Eu não negocio com lixo."</li>
             <li>Volume baixo, suficiente para o subconsciente captar sem despertar o crítico.</li>
-            <li>Repetir <span className="text-foreground font-semibold">os 5 dias</span> — a identidade nova é gravada no sistema 1.</li>
+            <li>Repetir <span className="text-foreground font-semibold">os 5 dias</span>, a identidade nova é gravada no sistema 1.</li>
           </ul>
         </SectionCard>
 
-        {/* 9 — 5 DIAS DINÂMICO */}
+        {/* 9, 5 DIAS DINÂMICO */}
         <SectionCard id="execucao" icon={<CalendarDays className="h-4 w-4" />} title="9. Execução Dinâmica · 5 Dias" subtitle="Marque hábitos e registre como foi cada dia">
           <div className="space-y-3">
             {fiveDays.map((d, i) => {
@@ -860,13 +860,13 @@ export default function Protocolo145Page() {
           </div>
         </SectionCard>
 
-        {/* 10 — DIÁRIO (atalho explicativo) */}
+        {/* 10, DIÁRIO (atalho explicativo) */}
         <SectionCard id="diario" icon={<NotebookPen className="h-4 w-4" />} title="10. Seu Diário do Protocolo" subtitle="Tudo que você escrever em cada dia fica salvo aqui">
-          <p>Cada anotação é gravada no seu dispositivo e arquivada quando o ciclo termina. Daqui a semanas, ao refazer o 14.5, você compara sintomas, vitórias e níveis de energia — e enxerga a evolução real entre os ciclos.</p>
-          <p className="text-xs text-foreground/70">Dica de mentora: escreva 2–3 linhas por dia. O cérebro consolida o aprendizado quando vê o padrão repetido nos próprios ciclos.</p>
+          <p>Cada anotação é gravada no seu dispositivo e arquivada quando o ciclo termina. Daqui a semanas, ao refazer o 14.5, você compara sintomas, vitórias e níveis de energia, e enxerga a evolução real entre os ciclos.</p>
+          <p className="text-xs text-foreground/70">Dica de mentora: escreva 2-3 linhas por dia. O cérebro consolida o aprendizado quando vê o padrão repetido nos próprios ciclos.</p>
         </SectionCard>
 
-        {/* 11 — HISTÓRICO */}
+        {/* 11, HISTÓRICO */}
         <SectionCard id="historico" icon={<History className="h-4 w-4" />} title="11. Histórico de Ciclos" subtitle={`${history.length} ciclo${history.length === 1 ? "" : "s"} arquivado${history.length === 1 ? "" : "s"}`}>
           {history.length === 0 ? (
             <div className="rounded-lg border border-dashed border-gold/30 bg-muted/10 p-4 text-center">
@@ -934,7 +934,7 @@ export default function Protocolo145Page() {
           )}
         </SectionCard>
 
-        {/* 12 — IA */}
+        {/* 12, IA */}
         <div data-section="ia" id="ia" className="scroll-mt-24">
           <Protocolo145Chat />
         </div>

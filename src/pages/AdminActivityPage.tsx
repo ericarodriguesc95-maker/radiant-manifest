@@ -333,7 +333,7 @@ export default function AdminActivityPage() {
                               <div className="flex-1 min-w-0">
                                 <p className="text-[11px] font-body text-foreground">
                                   <span className="font-semibold">
-                                    {format(session.start, "HH:mm")} — {format(session.end, "HH:mm")}
+                                    {format(session.start, "HH:mm")}, {format(session.end, "HH:mm")}
                                   </span>
                                   <span className="text-muted-foreground"> ({formatSessionDuration(session)})</span>
                                 </p>
@@ -362,7 +362,7 @@ export default function AdminActivityPage() {
                                 <div className="flex-1 min-w-0">
                                   <p className="text-[11px] font-body">
                                     <span className={cn("font-semibold", info.color)}>{info.label}</span>
-                                    {act.details && <span className="text-muted-foreground"> — {act.details}</span>}
+                                    {act.details && <span className="text-muted-foreground">, {act.details}</span>}
                                   </p>
                                 </div>
                                 <span className="text-[9px] font-body text-muted-foreground/60 shrink-0">
@@ -458,10 +458,10 @@ export default function AdminActivityPage() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-body font-semibold text-foreground">
-                            {format(session.start, "HH:mm")} — {format(session.end, "HH:mm")}
+                            {format(session.start, "HH:mm")}, {format(session.end, "HH:mm")}
                           </p>
                           <p className="text-[10px] font-body text-muted-foreground">
-                            Duração: {formatSessionDuration(session)} • Páginas: {session.pages.length > 0 ? session.pages.join(", ") : "—"}
+                            Duração: {formatSessionDuration(session)} • Páginas: {session.pages.length > 0 ? session.pages.join(", ") : "-"}
                           </p>
                         </div>
                       </div>
@@ -490,7 +490,7 @@ export default function AdminActivityPage() {
                       <div className="flex-1 min-w-0">
                         <p className="text-xs font-body">
                           <span className={cn("font-semibold", info.color)}>{info.label}</span>
-                          {act.details && <span className="text-muted-foreground"> — {act.details}</span>}
+                          {act.details && <span className="text-muted-foreground">, {act.details}</span>}
                         </p>
                         {act.page && (
                           <p className="text-[10px] text-muted-foreground/60 font-body">📍 {act.page}</p>

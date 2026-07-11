@@ -155,7 +155,7 @@ export default function MonthlyCalendar() {
         const reminderId = `${evt.id}_${todayStr}`;
 
         if (nowMinutes >= triggerMinutes && nowMinutes <= triggerMinutes + 2 && !sent.includes(reminderId)) {
-          sendNotification("📅 " + evt.title, `${evt.start_time.slice(0, 5)}${evt.description ? " — " + evt.description : ""}`, `cal-${evt.id}`);
+          sendNotification("📅 " + evt.title, `${evt.start_time.slice(0, 5)}${evt.description ? ", " + evt.description : ""}`, `cal-${evt.id}`);
           sent.push(reminderId);
           localStorage.setItem(sentKey, JSON.stringify(sent));
         }
@@ -355,7 +355,7 @@ export default function MonthlyCalendar() {
           ))}
         </div>
 
-        {/* Calendar Grid — Google Calendar style */}
+        {/* Calendar Grid, Google Calendar style */}
         <div className="grid grid-cols-7 gap-1">
           {blanks.map(i => <div key={`blank-${i}`} className="min-h-[74px]" />)}
           {days.map(day => {
@@ -465,7 +465,7 @@ export default function MonthlyCalendar() {
                       {evt.start_time && (
                         <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
                           <Clock className="h-2.5 w-2.5" />
-                          {formatTime(evt.start_time)}{evt.end_time && ` – ${formatTime(evt.end_time)}`}
+                          {formatTime(evt.start_time)}{evt.end_time && `, ${formatTime(evt.end_time)}`}
                         </span>
                       )}
                       {evt.recurrence && evt.recurrence !== "none" && (
@@ -510,7 +510,7 @@ export default function MonthlyCalendar() {
         <DialogContent className="max-w-sm mx-auto max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="font-display text-base">
-              {editingEvent ? "Editar Evento" : `Agendar — ${selectedDateStr}`}
+              {editingEvent ? "Editar Evento" : `Agendar, ${selectedDateStr}`}
             </DialogTitle>
           </DialogHeader>
 

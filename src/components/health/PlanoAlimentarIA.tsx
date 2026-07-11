@@ -50,7 +50,7 @@ Para CADA dia, entregue:
 
 Para cada refeição: lista de alimentos com PORÇÕES em gramas/ml e KCAL aproximada por refeição. Ao final de cada dia: total de kcal, proteína (g), carbo (g), gordura (g).
 
-Use markdown com títulos de dia (### Dia 1 — Segunda), tabelas curtas ou listas. Inclua uma seção final "🛒 Lista de compras consolidada" e "💡 Dicas de preparo e substituições".
+Use markdown com títulos de dia (### Dia 1, Segunda), tabelas curtas ou listas. Inclua uma seção final "🛒 Lista de compras consolidada" e "💡 Dicas de preparo e substituições".
 
 Seja PRÁTICA, com comida brasileira real, sem ingredientes raros.`;
 

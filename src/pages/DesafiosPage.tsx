@@ -49,7 +49,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
     exercicio: [
       "Sente-se confortavelmente (pode ser na cama, no sofá ou cadeira)",
       "Feche os olhos e respire fundo 3 vezes pelo nariz",
-      "Foque na sua respiração natural — apenas observe o ar entrando e saindo",
+      "Foque na sua respiração natural, apenas observe o ar entrando e saindo",
       "Quando a mente vagar (e vai vagar!), gentilmente traga a atenção de volta",
       "Comece com 5 minutos e aumente gradualmente para 10",
       "Ao final, abra os olhos devagar e sorria por ter se dedicado a si mesma"
@@ -58,7 +58,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   journaling: {
     name: "Journaling",
     icon: "📝",
-    dicaPratica: "Use o bloco de notas do celular se não tiver um caderno. Escreva no almoço, no banheiro, no intervalo do trabalho. Não precisa ser bonito ou longo — 3 frases já transformam o dia. Você pode até usar o Diário aqui do app!",
+    dicaPratica: "Use o bloco de notas do celular se não tiver um caderno. Escreva no almoço, no banheiro, no intervalo do trabalho. Não precisa ser bonito ou longo, 3 frases já transformam o dia. Você pode até usar o Diário aqui do app!",
     neurociencia: "A escrita expressiva ativa o córtex pré-frontal e reduz a atividade da amígdala. Um estudo publicado no Journal of Experimental Psychology mostrou que escrever sobre pensamentos e sentimentos por 15-20 minutos reduz o cortisol em até 28%. O journaling também fortalece a memória de trabalho e a regulação emocional.",
     exercicio: [
       "Escreva 3 coisas pelas quais é grata hoje (específicas, não genéricas)",
@@ -72,11 +72,11 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
     name: "Leitura 15min",
     icon: "📖",
     dicaPratica: "Leve o livro (ou Kindle/celular) no bolso. Leia na fila do banco, no consultório, antes de dormir no lugar de rolar o feed. Audiobooks contam! Ouvir no trajeto casa-trabalho é perfeito.",
-    neurociencia: "A leitura fortalece as conexões neurais no sulco temporal esquerdo (processamento de linguagem) e aumenta a conectividade no córtex somatossensorial. Pesquisadores da Universidade de Sussex descobriram que apenas 6 minutos de leitura reduzem o estresse em 68% — mais eficaz que ouvir música ou caminhar.",
+    neurociencia: "A leitura fortalece as conexões neurais no sulco temporal esquerdo (processamento de linguagem) e aumenta a conectividade no córtex somatossensorial. Pesquisadores da Universidade de Sussex descobriram que apenas 6 minutos de leitura reduzem o estresse em 68%, mais eficaz que ouvir música ou caminhar.",
     exercicio: [
       "Escolha um livro que te interesse genuinamente (autodesenvolvimento, ficção, espiritualidade)",
       "Separe 15 minutos ininterruptos (coloque o celular no modo avião)",
-      "Leia com atenção — se algo te marcar, sublinhe ou anote",
+      "Leia com atenção, se algo te marcar, sublinhe ou anote",
       "Sugestões acessíveis: 'O Poder do Agora', 'Mulheres que Correm com os Lobos', 'Hábitos Atômicos'",
       "Dica: bibliotecas públicas têm ótimos acervos gratuitos"
     ]
@@ -84,7 +84,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   respiracao478: {
     name: "Respiração 4-7-8",
     icon: "🌬️",
-    dicaPratica: "Perfeita para aquele momento de ansiedade no trânsito, antes de uma reunião difícil ou quando bater a vontade de descontar na comida. Pode fazer discretamente em qualquer lugar — ninguém percebe.",
+    dicaPratica: "Perfeita para aquele momento de ansiedade no trânsito, antes de uma reunião difícil ou quando bater a vontade de descontar na comida. Pode fazer discretamente em qualquer lugar, ninguém percebe.",
     neurociencia: "A técnica 4-7-8 ativa o nervo vago, estimulando o sistema nervoso parassimpático. Isso reduz a frequência cardíaca e a pressão arterial em minutos. O Dr. Andrew Weil, que popularizou a técnica, a chama de 'tranquilizante natural do sistema nervoso'. A expiração prolongada (8 tempos) é a chave: ela sinaliza segurança ao cérebro.",
     exercicio: [
       "Inspire pelo nariz contando até 4",
@@ -99,7 +99,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
     name: "Gratidão Diária",
     icon: "🙏",
     dicaPratica: "Pode ser mental, no espelho do banheiro, ou escrita no celular. Faça no café da manhã ou logo antes de dormir. O segredo é ser específica: em vez de 'sou grata pela saúde', diga 'sou grata por ter conseguido subir as escadas sem cansar hoje'.",
-    neurociencia: "A gratidão ativa o núcleo accumbens e o córtex pré-frontal ventromedial, as mesmas áreas ativadas por recompensas. Pesquisadores da UC Davis mostraram que praticar gratidão por 3 semanas aumenta a dopamina e a serotonina — os 'hormônios da felicidade'. Quem pratica gratidão regularmente tem 25% menos cortisol.",
+    neurociencia: "A gratidão ativa o núcleo accumbens e o córtex pré-frontal ventromedial, as mesmas áreas ativadas por recompensas. Pesquisadores da UC Davis mostraram que praticar gratidão por 3 semanas aumenta a dopamina e a serotonina, os 'hormônios da felicidade'. Quem pratica gratidão regularmente tem 25% menos cortisol.",
     exercicio: [
       "Ao acordar, pense em 3 coisas específicas pelas quais é grata",
       "Exemplo: 'Sou grata pelo sorriso da minha filha ontem no jantar'",
@@ -111,13 +111,13 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   digitalDetox: {
     name: "Digital Detox 1h",
     icon: "📵",
-    dicaPratica: "Escolha 1 hora do dia pra desligar notificações (não precisa desligar o celular). Pode ser a primeira hora acordada ou a última antes de dormir. Avise família/amigas que estará offline — elas vão entender.",
+    dicaPratica: "Escolha 1 hora do dia pra desligar notificações (não precisa desligar o celular). Pode ser a primeira hora acordada ou a última antes de dormir. Avise família/amigas que estará offline, elas vão entender.",
     neurociencia: "O uso excessivo de redes sociais reduz a matéria cinzenta na ínsula, área responsável pela empatia e autoconsciência. Cada notificação gera um micro-pico de dopamina que cria dependência. Pesquisadores da Universidade de Pennsylvania mostraram que limitar redes sociais a 30min/dia reduz solidão e depressão significativamente em 3 semanas.",
     exercicio: [
       "Escolha sua hora de detox (sugestão: 6h-7h da manhã ou 21h-22h)",
       "Coloque o celular em modo avião ou 'Não Perturbe'",
       "Use esse tempo para: cozinhar, conversar com alguém, ler, cuidar de si",
-      "Observe como você se sente sem o celular — desconfortável? Livre?",
+      "Observe como você se sente sem o celular, desconfortável? Livre?",
       "Gradualmente aumente para 2h quando se sentir confortável"
     ]
   },
@@ -132,7 +132,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
       "'Meu corpo é forte, saudável e bonito como é'",
       "'Eu mereço amor, abundância e paz'",
       "Repita cada uma 3 vezes, em voz alta, olhando no espelho",
-      "Sinta a emoção das palavras — não é robótico, é com intenção"
+      "Sinta a emoção das palavras, não é robótico, é com intenção"
     ]
   },
   exercicio30: {
@@ -178,12 +178,12 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   skincare: {
     name: "Skincare AM/PM",
     icon: "🧴",
-    dicaPratica: "Rotina mínima = 3 passos: limpar, hidratar, proteger (de manhã) ou limpar, tratar, hidratar (à noite). Não precisa de produtos caros — Cerave, Neutrogena e até Nivea têm ótimas opções. O protetor solar é o produto anti-idade mais eficaz que existe.",
-    neurociencia: "O ritual de skincare ativa o sistema de recompensa do cérebro ao criar uma rotina de autocuidado tangível. A pele e o sistema nervoso vêm da mesma camada embrionária (ectoderma), por isso o toque facial libera ocitocina e reduz cortisol. Cuidar da pele não é vaidade — é saúde e regulação emocional.",
+    dicaPratica: "Rotina mínima = 3 passos: limpar, hidratar, proteger (de manhã) ou limpar, tratar, hidratar (à noite). Não precisa de produtos caros, Cerave, Neutrogena e até Nivea têm ótimas opções. O protetor solar é o produto anti-idade mais eficaz que existe.",
+    neurociencia: "O ritual de skincare ativa o sistema de recompensa do cérebro ao criar uma rotina de autocuidado tangível. A pele e o sistema nervoso vêm da mesma camada embrionária (ectoderma), por isso o toque facial libera ocitocina e reduz cortisol. Cuidar da pele não é vaidade, é saúde e regulação emocional.",
     exercicio: [
       "Manhã: 1) Lave o rosto com sabonete suave 2) Hidratante leve 3) Protetor solar FPS 30+",
       "Noite: 1) Remova maquiagem com micelar 2) Lave o rosto 3) Sérum ou tratamento 4) Hidratante",
-      "Invista em protetor solar acima de tudo — use até em dias nublados",
+      "Invista em protetor solar acima de tudo, use até em dias nublados",
       "Troque a fronha do travesseiro 2x por semana",
       "Beba água! A hidratação interna reflete na pele"
     ]
@@ -191,7 +191,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   alongamento: {
     name: "Alongamento",
     icon: "🤸‍♀️",
-    dicaPratica: "5 minutos ao acordar já fazem diferença. Alongue no banheiro depois do banho quente (músculos mais relaxados). Se trabalha sentada, levante a cada hora e alongue pescoço e ombros. Não precisa ser ginasta — faça o que seu corpo permite.",
+    dicaPratica: "5 minutos ao acordar já fazem diferença. Alongue no banheiro depois do banho quente (músculos mais relaxados). Se trabalha sentada, levante a cada hora e alongue pescoço e ombros. Não precisa ser ginasta, faça o que seu corpo permite.",
     neurociencia: "O alongamento reduz a rigidez muscular causada pelo cortisol cronicamente elevado (estresse). Ele ativa os proprioceptores musculares que enviam sinais de relaxamento ao cérebro. Estudos mostram que 10 minutos de alongamento reduzem a ansiedade de forma comparável a uma caminhada de 20 minutos.",
     exercicio: [
       "Pescoço: incline a cabeça para cada lado, 15 segundos cada",
@@ -205,7 +205,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   sono7h: {
     name: "Sono 7h+",
     icon: "😴",
-    dicaPratica: "Coloque um alarme para IR DORMIR, não só para acordar. Celular no silencioso às 22h. Evite café depois das 14h. Se tem filhos pequenos, tente dormir quando eles dormem (mesmo que seja às 21h). Não é preguiça — é recuperação.",
+    dicaPratica: "Coloque um alarme para IR DORMIR, não só para acordar. Celular no silencioso às 22h. Evite café depois das 14h. Se tem filhos pequenos, tente dormir quando eles dormem (mesmo que seja às 21h). Não é preguiça, é recuperação.",
     neurociencia: "Durante o sono profundo, o sistema glinfático 'lava' o cérebro, removendo proteínas tóxicas como beta-amiloide. Dormir menos de 7h reduz a leptina (hormônio da saciedade) e aumenta a grelina (fome), levando ao ganho de peso. Uma única noite mal dormida reduz a função do córtex pré-frontal em até 60%, afetando decisões e autocontrole.",
     exercicio: [
       "Defina um horário fixo para dormir e acordar (inclusive nos fins de semana)",
@@ -225,7 +225,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
       "Escolha uma meditação guiada de 10-15 minutos no Insight Timer ou YouTube",
       "Sente-se ou deite-se confortavelmente com fones de ouvido",
       "Feche os olhos e simplesmente siga as instruções da voz guia",
-      "Não se julgue se a mente vagar — isso é normal e faz parte do processo",
+      "Não se julgue se a mente vagar, isso é normal e faz parte do processo",
       "Experimente temas diferentes: relaxamento, autocompaixão, visualização",
       "Sugestão: 'Meditação para mulheres' no YouTube tem ótimas opções em português"
     ]
@@ -234,11 +234,11 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
     name: "Gratidão Profunda",
     icon: "💛",
     dicaPratica: "Vá além do 'sou grata pelo dia'. Sinta no corpo a emoção de cada gratidão. Feche os olhos e reviva o momento. Pode fazer no banho, caminhando ou antes de dormir. Quando a gratidão é sentida (não só pensada), o impacto no cérebro é 3x maior.",
-    neurociencia: "A gratidão profunda — sentida no corpo, não apenas racionalizada — ativa o córtex pré-frontal medial e libera ocitocina. Dr. Joe Dispenza explica que quando combinamos pensamento + emoção, criamos novos padrões neurais duradouros. Pesquisas do HeartMath Institute mostram que a gratidão sentida muda a variabilidade da frequência cardíaca em minutos.",
+    neurociencia: "A gratidão profunda, sentida no corpo, não apenas racionalizada, ativa o córtex pré-frontal medial e libera ocitocina. Dr. Joe Dispenza explica que quando combinamos pensamento + emoção, criamos novos padrões neurais duradouros. Pesquisas do HeartMath Institute mostram que a gratidão sentida muda a variabilidade da frequência cardíaca em minutos.",
     exercicio: [
       "Feche os olhos e respire fundo 3 vezes",
-      "Pense em uma pessoa que te ajudou recentemente — sinta a emoção",
-      "Pense em uma parte do seu corpo que funciona bem — agradeça",
+      "Pense em uma pessoa que te ajudou recentemente, sinta a emoção",
+      "Pense em uma parte do seu corpo que funciona bem, agradeça",
       "Pense em algo 'pequeno' que te trouxe alegria hoje (um café, um sorriso)",
       "Mantenha cada sentimento de gratidão por pelo menos 30 segundos",
       "Opcional: coloque a mão no coração enquanto pratica"
@@ -247,22 +247,22 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   hooponopono: {
     name: "Ho'oponopono",
     icon: "🙏",
-    dicaPratica: "Pode fazer em qualquer lugar — mentalmente no ônibus, sussurrando no banho, ou em voz alta antes de dormir. Use quando sentir mágoa, raiva ou culpa. Não precisa entender tudo sobre a técnica — apenas repita as 4 frases com intenção.",
+    dicaPratica: "Pode fazer em qualquer lugar, mentalmente no ônibus, sussurrando no banho, ou em voz alta antes de dormir. Use quando sentir mágoa, raiva ou culpa. Não precisa entender tudo sobre a técnica, apenas repita as 4 frases com intenção.",
     neurociencia: "O Ho'oponopono trabalha com o conceito de neuroplasticidade emocional. Repetir frases de perdão e amor reativa circuitos neurais associados à compaixão (ínsula anterior e córtex cingulado). Estudos sobre perdão mostram que soltar ressentimentos reduz cortisol, pressão arterial e marcadores inflamatórios no sangue.",
     exercicio: [
       "Pense em uma situação ou pessoa que cause desconforto emocional",
       "Repita mentalmente ou em voz alta, com intenção:",
-      "'Sinto muito' — reconheça a dor ou situação",
-      "'Me perdoe' — assuma responsabilidade pela sua experiência",
-      "'Eu te amo' — envie amor incondicional (inclusive a si mesma)",
-      "'Sou grata' — agradeça pela oportunidade de cura",
+      "'Sinto muito', reconheça a dor ou situação",
+      "'Me perdoe', assuma responsabilidade pela sua experiência",
+      "'Eu te amo', envie amor incondicional (inclusive a si mesma)",
+      "'Sou grata', agradeça pela oportunidade de cura",
       "Repita o ciclo 7 vezes, respirando profundamente entre cada repetição"
     ]
   },
   visualizacao: {
     name: "Visualização Criativa",
     icon: "🌟",
-    dicaPratica: "Faça deitada na cama, 5 minutos antes de dormir ou ao acordar (estados alfa do cérebro). Imagine sua vida ideal como um filme mental — com detalhes sensoriais. Quanto mais detalhes (sons, cheiros, texturas), mais poderosa a visualização.",
+    dicaPratica: "Faça deitada na cama, 5 minutos antes de dormir ou ao acordar (estados alfa do cérebro). Imagine sua vida ideal como um filme mental, com detalhes sensoriais. Quanto mais detalhes (sons, cheiros, texturas), mais poderosa a visualização.",
     neurociencia: "O cérebro não diferencia completamente uma experiência real de uma vividamente imaginada. A visualização ativa as mesmas áreas motoras e sensoriais que a ação real. Atletas olímpicos usam essa técnica porque ela fortalece as conexões neurais como se você estivesse praticando. O Dr. Joe Dispenza demonstrou que a visualização consistente muda a expressão genética.",
     exercicio: [
       "Deite-se confortavelmente e feche os olhos",
@@ -281,7 +281,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
     neurociencia: "O conceito japonês de 'Shinrin-yoku' (banho de floresta) é respaldado por pesquisas: 20 minutos na natureza reduzem o cortisol em 13.4%, a pressão arterial e a frequência cardíaca. A exposição à luz natural regula o ritmo circadiano e a produção de melatonina. O contato com o verde aumenta as células NK (Natural Killer), fortalecendo o sistema imune.",
     exercicio: [
       "Caminhe 20 minutos em uma praça, parque ou rua arborizada",
-      "Tire os fones de ouvido — ouça os sons ao redor (pássaros, vento, água)",
+      "Tire os fones de ouvido, ouça os sons ao redor (pássaros, vento, água)",
       "Toque em plantas, terra, árvores (grounding)",
       "Tome pelo menos 10 minutos de sol direto (braços ou rosto)",
       "Se estiver chovendo: sente perto de uma janela com vista para o verde",
@@ -291,8 +291,8 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   desapegoItem: {
     name: "Desapego de 1 Item",
     icon: "🎁",
-    dicaPratica: "Abra o guarda-roupa e separe UMA peça que não usa há 6 meses. Doe para alguém ou para uma instituição. Pode ser roupa, acessório, livro, utensílio. O desapego material reflete no emocional — liberar espaço físico libera espaço mental.",
-    neurociencia: "A acumulação ativa a ínsula e o córtex cingulado anterior (áreas de dor emocional) quando pensamos em nos desfazer de algo. Mas o ato de doar ativa o sistema de recompensa (estriado ventral) e libera dopamina. Ambientes organizados reduzem o cortisol e melhoram o foco — o cérebro processa menos estímulos visuais e tem mais energia para tarefas importantes.",
+    dicaPratica: "Abra o guarda-roupa e separe UMA peça que não usa há 6 meses. Doe para alguém ou para uma instituição. Pode ser roupa, acessório, livro, utensílio. O desapego material reflete no emocional, liberar espaço físico libera espaço mental.",
+    neurociencia: "A acumulação ativa a ínsula e o córtex cingulado anterior (áreas de dor emocional) quando pensamos em nos desfazer de algo. Mas o ato de doar ativa o sistema de recompensa (estriado ventral) e libera dopamina. Ambientes organizados reduzem o cortisol e melhoram o foco, o cérebro processa menos estímulos visuais e tem mais energia para tarefas importantes.",
     exercicio: [
       "Abra o guarda-roupa ou uma gaveta",
       "Escolha 1 item que não usou nos últimos 6 meses",
@@ -305,7 +305,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   rotinaMatinal: {
     name: "Rotina Matinal",
     icon: "🌅",
-    dicaPratica: "Não precisa acordar às 5h! Acorde 30 minutos antes do normal. Os primeiros 30 minutos do dia definem seu humor. Nada de celular nos primeiros 20 minutos — faça algo para VOCÊ primeiro (água, respiração, intenção do dia).",
+    dicaPratica: "Não precisa acordar às 5h! Acorde 30 minutos antes do normal. Os primeiros 30 minutos do dia definem seu humor. Nada de celular nos primeiros 20 minutos, faça algo para VOCÊ primeiro (água, respiração, intenção do dia).",
     neurociencia: "Os primeiros 30-60 minutos após acordar, o cérebro está em estado alfa/teta, altamente sugestionável. O que você consome nesse período (informação, emoção, estímulo) programa o tom do dia inteiro. Verificar o celular imediatamente ativa o modo reativo; uma rotina matinal intencional ativa o modo proativo, com maior controle prefrontal.",
     exercicio: [
       "1. Ao acordar: 500ml de água (corpo desidratou 8h dormindo)",
@@ -319,22 +319,22 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   metaDoDia: {
     name: "Meta do Dia",
     icon: "🎯",
-    dicaPratica: "Toda manhã, escolha UMA meta principal (não três, não cinco — UMA). Escreva no post-it e cole no espelho ou na tela do celular. No final do dia, avalie: conseguiu? Se sim, celebre. Se não, sem culpa — ajuste e tente amanhã.",
-    neurociencia: "O foco em uma única meta ativa o córtex pré-frontal dorsolateral e reduz a 'fadiga de decisão'. Pesquisas de Baumeister sobre força de vontade mostram que ela é um recurso limitado — dividir entre muitas metas esgota o autocontrole. Estabelecer micro-metas diárias libera dopamina a cada conclusão, criando um ciclo positivo de motivação.",
+    dicaPratica: "Toda manhã, escolha UMA meta principal (não três, não cinco, UMA). Escreva no post-it e cole no espelho ou na tela do celular. No final do dia, avalie: conseguiu? Se sim, celebre. Se não, sem culpa, ajuste e tente amanhã.",
+    neurociencia: "O foco em uma única meta ativa o córtex pré-frontal dorsolateral e reduz a 'fadiga de decisão'. Pesquisas de Baumeister sobre força de vontade mostram que ela é um recurso limitado, dividir entre muitas metas esgota o autocontrole. Estabelecer micro-metas diárias libera dopamina a cada conclusão, criando um ciclo positivo de motivação.",
     exercicio: [
       "Pela manhã, defina UMA meta importante e alcançável para o dia",
       "Escreva no formato: 'Hoje eu vou [ação específica]'",
       "Exemplo: 'Hoje eu vou caminhar 30 minutos no almoço'",
       "Quebre em mini-passos se necessário",
       "À noite, avalie: completou? Parcialmente? O que aprendeu?",
-      "Celebre qualquer progresso — grande ou pequeno"
+      "Celebre qualquer progresso, grande ou pequeno"
     ]
   },
   reflexaoNoturna: {
     name: "Reflexão Noturna",
     icon: "🌙",
-    dicaPratica: "Faça mentalmente na cama, ou escreva 3 linhas no celular. Não precisa ser longo — é um 'fechamento' do dia. O que deu certo? O que aprendeu? O que faria diferente? Esse hábito melhora a qualidade do sono porque 'descarrega' a mente.",
-    neurociencia: "A reflexão noturna consolida a memória no hipocampo durante o sono subsequente. Processar os eventos do dia reduz a carga emocional que o cérebro carregaria para o sono (causando insônia ou sonhos agitados). A prática regular de reflexão aumenta a metacognição — capacidade de 'pensar sobre o pensamento' — fortalecendo a inteligência emocional.",
+    dicaPratica: "Faça mentalmente na cama, ou escreva 3 linhas no celular. Não precisa ser longo, é um 'fechamento' do dia. O que deu certo? O que aprendeu? O que faria diferente? Esse hábito melhora a qualidade do sono porque 'descarrega' a mente.",
+    neurociencia: "A reflexão noturna consolida a memória no hipocampo durante o sono subsequente. Processar os eventos do dia reduz a carga emocional que o cérebro carregaria para o sono (causando insônia ou sonhos agitados). A prática regular de reflexão aumenta a metacognição, capacidade de 'pensar sobre o pensamento', fortalecendo a inteligência emocional.",
     exercicio: [
       "Antes de dormir, reflita sobre 3 perguntas:",
       "1. 'Qual foi o melhor momento do meu dia?'",
@@ -347,13 +347,13 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   semRedes2h: {
     name: "Sem Redes 2h",
     icon: "📱",
-    dicaPratica: "Escolha as 2 horas menos comprometidas do seu dia — geralmente manhã cedo ou noite. Delete os apps temporariamente se preciso (pode reinstalar depois, os dados ficam salvos). Use esse tempo para algo que nutra: conversar, cozinhar, criar, descansar.",
-    neurociencia: "As redes sociais exploram o circuito de dopamina com recompensas variáveis (como caça-níqueis). Cada scroll é um 'talvez tenha algo bom' — isso vicia. 2 horas sem estímulo digital permite que o córtex pré-frontal 'descanse' e recupere capacidade de atenção profunda. Pesquisas mostram que a atenção focada está em declínio — de 12 segundos (2000) para 8 segundos (2023).",
+    dicaPratica: "Escolha as 2 horas menos comprometidas do seu dia, geralmente manhã cedo ou noite. Delete os apps temporariamente se preciso (pode reinstalar depois, os dados ficam salvos). Use esse tempo para algo que nutra: conversar, cozinhar, criar, descansar.",
+    neurociencia: "As redes sociais exploram o circuito de dopamina com recompensas variáveis (como caça-níqueis). Cada scroll é um 'talvez tenha algo bom', isso vicia. 2 horas sem estímulo digital permite que o córtex pré-frontal 'descanse' e recupere capacidade de atenção profunda. Pesquisas mostram que a atenção focada está em declínio, de 12 segundos (2000) para 8 segundos (2023).",
     exercicio: [
       "Defina horário: ex. 6h-8h da manhã ou 20h-22h à noite",
       "Coloque celular no modo avião ou em outro cômodo",
       "Alternativas produtivas: ler, cozinhar, conversar, alongar, journaling",
-      "Se sentir ansiedade, observe o sentimento sem agir — ele passa em 5-10min",
+      "Se sentir ansiedade, observe o sentimento sem agir, ele passa em 5-10min",
       "Após a primeira semana, você vai perceber que não perdeu nada importante"
     ]
   },
@@ -365,7 +365,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
     exercicio: [
       "Aquecimento: 5min de polichinelos ou caminhada rápida",
       "Cardio (20min): caminhada rápida, dança ou bicicleta",
-      "Força (25min): 3 séries de cada — agachamento, flexão, prancha, abdominal, lunges",
+      "Força (25min): 3 séries de cada, agachamento, flexão, prancha, abdominal, lunges",
       "Alongamento (10min): foque em quadril, ombros e coluna",
       "Use garrafas de água (2L) como halter se não tiver equipamento",
       "Playlist motivacional é obrigatória! 🎵"
@@ -388,21 +388,21 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   semAcucar: {
     name: "Sem Açúcar Refinado",
     icon: "🍬",
-    dicaPratica: "Não precisa cortar todo doce — corte o açúcar REFINADO (branco). Troque por mel, açúcar de coco ou frutas maduras. O café amargo parece impossível? Coloque canela! A vontade de doce passa em 3-5 dias quando o paladar se readapta.",
+    dicaPratica: "Não precisa cortar todo doce, corte o açúcar REFINADO (branco). Troque por mel, açúcar de coco ou frutas maduras. O café amargo parece impossível? Coloque canela! A vontade de doce passa em 3-5 dias quando o paladar se readapta.",
     neurociencia: "O açúcar refinado ativa os receptores de dopamina com a mesma intensidade que algumas drogas. A abstinência gera sintomas reais (irritabilidade, dor de cabeça, cansaço) nos primeiros 3-5 dias, mas depois o paladar se recalibra. Sem picos de glicose, o cortisol se estabiliza, o sono melhora e a pele fica mais limpa (menos glicação do colágeno).",
     exercicio: [
       "Substitua açúcar branco por mel, açúcar de coco ou xilitol",
       "Vontade de doce? Coma: frutas maduras, chocolate 70%, pasta de amendoim",
       "Café amargo: adicione canela em pó ou leite vegetal",
       "Leia rótulos: 'xarope de glicose', 'maltodextrina' e 'dextrose' são açúcar",
-      "Primeiros 3-5 dias são os mais difíceis — depois fica fácil",
+      "Primeiros 3-5 dias são os mais difíceis, depois fica fácil",
       "Permita-se um 'doce saudável' por dia para não sentir privação"
     ]
   },
   despertar5h: {
     name: "Despertar às 5h",
     icon: "⏰",
-    dicaPratica: "Só faz sentido se você DORMIR antes! Deitar às 22h = acordar às 5h com 7h de sono. A mágica não é o horário, é ter tempo SÓ SEU antes do mundo acordar. Se 5h é impossível, acorde 1h mais cedo que o normal — o princípio é o mesmo.",
+    dicaPratica: "Só faz sentido se você DORMIR antes! Deitar às 22h = acordar às 5h com 7h de sono. A mágica não é o horário, é ter tempo SÓ SEU antes do mundo acordar. Se 5h é impossível, acorde 1h mais cedo que o normal, o princípio é o mesmo.",
     neurociencia: "O cortisol tem um pico natural entre 6-8h da manhã (Cortisol Awakening Response). Acordar mais cedo aproveita esse pico hormonal para produtividade. As primeiras horas do dia têm menos interrupções externas, permitindo o 'deep work' (trabalho profundo). Acordar cedo também sincroniza o relógio circadiano com a luz solar, melhorando todo o eixo hormonal.",
     exercicio: [
       "Semana 1: acorde 30min mais cedo que o habitual",
@@ -417,7 +417,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
     name: "Leitura 30min",
     icon: "📚",
     dicaPratica: "Dobre o tempo de leitura de 15 para 30 minutos. Divida em 2 blocos de 15min se necessário (manhã e noite). Audiobooks no trajeto contam! A chave é exposição consistente a ideias que expandam sua mente.",
-    neurociencia: "30 minutos diários de leitura equivalem a ~20 livros por ano. A leitura profunda ativa o circuito de simulação cerebral — ao ler sobre experiências, o cérebro simula vivê-las, construindo empatia e modelos mentais. Pesquisas longitudinais mostram que leitores regulares têm 20% menor risco de declínio cognitivo na terceira idade.",
+    neurociencia: "30 minutos diários de leitura equivalem a ~20 livros por ano. A leitura profunda ativa o circuito de simulação cerebral, ao ler sobre experiências, o cérebro simula vivê-las, construindo empatia e modelos mentais. Pesquisas longitudinais mostram que leitores regulares têm 20% menor risco de declínio cognitivo na terceira idade.",
     exercicio: [
       "Bloco 1 (manhã): 15min de leitura de desenvolvimento pessoal ou profissional",
       "Bloco 2 (noite): 15min de ficção ou espiritualidade (relaxa antes de dormir)",
@@ -437,7 +437,7 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
       "Separe 1 hora diária (pode dividir: 30min manhã + 30min noite)",
       "Recursos gratuitos: Coursera, Khan Academy, Sebrae, YouTube",
       "Use a técnica Pomodoro: 25min estudo + 5min pausa",
-      "Ensine o que aprendeu para alguém — ensinar consolida o aprendizado",
+      "Ensine o que aprendeu para alguém, ensinar consolida o aprendizado",
       "Anote insights e dúvidas no seu diário"
     ]
   },
@@ -445,11 +445,11 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
     name: "Sono Regulado 22h",
     icon: "🛌",
     dicaPratica: "Coloque um alarme às 21:30 como aviso. Às 22h: celular no silencioso, luzes baixas, rotina de fechamento (skincare, chá, leitura). Se tem filhos que dormem tarde, negocie com o parceiro para alternar noites. Seu sono é prioridade, não luxo.",
-    neurociencia: "Dormir consistentemente no mesmo horário regula o ritmo circadiano e otimiza a secreção de melatonina, GH (hormônio do crescimento) e cortisol. O pico de GH ocorre entre 22h-2h — perdê-lo afeta recuperação muscular, pele e metabolismo. A regularidade do sono é mais importante para a saúde do que a duração total.",
+    neurociencia: "Dormir consistentemente no mesmo horário regula o ritmo circadiano e otimiza a secreção de melatonina, GH (hormônio do crescimento) e cortisol. O pico de GH ocorre entre 22h-2h, perdê-lo afeta recuperação muscular, pele e metabolismo. A regularidade do sono é mais importante para a saúde do que a duração total.",
     exercicio: [
-      "21:30 — Alarme 'hora de desacelerar'",
-      "21:30-22:00 — Rotina: skincare, chá de camomila, leitura leve",
-      "22:00 — Celular no modo avião, luzes baixas ou apagadas",
+      "21:30, Alarme 'hora de desacelerar'",
+      "21:30-22:00, Rotina: skincare, chá de camomila, leitura leve",
+      "22:00, Celular no modo avião, luzes baixas ou apagadas",
       "Quarto: temperatura fresca (18-22°C), escuro, silencioso",
       "Se acordar à noite: não olhe o celular (a luz azul reseta a melatonina)",
       "Fins de semana: tente não variar mais que 1h do horário normal"
@@ -458,15 +458,15 @@ const TASK_LIBRARY: Record<string, TaskDetail> = {
   rotinaCompleta: {
     name: "Rotina Completa",
     icon: "📋",
-    dicaPratica: "É a integração de tudo: manhã intencional, alimentação consciente, movimento, autocuidado e noite regulada. Não precisa ser perfeita — precisa ser consistente. A rotina é sua estrutura de segurança em dias caóticos.",
-    neurociencia: "Rotinas automatizam decisões nos gânglios basais, liberando o córtex pré-frontal para pensamento criativo e estratégico. Quanto mais hábitos saudáveis você automatiza, menos 'força de vontade' gasta. Pesquisas de Phillippa Lally (UCL) mostram que um hábito leva em média 66 dias para se automatizar — mas os benefícios começam desde o dia 1.",
+    dicaPratica: "É a integração de tudo: manhã intencional, alimentação consciente, movimento, autocuidado e noite regulada. Não precisa ser perfeita, precisa ser consistente. A rotina é sua estrutura de segurança em dias caóticos.",
+    neurociencia: "Rotinas automatizam decisões nos gânglios basais, liberando o córtex pré-frontal para pensamento criativo e estratégico. Quanto mais hábitos saudáveis você automatiza, menos 'força de vontade' gasta. Pesquisas de Phillippa Lally (UCL) mostram que um hábito leva em média 66 dias para se automatizar, mas os benefícios começam desde o dia 1.",
     exercicio: [
       "Manhã: água + respiração + intenção do dia (15min)",
       "Meio da manhã: lanche saudável + hidratação",
       "Almoço: prato equilibrado + 10min caminhada digestiva",
       "Tarde: estudo/desenvolvimento + movimento",
       "Noite: skincare + reflexão + leitura (sem tela)",
-      "Adapte ao SEU horário e realidade — a melhor rotina é a que você consegue manter"
+      "Adapte ao SEU horário e realidade, a melhor rotina é a que você consegue manter"
     ]
   }
 };

@@ -99,7 +99,7 @@ export default function ManifestacaoEscrita() {
 
       {saved && (
         <p className="text-center text-[10px] font-body text-muted-foreground italic">
-          Todos os direitos reservados — Eu Espiritual
+          Todos os direitos reservados, Eu Espiritual
         </p>
       )}
     </div>

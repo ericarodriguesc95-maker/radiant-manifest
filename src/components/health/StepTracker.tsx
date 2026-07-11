@@ -41,7 +41,7 @@ export default function StepTracker() {
   const km = ((todaySteps * stride) / 100000).toFixed(2);
   const kcal = Math.round(todaySteps * 0.04);
 
-  // Chronometer (cronômetro) — persists across reloads + persistent notification
+  // Chronometer (cronômetro), persists across reloads + persistent notification
   const [chronoStart, setChronoStart] = useState<number | null>(() => {
     const v = localStorage.getItem(TIMER_KEY);
     return v ? Number(v) : null;
@@ -91,7 +91,7 @@ export default function StepTracker() {
       if ("Notification" in window && Notification.permission === "default") {
         await Notification.requestPermission();
       }
-      // Wake Lock — mantém tela acordada enquanto caminha (Android Chrome)
+      // Wake Lock, mantém tela acordada enquanto caminha (Android Chrome)
       if ("wakeLock" in navigator) {
         try { wakeLockRef.current = await (navigator as any).wakeLock.request("screen"); } catch {}
       }
@@ -169,7 +169,7 @@ export default function StepTracker() {
     }
   };
 
-  // CSV genérico (Google Fit, Mi Fit, Samsung Health exportados): "date,steps" — uma linha por dia
+  // CSV genérico (Google Fit, Mi Fit, Samsung Health exportados): "date,steps", uma linha por dia
   const importCsv = async (file: File) => {
     try {
       const text = await file.text();
@@ -196,7 +196,7 @@ export default function StepTracker() {
     }
   };
 
-  // Capacitor nativo (quando o app rodar empacotado) — usa HealthKit/Google Fit
+  // Capacitor nativo (quando o app rodar empacotado), usa HealthKit/Google Fit
   const importNative = async () => {
     const cap = (window as any).Capacitor;
     if (!cap?.isNativePlatform?.()) {
@@ -350,7 +350,7 @@ export default function StepTracker() {
             <Timer className="h-5 w-5 text-primary" /> Cronômetro de caminhada
           </CardTitle>
           <CardDescription>
-            Roda em segundo plano e aparece na barra de notificações do celular (Android). No iOS web a notificação é limitada — para barra fixa, use o app nativo.
+            Roda em segundo plano e aparece na barra de notificações do celular (Android). No iOS web a notificação é limitada, para barra fixa, use o app nativo.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -459,7 +459,7 @@ export default function StepTracker() {
             <Input type="number" value={goal} onChange={(e) => setGoal(Number(e.target.value) || 0)} />
           </div>
           <div>
-            <label className="text-xs text-muted-foreground">Comprimento do passo (cm) — usado para calcular distância</label>
+            <label className="text-xs text-muted-foreground">Comprimento do passo (cm), usado para calcular distância</label>
             <Input type="number" value={stride} onChange={(e) => setStride(Number(e.target.value) || 0)} />
           </div>
           <Button

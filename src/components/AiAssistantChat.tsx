@@ -82,7 +82,7 @@ function speakText(text: string) {
 
   // If user's device has no pt-* voice, skip TTS entirely so we never read in English.
   if (!hasPtVoice()) {
-    console.warn("[TTS] Nenhuma voz em Português instalada — áudio desativado.");
+    console.warn("[TTS] Nenhuma voz em Português instalada, áudio desativado.");
     return;
   }
 
@@ -469,7 +469,7 @@ export default function AiAssistantChat() {
                     Olá, rainha 👑
                   </p>
                   <p className="text-xs text-muted-foreground mt-1 max-w-xs">
-                    Sou sua Assistente Pessoal de gestão de tempo. Fale ou digite — eu organizo sua agenda 🎤
+                    Sou sua Assistente Pessoal de gestão de tempo. Fale ou digite, eu organizo sua agenda 🎤
                   </p>
                 </div>
                 <div className="space-y-2 w-full max-w-xs">

@@ -13,7 +13,7 @@ export default function NewVersionBanner() {
   const [dismissed, setDismissed] = useState(false);
   const [reloading, setReloading] = useState(false);
 
-  // Don't run inside Lovable preview/iframe — SW only works in production deploy
+  // Don't run inside Lovable preview/iframe, SW only works in production deploy
   const isInIframe = (() => {
     try {
       return window.self !== window.top;
