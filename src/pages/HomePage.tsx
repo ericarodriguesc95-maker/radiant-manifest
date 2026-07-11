@@ -251,6 +251,40 @@ const HomePage = () => {
           <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
         </button>
 
+        {/* ═══════════════════════════════════════════ */}
+        {/* RESUMO DE SEXTA, ritual da vitória semanal */}
+        {/* ═══════════════════════════════════════════ */}
+        {(() => {
+          const isFriday = new Date().getDay() === 5;
+          return (
+            <button
+              onClick={() => navigate("/resumo-sexta")}
+              className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-rose-200"
+              style={{ "--stagger": 2 } as React.CSSProperties}
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-rose-50 via-pink-50 to-amber-50" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.18),transparent_60%)]" />
+              <div className="relative z-10 h-12 w-12 rounded-2xl bg-rose-100 flex items-center justify-center border border-rose-200">
+                <Trophy className="h-6 w-6 text-rose-500" />
+              </div>
+              <div className="relative z-10 flex-1 text-left">
+                <p className="text-sm font-display font-bold text-foreground">
+                  {isFriday ? "Sexta da Vitória 🎉" : "Resumo da semana"}
+                </p>
+                <p className="text-[11px] font-body text-muted-foreground mt-0.5">
+                  Veja tudo que você construiu nos últimos 7 dias e celebre.
+                </p>
+              </div>
+              {isFriday && (
+                <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-rose-600 border border-rose-300 rounded-full px-2 py-0.5 animate-pulse">
+                  Hoje
+                </span>
+              )}
+              <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
+            </button>
+          );
+        })()}
+
 
 
 
