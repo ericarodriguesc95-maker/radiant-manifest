@@ -778,16 +778,16 @@ export default function LandingPage() {
                 ✦ Plano Anual, Preço de lançamento
               </p>
               <div style={{ ...serif, color: C.cream }} className="text-[64px] md:text-[80px] font-light leading-none">
-                R$97<span style={{ color: C.goldMuted }}>,90</span>
+                R$67<span style={{ color: C.goldMuted }}>,90</span>
               </div>
               <p style={{ color: C.creamDim }} className="mt-3 text-[14px] font-light">
                 pagamento único · 12 meses de acesso completo
               </p>
               <p style={{ color: C.creamFaint }} className="text-[13px] font-light">
-                ou em até 12x de R$10,13 no cartão
+                ou em até 12x de R$7,02 no cartão
               </p>
               <p style={{ ...serif, color: C.gold }} className="mt-6 italic text-[16px]">
-                Menos de R$11 por mês.
+                Menos de R$8 por mês.
               </p>
               <p style={{ color: C.creamDim, lineHeight: 1.7 }} className="mt-3 text-[13px] font-light max-w-[440px] mx-auto">
                 O valor de <span style={{ color: C.gold }}>um café com leite</span> por mês para reprogramar sua mente, seu corpo e sua rotina inteira.
