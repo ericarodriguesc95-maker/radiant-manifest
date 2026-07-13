@@ -304,11 +304,11 @@ const FAQ = [
   },
   {
     q: "Quanto custa e como pago?",
-    a: "R$97,90 no ano, pagamento único, ou em até 12x de R$10,13 no cartão. Não há renovação automática.",
+    a: "R$67,90 no ano, pagamento único, ou em até 12x de R$7,02 no cartão. Não há renovação automática.",
   },
   {
     q: "Posso cancelar?",
-    a: "R$ 97,90 no ano, pagamento único à vista ou em até 12x de R$ 10,13 no cartão. A sua assinatura é anual e a renovação é automática após 12 meses, mas você pode cancelar a renovação quando quiser direto na plataforma de pagamento.",
+    a: "R$ 67,90 no ano, pagamento único à vista ou em até 12x de R$ 7,02 no cartão. A sua assinatura é anual e a renovação é automática após 12 meses, mas você pode cancelar a renovação quando quiser direto na plataforma de pagamento.",
   },
   {
     q: "Recebo atualizações sem pagar mais?",
