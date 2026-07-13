@@ -618,7 +618,7 @@ export default function LandingPage() {
             <SectionLabel>Conheça nosso app</SectionLabel>
             <H2 highlight="por dentro do Club.">Um tour visual</H2>
             <p style={{ color: C.creamDim }} className="mt-5 text-[15px] font-light max-w-[600px] mx-auto">
-              Veja como é a experiência real das Extraordinárias dentro do aplicativo.
+              Veja como é a experiência real das Extraordinárias. Tudo funciona pelo navegador: celular, tablet ou computador. Não precisa baixar em loja de apps.
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 md:gap-7">
