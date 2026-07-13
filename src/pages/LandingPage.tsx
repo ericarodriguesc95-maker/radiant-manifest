@@ -697,6 +697,28 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ACESSO PELO NAVEGADOR */}
+      <section
+        className="py-16 md:py-24 px-5 md:px-12"
+        style={{ background: `linear-gradient(180deg, ${C.gold}08, transparent)` }}
+      >
+        <div className="max-w-[720px] mx-auto text-center">
+          <SectionLabel>Acesso pelo navegador</SectionLabel>
+          <h2
+            style={{ ...serif, color: C.cream, lineHeight: 1.2 }}
+            className="text-[28px] md:text-[36px] font-light tracking-tight"
+          >
+            Não precisa instalar nada
+          </h2>
+          <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="mt-6 text-[16px] md:text-[17px] font-light">
+            O Gloow Up Club é uma plataforma web. Você acessa direto pelo navegador do seu celular, tablet ou computador, sem baixar nada em loja de apps. Basta fazer login no site e começar.
+          </p>
+          <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="mt-4 text-[16px] md:text-[17px] font-light">
+            Quer ainda mais praticidade no celular? É só adicionar o site à tela inicial. Ele abre rápido, como se fosse um app.
+          </p>
+        </div>
+      </section>
+
       {/* DEPOIMENTOS */}
       <section className="py-24 md:py-32 px-5 md:px-12">
         <div className="max-w-[1080px] mx-auto">
