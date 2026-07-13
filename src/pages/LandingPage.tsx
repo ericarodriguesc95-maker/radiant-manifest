@@ -268,7 +268,7 @@ const JOURNEY = [
 
 const BENEFITS = [
   "Acesso completo aos 10+ módulos",
-  "App no celular e site no computador",
+  "Acesso pelo navegador no celular, tablet e computador",
   "Comunidade das Extraordinárias, rede social privada exclusiva",
   "IA Assistente, IA Nutri Luna, IA do Sono, IA do Eu Superior, IA de Finanças",
   "Reprogramação Mental e Alta Performance",
