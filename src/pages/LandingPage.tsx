@@ -268,7 +268,7 @@ const JOURNEY = [
 
 const BENEFITS = [
   "Acesso completo aos 10+ módulos",
-  "App no celular e site no computador",
+  "Acesso pelo navegador no celular, tablet e computador",
   "Comunidade das Extraordinárias, rede social privada exclusiva",
   "IA Assistente, IA Nutri Luna, IA do Sono, IA do Eu Superior, IA de Finanças",
   "Reprogramação Mental e Alta Performance",
@@ -288,7 +288,7 @@ const FAQ = [
   },
   {
     q: "Funciona como app no celular?",
-    a: "Sim. Você instala como app no celular e também acessa como site no computador. Disponível onde você estiver.",
+    a: "O Gloow Up Club é acessado pelo navegador, sem precisar baixar nada em loja de apps. Funciona no celular, tablet e computador, basta acessar pelo site. Você ainda pode adicionar o atalho à tela inicial do celular para abrir como se fosse um app.",
   },
   {
     q: "O que são os Desafios Progressivos?",
@@ -618,7 +618,7 @@ export default function LandingPage() {
             <SectionLabel>Conheça nosso app</SectionLabel>
             <H2 highlight="por dentro do Club.">Um tour visual</H2>
             <p style={{ color: C.creamDim }} className="mt-5 text-[15px] font-light max-w-[600px] mx-auto">
-              Veja como é a experiência real das Extraordinárias dentro do aplicativo.
+              Veja como é a experiência real das Extraordinárias. Tudo funciona pelo navegador: celular, tablet ou computador. Não precisa baixar em loja de apps.
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 md:gap-7">
@@ -694,6 +694,28 @@ export default function LandingPage() {
           <div className="text-center mt-14">
             <PrimaryCTA href={KIWIFY_URL}>Quero acessar o app ✦</PrimaryCTA>
           </div>
+        </div>
+      </section>
+
+      {/* ACESSO PELO NAVEGADOR */}
+      <section
+        className="py-16 md:py-24 px-5 md:px-12"
+        style={{ background: `linear-gradient(180deg, ${C.gold}08, transparent)` }}
+      >
+        <div className="max-w-[720px] mx-auto text-center">
+          <SectionLabel>Acesso pelo navegador</SectionLabel>
+          <h2
+            style={{ ...serif, color: C.cream, lineHeight: 1.2 }}
+            className="text-[28px] md:text-[36px] font-light tracking-tight"
+          >
+            Não precisa instalar nada
+          </h2>
+          <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="mt-6 text-[16px] md:text-[17px] font-light">
+            O Gloow Up Club é uma plataforma web. Você acessa direto pelo navegador do seu celular, tablet ou computador, sem baixar nada em loja de apps. Basta fazer login no site e começar.
+          </p>
+          <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="mt-4 text-[16px] md:text-[17px] font-light">
+            Quer ainda mais praticidade no celular? É só adicionar o site à tela inicial. Ele abre rápido, como se fosse um app.
+          </p>
         </div>
       </section>
 

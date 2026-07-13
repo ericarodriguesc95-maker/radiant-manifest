@@ -1,9 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Download, Smartphone, ChevronDown, ChevronUp, Copy, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-
-const APK_URL = "https://cf.admin.appmysite.com/786957/811978/android/builds/1.1.0/ams_android_811978_live.apk?_gl=1*v4elly*_gcl_au*NjE3NTE2NTMwLjE3Nzc4MjkxNzM.*_ga*NjkwMzY1MDc3LjE3Nzc4MjkxNzM.*_ga_BWZ5717E0Z*czE3NzgxOTQxMzEkbzIkZzEkdDE3NzgxOTYwNTYkajYwJGwwJGgw";
+import { X, Smartphone, ChevronDown, ChevronUp } from "lucide-react";
 
 const DISMISSED_KEY = "glowup-install-banner-dismissed";
 const DISMISS_DURATION = 3 * 24 * 60 * 60 * 1000; // 3 days
@@ -18,19 +14,6 @@ function isStandalone() {
 export default function InstallAppBanner() {
   const [show, setShow] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [copied, setCopied] = useState(false);
-
-  const handleCopyApk = async () => {
-    try {
-      await navigator.clipboard.writeText(APK_URL);
-      setCopied(true);
-      toast.success("Link do APK copiado! ✨ Compartilhe com suas amigas, rainha 👑");
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error("Não foi possível copiar. Tente novamente.");
-    }
-  };
 
   useEffect(() => {
     if (isStandalone()) return;
@@ -38,47 +21,13 @@ export default function InstallAppBanner() {
     const dismissed = localStorage.getItem(DISMISSED_KEY);
     if (dismissed && Date.now() - parseInt(dismissed) < DISMISS_DURATION) return;
 
-    // Show after 3s delay
     const timer = setTimeout(() => setShow(true), 3000);
-
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-    };
-    window.addEventListener("beforeinstallprompt", handler);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("beforeinstallprompt", handler);
-    };
+    return () => clearTimeout(timer);
   }, []);
 
   const dismiss = () => {
     setShow(false);
     localStorage.setItem(DISMISSED_KEY, String(Date.now()));
-  };
-
-  const handleInstall = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      setDeferredPrompt(null);
-      dismiss();
-    } else {
-      setExpanded(true);
-    }
-  };
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Performance Glow Up",
-          text: "Baixe o app Glow Up e comece sua transformação! ✨",
-          url: window.location.origin,
-        });
-      } catch {}
-    }
   };
 
   if (!show) return null;
@@ -96,26 +45,15 @@ export default function InstallAppBanner() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-heading font-bold text-foreground">
-              Baixe o Glow Up! 📲
+              Crie seu atalho no celular 👑
             </p>
             <p className="text-[11px] font-body text-muted-foreground">
-              Instale como app no seu celular
+              Acesso rápido pelo navegador, sem precisar baixar nada
             </p>
           </div>
-          <div className="flex items-center gap-1">
-            <Button
-              variant="gold"
-              size="sm"
-              onClick={handleInstall}
-              className="h-8 text-xs gap-1 px-3"
-            >
-              <Download className="h-3 w-3" />
-              Instalar
-            </Button>
-            <button onClick={dismiss} className="p-1.5 text-muted-foreground hover:text-foreground">
-              <X className="h-4 w-4" />
-            </button>
-          </div>
+          <button onClick={dismiss} className="p-1.5 text-muted-foreground hover:text-foreground">
+            <X className="h-4 w-4" />
+          </button>
         </div>
 
         {/* Expand toggle */}
@@ -123,7 +61,7 @@ export default function InstallAppBanner() {
           onClick={() => setExpanded(!expanded)}
           className="w-full flex items-center justify-center gap-1 py-1.5 text-[10px] font-body text-gold border-t border-border hover:bg-muted/30 transition-colors"
         >
-          Como instalar passo a passo
+          Como criar o atalho passo a passo
           {expanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
         </button>
 
@@ -133,65 +71,25 @@ export default function InstallAppBanner() {
             {isIOS ? (
               <>
                 <Step n={1} text='Toque no botão "Compartilhar" (ícone ↑) na barra do Safari' />
-                <Step n={2} text='"Adicionar à Tela de Início"' />
+                <Step n={2} text='Role e selecione "Adicionar à Tela de Início"' />
                 <Step n={3} text='Toque em "Adicionar" e pronto! 🎉' />
               </>
             ) : isAndroid ? (
               <>
-                <Step n={1} text='Toque no menu (⋮) do navegador' />
-                <Step n={2} text='Selecione "Instalar app" ou "Adicionar à tela inicial"' />
-                <Step n={3} text="Confirme e pronto! 🎉" />
-                <a
-                  href={APK_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block"
-                >
-                  <Button variant="gold" size="sm" className="w-full text-xs h-9 gap-1.5">
-                    <Download className="h-3.5 w-3.5" />
-                    Baixar APK direto (Android)
-                  </Button>
-                </a>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleCopyApk}
-                  className="w-full text-xs h-9 gap-1.5 border-gold/30 text-gold hover:bg-gold/10"
-                >
-                  {copied ? (
-                    <>
-                      <Check className="h-3.5 w-3.5" />
-                      Link copiado!
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-3.5 w-3.5" />
-                      Copiar link do APK p/ compartilhar
-                    </>
-                  )}
-                </Button>
-                <p className="text-[10px] text-muted-foreground text-center">
-                  Compartilhe o link com suas amigas para baixar o app
-                </p>
+                <Step n={1} text='Toque no menu (⋮) do Chrome ou navegador' />
+                <Step n={2} text='Selecione "Adicionar à tela inicial" ou "Instalar app"' />
+                <Step n={3} text="Confirme e o ícone do Club vai aparecer na sua home 🎉" />
               </>
             ) : (
               <>
                 <Step n={1} text="No Chrome, clique no ícone de instalar na barra de endereço" />
                 <Step n={2} text='Ou clique no menu (⋮) → "Instalar app"' />
-                <Step n={3} text="Confirme e pronto! 🎉" />
+                <Step n={3} text="Confirme e pronto! O acesso fica na sua área de trabalho 🎉" />
               </>
             )}
-
-            {navigator.share && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleShare}
-                className="w-full text-xs h-8 gap-1 border-gold/20 text-gold"
-              >
-                Compartilhar link do app ✨
-              </Button>
-            )}
+            <p className="text-[10px] text-muted-foreground text-center pt-1">
+              O Gloow Up Club funciona pelo navegador. Não é necessário baixar em loja de apps.
+            </p>
           </div>
         )}
       </div>
