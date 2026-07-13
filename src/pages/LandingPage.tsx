@@ -62,7 +62,7 @@ const TESTIMONIALS = [
   { name: "Nat, sobre as dinâmicas", img: depoimentoNat2 },
 ];
 
-const KIWIFY_URL = "https://pay.kiwify.com.br/zJaiYCQ";
+const KIWIFY_URL = "https://pay.kiwify.com.br/mHzhnuA";
 
 // ===== Design tokens (inline to keep this page self-contained) =====
 // Light premium palette, off-white pérola + gold (matches app theme)
