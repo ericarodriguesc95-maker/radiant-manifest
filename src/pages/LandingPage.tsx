@@ -62,7 +62,7 @@ const TESTIMONIALS = [
   { name: "Nat, sobre as dinâmicas", img: depoimentoNat2 },
 ];
 
-const KIWIFY_URL = "https://pay.kiwify.com.br/zJaiYCQ";
+const KIWIFY_URL = "https://pay.kiwify.com.br/mHzhnuA";
 
 // ===== Design tokens (inline to keep this page self-contained) =====
 // Light premium palette, off-white pérola + gold (matches app theme)
@@ -304,11 +304,11 @@ const FAQ = [
   },
   {
     q: "Quanto custa e como pago?",
-    a: "R$97,90 no ano, pagamento único, ou em até 12x de R$10,13 no cartão. Não há renovação automática.",
+    a: "R$67,90 no ano, pagamento único, ou em até 12x de R$7,02 no cartão. Não há renovação automática.",
   },
   {
     q: "Posso cancelar?",
-    a: "R$ 97,90 no ano, pagamento único à vista ou em até 12x de R$ 10,13 no cartão. A sua assinatura é anual e a renovação é automática após 12 meses, mas você pode cancelar a renovação quando quiser direto na plataforma de pagamento.",
+    a: "R$ 67,90 no ano, pagamento único à vista ou em até 12x de R$ 7,02 no cartão. A sua assinatura é anual e a renovação é automática após 12 meses, mas você pode cancelar a renovação quando quiser direto na plataforma de pagamento.",
   },
   {
     q: "Recebo atualizações sem pagar mais?",
@@ -778,16 +778,16 @@ export default function LandingPage() {
                 ✦ Plano Anual, Preço de lançamento
               </p>
               <div style={{ ...serif, color: C.cream }} className="text-[64px] md:text-[80px] font-light leading-none">
-                R$97<span style={{ color: C.goldMuted }}>,90</span>
+                R$67<span style={{ color: C.goldMuted }}>,90</span>
               </div>
               <p style={{ color: C.creamDim }} className="mt-3 text-[14px] font-light">
                 pagamento único · 12 meses de acesso completo
               </p>
               <p style={{ color: C.creamFaint }} className="text-[13px] font-light">
-                ou em até 12x de R$10,13 no cartão
+                ou em até 12x de R$7,02 no cartão
               </p>
               <p style={{ ...serif, color: C.gold }} className="mt-6 italic text-[16px]">
-                Menos de R$11 por mês.
+                Menos de R$8 por mês.
               </p>
               <p style={{ color: C.creamDim, lineHeight: 1.7 }} className="mt-3 text-[13px] font-light max-w-[440px] mx-auto">
                 O valor de <span style={{ color: C.gold }}>um café com leite</span> por mês para reprogramar sua mente, seu corpo e sua rotina inteira.
