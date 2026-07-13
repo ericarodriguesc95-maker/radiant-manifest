@@ -288,7 +288,7 @@ const FAQ = [
   },
   {
     q: "Funciona como app no celular?",
-    a: "Sim. Você instala como app no celular e também acessa como site no computador. Disponível onde você estiver.",
+    a: "O Gloow Up Club é acessado pelo navegador, sem precisar baixar nada em loja de apps. Funciona no celular, tablet e computador, basta acessar pelo site. Você ainda pode adicionar o atalho à tela inicial do celular para abrir como se fosse um app.",
   },
   {
     q: "O que são os Desafios Progressivos?",
