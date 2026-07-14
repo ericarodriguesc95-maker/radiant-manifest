@@ -797,7 +797,7 @@ export default function LandingPage() {
           >
             <div className="text-center">
               <p style={{ ...sans, color: C.gold, letterSpacing: "0.2em" }} className="text-[11px] font-medium uppercase mb-4">
-                ✦ Plano Anual, Preço de lançamento
+                ✦ Acesso Vitalício, Preço de lançamento
               </p>
               <div style={{ ...serif, color: C.cream }} className="text-[64px] md:text-[80px] font-light leading-none">
                 R$47<span style={{ color: C.goldMuted }}>,90</span>
