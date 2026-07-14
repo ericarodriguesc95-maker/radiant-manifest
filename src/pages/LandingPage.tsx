@@ -826,7 +826,7 @@ export default function LandingPage() {
 
             <div className="mt-10 text-center">
               <PrimaryCTA href={KIWIFY_URL} className="w-full md:w-auto">
-                Quero meu acesso anual ✦
+                Quero meu acesso vitalício ✦
               </PrimaryCTA>
               <p style={{ color: C.creamFaint }} className="mt-5 text-[12px] font-light">
                 Já é membra? <Link to="/login" style={{ color: C.gold }}>Faça login →</Link>
