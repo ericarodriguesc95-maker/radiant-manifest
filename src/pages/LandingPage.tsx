@@ -304,7 +304,7 @@ const FAQ = [
   },
   {
     q: "Quanto custa e como pago?",
-    a: "R$47,90 valor único. Acesso completo por 12 meses, sem renovação automática.",
+    a: "R$47,90 valor único. Acesso vitalício completo, sem renovação automática.",
   },
   {
     q: "Posso cancelar?",
@@ -803,7 +803,7 @@ export default function LandingPage() {
                 R$47<span style={{ color: C.goldMuted }}>,90</span>
               </div>
               <p style={{ color: C.creamDim }} className="mt-3 text-[14px] font-light">
-                pagamento único · 12 meses de acesso completo
+                pagamento único · acesso vitalício completo
               </p>
               <p style={{ ...serif, color: C.gold }} className="mt-6 italic text-[16px]">
                 Menos de R$4 por mês.
