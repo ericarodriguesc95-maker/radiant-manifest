@@ -25,12 +25,14 @@ const CHECKPOINTS: Checkpoint[] = [
 
 interface DailyCheckpointsProps {
   className?: string;
+  showHeader?: boolean;
 }
 
-export default function DailyCheckpoints({ className }: DailyCheckpointsProps) {
+export default function DailyCheckpoints({ className, showHeader = true }: DailyCheckpointsProps) {
   const { user } = useAuth();
   const [done, setDone] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+
 
 
   const today = new Date().toISOString().split("T")[0];
