@@ -499,6 +499,33 @@ export type Database = {
         }
         Relationships: []
       }
+      daily_checkpoints: {
+        Row: {
+          checkpoint_key: string
+          completion_date: string
+          created_at: string
+          id: string
+          points: number
+          user_id: string
+        }
+        Insert: {
+          checkpoint_key: string
+          completion_date?: string
+          created_at?: string
+          id?: string
+          points?: number
+          user_id: string
+        }
+        Update: {
+          checkpoint_key?: string
+          completion_date?: string
+          created_at?: string
+          id?: string
+          points?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       daily_completions: {
         Row: {
           all_completed: boolean

@@ -9,6 +9,7 @@ import NotificationsPanel from "@/components/NotificationsPanel";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
 import PostConquista from "@/components/PostConquista";
+import DailyCheckpoints from "@/components/DailyCheckpoints";
 
 import StreakMedals from "@/components/StreakMedals";
 import AppUpdatesModal from "@/components/AppUpdatesModal";
@@ -323,6 +324,14 @@ const HomePage = () => {
         <div className="animate-stagger" style={{ "--stagger": 1 } as React.CSSProperties}>
           <DailyStreak completedHabits={completedHabits} requiredHabits={["meditate", "goals"]} />
         </div>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* CHECK-POINTS DIÁRIOS — pontos para o ranking */}
+        {/* ═══════════════════════════════════════════ */}
+        <div className="animate-stagger" style={{ "--stagger": 1 } as React.CSSProperties}>
+          <DailyCheckpoints />
+        </div>
+
 
         {/* ═══════════════════════════════════════════ */}
         {/* MEDALS, Elegant showcase */}
