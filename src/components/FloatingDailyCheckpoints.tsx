@@ -3,13 +3,41 @@ import { X, Minus, Maximize2, ClipboardCheck, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DailyCheckpoints from "./DailyCheckpoints";
 
+const STORAGE_KEY = "gloow-checkpoints-panel-state";
+
+interface PanelState {
+  isOpen: boolean;
+  isMinimized: boolean;
+}
+
+function loadState(): PanelState {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as Partial<PanelState>;
+      if (typeof parsed.isOpen === "boolean" && typeof parsed.isMinimized === "boolean") {
+        return parsed as PanelState;
+      }
+    }
+  } catch {}
+  return { isOpen: false, isMinimized: false };
+}
+
+function saveState(state: PanelState) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {}
+}
+
 /**
  * Floating, draggable, minimizable Daily Checkpoints window.
  * Non-intrusive: sits bottom-right, can be minimized to a slim pill.
+ * State is persisted across reloads via localStorage.
  */
 export default function FloatingDailyCheckpoints() {
-  const [open, setOpen] = useState(false);
-  const [minimized, setMinimized] = useState(false);
+  const initialState = useRef(loadState()).current;
+  const [open, setOpen] = useState(initialState.isOpen);
+  const [minimized, setMinimized] = useState(initialState.isMinimized);
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
   const dragRef = useRef<{ dragging: boolean; ox: number; oy: number; moved: boolean }>({
     dragging: false, ox: 0, oy: 0, moved: false,
@@ -17,6 +45,11 @@ export default function FloatingDailyCheckpoints() {
   const panelRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
   const pendingRef = useRef<{ x: number; y: number } | null>(null);
+
+  // Persist open/minimized state across reloads
+  useEffect(() => {
+    saveState({ isOpen: open, isMinimized: minimized });
+  }, [open, minimized]);
 
   const flushDrag = () => {
     rafRef.current = null;
