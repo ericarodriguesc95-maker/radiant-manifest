@@ -326,6 +326,14 @@ const HomePage = () => {
         </div>
 
         {/* ═══════════════════════════════════════════ */}
+        {/* CHECK-POINTS DIÁRIOS — pontos para o ranking */}
+        {/* ═══════════════════════════════════════════ */}
+        <div className="animate-stagger" style={{ "--stagger": 1 } as React.CSSProperties}>
+          <DailyCheckpoints />
+        </div>
+
+
+        {/* ═══════════════════════════════════════════ */}
         {/* MEDALS, Elegant showcase */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 1 } as React.CSSProperties}>
