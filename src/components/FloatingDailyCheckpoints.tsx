@@ -129,7 +129,7 @@ export default function FloatingDailyCheckpoints() {
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto p-3 bg-background/40">
-        <DailyCheckpoints className="!bg-transparent !border-0 !shadow-none !p-0" />
+        <DailyCheckpoints className="!bg-transparent !border-0 !shadow-none !p-0" showHeader={false} />
       </div>
     </div>
   );
