@@ -23,10 +23,17 @@ const CHECKPOINTS: Checkpoint[] = [
   { key: "ato_generosidade", label: "Ato de generosidade", emoji: "💛", points: 8 },
 ];
 
-export default function DailyCheckpoints() {
+interface DailyCheckpointsProps {
+  className?: string;
+  showHeader?: boolean;
+}
+
+export default function DailyCheckpoints({ className, showHeader = true }: DailyCheckpointsProps) {
   const { user } = useAuth();
   const [done, setDone] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+
+
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -79,24 +86,28 @@ export default function DailyCheckpoints() {
   const pct = Math.round((total / max) * 100);
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="h-9 w-9 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
-            <Trophy className="h-4 w-4 text-primary-foreground" />
+    <div className={cn("bg-card rounded-2xl border border-border p-4 space-y-3", className)}>
+
+      {showHeader && (
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="h-9 w-9 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
+              <Trophy className="h-4 w-4 text-primary-foreground" />
+            </div>
+            <div>
+              <p className="text-sm font-display font-bold text-foreground">Check-points do dia</p>
+              <p className="text-[11px] font-body text-muted-foreground">Pontos contam para o ranking do mês</p>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-display font-bold text-foreground">Check-points do dia</p>
-            <p className="text-[11px] font-body text-muted-foreground">Pontos contam para o ranking do mês</p>
+          <div className="text-right">
+            <p className="text-lg font-display font-bold text-gold leading-none">{total}<span className="text-[10px] text-muted-foreground font-body">/{max}</span></p>
+            <p className="text-[10px] text-muted-foreground font-body">pontos</p>
           </div>
         </div>
-        <div className="text-right">
-          <p className="text-lg font-display font-bold text-gold leading-none">{total}<span className="text-[10px] text-muted-foreground font-body">/{max}</span></p>
-          <p className="text-[10px] text-muted-foreground font-body">pontos</p>
-        </div>
-      </div>
+      )}
 
       <div className="bg-muted rounded-full h-1.5 overflow-hidden">
+
         <div className="h-full bg-gradient-gold rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
       </div>
 
