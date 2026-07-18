@@ -595,8 +595,12 @@ const HomePage = () => {
           </p>
         </div>
       </div>
+
+      {/* Floating daily checkpoints window */}
+      <FloatingDailyCheckpoints />
     </div>
   );
+
 };
 
 export default HomePage;
