@@ -84,7 +84,8 @@ export default function DailyCheckpoints({ className }: DailyCheckpointsProps) {
   const pct = Math.round((total / max) * 100);
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-4 space-y-3">
+    <div className={cn("bg-card rounded-2xl border border-border p-4 space-y-3", className)}>
+
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-9 w-9 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
