@@ -145,18 +145,20 @@ export default function FloatingDailyCheckpoints() {
           <p className="text-[10px] text-muted-foreground leading-tight">Janela suspensa · arraste para mover</p>
         </div>
         <button
-          onClick={() => setMinimized(true)}
-          className="h-7 w-7 rounded-lg hover:bg-gold/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); setMinimized(true); }}
+          className="h-7 w-7 rounded-lg hover:bg-gold/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition relative z-10"
           aria-label="Minimizar"
         >
-          <Minus className="h-4 w-4" />
+          <Minus className="h-4 w-4 pointer-events-none" />
         </button>
         <button
-          onClick={() => setOpen(false)}
-          className="h-7 w-7 rounded-lg hover:bg-destructive/10 flex items-center justify-center text-muted-foreground hover:text-destructive transition"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); setOpen(false); setMinimized(false); }}
+          className="h-7 w-7 rounded-lg hover:bg-destructive/10 flex items-center justify-center text-muted-foreground hover:text-destructive transition relative z-10"
           aria-label="Fechar"
         >
-          <X className="h-4 w-4" />
+          <X className="h-4 w-4 pointer-events-none" />
         </button>
       </div>
 
