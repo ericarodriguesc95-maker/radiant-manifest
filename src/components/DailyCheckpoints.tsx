@@ -23,10 +23,15 @@ const CHECKPOINTS: Checkpoint[] = [
   { key: "ato_generosidade", label: "Ato de generosidade", emoji: "💛", points: 8 },
 ];
 
-export default function DailyCheckpoints() {
+interface DailyCheckpointsProps {
+  className?: string;
+}
+
+export default function DailyCheckpoints({ className }: DailyCheckpointsProps) {
   const { user } = useAuth();
   const [done, setDone] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+
 
   const today = new Date().toISOString().split("T")[0];
 
