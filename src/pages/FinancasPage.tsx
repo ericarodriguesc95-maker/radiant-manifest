@@ -340,7 +340,7 @@ const FinancasPage = () => {
         .eq("mode", mode)
         .order("created_at", { ascending: false }),
     ]);
-    setEntries((data || []).map((e: any) => ({ id: e.id, description: e.description, amount: Number(e.amount), type: e.type })));
+    setEntries((data || []).map((e: any) => ({ id: e.id, description: e.description, amount: Number(e.amount), type: e.type, is_paid: !!e.is_paid })));
     setAllYearEntries((yearData || []).map((e: any) => ({ month: e.month, type: e.type, amount: Number(e.amount) })));
     setNotes(noteData?.content || "");
     const bmap: Record<string, number> = {};
