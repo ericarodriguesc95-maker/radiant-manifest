@@ -251,6 +251,43 @@ export default function ShoppingList() {
         </button>
       </div>
 
+      {/* Total spent card */}
+      <div className="bg-gradient-to-br from-gold/15 via-amber-100/40 to-gold/5 border-2 border-gold/40 rounded-2xl p-4 shadow-sm">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-[10px] font-body uppercase tracking-widest text-muted-foreground font-semibold">
+              Total gasto em compras
+            </p>
+            <p className="text-2xl font-heading font-bold text-foreground mt-0.5">
+              {BRL(monthSpent)}
+            </p>
+            <p className="text-[10px] font-body text-muted-foreground capitalize mt-0.5">
+              {monthLabel(currentMonth)} · {monthItems.length} {monthItems.length === 1 ? "item" : "itens"}
+            </p>
+          </div>
+          <div className="h-12 w-12 rounded-2xl bg-gold/20 flex items-center justify-center">
+            <ShoppingBasket className="h-6 w-6 text-gold" />
+          </div>
+        </div>
+        {monthSpent > 0 && (
+          <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-gold/20">
+            {CATS.map(c => {
+              const catTotal = monthItems
+                .filter(i => i.category === c.key)
+                .reduce((s, i) => s + (i.price || 0), 0);
+              return (
+                <div key={c.key} className="text-center">
+                  <p className="text-[9px] font-body text-muted-foreground truncate">{c.label}</p>
+                  <p className="text-xs font-heading font-bold" style={{ color: c.color }}>
+                    {BRL(catTotal)}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
       {/* Category tabs */}
       <div className="grid grid-cols-3 gap-2">
         {CATS.map(c => {
