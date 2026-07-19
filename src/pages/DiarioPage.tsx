@@ -191,10 +191,36 @@ export default function DiarioPage() {
             <p className="text-xs font-body text-muted-foreground">Só você lê o que escreve aqui. Desabafe, planeje, sonhe.</p>
           </div>
         </div>
-        <Button variant="gold" size="sm" onClick={createNote} className="gap-1.5">
-          <Plus className="h-4 w-4" /> Nova nota
-        </Button>
+        {tab === "notas" && (
+          <Button variant="gold" size="sm" onClick={createNote} className="gap-1.5">
+            <Plus className="h-4 w-4" /> Nova nota
+          </Button>
+        )}
       </div>
+
+      {/* Tabs */}
+      <div className="grid grid-cols-2 gap-2 bg-muted/40 p-1 rounded-2xl">
+        <button
+          onClick={() => setTab("notas")}
+          className={cn(
+            "flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-body font-semibold transition-all",
+            tab === "notas" ? "bg-card shadow-sm text-foreground" : "text-muted-foreground"
+          )}
+        >
+          <BookOpen className="h-3.5 w-3.5" /> Notas
+        </button>
+        <button
+          onClick={() => setTab("compras")}
+          className={cn(
+            "flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-body font-semibold transition-all",
+            tab === "compras" ? "bg-card shadow-sm text-foreground" : "text-muted-foreground"
+          )}
+        >
+          <ShoppingBasket className="h-3.5 w-3.5" /> Lista de compras
+        </button>
+      </div>
+
+      {tab === "compras" ? <ShoppingList /> : (<></>)}
 
       {/* Notes grid */}
       {loading ? (
