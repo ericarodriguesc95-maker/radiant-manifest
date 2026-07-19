@@ -4,8 +4,28 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const LAST_SHOWN_KEY = "cp_reminder_last_shown";
 
-function sameDay(a: Date, b: Date) {
-  return a.toDateString() === b.toDateString();
+async function triggerReminder(tag?: string) {
+  if (!("Notification" in window)) return;
+  if (Notification.permission === "default") {
+    try { await Notification.requestPermission(); } catch {}
+  }
+  if (Notification.permission !== "granted") return;
+
+  // Prefer SW notification (supports action buttons for snooze)
+  try {
+    if ("serviceWorker" in navigator) {
+      const reg = await navigator.serviceWorker.ready;
+      reg.active?.postMessage({ type: "SHOW_CHECKPOINT_REMINDER", tag });
+      return;
+    }
+  } catch {}
+
+  // Fallback (no actions)
+  new Notification("Check-points do dia 👑", {
+    body: "Bora somar pontos, rainha! Complete os seus check-points e suba no ranking.",
+    icon: "/icon-192.png",
+    tag: tag || "checkpoints-reminder",
+  });
 }
 
 export function useCheckpointReminders() {
@@ -15,6 +35,21 @@ export function useCheckpointReminders() {
     if (!user) return;
     let cancelled = false;
     let timerId: number | undefined;
+    const snoozeTimers: number[] = [];
+
+    const onSwMessage = (event: MessageEvent) => {
+      const msg = event.data || {};
+      if (msg.type === "SCHEDULE_CHECKPOINT_SNOOZE" && typeof msg.hours === "number") {
+        const ms = msg.hours * 60 * 60 * 1000;
+        const id = window.setTimeout(() => {
+          triggerReminder(`checkpoints-reminder-snooze-${Date.now()}`);
+        }, ms);
+        snoozeTimers.push(id);
+      }
+    };
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.addEventListener("message", onSwMessage);
+    }
 
     const tick = async () => {
       try {
@@ -35,18 +70,7 @@ export function useCheckpointReminders() {
         if (lastRaw === key) return;
         localStorage.setItem(LAST_SHOWN_KEY, key);
 
-        if ("Notification" in window) {
-          if (Notification.permission === "default") {
-            try { await Notification.requestPermission(); } catch {}
-          }
-          if (Notification.permission === "granted") {
-            new Notification("Check-points do dia 👑", {
-              body: "Bora somar pontos, rainha! Complete os seus check-points e suba no ranking.",
-              icon: "/favicon.ico",
-              tag: "checkpoints-reminder",
-            });
-          }
-        }
+        await triggerReminder();
       } catch {}
     };
 
@@ -61,6 +85,13 @@ export function useCheckpointReminders() {
     };
 
     schedule();
-    return () => { cancelled = true; if (timerId) window.clearTimeout(timerId); };
+    return () => {
+      cancelled = true;
+      if (timerId) window.clearTimeout(timerId);
+      snoozeTimers.forEach((id) => window.clearTimeout(id));
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.removeEventListener("message", onSwMessage);
+      }
+    };
   }, [user]);
 }
