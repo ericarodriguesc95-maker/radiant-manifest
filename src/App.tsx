@@ -26,6 +26,7 @@ import SignupPage from "@/pages/SignupPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import SettingsPage from "@/pages/SettingsPage";
+import LembretesHistoricoPage from "@/pages/LembretesHistoricoPage";
 import NotFound from "./pages/NotFound";
 import ProfilePage from "@/pages/ProfilePage";
 import DiarioPage from "@/pages/DiarioPage";
@@ -125,6 +126,7 @@ const AppRoutes = () => (
       <Route path="/alta-performance" element={<ErrorBoundary><AltaPerformancePage /></ErrorBoundary>} />
       <Route path="/diario" element={<ErrorBoundary><DiarioPage /></ErrorBoundary>} />
       <Route path="/settings" element={<ErrorBoundary><SettingsPage /></ErrorBoundary>} />
+      <Route path="/lembretes-historico" element={<ErrorBoundary><LembretesHistoricoPage /></ErrorBoundary>} />
       <Route path="/admin/atividade" element={<ErrorBoundary><AdminActivityPage /></ErrorBoundary>} />
       <Route path="/admin/conteudo" element={<ErrorBoundary><AdminContentPage /></ErrorBoundary>} />
       <Route path="/admin/assinaturas" element={<ErrorBoundary><AdminSubscriptionsPage /></ErrorBoundary>} />
