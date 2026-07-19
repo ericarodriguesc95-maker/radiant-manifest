@@ -799,7 +799,16 @@ const FinancasPage = () => {
             ))}
           </select>
         </div>
-        <p className="text-[11px] text-muted-foreground font-body mt-1">Quanto entra, quanto sai, quanto sobra. Você no comando, rainha. ✨</p>
+        <div className="flex items-center justify-between gap-2 mt-1">
+          <p className="text-[11px] text-muted-foreground font-body">Quanto entra, quanto sai, quanto sobra. Você no comando, rainha. ✨</p>
+          <button
+            onClick={exportarPDF}
+            className="shrink-0 flex items-center gap-1.5 text-[10px] font-body font-semibold text-gold border border-gold/30 hover:bg-gold/10 rounded-full px-3 py-1.5 transition-colors"
+          >
+            <FileDown className="h-3 w-3" />
+            Exportar PDF
+          </button>
+        </div>
       </header>
 
       <div className="px-5 space-y-4 pb-28">
