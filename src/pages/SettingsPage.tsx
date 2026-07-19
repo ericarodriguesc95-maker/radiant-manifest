@@ -215,3 +215,23 @@ export default function SettingsPage() {
     </div>
   );
 }
+
+function AdminCheckpointsLink() {
+  const { isAdmin } = useIsAdmin();
+  if (!isAdmin) return null;
+  return (
+    <Link to="/admin/checkpoints">
+      <Card className="hover:border-gold/40 transition-colors">
+        <CardContent className="pt-6 flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
+            <Trophy className="h-5 w-5 text-primary-foreground" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-foreground">Editar check-points (admin)</p>
+            <p className="text-xs text-muted-foreground">Textos, emojis, pontos e ordem</p>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
