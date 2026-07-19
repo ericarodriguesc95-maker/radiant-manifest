@@ -27,6 +27,7 @@ interface FinanceEntry {
   description: string;
   amount: number;
   type: EntryType;
+  is_paid?: boolean;
 }
 
 const monthNames = [
