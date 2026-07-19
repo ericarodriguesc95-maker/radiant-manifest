@@ -236,11 +236,6 @@ export default function ShoppingList() {
           <p className="text-sm font-heading font-semibold text-foreground capitalize">
             {monthLabel(currentMonth)}
           </p>
-          {monthSpent > 0 && (
-            <p className="text-[10px] font-body text-muted-foreground">
-              Gasto total no mês: <span className="text-gold font-semibold">{BRL(monthSpent)}</span>
-            </p>
-          )}
         </div>
         <button
           onClick={() => shiftMonth(1)}
