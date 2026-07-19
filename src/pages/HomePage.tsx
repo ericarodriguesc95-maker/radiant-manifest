@@ -34,6 +34,7 @@ const HomePage = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
   const { user } = useAuth();
+  useCheckpointReminders();
 
   useEffect(() => {
     if (!user) return;
