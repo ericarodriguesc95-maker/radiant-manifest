@@ -32,6 +32,7 @@ import DiarioPage from "@/pages/DiarioPage";
 import AdminActivityPage from "@/pages/AdminActivityPage";
 import AdminContentPage from "@/pages/AdminContentPage";
 import AdminSubscriptionsPage from "@/pages/AdminSubscriptionsPage";
+import AdminCheckpointsPage from "@/pages/AdminCheckpointsPage";
 import SaudePage from "@/pages/SaudePage";
 import SonoPage from "@/pages/SonoPage";
 import DesafiosPage from "@/pages/DesafiosPage";
@@ -129,6 +130,7 @@ const AppRoutes = () => (
       <Route path="/admin/assinaturas" element={<ErrorBoundary><AdminSubscriptionsPage /></ErrorBoundary>} />
       <Route path="/admin/biblioteca-elite" element={<ErrorBoundary><AdminBibliotecaElitePage /></ErrorBoundary>} />
       <Route path="/admin/sugestoes" element={<ErrorBoundary><AdminSugestoesPage /></ErrorBoundary>} />
+      <Route path="/admin/checkpoints" element={<ErrorBoundary><AdminCheckpointsPage /></ErrorBoundary>} />
       <Route path="/sugestoes" element={<ErrorBoundary><SugestoesPage /></ErrorBoundary>} />
       <Route path="/perfil/:userId" element={<ErrorBoundary><ProfilePage /></ErrorBoundary>} />
 
