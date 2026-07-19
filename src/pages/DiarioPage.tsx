@@ -40,6 +40,7 @@ export default function DiarioPage() {
   const [editColor, setEditColor] = useState("#C8A45C");
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [tab, setTab] = useState<"notas" | "compras">("notas");
 
   const fetchNotes = async () => {
     if (!user) return;
