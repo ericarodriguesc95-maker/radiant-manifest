@@ -659,7 +659,8 @@ const FinancasPage = () => {
   ];
 
   // Cálculos derivados
-  const balanco = renda - despFixas - despVar - cartao - poupanca;
+  const sobraAntesPoupanca = renda - despFixas - despVar - cartao;
+  const balanco = sobraAntesPoupanca - poupanca; // sobra real do mês
   const totalDespesas = despFixas + despVar;
 
   // Gastos por categoria (a partir das descrições, agrupando pelos tipos)
