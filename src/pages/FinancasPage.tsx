@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown, Lightbulb, Bot, Send, Brain, Briefcase, User as UserIcon, Copy, Target, AlertCircle, Eye, EyeOff, LayoutGrid, Table as TableIcon, ChevronRight, Wallet, PieChart, Tag, Sparkles, Coins, Trophy } from "lucide-react";
+import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown, Lightbulb, Bot, Send, Brain, Briefcase, User as UserIcon, Copy, Target, AlertCircle, Eye, EyeOff, LayoutGrid, Table as TableIcon, ChevronRight, Wallet, PieChart, Tag, Sparkles, Coins, Trophy, FileDown } from "lucide-react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { PieChart as RPieChart, Pie, Cell } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -659,7 +661,8 @@ const FinancasPage = () => {
   ];
 
   // Cálculos derivados
-  const balanco = renda - despFixas - despVar - cartao - poupanca;
+  const sobraAntesPoupanca = renda - despFixas - despVar - cartao;
+  const balanco = sobraAntesPoupanca - poupanca; // sobra real do mês
   const totalDespesas = despFixas + despVar;
 
   // Gastos por categoria (a partir das descrições, agrupando pelos tipos)
@@ -694,6 +697,85 @@ const FinancasPage = () => {
     return rows;
   }, [budgets, entries, planejarSort]);
 
+  const exportarPDF = () => {
+    const doc = new jsPDF();
+    const mesLabel = `${monthNames[currentMonth]} ${currentYear}`;
+    const now = new Date().toLocaleDateString("pt-BR");
+
+    // Cabeçalho dourado
+    doc.setFillColor(212, 175, 55);
+    doc.rect(0, 0, 210, 22, "F");
+    doc.setTextColor(13, 13, 13);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("Gloow Up Club — Relatório de Finanças", 14, 14);
+
+    doc.setTextColor(60, 60, 60);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text(`${mode.toUpperCase()} • ${mesLabel}`, 14, 30);
+    doc.text(`Emitido em ${now}`, 14, 36);
+
+    // Resumo
+    autoTable(doc, {
+      startY: 44,
+      head: [["Resumo do mês", "Valor"]],
+      body: [
+        ["Receitas", money(renda)],
+        ["Despesas fixas", money(despFixas)],
+        ["Despesas variáveis", money(despVar)],
+        ["Cartão de crédito", money(cartao)],
+        ["Poupança / Investimentos", money(poupanca)],
+        ["Sobra antes da poupança", money(sobraAntesPoupanca)],
+        ["Sobra do mês (real, após poupança)", money(balanco)],
+      ],
+      theme: "grid",
+      headStyles: { fillColor: [212, 175, 55], textColor: 13 },
+      styles: { font: "helvetica", fontSize: 10 },
+    });
+
+    // Despesas detalhadas
+    const despRows = entries
+      .filter(e => ["fixa", "variavel", "cartao"].includes(e.type))
+      .map(e => [typeLabels[e.type], e.description || "—", money(e.amount)]);
+
+    if (despRows.length > 0) {
+      autoTable(doc, {
+        startY: (doc as any).lastAutoTable.finalY + 8,
+        head: [["Tipo", "Descrição", "Valor"]],
+        body: despRows,
+        theme: "striped",
+        headStyles: { fillColor: [239, 68, 68], textColor: 255 },
+        styles: { font: "helvetica", fontSize: 9 },
+      });
+    }
+
+    // Poupança detalhada
+    const poupRows = entries
+      .filter(e => e.type === "poupanca")
+      .map(e => [e.description || "Aporte", money(e.amount)]);
+
+    if (poupRows.length > 0) {
+      autoTable(doc, {
+        startY: (doc as any).lastAutoTable.finalY + 8,
+        head: [["Poupança / Investimento", "Valor"]],
+        body: [...poupRows, ["Total guardado no mês", money(poupanca)]],
+        theme: "striped",
+        headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+        styles: { font: "helvetica", fontSize: 9 },
+      });
+    }
+
+    // Rodapé
+    const pageHeight = doc.internal.pageSize.height;
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text("Gloow Up Club • Você no comando, rainha ✨", 14, pageHeight - 10);
+
+    doc.save(`financas-${mesLabel.toLowerCase().replace(" ", "-")}.pdf`);
+    toast.success("Relatório PDF gerado!");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* HEADER */}
@@ -717,7 +799,16 @@ const FinancasPage = () => {
             ))}
           </select>
         </div>
-        <p className="text-[11px] text-muted-foreground font-body mt-1">Quanto entra, quanto sai, quanto sobra. Você no comando, rainha. ✨</p>
+        <div className="flex items-center justify-between gap-2 mt-1">
+          <p className="text-[11px] text-muted-foreground font-body">Quanto entra, quanto sai, quanto sobra. Você no comando, rainha. ✨</p>
+          <button
+            onClick={exportarPDF}
+            className="shrink-0 flex items-center gap-1.5 text-[10px] font-body font-semibold text-gold border border-gold/30 hover:bg-gold/10 rounded-full px-3 py-1.5 transition-colors"
+          >
+            <FileDown className="h-3 w-3" />
+            Exportar PDF
+          </button>
+        </div>
       </header>
 
       <div className="px-5 space-y-4 pb-28">
@@ -738,9 +829,13 @@ const FinancasPage = () => {
         <div className="grid grid-cols-2 gap-3">
           <div className="glass rounded-2xl p-4 border-t-2 border-t-blue-400/80 relative overflow-hidden">
             <PiggyBank className="absolute top-3 right-3 h-4 w-4 text-blue-400/40" />
-            <p className="text-[9px] font-body text-muted-foreground uppercase tracking-widest">Balanço Mensal</p>
-            <p className="text-[10px] font-body text-muted-foreground mt-0.5">Resultado do mês</p>
+            <p className="text-[9px] font-body text-muted-foreground uppercase tracking-widest">Sobra do mês (real)</p>
+            <p className="text-[10px] font-body text-muted-foreground mt-0.5">Já descontando a poupança</p>
             <p className={cn("text-base font-display font-bold mt-1", balanco >= 0 ? "text-blue-400" : "text-amber-300")}>{money(balanco)}</p>
+            <div className="mt-1.5 pt-1.5 border-t border-gold/10">
+              <p className="text-[9px] font-body text-muted-foreground">Antes da poupança</p>
+              <p className={cn("text-[11px] font-display font-semibold", sobraAntesPoupanca >= 0 ? "text-foreground/80" : "text-amber-300/80")}>{money(sobraAntesPoupanca)}</p>
+            </div>
           </div>
           <div className="glass rounded-2xl p-4 border-t-2 border-t-green-400/80 relative overflow-hidden">
             <TrendingUp className="absolute top-3 right-3 h-4 w-4 text-green-400/40" />
