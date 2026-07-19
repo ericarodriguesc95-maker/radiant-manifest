@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { X, Minus, Maximize2, ClipboardCheck, Trophy } from "lucide-react";
+import { X, Minus, Maximize2, ClipboardCheck, Trophy, Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DailyCheckpoints from "./DailyCheckpoints";
+import LiveCheckpointLeaderboard from "./LiveCheckpointLeaderboard";
 
 const STATE_KEY = "gloow-checkpoints-panel-state";
 const POS_KEY = "gloow-checkpoints-panel-pos";
