@@ -374,6 +374,39 @@ export type Database = {
         }
         Relationships: []
       }
+      checkpoint_definitions: {
+        Row: {
+          active: boolean
+          created_at: string
+          emoji: string
+          key: string
+          label: string
+          points: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          emoji?: string
+          key: string
+          label: string
+          points?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          emoji?: string
+          key?: string
+          label?: string
+          points?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       community_posts: {
         Row: {
           created_at: string
@@ -1663,6 +1696,7 @@ export type Database = {
           display_name: string | null
           id: string
           phone_number: string | null
+          skin_tone: string | null
           updated_at: string
           user_id: string
         }
@@ -1675,6 +1709,7 @@ export type Database = {
           display_name?: string | null
           id?: string
           phone_number?: string | null
+          skin_tone?: string | null
           updated_at?: string
           user_id: string
         }
@@ -1687,6 +1722,7 @@ export type Database = {
           display_name?: string | null
           id?: string
           phone_number?: string | null
+          skin_tone?: string | null
           updated_at?: string
           user_id?: string
         }
