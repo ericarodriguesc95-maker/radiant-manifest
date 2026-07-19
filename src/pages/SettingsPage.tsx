@@ -204,6 +204,9 @@ export default function SettingsPage() {
         {/* Notifications */}
         <NotificationSettingsCard />
 
+        {/* Checkpoint reminders */}
+        <CheckpointReminderSettings />
+
         {/* Admin — Checkpoints */}
         <AdminCheckpointsLink />
 
