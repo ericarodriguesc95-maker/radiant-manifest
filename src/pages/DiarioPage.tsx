@@ -274,7 +274,7 @@ export default function DiarioPage() {
             </button>
           ))}
         </div>
-      )}
+      ))}
     </div>
   );
 }
