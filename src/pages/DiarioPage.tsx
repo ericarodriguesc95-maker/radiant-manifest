@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Plus, Trash2, ArrowLeft, Palette, BookOpen } from "lucide-react";
+import { Plus, Trash2, ArrowLeft, Palette, BookOpen, ShoppingBasket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import ShoppingList from "@/components/ShoppingList";
 
 interface DiaryNote {
   id: string;
@@ -39,6 +40,7 @@ export default function DiarioPage() {
   const [editColor, setEditColor] = useState("#C8A45C");
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [tab, setTab] = useState<"notas" | "compras">("notas");
 
   const fetchNotes = async () => {
     if (!user) return;
@@ -189,13 +191,39 @@ export default function DiarioPage() {
             <p className="text-xs font-body text-muted-foreground">Só você lê o que escreve aqui. Desabafe, planeje, sonhe.</p>
           </div>
         </div>
-        <Button variant="gold" size="sm" onClick={createNote} className="gap-1.5">
-          <Plus className="h-4 w-4" /> Nova nota
-        </Button>
+        {tab === "notas" && (
+          <Button variant="gold" size="sm" onClick={createNote} className="gap-1.5">
+            <Plus className="h-4 w-4" /> Nova nota
+          </Button>
+        )}
       </div>
 
+      {/* Tabs */}
+      <div className="grid grid-cols-2 gap-2 bg-muted/40 p-1 rounded-2xl">
+        <button
+          onClick={() => setTab("notas")}
+          className={cn(
+            "flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-body font-semibold transition-all",
+            tab === "notas" ? "bg-card shadow-sm text-foreground" : "text-muted-foreground"
+          )}
+        >
+          <BookOpen className="h-3.5 w-3.5" /> Notas
+        </button>
+        <button
+          onClick={() => setTab("compras")}
+          className={cn(
+            "flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-body font-semibold transition-all",
+            tab === "compras" ? "bg-card shadow-sm text-foreground" : "text-muted-foreground"
+          )}
+        >
+          <ShoppingBasket className="h-3.5 w-3.5" /> Lista de compras
+        </button>
+      </div>
+
+      {tab === "compras" ? <ShoppingList /> : (<></>)}
+
       {/* Notes grid */}
-      {loading ? (
+      {tab === "notas" && (loading ? (
         <p className="text-center text-sm text-muted-foreground py-12">Carregando notas...</p>
       ) : notes.length === 0 ? (
         <div className="text-center py-16 space-y-4">
@@ -246,7 +274,7 @@ export default function DiarioPage() {
             </button>
           ))}
         </div>
-      )}
+      ))}
     </div>
   );
 }

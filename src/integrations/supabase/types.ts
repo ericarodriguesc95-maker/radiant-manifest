@@ -1033,6 +1033,7 @@ export type Database = {
           created_at: string
           description: string
           id: string
+          is_paid: boolean
           mode: string
           month: number
           occurred_at: string | null
@@ -1049,6 +1050,7 @@ export type Database = {
           created_at?: string
           description: string
           id?: string
+          is_paid?: boolean
           mode?: string
           month: number
           occurred_at?: string | null
@@ -1065,6 +1067,7 @@ export type Database = {
           created_at?: string
           description?: string
           id?: string
+          is_paid?: boolean
           mode?: string
           month?: number
           occurred_at?: string | null
@@ -1742,6 +1745,42 @@ export type Database = {
           preview_url?: string | null
           type?: string
           url?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      shopping_list_items: {
+        Row: {
+          category: string
+          checked: boolean
+          created_at: string
+          id: string
+          name: string
+          quantity: string | null
+          sort_order: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string
+          checked?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          quantity?: string | null
+          sort_order?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          checked?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          quantity?: string | null
+          sort_order?: number
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
