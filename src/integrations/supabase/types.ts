@@ -1690,6 +1690,8 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          checkpoint_reminder_enabled: boolean
+          checkpoint_reminder_times: string[]
           cover_position: number
           cover_url: string | null
           created_at: string
@@ -1703,6 +1705,8 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          checkpoint_reminder_enabled?: boolean
+          checkpoint_reminder_times?: string[]
           cover_position?: number
           cover_url?: string | null
           created_at?: string
@@ -1716,6 +1720,8 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          checkpoint_reminder_enabled?: boolean
+          checkpoint_reminder_times?: string[]
           cover_position?: number
           cover_url?: string | null
           created_at?: string
@@ -2378,6 +2384,16 @@ export type Database = {
         Returns: {
           challenge_id: string
           count: number
+        }[]
+      }
+      get_daily_checkpoint_leaderboard: {
+        Args: { _day?: string }
+        Returns: {
+          avatar_url: string
+          display_name: string
+          points: number
+          tasks_done: number
+          user_id: string
         }[]
       }
       get_leaderboard_streaks: {
