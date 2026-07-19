@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Bell, Plus, X, BellRing } from "lucide-react";
+import { Bell, Plus, X, BellRing, History } from "lucide-react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -120,6 +121,12 @@ export default function CheckpointReminderSettings() {
             </Button>
           </div>
         </div>
+
+        <Link to="/lembretes-historico" className="block">
+          <Button variant="outline" className="w-full gap-2">
+            <History className="h-4 w-4" /> Ver histórico de lembretes
+          </Button>
+        </Link>
       </CardContent>
     </Card>
   );
