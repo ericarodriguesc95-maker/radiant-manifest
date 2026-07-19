@@ -14,6 +14,7 @@ import { toast } from "@/hooks/use-toast";
 import { ArrowLeft, User, Moon, Sun, Bell, LogOut, Camera, Save, Phone, Lightbulb, Shield, Trophy } from "lucide-react";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import SkinToneSelector from "@/components/SkinToneSelector";
+import CheckpointReminderSettings from "@/components/CheckpointReminderSettings";
 import { Link } from "react-router-dom";
 import { useIsAdmin } from "@/hooks/useIsAdmin";
 
@@ -202,6 +203,9 @@ export default function SettingsPage() {
 
         {/* Notifications */}
         <NotificationSettingsCard />
+
+        {/* Checkpoint reminders */}
+        <CheckpointReminderSettings />
 
         {/* Admin — Checkpoints */}
         <AdminCheckpointsLink />
