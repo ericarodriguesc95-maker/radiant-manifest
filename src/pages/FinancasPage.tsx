@@ -697,6 +697,85 @@ const FinancasPage = () => {
     return rows;
   }, [budgets, entries, planejarSort]);
 
+  const exportarPDF = () => {
+    const doc = new jsPDF();
+    const mesLabel = `${monthNames[currentMonth]} ${currentYear}`;
+    const now = new Date().toLocaleDateString("pt-BR");
+
+    // Cabeçalho dourado
+    doc.setFillColor(212, 175, 55);
+    doc.rect(0, 0, 210, 22, "F");
+    doc.setTextColor(13, 13, 13);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text("Gloow Up Club — Relatório de Finanças", 14, 14);
+
+    doc.setTextColor(60, 60, 60);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text(`${mode.toUpperCase()} • ${mesLabel}`, 14, 30);
+    doc.text(`Emitido em ${now}`, 14, 36);
+
+    // Resumo
+    autoTable(doc, {
+      startY: 44,
+      head: [["Resumo do mês", "Valor"]],
+      body: [
+        ["Receitas", money(renda)],
+        ["Despesas fixas", money(despFixas)],
+        ["Despesas variáveis", money(despVar)],
+        ["Cartão de crédito", money(cartao)],
+        ["Poupança / Investimentos", money(poupanca)],
+        ["Sobra antes da poupança", money(sobraAntesPoupanca)],
+        ["Sobra do mês (real, após poupança)", money(balanco)],
+      ],
+      theme: "grid",
+      headStyles: { fillColor: [212, 175, 55], textColor: 13 },
+      styles: { font: "helvetica", fontSize: 10 },
+    });
+
+    // Despesas detalhadas
+    const despRows = entries
+      .filter(e => ["fixa", "variavel", "cartao"].includes(e.type))
+      .map(e => [typeLabels[e.type], e.description || "—", money(e.amount)]);
+
+    if (despRows.length > 0) {
+      autoTable(doc, {
+        startY: (doc as any).lastAutoTable.finalY + 8,
+        head: [["Tipo", "Descrição", "Valor"]],
+        body: despRows,
+        theme: "striped",
+        headStyles: { fillColor: [239, 68, 68], textColor: 255 },
+        styles: { font: "helvetica", fontSize: 9 },
+      });
+    }
+
+    // Poupança detalhada
+    const poupRows = entries
+      .filter(e => e.type === "poupanca")
+      .map(e => [e.description || "Aporte", money(e.amount)]);
+
+    if (poupRows.length > 0) {
+      autoTable(doc, {
+        startY: (doc as any).lastAutoTable.finalY + 8,
+        head: [["Poupança / Investimento", "Valor"]],
+        body: [...poupRows, ["Total guardado no mês", money(poupanca)]],
+        theme: "striped",
+        headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+        styles: { font: "helvetica", fontSize: 9 },
+      });
+    }
+
+    // Rodapé
+    const pageHeight = doc.internal.pageSize.height;
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text("Gloow Up Club • Você no comando, rainha ✨", 14, pageHeight - 10);
+
+    doc.save(`financas-${mesLabel.toLowerCase().replace(" ", "-")}.pdf`);
+    toast.success("Relatório PDF gerado!");
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* HEADER */}
