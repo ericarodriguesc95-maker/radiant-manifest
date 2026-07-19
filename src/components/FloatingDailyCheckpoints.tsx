@@ -140,27 +140,22 @@ export default function FloatingDailyCheckpoints() {
       <div
         ref={wrapperRef}
         style={defaultStyle}
-        className="fixed z-[55] will-change-transform transform-gpu animate-in fade-in-0 zoom-in-90 slide-in-from-bottom-3 duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]"
+        onPointerDown={startDrag}
+        onPointerMove={moveDrag}
+        onPointerUp={(e) => {
+          const wasDrag = dragRef.current.moved;
+          endDrag(e);
+          if (!wasDrag) { setOpen(true); setMinimized(false); }
+        }}
+        className="fixed z-[55] will-change-transform transform-gpu animate-in fade-in-0 zoom-in-90 slide-in-from-bottom-3 duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] flex flex-col items-center gap-1 group touch-none select-none cursor-grab active:cursor-grabbing"
+        aria-label="Abrir check-points do dia"
       >
-        <div
-          onPointerDown={startDrag}
-          onPointerMove={moveDrag}
-          onPointerUp={endDrag}
-          className="flex flex-col items-center gap-1 group touch-none select-none cursor-grab active:cursor-grabbing"
-          aria-label="Abrir check-points do dia"
-        >
-          <button
-            onClick={() => { setOpen(true); setMinimized(false); }}
-            onPointerDown={(e) => e.stopPropagation()}
-            className="h-12 w-12 md:h-14 md:w-14 rounded-full bg-background/90 backdrop-blur flex items-center justify-center ring-2 ring-gold/60 shadow-[0_0_20px_rgba(212,175,55,0.55)] hover:scale-110 active:scale-90 transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]"
-            aria-label="Check-points do dia"
-          >
-            <ClipboardCheck className="h-5 w-5 md:h-6 md:w-6 text-gold" />
-          </button>
-          <span className="text-[9px] font-body font-semibold text-gold/90 leading-none whitespace-nowrap pointer-events-none">
-            Check-points
-          </span>
+        <div className="h-12 w-12 md:h-14 md:w-14 rounded-full bg-background/90 backdrop-blur flex items-center justify-center ring-2 ring-gold/60 shadow-[0_0_20px_rgba(212,175,55,0.55)] hover:scale-110 active:scale-90 transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]">
+          <ClipboardCheck className="h-5 w-5 md:h-6 md:w-6 text-gold" />
         </div>
+        <span className="text-[9px] font-body font-semibold text-gold/90 leading-none whitespace-nowrap pointer-events-none">
+          Check-points
+        </span>
       </div>
     );
   }
