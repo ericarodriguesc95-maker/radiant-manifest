@@ -206,10 +206,43 @@ export default function FloatingDailyCheckpoints() {
         </button>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto p-3 bg-background/40">
-        <DailyCheckpoints className="!bg-transparent !border-0 !shadow-none !p-0" showHeader={false} />
-      </div>
+      {/* Content with tabs */}
+      <TabbedContent />
     </div>
+  );
+}
+
+function TabbedContent() {
+  const [tab, setTab] = useState<"mine" | "live">("mine");
+  return (
+    <>
+      <div className="flex border-b border-gold/20 shrink-0">
+        <button
+          onClick={() => setTab("mine")}
+          className={cn(
+            "flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1.5 transition",
+            tab === "mine" ? "text-gold border-b-2 border-gold bg-gold/5" : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <Trophy className="h-3.5 w-3.5" /> Meus pontos
+        </button>
+        <button
+          onClick={() => setTab("live")}
+          className={cn(
+            "flex-1 py-2 text-xs font-semibold flex items-center justify-center gap-1.5 transition",
+            tab === "live" ? "text-gold border-b-2 border-gold bg-gold/5" : "text-muted-foreground hover:text-foreground"
+          )}
+        >
+          <Flame className="h-3.5 w-3.5" /> Ranking ao vivo
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto p-3 bg-background/40">
+        {tab === "mine" ? (
+          <DailyCheckpoints className="!bg-transparent !border-0 !shadow-none !p-0" showHeader={false} />
+        ) : (
+          <LiveCheckpointLeaderboard className="!bg-transparent !border-0 !shadow-none !p-0" limit={30} />
+        )}
+      </div>
+    </>
   );
 }
