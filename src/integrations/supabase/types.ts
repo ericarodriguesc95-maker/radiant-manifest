@@ -1761,6 +1761,36 @@ export type Database = {
         }
         Relationships: []
       }
+      reminder_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          metadata: Json
+          snooze_hours: number | null
+          source: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          metadata?: Json
+          snooze_hours?: number | null
+          source?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          metadata?: Json
+          snooze_hours?: number | null
+          source?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       saved_stickers: {
         Row: {
           created_at: string
