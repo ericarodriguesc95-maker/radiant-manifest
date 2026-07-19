@@ -739,9 +739,13 @@ const FinancasPage = () => {
         <div className="grid grid-cols-2 gap-3">
           <div className="glass rounded-2xl p-4 border-t-2 border-t-blue-400/80 relative overflow-hidden">
             <PiggyBank className="absolute top-3 right-3 h-4 w-4 text-blue-400/40" />
-            <p className="text-[9px] font-body text-muted-foreground uppercase tracking-widest">Balanço Mensal</p>
-            <p className="text-[10px] font-body text-muted-foreground mt-0.5">Resultado do mês</p>
+            <p className="text-[9px] font-body text-muted-foreground uppercase tracking-widest">Sobra do mês (real)</p>
+            <p className="text-[10px] font-body text-muted-foreground mt-0.5">Já descontando a poupança</p>
             <p className={cn("text-base font-display font-bold mt-1", balanco >= 0 ? "text-blue-400" : "text-amber-300")}>{money(balanco)}</p>
+            <div className="mt-1.5 pt-1.5 border-t border-gold/10">
+              <p className="text-[9px] font-body text-muted-foreground">Antes da poupança</p>
+              <p className={cn("text-[11px] font-display font-semibold", sobraAntesPoupanca >= 0 ? "text-foreground/80" : "text-amber-300/80")}>{money(sobraAntesPoupanca)}</p>
+            </div>
           </div>
           <div className="glass rounded-2xl p-4 border-t-2 border-t-green-400/80 relative overflow-hidden">
             <TrendingUp className="absolute top-3 right-3 h-4 w-4 text-green-400/40" />
