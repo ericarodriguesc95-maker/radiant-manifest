@@ -223,7 +223,7 @@ export default function DiarioPage() {
       {tab === "compras" ? <ShoppingList /> : (<></>)}
 
       {/* Notes grid */}
-      {loading ? (
+      {tab === "notas" && (loading ? (
         <p className="text-center text-sm text-muted-foreground py-12">Carregando notas...</p>
       ) : notes.length === 0 ? (
         <div className="text-center py-16 space-y-4">
