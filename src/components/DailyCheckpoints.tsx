@@ -21,6 +21,13 @@ const CHECKPOINTS: Checkpoint[] = [
   { key: "gratidao_diaria", label: "Anotar 3 gratidões", emoji: "🙏", points: 5 },
   { key: "hidratacao", label: "Hidratação completa", emoji: "💧", points: 5 },
   { key: "ato_generosidade", label: "Ato de generosidade", emoji: "💛", points: 8 },
+  { key: "leitura_diaria", label: "Leitura diária 10 pág", emoji: "📄", points: 8 },
+  { key: "skin_care", label: "Skin Care", emoji: "🧴", points: 8 },
+  { key: "podcast", label: "Escutar um podcast", emoji: "🎧", points: 10 },
+  { key: "video_youtube", label: "Vídeo no YouTube para conhecimento", emoji: "▶️", points: 10 },
+  { key: "oracao_diaria", label: "Oração diária", emoji: "🛐", points: 15 },
+  { key: "tomar_cha", label: "Tomar um chá", emoji: "🍵", points: 8 },
+  { key: "suplemento_vitamina", label: "Tomar suplemento/vitamina", emoji: "💊", points: 10 },
 ];
 
 interface DailyCheckpointsProps {
