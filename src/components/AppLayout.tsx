@@ -6,11 +6,8 @@ import DesktopSidebar from "./DesktopSidebar";
 import ViewModeToggle from "./ViewModeToggle";
 import GuidedTour from "./GuidedTour";
 import BackButton from "./BackButton";
-import InstallAppBanner from "./InstallAppBanner";
 import WelcomeBackAlert from "./WelcomeBackAlert";
 import NpsPopup from "./NpsPopup";
-import SuggestionsFloatingButton from "./SuggestionsFloatingButton";
-import FloatingBubblesDock from "./FloatingBubblesDock";
 import PushPermissionOnboarding from "./PushPermissionOnboarding";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
 import { usePushNotificationListener } from "@/hooks/usePushNotificationListener";
@@ -60,11 +57,8 @@ export default function AppLayout() {
         <Outlet />
       </div>
 
-      {!isDesktop && <InstallAppBanner />}
       {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
       <NpsPopup />
-      <SuggestionsFloatingButton />
-      <FloatingBubblesDock />
       <PushPermissionOnboarding />
     </div>
   );
