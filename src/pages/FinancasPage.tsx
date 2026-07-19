@@ -659,7 +659,7 @@ const FinancasPage = () => {
   ];
 
   // Cálculos derivados
-  const balanco = renda - despFixas - despVar - cartao;
+  const balanco = renda - despFixas - despVar - cartao - poupanca;
   const totalDespesas = despFixas + despVar;
 
   // Gastos por categoria (a partir das descrições, agrupando pelos tipos)
