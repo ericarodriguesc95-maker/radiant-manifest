@@ -463,6 +463,16 @@ const FinancasPage = () => {
     setEditingId(null);
   };
 
+  const togglePaid = async (entry: FinanceEntry) => {
+    const next = !entry.is_paid;
+    setEntries(es => es.map(x => x.id === entry.id ? { ...x, is_paid: next } : x));
+    const { error } = await supabase.from("finance_entries").update({ is_paid: next } as any).eq("id", entry.id);
+    if (error) {
+      setEntries(es => es.map(x => x.id === entry.id ? { ...x, is_paid: !next } : x));
+      toast.error("Erro ao atualizar");
+    }
+  };
+
   const saveNotes = async () => {
     if (!user) return;
     setNotesSaving(true);
