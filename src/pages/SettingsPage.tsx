@@ -197,8 +197,14 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
+        {/* Skin tone */}
+        <SkinToneSelector />
+
         {/* Notifications */}
         <NotificationSettingsCard />
+
+        {/* Admin — Checkpoints */}
+        <AdminCheckpointsLink />
 
         {/* Logout */}
         <Button variant="destructive" onClick={handleLogout} className="w-full gap-2">
