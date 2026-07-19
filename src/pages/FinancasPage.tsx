@@ -588,14 +588,26 @@ const FinancasPage = () => {
             ) : (
               <>
                 <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => togglePaid(entry)}
+                    title={entry.is_paid ? (entry.type === "poupanca" ? "Guardado" : "Pago") : (entry.type === "poupanca" ? "Marcar como guardado" : "Marcar como pago")}
+                    className={cn(
+                      "h-5 w-5 rounded-md border-2 flex items-center justify-center transition-all shrink-0",
+                      entry.is_paid
+                        ? "bg-green-500 border-green-500 text-white"
+                        : "border-muted-foreground/40 hover:border-gold"
+                    )}
+                  >
+                    {entry.is_paid && <Check className="h-3 w-3" strokeWidth={3} />}
+                  </button>
                   <span className="text-lg">{typeIcons[entry.type]}</span>
                   <div>
-                    <p className="text-sm font-body font-medium">{entry.description}</p>
-                    <p className={cn("text-[10px] font-body", typeColors[entry.type])}>{typeLabels[entry.type]}</p>
+                    <p className={cn("text-sm font-body font-medium", entry.is_paid && "line-through text-muted-foreground")}>{entry.description}</p>
+                    <p className={cn("text-[10px] font-body", typeColors[entry.type])}>{typeLabels[entry.type]}{entry.is_paid && (entry.type === "poupanca" ? " • Guardado ✅" : " • Pago ✅")}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={cn("text-sm font-body font-semibold", typeColors[entry.type])}>
+                  <span className={cn("text-sm font-body font-semibold", typeColors[entry.type], entry.is_paid && "line-through opacity-60")}>
                     {entry.type === "renda" ? "+" : "-"} R$ {entry.amount.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                   </span>
                   <button onClick={() => startEdit(entry)} className="p-1 text-muted-foreground hover:text-gold"><Pencil className="h-3 w-3" /></button>
