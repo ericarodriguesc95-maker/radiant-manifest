@@ -1755,7 +1755,10 @@ export type Database = {
           checked: boolean
           created_at: string
           id: string
+          month_ref: string
           name: string
+          notes: string | null
+          price: number | null
           quantity: string | null
           sort_order: number
           updated_at: string
@@ -1766,7 +1769,10 @@ export type Database = {
           checked?: boolean
           created_at?: string
           id?: string
+          month_ref?: string
           name: string
+          notes?: string | null
+          price?: number | null
           quantity?: string | null
           sort_order?: number
           updated_at?: string
@@ -1777,7 +1783,10 @@ export type Database = {
           checked?: boolean
           created_at?: string
           id?: string
+          month_ref?: string
           name?: string
+          notes?: string | null
+          price?: number | null
           quantity?: string | null
           sort_order?: number
           updated_at?: string
