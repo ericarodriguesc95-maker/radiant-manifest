@@ -10,6 +10,7 @@ import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
 import PostConquista from "@/components/PostConquista";
 import FloatingDailyCheckpoints from "@/components/FloatingDailyCheckpoints";
+import { useCheckpointReminders } from "@/hooks/useCheckpointReminders";
 
 import StreakMedals from "@/components/StreakMedals";
 import AppUpdatesModal from "@/components/AppUpdatesModal";
