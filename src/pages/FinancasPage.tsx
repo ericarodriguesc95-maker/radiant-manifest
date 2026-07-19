@@ -395,7 +395,7 @@ const FinancasPage = () => {
   const despVar = entries.filter(e => e.type === "variavel").reduce((s, e) => s + e.amount, 0);
   const cartao = entries.filter(e => e.type === "cartao").reduce((s, e) => s + e.amount, 0);
   const poupanca = entries.filter(e => e.type === "poupanca").reduce((s, e) => s + e.amount, 0);
-  const saldo = renda - despFixas - despVar - cartao;
+  const saldo = renda - despFixas - despVar - cartao - poupanca;
 
   // Chart data
   const chartData = useMemo(() => {
