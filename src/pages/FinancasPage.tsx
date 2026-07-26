@@ -9,7 +9,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import FinanceProfileQuiz from "@/components/finance/FinanceProfileQuiz";
-import PluggyConnectButton from "@/components/finance/PluggyConnectButton";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -835,8 +834,8 @@ const FinancasPage = () => {
       </header>
 
       <div className="px-5 space-y-4 pb-28">
-        {/* PF / CNPJ + Conectar conta */}
-        <div className="flex items-center gap-2">
+        {/* PF / CNPJ */}
+        <div className="flex items-center justify-between">
           <div className="flex bg-muted/30 rounded-full p-0.5 text-[10px] font-body">
             <button onClick={() => setMode("pf")} className={cn("px-3 py-1.5 rounded-full transition-all", mode === "pf" ? "bg-gold text-background font-semibold" : "text-muted-foreground")}>
               <UserIcon className="h-3 w-3 inline mr-1" />PF
@@ -845,7 +844,6 @@ const FinancasPage = () => {
               <Briefcase className="h-3 w-3 inline mr-1" />CNPJ
             </button>
           </div>
-          <div className="flex-1"><PluggyConnectButton mode={mode} onSynced={fetchEntries} /></div>
         </div>
 
         {/* 4 CARDS DE RESUMO */}
