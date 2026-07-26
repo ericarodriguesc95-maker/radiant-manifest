@@ -13,7 +13,7 @@ const TabsList = React.forwardRef<
     ref={ref}
     className={cn(
       // Digital / segmented pill bar. Scroll horizontal no mobile, centrado no desktop.
-      "flex h-9 w-full items-center gap-1 overflow-x-auto scrollbar-none rounded-full border border-border/60 bg-background/70 p-1 text-muted-foreground shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-background/50 md:h-10 md:w-auto md:justify-center",
+      "flex h-9 w-full items-center gap-1 overflow-x-auto rounded-full border border-border/60 bg-background/70 p-1 text-muted-foreground shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-background/50 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:h-10 md:w-auto md:justify-center",
       className,
     )}
     {...props}
