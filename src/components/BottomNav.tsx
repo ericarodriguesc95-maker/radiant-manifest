@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Wallet, Users, User, Heart } from "lucide-react";
+import { Home, Wallet, Users, User, Heart, Target, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -9,7 +9,9 @@ export default function BottomNav() {
 
   const tabs = [
     { to: "/", icon: Home, label: "Home", match: (p: string) => p === "/" },
-    { to: "/comunidade", icon: Users, label: "Girls", match: (p: string) => p.startsWith("/comunidade") },
+    { to: "/comunidade", icon: Users, label: "Comunidade", match: (p: string) => p.startsWith("/comunidade") },
+    { to: "/diario", icon: BookOpen, label: "Diário", match: (p: string) => p.startsWith("/diario") },
+    { to: "/metas", icon: Target, label: "Metas", match: (p: string) => p.startsWith("/metas") },
     { to: "/saude", icon: Heart, label: "Saúde", match: (p: string) => p.startsWith("/saude") },
     { to: "/financas", icon: Wallet, label: "Finanças", match: (p: string) => p.startsWith("/financas") },
     { to: user ? `/perfil/${user.id}` : "/comunidade", icon: User, label: "Perfil", match: (p: string) => p.startsWith("/perfil") },
@@ -40,7 +42,7 @@ export default function BottomNav() {
                 {/* Active pill */}
                 <span
                   className={cn(
-                    "flex h-8 w-14 items-center justify-center rounded-full transition-all duration-300 ease-out",
+                    "flex h-7 w-10 items-center justify-center rounded-full transition-all duration-300 ease-out",
                     active
                       ? "bg-gradient-gold shadow-[0_6px_16px_-6px_hsl(40_75%_45%/0.55)] scale-100"
                       : "bg-transparent scale-90 group-hover:bg-gold/10"
@@ -49,14 +51,14 @@ export default function BottomNav() {
                   <Icon
                     className={cn(
                       "transition-all duration-300",
-                      active ? "h-5 w-5 text-white" : "h-[22px] w-[22px] text-foreground/70"
+                      active ? "h-[18px] w-[18px] text-white" : "h-[19px] w-[19px] text-foreground/70"
                     )}
                     strokeWidth={active ? 2.6 : 2}
                   />
                 </span>
                 <span
                   className={cn(
-                    "text-[10.5px] font-body tracking-wide transition-colors",
+                    "text-[9.5px] font-body tracking-tight transition-colors truncate max-w-full",
                     active ? "font-semibold text-gold" : "font-medium text-muted-foreground"
                   )}
                 >
