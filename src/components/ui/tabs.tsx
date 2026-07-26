@@ -12,7 +12,8 @@ const TabsList = React.forwardRef<
   <TabsPrimitive.List
     ref={ref}
     className={cn(
-      "inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground",
+      // Digital / segmented pill bar. Scroll horizontal no mobile, centrado no desktop.
+      "flex h-9 w-full items-center gap-1 overflow-x-auto scrollbar-none rounded-full border border-border/60 bg-background/70 p-1 text-muted-foreground shadow-sm backdrop-blur-md supports-[backdrop-filter]:bg-background/50 md:h-10 md:w-auto md:justify-center",
       className,
     )}
     {...props}
@@ -27,7 +28,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+      "inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap rounded-full px-3 py-1 text-[11px] font-semibold leading-none tracking-tight ring-offset-background transition-all duration-200 hover:text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_2px_10px_-2px_hsl(var(--primary)/0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-50 md:px-3.5 md:py-1.5 md:text-xs",
       className,
     )}
     {...props}
