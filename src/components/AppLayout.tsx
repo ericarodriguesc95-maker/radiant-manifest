@@ -46,7 +46,7 @@ export default function AppLayout() {
   }, []);
 
   return (
-    <div className={cn("min-h-screen bg-background", isDesktop ? "pl-64" : "pb-20")}>
+    <div className={cn("app-shell", isDesktop ? "pl-64" : "pb-28")}>
       {isDesktop ? <DesktopSidebar /> : <BottomNav />}
       <div className="flex justify-end px-4 pt-3 pb-1">
         <ViewModeToggle />
