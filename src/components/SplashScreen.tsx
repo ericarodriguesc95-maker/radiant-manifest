@@ -46,7 +46,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   return (
     <div
       className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden transition-opacity duration-500 ${phase === "exit" ? "opacity-0" : "opacity-100"}`}
-      style={{ background: "linear-gradient(180deg, #FAF7F0, #F3EDE0 50%, #FAF7F0)" }}
+      style={{ background: "radial-gradient(ellipse at center, #141414 0%, #050505 70%, #000000 100%)" }}
     >
       {/* Gold radial glow */}
       <div
