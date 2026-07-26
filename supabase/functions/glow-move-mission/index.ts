@@ -1,4 +1,18 @@
 import { corsHeaders } from "npm:@supabase/supabase-js@2/cors";
+import { createClient } from "npm:@supabase/supabase-js@2";
+
+async function requireAuth(req: Request): Promise<Response | null> {
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  }
+  const sb = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!);
+  const { data, error } = await sb.auth.getClaims(authHeader.replace("Bearer ", ""));
+  if (error || !data?.claims) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  }
+  return null;
+}
 
 const PILLAR_CONTEXT: Record<string, { nome: string; conceito: string }> = {
   "recablea": { nome: "Recablea", conceito: "Reprogramar padrões mentais com base em neuroplasticidade, dopamina, ciclos de atenção e formação de hábitos." },
@@ -14,6 +28,9 @@ const PHASES = ["Reconhecer", "Soltar", "Construir", "Enraizar"];
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  const authFail = await requireAuth(req);
+  if (authFail) return authFail;
 
   try {
     const { pillar_id, phase } = await req.json();

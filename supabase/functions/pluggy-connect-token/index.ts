@@ -39,6 +39,20 @@ Deno.serve(async (req) => {
 
     const body = await req.json().catch(() => ({}));
     const itemId: string | undefined = body?.itemId; // se passado, é update token
+    const userId = claimsData.claims.sub;
+
+    // Se for update token, verificar que o item pertence ao usuário
+    if (itemId) {
+      const { data: ownedItem, error: ownErr } = await supabase
+        .from("pluggy_items")
+        .select("pluggy_item_id")
+        .eq("pluggy_item_id", itemId)
+        .eq("user_id", userId)
+        .maybeSingle();
+      if (ownErr || !ownedItem) {
+        return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+    }
 
     const apiKey = await getApiKey();
     const ctRes = await fetch("https://api.pluggy.ai/connect_token", {
