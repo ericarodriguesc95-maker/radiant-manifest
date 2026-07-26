@@ -33,6 +33,9 @@ const MEAL_LABELS: Record<string, string> = {
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  const authFail = await requireAuth(req);
+  if (authFail) return authFail;
+
   try {
     const {
       mode = "week", // "week" | "day"
