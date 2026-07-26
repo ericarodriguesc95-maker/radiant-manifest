@@ -10,7 +10,7 @@ declare global {
   }
 }
 
-const WIDGET_SCRIPT = "https://cdn.pluggy.ai/pluggy-connect/v2.10.0/pluggy-connect.js";
+const WIDGET_SCRIPT = "https://cdn.pluggy.ai/pluggy-connect/latest/pluggy-connect.js";
 
 interface PluggyItem {
   id: string;
@@ -78,27 +78,53 @@ export default function PluggyConnectButton({ mode, onSynced }: Props) {
     try {
       setBusy(true);
       await ensureScript();
+      if (!window.PluggyConnect) throw new Error("Widget Pluggy indisponível. Desative bloqueadores (AdBlock/Brave Shields) e recarregue.");
+
       const { data, error } = await supabase.functions.invoke("pluggy-connect-token", {
         body: existingItemId ? { itemId: existingItemId } : {},
       });
-      if (error) throw error;
+      if (error) {
+        const detail = (error as any)?.context ? await (error as any).context.text().catch(() => "") : "";
+        console.error("[Pluggy] connect-token error", error, detail);
+        throw new Error(detail || error.message || "Falha ao gerar token");
+      }
       const accessToken = (data as any)?.accessToken;
-      if (!accessToken) throw new Error("Token não recebido");
+      if (!accessToken) {
+        console.error("[Pluggy] resposta sem accessToken", data);
+        throw new Error("Token não recebido do servidor");
+      }
+
+      // Destroy any previous widget instance to avoid duplicated overlays
+      try { widgetRef.current?.destroy?.(); } catch {}
 
       widgetRef.current = new window.PluggyConnect({
         connectToken: accessToken,
         includeSandbox: true,
+        theme: "light",
         onSuccess: async (itemData: any) => {
           const newItemId = itemData?.item?.id || existingItemId;
           if (newItemId) await sync(newItemId);
         },
         onError: (err: any) => {
-          console.error("Pluggy error", err);
-          toast.error("Não foi possível conectar a conta");
+          console.error("[Pluggy] widget error", err);
+          toast.error("Não foi possível conectar a conta: " + (err?.message || "erro desconhecido"));
+        },
+        onClose: () => {
+          try { widgetRef.current?.destroy?.(); } catch {}
         },
       });
       widgetRef.current.init();
+
+      // Elevate widget above floating bottom nav / dock (z-50)
+      setTimeout(() => {
+        document
+          .querySelectorAll<HTMLElement>("[id^='pluggy'], .pluggy-connect, [class*='pluggy']")
+          .forEach((el) => {
+            el.style.zIndex = "2147483000";
+          });
+      }, 100);
     } catch (e: any) {
+      console.error("[Pluggy] openConnect failed", e);
       toast.error(e?.message || "Erro ao abrir conexão");
     } finally {
       setBusy(false);
