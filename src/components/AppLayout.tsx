@@ -9,6 +9,7 @@ import BackButton from "./BackButton";
 import WelcomeBackAlert from "./WelcomeBackAlert";
 import NpsPopup from "./NpsPopup";
 import PushPermissionOnboarding from "./PushPermissionOnboarding";
+import InstallAppBanner from "./InstallAppBanner";
 import { useActivityTracker } from "@/hooks/useActivityTracker";
 import { usePushNotificationListener } from "@/hooks/usePushNotificationListener";
 import { useCycleNotifications } from "@/hooks/useCycleNotifications";
@@ -60,6 +61,7 @@ export default function AppLayout() {
       {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
       <NpsPopup />
       <PushPermissionOnboarding />
+      <InstallAppBanner />
     </div>
   );
 }

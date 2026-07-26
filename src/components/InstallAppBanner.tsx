@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Smartphone, ChevronDown, ChevronUp } from "lucide-react";
+import { X, Smartphone, ChevronDown, ChevronUp, Download, Monitor } from "lucide-react";
 
 const DISMISSED_KEY = "glowup-install-banner-dismissed";
 const DISMISS_DURATION = 3 * 24 * 60 * 60 * 1000; // 3 days
@@ -14,6 +14,7 @@ function isStandalone() {
 export default function InstallAppBanner() {
   const [show, setShow] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
   useEffect(() => {
     if (isStandalone()) return;
@@ -21,8 +22,17 @@ export default function InstallAppBanner() {
     const dismissed = localStorage.getItem(DISMISSED_KEY);
     if (dismissed && Date.now() - parseInt(dismissed) < DISMISS_DURATION) return;
 
-    const timer = setTimeout(() => setShow(true), 3000);
-    return () => clearTimeout(timer);
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+
+    const timer = setTimeout(() => setShow(true), 4000);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("beforeinstallprompt", handler);
+    };
   }, []);
 
   const dismiss = () => {
@@ -30,25 +40,37 @@ export default function InstallAppBanner() {
     localStorage.setItem(DISMISSED_KEY, String(Date.now()));
   };
 
+  const install = async () => {
+    if (!deferredPrompt) {
+      setExpanded(true);
+      return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === "accepted") dismiss();
+    setDeferredPrompt(null);
+  };
+
   if (!show) return null;
 
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isAndroid = /Android/.test(navigator.userAgent);
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+  const isAndroid = /Android/.test(ua);
+  const isDesktop = !isIOS && !isAndroid;
 
   return (
-    <div className="fixed bottom-24 left-3 right-3 z-50 animate-slide-up">
-      <div className="bg-card border border-gold/30 rounded-2xl shadow-[0_8px_32px_hsl(43_72%_52%/0.15)] overflow-hidden">
-        {/* Main bar */}
+    <div className="fixed bottom-24 left-3 right-3 z-50 animate-slide-up md:left-auto md:right-6 md:max-w-sm md:bottom-6">
+      <div className="bg-card border border-gold/30 rounded-2xl shadow-[0_8px_32px_hsl(43_72%_52%/0.15)] overflow-hidden backdrop-blur-md">
         <div className="flex items-center gap-3 p-3">
           <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center">
-            <Smartphone className="h-5 w-5 text-gold" />
+            {isDesktop ? <Monitor className="h-5 w-5 text-gold" /> : <Smartphone className="h-5 w-5 text-gold" />}
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-heading font-bold text-foreground">
-              Crie seu atalho no celular 👑
+              Instalar Gloow Up Club 👑
             </p>
             <p className="text-[11px] font-body text-muted-foreground">
-              Acesso rápido pelo navegador, sem precisar baixar nada
+              {isDesktop ? "Acesso rápido no seu computador, como um app" : "Acesso rápido no celular, como um app nativo"}
             </p>
           </div>
           <button onClick={dismiss} className="p-1.5 text-muted-foreground hover:text-foreground">
@@ -56,16 +78,27 @@ export default function InstallAppBanner() {
           </button>
         </div>
 
-        {/* Expand toggle */}
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="w-full flex items-center justify-center gap-1 py-1.5 text-[10px] font-body text-gold border-t border-border hover:bg-muted/30 transition-colors"
-        >
-          Como criar o atalho passo a passo
-          {expanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
-        </button>
+        <div className="px-3 pb-3 flex gap-2">
+          {(deferredPrompt || (!isIOS)) && (
+            <button
+              onClick={install}
+              className="flex-1 bg-gold text-black text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5 hover:bg-gold/90 transition-colors"
+            >
+              <Download className="h-3.5 w-3.5" />
+              {deferredPrompt ? "Instalar agora" : "Como instalar"}
+            </button>
+          )}
+          {isIOS && (
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="flex-1 bg-gold text-black text-xs font-bold py-2 rounded-xl flex items-center justify-center gap-1.5"
+            >
+              Ver passo a passo
+              {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+            </button>
+          )}
+        </div>
 
-        {/* Step by step */}
         {expanded && (
           <div className="px-4 pb-4 pt-1 space-y-3 border-t border-border animate-fade-in">
             {isIOS ? (
@@ -82,13 +115,13 @@ export default function InstallAppBanner() {
               </>
             ) : (
               <>
-                <Step n={1} text="No Chrome, clique no ícone de instalar na barra de endereço" />
-                <Step n={2} text='Ou clique no menu (⋮) → "Instalar app"' />
-                <Step n={3} text="Confirme e pronto! O acesso fica na sua área de trabalho 🎉" />
+                <Step n={1} text="No Chrome/Edge, clique no ícone de instalar na barra de endereço (⊕)" />
+                <Step n={2} text='Ou abra o menu (⋮) e escolha "Instalar Gloow Up Club"' />
+                <Step n={3} text="Pronto! Vai abrir em janela própria como app 🎉" />
               </>
             )}
             <p className="text-[10px] text-muted-foreground text-center pt-1">
-              O Gloow Up Club funciona pelo navegador. Não é necessário baixar em loja de apps.
+              Funciona no navegador. Sem loja de apps, sem download pesado.
             </p>
           </div>
         )}
