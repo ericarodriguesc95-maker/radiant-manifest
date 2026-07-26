@@ -29,6 +29,9 @@ const PHASES = ["Reconhecer", "Soltar", "Construir", "Enraizar"];
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
+  const authFail = await requireAuth(req);
+  if (authFail) return authFail;
+
   try {
     const { pillar_id, phase } = await req.json();
     const ctx = PILLAR_CONTEXT[pillar_id];
