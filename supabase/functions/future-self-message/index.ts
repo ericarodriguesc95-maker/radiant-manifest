@@ -23,6 +23,9 @@ async function requireAuth(req: Request): Promise<Response | null> {
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  const authFail = await requireAuth(req);
+  if (authFail) return authFail;
+
   try {
     const { name, date } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
