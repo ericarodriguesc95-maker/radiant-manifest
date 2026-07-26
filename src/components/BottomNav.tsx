@@ -25,10 +25,10 @@ export default function BottomNav() {
       {/* Floating Material You bar */}
       <div className="mx-auto max-w-lg px-3 pb-3">
         <div
-          className="relative flex items-center justify-between rounded-[28px] border border-gold/25 bg-[hsl(40_40%_99%/0.92)] px-2 py-2 backdrop-blur-xl"
+          className="relative flex items-center justify-between rounded-[28px] border border-gold/30 bg-[hsl(0_0%_7%/0.88)] px-2 py-2 backdrop-blur-xl"
           style={{
             boxShadow:
-              "0 12px 40px -12px hsl(30 40% 20% / 0.22), 0 2px 8px -2px hsl(40 60% 40% / 0.14), inset 0 1px 0 hsl(0 0% 100% / 0.7)",
+              "0 16px 48px -12px hsl(0 0% 0% / 0.75), 0 2px 10px -2px hsl(40 75% 45% / 0.28), inset 0 1px 0 hsl(40 75% 60% / 0.14)",
           }}
         >
           {tabs.map(({ to, icon: Icon, label, match }) => {
