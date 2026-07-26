@@ -88,6 +88,17 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "itemId required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
+    // IDOR protection: if this item already exists in pluggy_items owned by another user, reject.
+    // First-time sync (item not yet recorded) is allowed because the connect_token flow gates creation.
+    const { data: existingItem } = await supabase
+      .from("pluggy_items")
+      .select("user_id")
+      .eq("pluggy_item_id", itemId)
+      .maybeSingle();
+    if (existingItem && existingItem.user_id !== userId) {
+      return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
     const apiKey = await getApiKey();
 
     // Carrega o item
