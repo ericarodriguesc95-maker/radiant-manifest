@@ -42,7 +42,7 @@ export default function BottomNav() {
                 {/* Active pill */}
                 <span
                   className={cn(
-                    "flex h-8 w-14 items-center justify-center rounded-full transition-all duration-300 ease-out",
+                    "flex h-7 w-10 items-center justify-center rounded-full transition-all duration-300 ease-out",
                     active
                       ? "bg-gradient-gold shadow-[0_6px_16px_-6px_hsl(40_75%_45%/0.55)] scale-100"
                       : "bg-transparent scale-90 group-hover:bg-gold/10"
