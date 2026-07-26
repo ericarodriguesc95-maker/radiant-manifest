@@ -101,7 +101,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         </div>
 
         {/* Loading bar */}
-        <div className="w-32 h-[2px] rounded-full overflow-hidden mt-3" style={{ background: "rgba(255,255,255,0.10)" }}>
+        <div className="w-32 h-[2px] rounded-full overflow-hidden mt-3" style={{ background: "rgba(42,35,23,0.10)" }}>
           <div
             className="h-full rounded-full"
             style={{
@@ -117,7 +117,7 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
         className={`absolute bottom-12 font-body text-xs tracking-widest transition-opacity duration-700 ${
           phase === "enter" ? "opacity-0" : "opacity-100"
         }`}
-        style={{ color: "hsl(43 60% 70%)" }}
+        style={{ color: "hsl(43 40% 40%)" }}
       >
         SUA TRANSFORMAÇÃO COMEÇA AQUI
       </p>
