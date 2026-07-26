@@ -51,14 +51,14 @@ export default function BottomNav() {
                   <Icon
                     className={cn(
                       "transition-all duration-300",
-                      active ? "h-5 w-5 text-white" : "h-[22px] w-[22px] text-foreground/70"
+                      active ? "h-[18px] w-[18px] text-white" : "h-[19px] w-[19px] text-foreground/70"
                     )}
                     strokeWidth={active ? 2.6 : 2}
                   />
                 </span>
                 <span
                   className={cn(
-                    "text-[10.5px] font-body tracking-wide transition-colors",
+                    "text-[9.5px] font-body tracking-tight transition-colors truncate max-w-full",
                     active ? "font-semibold text-gold" : "font-medium text-muted-foreground"
                   )}
                 >
