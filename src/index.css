@@ -6,47 +6,50 @@
 
 @layer base {
   :root {
-    /* Light Mode Premium, Off-white pérola / marfim */
-    --background: 40 30% 97%;
-    --foreground: 30 15% 12%;
+    /* Netflix Cinematic + Gloow Up Gold */
+    --background: 0 0% 5%;
+    --foreground: 40 30% 96%;
 
-    --card: 40 40% 99%;
-    --card-foreground: 30 15% 12%;
+    --card: 0 0% 9%;
+    --card-foreground: 40 30% 96%;
 
-    --popover: 40 40% 99%;
-    --popover-foreground: 30 15% 12%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 40 30% 96%;
 
-    --primary: 40 75% 45%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 40 75% 52%;
+    --primary-foreground: 0 0% 6%;
 
-    --secondary: 40 25% 93%;
-    --secondary-foreground: 30 15% 15%;
+    --secondary: 0 0% 13%;
+    --secondary-foreground: 40 30% 94%;
 
-    --muted: 40 22% 90%;
-    --muted-foreground: 30 14% 28%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 40 12% 68%;
 
-    --accent: 40 75% 45%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 43 78% 58%;
+    --accent-foreground: 0 0% 6%;
 
-    --destructive: 0 72% 50%;
+    --destructive: 358 79% 47%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 20% 85%;
-    --input: 40 20% 90%;
-    --ring: 40 75% 45%;
+    --border: 0 0% 18%;
+    --input: 0 0% 14%;
+    --ring: 40 75% 52%;
 
     --radius: 0.75rem;
 
-    --brand: 40 75% 45%;
-    --brand-light: 43 78% 58%;
-    --brand-dark: 38 78% 38%;
-    --gold: 40 75% 45%;
-    --gold-light: 43 78% 58%;
-    --gold-dark: 38 78% 38%;
-    --offwhite: 40 30% 97%;
-    --charcoal: 30 15% 12%;
+    --brand: 40 75% 52%;
+    --brand-light: 43 78% 62%;
+    --brand-dark: 38 78% 42%;
+    --gold: 40 75% 52%;
+    --gold-light: 43 78% 62%;
+    --gold-dark: 38 78% 42%;
+    --offwhite: 40 30% 96%;
+    --charcoal: 0 0% 5%;
 
-    /* Secondary palette, Bíblia 365 sections */
+    /* Netflix red accent for hero/CTA highlights */
+    --netflix: 358 79% 47%;
+
+    /* Secondary palette */
     --serene-blue: 210 65% 55%;
     --olive: 75 32% 45%;
     --coral: 8 78% 62%;
@@ -54,13 +57,14 @@
     --font-display: 'Playfair Display', serif;
     --font-body: 'Raleway', sans-serif;
 
-    --gradient-brand: linear-gradient(135deg, hsl(40 75% 45%), hsl(38 78% 38%));
-    --gradient-gold: linear-gradient(135deg, hsl(40 75% 45%), hsl(43 78% 58%));
-    --gradient-dark: linear-gradient(180deg, hsl(40 30% 98%), hsl(40 25% 94%));
-    --gradient-card: linear-gradient(145deg, hsl(40 40% 99%), hsl(40 30% 96%));
-    --shadow-brand: 0 6px 28px -6px hsl(40 75% 45% / 0.30);
-    --shadow-card: 0 4px 20px -6px hsl(30 20% 40% / 0.15);
-    --shadow-glow: 0 0 24px hsl(40 75% 45% / 0.22);
+    --gradient-brand: linear-gradient(135deg, hsl(40 75% 52%), hsl(38 78% 42%));
+    --gradient-gold: linear-gradient(135deg, hsl(40 75% 52%), hsl(43 78% 62%));
+    --gradient-dark: linear-gradient(180deg, hsl(0 0% 4%), hsl(0 0% 8%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 11%), hsl(0 0% 7%));
+    --gradient-cinema: linear-gradient(180deg, hsl(0 0% 5% / 0) 0%, hsl(0 0% 5% / 0.4) 40%, hsl(0 0% 5%) 100%);
+    --shadow-brand: 0 6px 28px -6px hsl(40 75% 52% / 0.35);
+    --shadow-card: 0 8px 30px -10px hsl(0 0% 0% / 0.7);
+    --shadow-glow: 0 0 32px hsl(40 75% 52% / 0.30);
   }
 }
 
