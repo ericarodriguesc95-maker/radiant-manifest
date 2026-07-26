@@ -975,7 +975,7 @@ export default function SaudePage() {
           <TabsTrigger value="dieta" className="text-[9px] px-0.5 py-1.5">🍽️ O que comi</TabsTrigger>
           <TabsTrigger value="nutri" className="text-[9px] px-0.5 py-1.5">🥗 IA Nutri</TabsTrigger>
           <TabsTrigger value="treino" className="text-[9px] px-0.5 py-1.5">💪 Treino</TabsTrigger>
-          <TabsTrigger value="passos" className="text-[9px] px-0.5 py-1.5">👣 Passos</TabsTrigger>
+          
           <TabsTrigger value="suplem" className="text-[9px] px-0.5 py-1.5">💊 Suplem.</TabsTrigger>
           <TabsTrigger value="ciclo" className="text-[9px] px-0.5 py-1.5">🩸 Meu ciclo</TabsTrigger>
           <TabsTrigger value="medic" className="text-[9px] px-0.5 py-1.5">💉 Medic.</TabsTrigger>
@@ -1605,8 +1605,6 @@ export default function SaudePage() {
             <WeeklyDashboard />
             <WorkoutOfTheDay />
             <ActivityTracker />
-            <ShareGlowUp />
-            <SmartWatchConnect />
           </Suspense>
           <Card>
             <CardHeader>
@@ -1800,12 +1798,6 @@ export default function SaudePage() {
           </Suspense>
         </TabsContent>
 
-        {/* ====== PASSOS ====== */}
-        <TabsContent value="passos" className="space-y-4">
-          <Suspense fallback={<div className="text-center py-8 text-xs text-muted-foreground">Carregando...</div>}>
-            <StepTracker />
-          </Suspense>
-        </TabsContent>
 
         {/* ====== MEDICAÇÕES ====== */}
         <TabsContent value="medic" className="space-y-4">
