@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sparkles, Brain, ChevronRight, Bell, Zap, Settings, MapPin, Shield, Trophy, Crown, Heart, Target, BookOpen, ClipboardCheck, Flame, MessageCircle, ThermometerSun } from "lucide-react";
+import { Sparkles, Brain, ChevronRight, Bell, Zap, Settings, Shield, Trophy, Crown, Heart, Target, BookOpen, ClipboardCheck, Flame, MessageCircle, ThermometerSun } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
@@ -127,9 +127,6 @@ const HomePage = () => {
                 <Shield className="h-4 w-4 text-primary" />
               </button>
             )}
-            <button onClick={() => (window as any).__startGlowTour?.()} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors" title="Tour guiado">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-            </button>
             <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2 rounded-full border border-border hover:bg-secondary transition-colors">
               <Bell className="h-4 w-4 text-muted-foreground" />
               {unreadCount > 0 && (
