@@ -101,6 +101,65 @@ const BibleReader = () => {
     setTimeout(() => setCopied(false), 1800);
   };
 
+  // Grifos salvos
+  const loadHighlights = useCallback(async () => {
+    if (!user) {
+      setSaved([]);
+      return;
+    }
+    const { data } = await supabase
+      .from("bible_highlights")
+      .select("id, verse, color")
+      .eq("book", book.name)
+      .eq("chapter", chapter);
+    setSaved((data as SavedHighlight[]) || []);
+  }, [user, book.name, chapter]);
+
+  useEffect(() => {
+    loadHighlights();
+    setSelected(null);
+  }, [loadHighlights]);
+
+  const savedFor = (verse: number) => saved.find((s) => s.verse === verse);
+
+  const applyHighlight = async (verse: number, color: string) => {
+    if (!user) {
+      toast({ title: "Entre na sua conta para grifar versículos" });
+      return;
+    }
+    const text = verses.find((v) => v.verse === verse)?.text ?? "";
+    const { data, error: err } = await supabase
+      .from("bible_highlights")
+      .upsert(
+        { user_id: user.id, book: book.name, chapter, verse, verse_text: text, color },
+        { onConflict: "user_id,book,chapter,verse" }
+      )
+      .select("id, verse, color")
+      .single();
+    if (err) {
+      toast({ title: "Não conseguimos salvar o grifo", variant: "destructive" });
+      return;
+    }
+    setSaved((s) => [...s.filter((x) => x.verse !== verse), data as SavedHighlight]);
+    setSelected(null);
+    toast({ title: "Versículo grifado", description: `${book.name} ${chapter}:${verse}` });
+    window.dispatchEvent(new CustomEvent("bible:highlights-updated"));
+  };
+
+  const removeHighlight = async (verse: number) => {
+    const item = savedFor(verse);
+    if (!item) return;
+    const { error: err } = await supabase.from("bible_highlights").delete().eq("id", item.id);
+    if (err) {
+      toast({ title: "Erro ao remover o grifo", variant: "destructive" });
+      return;
+    }
+    setSaved((s) => s.filter((x) => x.verse !== verse));
+    setSelected(null);
+    window.dispatchEvent(new CustomEvent("bible:highlights-updated"));
+  };
+
+
   return (
     <div className="space-y-4">
       {/* Busca */}
