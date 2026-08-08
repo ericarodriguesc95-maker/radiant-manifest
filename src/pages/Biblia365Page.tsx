@@ -22,7 +22,8 @@ import {
 import BibleStudyChat from "@/components/bible/BibleStudyChat";
 import BibleReader from "@/components/bible/BibleReader";
 import BibleDictionary from "@/components/bible/BibleDictionary";
-import { BookOpen, BookMarked } from "lucide-react";
+import { BookOpen, BookMarked, HandHeart } from "lucide-react";
+import DailyPrayerCard from "@/components/bible/DailyPrayerCard";
 import biblicalJourneyMap from "@/assets/biblical-journey-map.jpg";
 import {
   AlertDialog,
@@ -75,7 +76,7 @@ const Biblia365Page = () => {
   const [savingNote, setSavingNote] = useState(false);
 
   // Active tab (controls visibility of fixed footer nav)
-  const [activeTab, setActiveTab] = useState<"leitura" | "biblia" | "dicionario" | "historico">("leitura");
+  const [activeTab, setActiveTab] = useState<"leitura" | "biblia" | "dicionario" | "oracao" | "historico">("leitura");
   useScrollTopOnChange(activeTab);
 
   // AI study chat
@@ -475,6 +476,13 @@ const Biblia365Page = () => {
               Dicionário
             </TabsTrigger>
             <TabsTrigger
+              value="oracao"
+              className="flex-1 rounded-xl text-xs font-body data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
+            >
+              <HandHeart className="h-3.5 w-3.5 mr-1.5" />
+              Oração
+            </TabsTrigger>
+            <TabsTrigger
               value="historico"
               className="flex-1 rounded-xl text-xs font-body data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
             >
@@ -490,6 +498,11 @@ const Biblia365Page = () => {
           <TabsContent value="dicionario" className="mt-0">
             <BibleDictionary />
           </TabsContent>
+
+          <TabsContent value="oracao" className="mt-0">
+            <DailyPrayerCard />
+          </TabsContent>
+
 
 
           <TabsContent value="leitura" className="space-y-5 mt-0">
