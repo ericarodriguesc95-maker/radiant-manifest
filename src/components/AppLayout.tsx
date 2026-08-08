@@ -46,25 +46,28 @@ export default function AppLayout() {
   }, []);
 
   return (
-    <div className={cn("app-shell", isDesktop ? "pl-64" : "pb-28")}>
+    <>
+      <div className={cn("app-shell", isDesktop ? "pl-64" : "pb-28")}>
+        <div className="flex justify-end px-4 pt-3 pb-1">
+          <ViewModeToggle />
+        </div>
+        <WelcomeBackAlert />
+
+        <div className={cn(isDesktop && "max-w-5xl mx-auto px-6 py-4")}>
+          <BackButton />
+          <Outlet />
+        </div>
+
+        {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
+        <NpsPopup />
+        <PushPermissionOnboarding />
+        <InstallAppBanner />
+      </div>
+
+      {/* Fora do .app-shell para que position:fixed siga a viewport
+          (backdrop-filter no shell criaria um containing block) */}
       {isDesktop ? <DesktopSidebar /> : <BottomNav />}
-
-      <div className="flex justify-end px-4 pt-3 pb-1">
-        <ViewModeToggle />
-      </div>
-      <WelcomeBackAlert />
-
-      <div className={cn(isDesktop && "max-w-5xl mx-auto px-6 py-4")}>
-        <BackButton />
-        <Outlet />
-      </div>
-
-
-
-      {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
-      <NpsPopup />
-      <PushPermissionOnboarding />
-      <InstallAppBanner />
-    </div>
+    </>
   );
 }
+
