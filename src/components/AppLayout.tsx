@@ -17,7 +17,6 @@ import { useViewMode } from "@/contexts/ViewModeContext";
 import { cn } from "@/lib/utils";
 
 export default function AppLayout() {
-  const [showTour, setShowTour] = useState(false);
   const { mode } = useViewMode();
   const { user } = useAuth();
   const isDesktop = mode === "desktop";
@@ -29,13 +28,6 @@ export default function AppLayout() {
   useEffect(() => {
     initNotifications(user?.id);
   }, [user?.id]);
-
-  // Tour agora só inicia manualmente pelo botão no header da Home
-
-  useEffect(() => {
-    (window as any).__startGlowTour = () => setShowTour(true);
-    return () => { delete (window as any).__startGlowTour; };
-  }, []);
 
   return (
     <>
