@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import BottomNav from "./BottomNav";
 import DesktopSidebar from "./DesktopSidebar";
 import ViewModeToggle from "./ViewModeToggle";
@@ -19,7 +19,6 @@ import { cn } from "@/lib/utils";
 
 export default function AppLayout() {
   const [showTour, setShowTour] = useState(false);
-  const location = useLocation();
   const { mode } = useViewMode();
   const { user } = useAuth();
   const isDesktop = mode === "desktop";
@@ -32,13 +31,7 @@ export default function AppLayout() {
     initNotifications(user?.id);
   }, [user?.id]);
 
-  useEffect(() => {
-    const completed = localStorage.getItem("glow-tour-completed");
-    if (!completed && location.pathname === "/") {
-      const timer = setTimeout(() => setShowTour(true), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  // Tour agora só inicia manualmente pelo botão no header da Home
 
   useEffect(() => {
     (window as any).__startGlowTour = () => setShowTour(true);
