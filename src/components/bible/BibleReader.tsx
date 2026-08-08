@@ -1,26 +1,39 @@
-import { useEffect, useMemo, useState } from "react";
-import { Search, ChevronLeft, ChevronRight, BookOpen, Loader2, Copy, Check } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Search, ChevronLeft, ChevronRight, BookOpen, Loader2, Copy, Check, Highlighter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bibleBooks, parseReference, normalize, type BibleBook } from "./bibleBooks";
+import { highlightColors, colorBg, colorChip } from "./highlightColors";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Verse {
   verse: number;
   text: string;
 }
 
+interface SavedHighlight {
+  id: string;
+  verse: number;
+  color: string;
+}
+
 const BibleReader = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [query, setQuery] = useState("");
   const [book, setBook] = useState<BibleBook>(bibleBooks.find((b) => b.name === "João")!);
   const [chapter, setChapter] = useState(1);
   const [verses, setVerses] = useState<Verse[]>([]);
   const [highlight, setHighlight] = useState<number[]>([]);
+  const [saved, setSaved] = useState<SavedHighlight[]>([]);
+  const [selected, setSelected] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
 
   const suggestions = useMemo(() => {
     const q = normalize(query.replace(/[\d:.\-]/g, ""));
@@ -87,6 +100,65 @@ const BibleReader = () => {
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
   };
+
+  // Grifos salvos
+  const loadHighlights = useCallback(async () => {
+    if (!user) {
+      setSaved([]);
+      return;
+    }
+    const { data } = await supabase
+      .from("bible_highlights")
+      .select("id, verse, color")
+      .eq("book", book.name)
+      .eq("chapter", chapter);
+    setSaved((data as SavedHighlight[]) || []);
+  }, [user, book.name, chapter]);
+
+  useEffect(() => {
+    loadHighlights();
+    setSelected(null);
+  }, [loadHighlights]);
+
+  const savedFor = (verse: number) => saved.find((s) => s.verse === verse);
+
+  const applyHighlight = async (verse: number, color: string) => {
+    if (!user) {
+      toast({ title: "Entre na sua conta para grifar versículos" });
+      return;
+    }
+    const text = verses.find((v) => v.verse === verse)?.text ?? "";
+    const { data, error: err } = await supabase
+      .from("bible_highlights")
+      .upsert(
+        { user_id: user.id, book: book.name, chapter, verse, verse_text: text, color },
+        { onConflict: "user_id,book,chapter,verse" }
+      )
+      .select("id, verse, color")
+      .single();
+    if (err) {
+      toast({ title: "Não conseguimos salvar o grifo", variant: "destructive" });
+      return;
+    }
+    setSaved((s) => [...s.filter((x) => x.verse !== verse), data as SavedHighlight]);
+    setSelected(null);
+    toast({ title: "Versículo grifado", description: `${book.name} ${chapter}:${verse}` });
+    window.dispatchEvent(new CustomEvent("bible:highlights-updated"));
+  };
+
+  const removeHighlight = async (verse: number) => {
+    const item = savedFor(verse);
+    if (!item) return;
+    const { error: err } = await supabase.from("bible_highlights").delete().eq("id", item.id);
+    if (err) {
+      toast({ title: "Erro ao remover o grifo", variant: "destructive" });
+      return;
+    }
+    setSaved((s) => s.filter((x) => x.verse !== verse));
+    setSelected(null);
+    window.dispatchEvent(new CustomEvent("bible:highlights-updated"));
+  };
+
 
   return (
     <div className="space-y-4">
@@ -189,21 +261,60 @@ const BibleReader = () => {
         ) : error ? (
           <p className="text-sm font-body text-muted-foreground py-6 text-center">{error}</p>
         ) : (
-          <div className="space-y-2.5">
-            {verses.map((v) => (
-              <p
-                key={v.verse}
-                className={cn(
-                  "text-sm font-body leading-relaxed text-foreground/85 rounded-lg px-2 py-1 -mx-2 transition-colors",
-                  highlight.includes(v.verse) && "bg-gold/15 text-foreground"
-                )}
-              >
-                <span className="text-gold font-semibold text-xs mr-1.5 align-super">{v.verse}</span>
-                {v.text}
-              </p>
-            ))}
+          <div className="space-y-1.5">
+            <p className="text-[11px] font-body text-muted-foreground mb-2 flex items-center gap-1.5">
+              <Highlighter className="h-3 w-3 text-gold" />
+              Toque em um versículo para grifar
+            </p>
+            {verses.map((v) => {
+              const mark = savedFor(v.verse);
+              return (
+                <div key={v.verse}>
+                  <button
+                    type="button"
+                    onClick={() => setSelected(selected === v.verse ? null : v.verse)}
+                    aria-label={`Grifar versículo ${v.verse}`}
+                    className={cn(
+                      "w-full text-left text-sm font-body leading-relaxed text-foreground/85 rounded-lg px-2 py-1.5 transition-colors hover:bg-gold/10",
+                      highlight.includes(v.verse) && !mark && "bg-gold/15 text-foreground",
+                      mark && cn(colorBg(mark.color), "text-foreground"),
+                      selected === v.verse && "ring-1 ring-gold/40"
+                    )}
+                  >
+                    <span className="text-gold font-semibold text-xs mr-1.5 align-super">{v.verse}</span>
+                    {v.text}
+                  </button>
+
+                  {selected === v.verse && (
+                    <div className="mt-1.5 mb-2 flex items-center gap-2 flex-wrap glass rounded-xl border border-gold/15 px-3 py-2">
+                      {highlightColors.map((c) => (
+                        <button
+                          key={c.key}
+                          onClick={() => applyHighlight(v.verse, c.key)}
+                          aria-label={`Grifar em ${c.label}`}
+                          className={cn(
+                            "h-6 w-6 rounded-full border border-black/10 transition-transform hover:scale-110",
+                            c.chip,
+                            mark?.color === c.key && "ring-2 ring-gold ring-offset-1 ring-offset-background"
+                          )}
+                        />
+                      ))}
+                      {mark && (
+                        <button
+                          onClick={() => removeHighlight(v.verse)}
+                          className="ml-auto text-[11px] font-body text-destructive/80 inline-flex items-center gap-1 px-2 py-1 rounded-full hover:bg-destructive/10"
+                        >
+                          <X className="h-3 w-3" /> Remover grifo
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
+
 
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-gold/10">
           <button
