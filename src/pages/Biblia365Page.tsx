@@ -471,6 +471,14 @@ const Biblia365Page = () => {
               Bíblia
             </TabsTrigger>
             <TabsTrigger
+              value="grifados"
+              className="flex-1 rounded-xl text-xs font-body data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
+            >
+              <Highlighter className="h-3.5 w-3.5 mr-1.5" />
+              Grifados
+            </TabsTrigger>
+            <TabsTrigger
+
               value="dicionario"
               className="flex-1 rounded-xl text-xs font-body data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
             >
@@ -496,6 +504,11 @@ const Biblia365Page = () => {
           <TabsContent value="biblia" className="mt-0">
             <BibleReader />
           </TabsContent>
+
+          <TabsContent value="grifados" className="mt-0">
+            <BibleHighlights />
+          </TabsContent>
+
 
           <TabsContent value="dicionario" className="mt-0">
             <BibleDictionary />
