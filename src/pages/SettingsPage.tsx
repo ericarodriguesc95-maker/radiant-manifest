@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "@/hooks/use-toast";
-import { ArrowLeft, User, Moon, Sun, Bell, LogOut, Camera, Save, Phone, Lightbulb, Shield, Trophy } from "lucide-react";
+import { ArrowLeft, User, Moon, Sun, Bell, LogOut, Camera, Save, Phone, Lightbulb, Shield, Trophy, Cake } from "lucide-react";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import SkinToneSelector from "@/components/SkinToneSelector";
 import CheckpointReminderSettings from "@/components/CheckpointReminderSettings";
@@ -25,6 +25,7 @@ export default function SettingsPage() {
   const [bio, setBio] = useState("");
   const [avatarUrl, setAvatarUrl] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [birthDate, setBirthDate] = useState("");
   const [saving, setSaving] = useState(false);
   const [darkMode, setDarkMode] = useState(() => document.documentElement.classList.contains("dark"));
   const [uploading, setUploading] = useState(false);
@@ -37,8 +38,9 @@ export default function SettingsPage() {
     }
     // Fetch phone number separately since it's not in AuthContext profile
     if (user) {
-      supabase.from("profiles").select("phone_number").eq("user_id", user.id).single().then(({ data }) => {
+      supabase.from("profiles").select("phone_number, birth_date").eq("user_id", user.id).single().then(({ data }) => {
         if (data?.phone_number) setPhoneNumber(data.phone_number);
+        if ((data as any)?.birth_date) setBirthDate((data as any).birth_date);
       });
     }
   }, [profile, user]);
@@ -49,7 +51,7 @@ export default function SettingsPage() {
     const cleanPhone = phoneNumber.replace(/\D/g, "");
     const { error } = await supabase
       .from("profiles")
-      .update({ display_name: displayName, bio, phone_number: cleanPhone || null } as any)
+      .update({ display_name: displayName, bio, phone_number: cleanPhone || null, birth_date: birthDate || null } as any)
       .eq("user_id", user.id);
     setSaving(false);
     if (error) {
@@ -173,6 +175,21 @@ export default function SettingsPage() {
                 type="tel"
               />
               <p className="text-[10px] text-muted-foreground">Número com DDI (55) + DDD + número. Ex: 5511999887766</p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="birthdate" className="flex items-center gap-1.5">
+                <Cake className="h-3.5 w-3.5 text-primary" /> Data de aniversário
+              </Label>
+              <Input
+                id="birthdate"
+                type="date"
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
+              />
+              <p className="text-[10px] text-muted-foreground">
+                No seu dia o clube publica automaticamente um post de parabéns na comunidade e avisa todas as extraordinárias. 🎂👑
+              </p>
             </div>
 
             <Button onClick={handleSaveProfile} disabled={saving} className="w-full gap-2">

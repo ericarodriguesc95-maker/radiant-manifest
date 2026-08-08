@@ -108,7 +108,8 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
 
   const getNotificationText = (n: Notification) => {
     if (n.type === "app_update") return n.comment_text || "Nova atualização disponível 🎁";
-    const action = n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : n.type === "follow" ? "começou a te seguir 👤" : "comentou no seu post";
+    if (n.type === "birthday" || n.type === "birthday_self") return n.comment_text || "🎂 Aniversário no clube!";
+    const action = n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : n.type === "follow" ? "começou a te seguir 👤" : n.type === "birthday" ? "está fazendo aniversário hoje 🎂" : n.type === "birthday_self" ? "Feliz aniversário! 🎉👑" : "comentou no seu post";
     return `${n.from_name} ${action}${n.comment_text ? ` "${n.comment_text}"` : ""}`;
   };
 
@@ -193,7 +194,7 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
                   <>
                     <p className="text-xs font-body">
                       <span className="font-semibold">{n.from_name}</span>{" "}
-                      {n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : n.type === "follow" ? "começou a te seguir 👤" : "comentou no seu post"}
+                      {n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : n.type === "follow" ? "começou a te seguir 👤" : n.type === "birthday" ? "está fazendo aniversário hoje 🎂" : n.type === "birthday_self" ? "Feliz aniversário! 🎉👑" : "comentou no seu post"}
                     </p>
                     {n.comment_text && (
                       <p className="text-[11px] font-body text-muted-foreground mt-0.5 truncate">"{n.comment_text}"</p>
