@@ -22,7 +22,9 @@ import {
 import BibleStudyChat from "@/components/bible/BibleStudyChat";
 import BibleReader from "@/components/bible/BibleReader";
 import BibleDictionary from "@/components/bible/BibleDictionary";
-import { BookOpen, BookMarked, HandHeart } from "lucide-react";
+import BibleHighlights from "@/components/bible/BibleHighlights";
+import { BookOpen, BookMarked, HandHeart, Highlighter } from "lucide-react";
+
 import DailyPrayerCard from "@/components/bible/DailyPrayerCard";
 import biblicalJourneyMap from "@/assets/biblical-journey-map.jpg";
 import {
@@ -76,7 +78,7 @@ const Biblia365Page = () => {
   const [savingNote, setSavingNote] = useState(false);
 
   // Active tab (controls visibility of fixed footer nav)
-  const [activeTab, setActiveTab] = useState<"leitura" | "biblia" | "dicionario" | "oracao" | "historico">("leitura");
+  const [activeTab, setActiveTab] = useState<"leitura" | "biblia" | "grifados" | "dicionario" | "oracao" | "historico">("leitura");
   useScrollTopOnChange(activeTab);
 
   // AI study chat
