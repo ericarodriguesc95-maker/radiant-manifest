@@ -19,7 +19,6 @@ import { cn } from "@/lib/utils";
 
 export default function AppLayout() {
   const [showTour, setShowTour] = useState(false);
-  const location = useLocation();
   const { mode } = useViewMode();
   const { user } = useAuth();
   const isDesktop = mode === "desktop";
