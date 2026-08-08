@@ -40,7 +40,18 @@ export default function ResetPasswordPage() {
 
   if (!valid) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4 bg-background">
+      <div
+        className="min-h-screen flex items-center justify-center px-4"
+        style={{
+          background: `linear-gradient(180deg, hsl(32 30% 97% / 0.92), hsl(30 28% 94% / 0.92)),
+            radial-gradient(100% 60% at 50% 0%, hsl(32 30% 100% / 0.7) 0%, transparent 55%),
+            radial-gradient(100% 60% at 50% 100%, hsl(24 45% 88% / 0.35) 0%, transparent 55%),
+            radial-gradient(45% 90% at -5% 50%, hsl(24 48% 88% / 0.35) 0%, transparent 55%),
+            radial-gradient(45% 90% at 105% 50%, hsl(19 48% 84% / 0.32) 0%, transparent 55%)`,
+          backdropFilter: "blur(18px) saturate(1.05)",
+          WebkitBackdropFilter: "blur(18px) saturate(1.05)",
+        }}
+      >
         <Card className="w-full max-w-md">
           <CardContent className="pt-6 text-center">
             <p className="text-muted-foreground">Link inválido ou expirado. Solicite um novo link de recuperação.</p>
