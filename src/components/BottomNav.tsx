@@ -22,48 +22,37 @@ export default function BottomNav() {
       className="fixed bottom-0 left-0 right-0 z-50 pb-[env(safe-area-inset-bottom)]"
       aria-label="Navegação principal"
     >
-      {/* Floating Material You bar */}
       <div className="mx-auto max-w-lg px-3 pb-3">
-        <div
-          className="relative flex items-center justify-between rounded-[28px] border border-gold/25 bg-[hsl(40_40%_99%/0.92)] px-2 py-2 backdrop-blur-xl"
-          style={{
-            boxShadow:
-              "0 12px 40px -12px hsl(30 40% 20% / 0.22), 0 2px 8px -2px hsl(40 60% 40% / 0.14), inset 0 1px 0 hsl(0 0% 100% / 0.7)",
-          }}
-        >
+        <div className="relative flex items-stretch justify-between rounded-[30px] border border-border/70 bg-[hsl(var(--card)/0.92)] px-1.5 py-2 backdrop-blur-xl shadow-[0_18px_44px_-24px_hsl(24_25%_25%/0.55)]">
           {tabs.map(({ to, icon: Icon, label, match }) => {
             const active = match(location.pathname);
             return (
               <NavLink
                 key={label}
                 to={to}
-                className="group relative flex flex-1 flex-col items-center justify-center gap-0.5 outline-none"
+                className="group relative flex flex-1 flex-col items-center justify-center gap-1 pt-1 outline-none"
               >
-                {/* Active pill */}
-                <span
+                <Icon
                   className={cn(
-                    "flex h-7 w-10 items-center justify-center rounded-full transition-all duration-300 ease-out",
-                    active
-                      ? "bg-gradient-gold shadow-[0_6px_16px_-6px_hsl(40_75%_45%/0.55)] scale-100"
-                      : "bg-transparent scale-90 group-hover:bg-gold/10"
+                    "h-[19px] w-[19px] transition-all duration-300",
+                    active ? "text-primary" : "text-foreground/45 group-hover:text-foreground/75",
                   )}
-                >
-                  <Icon
-                    className={cn(
-                      "transition-all duration-300",
-                      active ? "h-[18px] w-[18px] text-white" : "h-[19px] w-[19px] text-foreground/70"
-                    )}
-                    strokeWidth={active ? 2.6 : 2}
-                  />
-                </span>
+                  strokeWidth={active ? 2.1 : 1.6}
+                />
                 <span
                   className={cn(
-                    "text-[9.5px] font-body tracking-tight transition-colors truncate max-w-full",
-                    active ? "font-semibold text-gold" : "font-medium text-muted-foreground"
+                    "max-w-full truncate text-[8.5px] font-body uppercase tracking-[0.09em] transition-colors",
+                    active ? "font-semibold text-foreground" : "font-medium text-muted-foreground/70",
                   )}
                 >
                   {label}
                 </span>
+                <span
+                  className={cn(
+                    "mt-0.5 h-[3px] rounded-full bg-primary transition-all duration-300",
+                    active ? "w-4 opacity-100" : "w-0 opacity-0",
+                  )}
+                />
               </NavLink>
             );
           })}
