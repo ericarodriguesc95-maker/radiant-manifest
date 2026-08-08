@@ -362,23 +362,8 @@
       repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(24 22% 13% / 0.06) 2px, hsl(24 22% 13% / 0.06) 3px);
   }
 
-  /* Modo App: moldura compacta de celular */
-  .phone-frame {
-    width: 100%;
-    max-width: 430px;
-    margin-inline: auto;
-    position: relative;
-  }
-  @media (min-width: 640px) {
-    .phone-frame {
-      border-left: 1px solid hsl(var(--border) / 0.6);
-      border-right: 1px solid hsl(var(--border) / 0.6);
-      box-shadow: 0 30px 80px -40px hsl(24 25% 25% / 0.45);
-      background: hsl(var(--background) / 0.35);
-    }
-  }
-
   .app-status-bar {
+
 
     height: env(safe-area-inset-top);
     background: hsl(var(--card) / 0.7);
