@@ -243,10 +243,13 @@ export default function DiarioPage() {
       ) : (
         <div className="grid grid-cols-2 gap-3">
           {notes.map(note => (
-            <button
+            <div
               key={note.id}
+              role="button"
+              tabIndex={0}
               onClick={() => openNote(note)}
-              className="group relative bg-card rounded-2xl border border-border overflow-hidden text-left transition-all hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98]"
+              onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openNote(note); } }}
+              className="group relative bg-card rounded-2xl border border-border overflow-hidden text-left cursor-pointer transition-all hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98]"
             >
               {/* Color bar */}
               <div className="h-1.5 w-full" style={{ backgroundColor: note.color }} />
@@ -271,7 +274,7 @@ export default function DiarioPage() {
               >
                 <Trash2 className="h-3.5 w-3.5" />
               </button>
-            </button>
+            </div>
           ))}
         </div>
       ))}

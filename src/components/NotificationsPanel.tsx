@@ -7,7 +7,7 @@ import { ptBR } from "date-fns/locale";
 
 interface Notification {
   id: string;
-  type: "like" | "comment" | "mention" | "welcome" | "new_post" | "follow" | "app_update";
+  type: "like" | "comment" | "mention" | "welcome" | "new_post" | "follow" | "app_update" | "birthday" | "birthday_self";
   from_name: string;
   from_avatar: string | null;
   comment_text: string | null;
@@ -109,7 +109,7 @@ export default function NotificationsPanel({ onClose }: { onClose: () => void })
   const getNotificationText = (n: Notification) => {
     if (n.type === "app_update") return n.comment_text || "Nova atualização disponível 🎁";
     if (n.type === "birthday" || n.type === "birthday_self") return n.comment_text || "🎂 Aniversário no clube!";
-    const action = n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : n.type === "follow" ? "começou a te seguir 👤" : n.type === "birthday" ? "está fazendo aniversário hoje 🎂" : n.type === "birthday_self" ? "Feliz aniversário! 🎉👑" : "comentou no seu post";
+    const action = n.type === "like" ? "curtiu seu post ❤️" : n.type === "mention" ? "mencionou você 📣" : n.type === "welcome" ? "entrou para o Glow Up! 🦋✨" : n.type === "new_post" ? "publicou na comunidade 📝" : n.type === "follow" ? "começou a te seguir 👤" : "comentou no seu post";
     return `${n.from_name} ${action}${n.comment_text ? ` "${n.comment_text}"` : ""}`;
   };
 

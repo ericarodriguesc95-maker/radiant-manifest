@@ -185,7 +185,7 @@ const ComunidadePage = () => {
       Promise.all(postIds.map(pid =>
         supabase.from("post_views").upsert(
           { post_id: pid, viewer_id: user.id },
-          { onConflict: "post_id,viewer_id" }
+          { onConflict: "post_id,viewer_id", ignoreDuplicates: true }
         )
       ));
     }
