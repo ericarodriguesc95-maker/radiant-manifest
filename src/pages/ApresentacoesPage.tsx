@@ -27,17 +27,25 @@ const ApresentacoesPage = () => {
     setLoading(true);
     const { data } = await (supabase as any)
       .from("community_posts")
-      .select("id,user_id,text,objetivos,created_at,likes_count,comments_count")
+      .select("id,user_id,text,objetivos,created_at,likes_count")
       .eq("kind", "introduction")
       .order(tab === "populares" ? "likes_count" : "created_at", { ascending: false })
       .limit(50);
     const list = (data as any[]) || [];
     if (list.length) {
-      const ids = [...new Set(list.map(i => i.user_id))];
-      const { data: profs } = await (supabase as any).rpc("get_public_profiles");
+      const ids = list.map(i => i.id);
+      const [{ data: profs }, { data: comments }] = await Promise.all([
+        (supabase as any).rpc("get_public_profiles"),
+        (supabase as any).from("post_comments").select("post_id").in("post_id", ids),
+      ]);
       const map = new Map<string, any>();
       (profs as any[] || []).forEach(p => map.set(p.user_id, p));
-      list.forEach((i: any) => (i.profile = map.get(i.user_id)));
+      const counts = new Map<string, number>();
+      (comments as any[] || []).forEach(c => counts.set(c.post_id, (counts.get(c.post_id) || 0) + 1));
+      list.forEach((i: any) => {
+        i.profile = map.get(i.user_id);
+        i.comments_count = counts.get(i.id) || 0;
+      });
     }
     setIntros(list as Intro[]);
     setLoading(false);
