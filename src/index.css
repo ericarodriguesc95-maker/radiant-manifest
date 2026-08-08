@@ -222,9 +222,11 @@
   /* ===== Editorial UI language ===== */
   .ed-card {
     border-radius: 26px;
-    background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
+    background: linear-gradient(145deg, hsl(var(--card) / 0.72), hsl(30 28% 96% / 0.68));
+    border: 1px solid hsl(var(--border) / 0.75);
     box-shadow: var(--shadow-card);
+    backdrop-filter: blur(16px) saturate(1.1);
+    -webkit-backdrop-filter: blur(16px) saturate(1.1);
   }
 
   /* Editorial list row: hairline separated, no candy gradients */
