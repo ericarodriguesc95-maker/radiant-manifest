@@ -20,6 +20,9 @@ import {
   RotateCcw,
 } from "lucide-react";
 import BibleStudyChat from "@/components/bible/BibleStudyChat";
+import BibleReader from "@/components/bible/BibleReader";
+import BibleDictionary from "@/components/bible/BibleDictionary";
+import { BookOpen, BookMarked } from "lucide-react";
 import biblicalJourneyMap from "@/assets/biblical-journey-map.jpg";
 import {
   AlertDialog,
