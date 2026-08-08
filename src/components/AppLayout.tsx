@@ -32,13 +32,7 @@ export default function AppLayout() {
     initNotifications(user?.id);
   }, [user?.id]);
 
-  useEffect(() => {
-    const completed = localStorage.getItem("glow-tour-completed");
-    if (!completed && location.pathname === "/") {
-      const timer = setTimeout(() => setShowTour(true), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  // Tour agora só inicia manualmente pelo botão no header da Home
 
   useEffect(() => {
     (window as any).__startGlowTour = () => setShowTour(true);
