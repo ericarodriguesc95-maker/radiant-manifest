@@ -6,63 +6,63 @@
 
 @layer base {
   :root {
-    /* Light Mode Premium, Off-white pérola / marfim */
-    --background: 40 30% 97%;
-    --foreground: 30 15% 12%;
+    /* Editorial Nude, areia quente + terracota */
+    --background: 32 30% 97%;
+    --foreground: 24 22% 13%;
 
-    --card: 40 40% 99%;
-    --card-foreground: 30 15% 12%;
+    --card: 34 42% 99%;
+    --card-foreground: 24 22% 13%;
 
-    --popover: 40 40% 99%;
-    --popover-foreground: 30 15% 12%;
+    --popover: 34 42% 99%;
+    --popover-foreground: 24 22% 13%;
 
-    --primary: 40 75% 45%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 19 48% 55%;
+    --primary-foreground: 34 42% 99%;
 
-    --secondary: 40 25% 93%;
-    --secondary-foreground: 30 15% 15%;
+    --secondary: 30 32% 93%;
+    --secondary-foreground: 24 22% 16%;
 
-    --muted: 40 22% 90%;
-    --muted-foreground: 30 14% 28%;
+    --muted: 30 24% 91%;
+    --muted-foreground: 24 14% 34%;
 
-    --accent: 40 75% 45%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 19 48% 55%;
+    --accent-foreground: 34 42% 99%;
 
-    --destructive: 0 72% 50%;
+    --destructive: 4 66% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 40 20% 85%;
-    --input: 40 20% 90%;
-    --ring: 40 75% 45%;
+    --border: 28 24% 87%;
+    --input: 28 24% 92%;
+    --ring: 19 48% 55%;
 
-    --radius: 0.75rem;
+    --radius: 1.25rem;
 
-    --brand: 40 75% 45%;
-    --brand-light: 43 78% 58%;
-    --brand-dark: 38 78% 38%;
-    --gold: 40 75% 45%;
-    --gold-light: 43 78% 58%;
-    --gold-dark: 38 78% 38%;
-    --offwhite: 40 30% 97%;
-    --charcoal: 30 15% 12%;
+    --brand: 19 48% 55%;
+    --brand-light: 24 62% 74%;
+    --brand-dark: 15 42% 40%;
+    --gold: 19 48% 55%;
+    --gold-light: 24 62% 74%;
+    --gold-dark: 15 42% 40%;
+    --offwhite: 32 30% 97%;
+    --charcoal: 24 22% 13%;
 
-    --netflix: 358 79% 47%;
+    --netflix: 4 66% 52%;
 
     /* Secondary palette */
-    --serene-blue: 210 65% 55%;
-    --olive: 75 32% 45%;
-    --coral: 8 78% 62%;
+    --serene-blue: 205 40% 62%;
+    --olive: 60 18% 52%;
+    --coral: 14 62% 66%;
 
     --font-display: 'Playfair Display', serif;
     --font-body: 'Raleway', sans-serif;
 
-    --gradient-brand: linear-gradient(135deg, hsl(40 75% 45%), hsl(38 78% 38%));
-    --gradient-gold: linear-gradient(135deg, hsl(40 75% 45%), hsl(43 78% 58%));
-    --gradient-dark: linear-gradient(180deg, hsl(40 30% 98%), hsl(40 25% 94%));
-    --gradient-card: linear-gradient(145deg, hsl(40 40% 99%), hsl(40 30% 96%));
-    --shadow-brand: 0 6px 28px -6px hsl(40 75% 45% / 0.30);
-    --shadow-card: 0 4px 20px -6px hsl(30 20% 40% / 0.15);
-    --shadow-glow: 0 0 24px hsl(40 75% 45% / 0.22);
+    --gradient-brand: linear-gradient(135deg, hsl(19 48% 55%), hsl(15 42% 40%));
+    --gradient-gold: linear-gradient(135deg, hsl(19 48% 55%), hsl(24 62% 74%));
+    --gradient-dark: linear-gradient(180deg, hsl(32 32% 98%), hsl(30 26% 94%));
+    --gradient-card: linear-gradient(145deg, hsl(34 42% 99%), hsl(30 30% 96%));
+    --shadow-brand: 0 10px 34px -10px hsl(19 48% 45% / 0.32);
+    --shadow-card: 0 8px 30px -12px hsl(24 25% 30% / 0.18);
+    --shadow-glow: 0 0 28px hsl(19 48% 55% / 0.22);
   }
 }
 
