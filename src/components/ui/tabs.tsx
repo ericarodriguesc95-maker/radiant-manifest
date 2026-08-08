@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
+import { ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -8,11 +9,31 @@ const Tabs = TabsPrimitive.Root;
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => {
+>(({ className, children, ...props }, ref) => {
   const innerRef = React.useRef<HTMLDivElement | null>(null);
   const drag = React.useRef({ active: false, moved: false, startX: 0, startScroll: 0 });
+  const [showScrollHint, setShowScrollHint] = React.useState(false);
 
   React.useImperativeHandle(ref, () => innerRef.current as HTMLDivElement);
+
+  const checkOverflow = React.useCallback(() => {
+    const el = innerRef.current;
+    if (!el) return;
+    setShowScrollHint(el.scrollWidth > el.clientWidth + 2);
+  }, []);
+
+  React.useEffect(() => {
+    checkOverflow();
+    const el = innerRef.current;
+    if (!el) return;
+    const resizeObs = new ResizeObserver(checkOverflow);
+    resizeObs.observe(el);
+    window.addEventListener("resize", checkOverflow);
+    return () => {
+      resizeObs.disconnect();
+      window.removeEventListener("resize", checkOverflow);
+    };
+  }, [checkOverflow]);
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = innerRef.current;
@@ -41,23 +62,38 @@ const TabsList = React.forwardRef<
   };
 
   return (
-    <TabsPrimitive.List
-      ref={innerRef}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={endDrag}
-      onPointerLeave={endDrag}
-      onClickCapture={onClickCapture}
-      className={cn(
-        // Editorial compacto: trilho hairline, arrastável no desktop/tablet, scroll nativo no mobile.
-        "flex w-full items-center gap-3 sm:gap-4 overflow-x-auto overscroll-x-contain border-b border-border/70 bg-transparent pb-0 text-muted-foreground cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [-webkit-overflow-scrolling:touch]",
-        className,
+    <div className="relative w-full">
+      <TabsPrimitive.List
+        ref={innerRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerLeave={endDrag}
+        onScroll={checkOverflow}
+        onClickCapture={onClickCapture}
+        className={cn(
+          // Editorial compacto: trilho hairline, arrastável no desktop/tablet, scroll nativo no mobile.
+          "flex w-full items-center gap-3 sm:gap-4 overflow-x-auto overscroll-x-contain border-b border-border/70 bg-transparent pb-0 text-muted-foreground cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [-webkit-overflow-scrolling:touch]",
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </TabsPrimitive.List>
+      {showScrollHint && (
+        <div className="pointer-events-none absolute right-0 top-0 flex h-full items-center pl-6 pr-1">
+          <div className="flex items-center gap-0.5 rounded-full bg-gradient-to-l from-[hsl(32,30%,97%,0.95)] via-[hsl(32,30%,97%,0.85)] to-transparent px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary/90 shadow-sm">
+            <span className="hidden sm:inline">arraste</span>
+            <span className="sm:hidden">deslize</span>
+            <ChevronRight className="h-3 w-3 animate-pulse" />
+          </div>
+        </div>
       )}
-      {...props}
-    />
+    </div>
   );
 });
 TabsList.displayName = TabsPrimitive.List.displayName;
+
 
 
 const TabsTrigger = React.forwardRef<
