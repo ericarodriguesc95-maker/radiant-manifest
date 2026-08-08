@@ -202,103 +202,56 @@ const HomePage = () => {
         {/* ═══════════════════════════════════════════ */}
         {/* COMUNIDADE, WhatsApp group CTA (logo abaixo do Comece por aqui) */}
         {/* ═══════════════════════════════════════════ */}
-        <a
-          href="https://chat.whatsapp.com/KqwvIi2Ht238RoSMVCS7J0"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-green-400/30"
-          style={{ "--stagger": 1 } as React.CSSProperties}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-100 via-green-50 to-teal-50" />
-          <div className="absolute inset-0 border border-emerald-200/60 rounded-2xl" />
-          <div className="relative z-10 h-12 w-12 rounded-2xl bg-emerald-500/15 flex items-center justify-center border border-emerald-500/40 group-hover:bg-emerald-500/25 transition-all">
-            <MessageCircle className="h-6 w-6 text-emerald-700" />
-          </div>
-          <div className="relative z-10 flex-1 text-left">
-            <p className="text-sm font-display font-bold text-foreground">Entre no grupo do WhatsApp</p>
-            <p className="text-[11px] font-body text-muted-foreground mt-0.5">Conecte-se com outras rainhas, troque experiências e cresça junto 👑</p>
-          </div>
-          <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-emerald-700 border border-emerald-500/50 rounded-full px-2 py-0.5">Entrar</span>
-          <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-        </a>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* TERMÔMETRO DE ROTINA, check-in mensal */}
-        {/* ═══════════════════════════════════════════ */}
-        <button
-          onClick={() => navigate("/meu-mes")}
-          className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-gold/30"
-          style={{ "--stagger": 1 } as React.CSSProperties}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.2),transparent_60%)]" />
-          <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/40 group-hover:bg-gold/25 transition-all">
-            <ThermometerSun className="h-6 w-6 text-gold" />
-          </div>
-          <div className="relative z-10 flex-1 text-left">
-            <p className="text-sm font-display font-bold text-foreground">Termômetro do mês</p>
-            <p className="text-[11px] font-body text-muted-foreground mt-0.5">Três perguntas rápidas pra ajustar o app pro seu momento ✨</p>
-          </div>
-          <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-gold border border-gold/50 rounded-full px-2 py-0.5">Responder</span>
-          <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-        </button>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* RESUMO DE SEXTA, ritual da vitória semanal */}
-        {/* ═══════════════════════════════════════════ */}
-        {(() => {
-          const isFriday = new Date().getDay() === 5;
-          return (
-            <button
-              onClick={() => navigate("/resumo-sexta")}
-              className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-rose-200"
-              style={{ "--stagger": 2 } as React.CSSProperties}
+        <section className="animate-stagger space-y-4" style={{ "--stagger": 1 } as React.CSSProperties}>
+          <SectionHeading eyebrow="Seus rituais" title="Do dia a dia" />
+          <div className="ed-card px-4">
+            <a
+              href="https://chat.whatsapp.com/KqwvIi2Ht238RoSMVCS7J0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ed-row"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-rose-50 via-pink-50 to-amber-50" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.18),transparent_60%)]" />
-              <div className="relative z-10 h-12 w-12 rounded-2xl bg-rose-100 flex items-center justify-center border border-rose-200">
-                <Trophy className="h-6 w-6 text-rose-500" />
-              </div>
-              <div className="relative z-10 flex-1 text-left">
-                <p className="text-sm font-display font-bold text-foreground">
-                  {isFriday ? "Sexta da Vitória 🎉" : "Resumo da semana"}
-                </p>
-                <p className="text-[11px] font-body text-muted-foreground mt-0.5">
-                  Veja tudo que você construiu nos últimos 7 dias e celebre.
-                </p>
-              </div>
-              {isFriday && (
-                <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-rose-600 border border-rose-300 rounded-full px-2 py-0.5 animate-pulse">
-                  Hoje
-                </span>
-              )}
-              <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-            </button>
-          );
-        })()}
+              <span className="ed-row-icon"><MessageCircle className="h-5 w-5" /></span>
+              <span className="flex-1">
+                <span className="ed-title block">Grupo do WhatsApp</span>
+                <span className="ed-sub block">Conecte-se com outras rainhas e cresça junto</span>
+              </span>
+              <span className="ed-tag">Entrar</span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </a>
 
-        {/* ═══════════════════════════════════════════ */}
-        {/* PLANO ALIMENTAR SEMANAL, IA nutricional */}
-        {/* ═══════════════════════════════════════════ */}
-        <button
-          onClick={() => navigate("/plano-alimentar")}
-          className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-emerald-200"
-          style={{ "--stagger": 3 } as React.CSSProperties}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-50 via-lime-50 to-amber-50" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.18),transparent_60%)]" />
-          <div className="relative z-10 h-12 w-12 rounded-2xl bg-emerald-100 flex items-center justify-center border border-emerald-200">
-            <span className="text-2xl">🥗</span>
+            <button onClick={() => navigate("/meu-mes")} className="ed-row">
+              <span className="ed-row-icon"><ThermometerSun className="h-5 w-5" /></span>
+              <span className="flex-1">
+                <span className="ed-title block">Termômetro do mês</span>
+                <span className="ed-sub block">Três perguntas rápidas pra ajustar o app pro seu momento</span>
+              </span>
+              <span className="ed-tag">Responder</span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </button>
+
+            <button onClick={() => navigate("/resumo-sexta")} className="ed-row">
+              <span className="ed-row-icon"><Trophy className="h-5 w-5" /></span>
+              <span className="flex-1">
+                <span className="ed-title block">{new Date().getDay() === 5 ? "Sexta da vitória" : "Resumo da semana"}</span>
+                <span className="ed-sub block">Veja tudo que você construiu nos últimos 7 dias</span>
+              </span>
+              {new Date().getDay() === 5 && <span className="ed-tag">Hoje</span>}
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </button>
+
+            <button onClick={() => navigate("/plano-alimentar")} className="ed-row">
+              <span className="ed-row-icon"><span className="text-lg">🥗</span></span>
+              <span className="flex-1">
+                <span className="ed-title block">Plano alimentar da semana</span>
+                <span className="ed-sub block">7 dias, 5 refeições, lista de compras pronta</span>
+              </span>
+              <span className="ed-tag">IA</span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </button>
           </div>
-          <div className="relative z-10 flex-1 text-left">
-            <p className="text-sm font-display font-bold text-foreground">Plano alimentar da semana</p>
-            <p className="text-[11px] font-body text-muted-foreground mt-0.5">
-              7 dias, 5 refeições, lista de compras pronta.
-            </p>
-          </div>
-          <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-emerald-700 border border-emerald-300 rounded-full px-2 py-0.5">IA</span>
-          <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-        </button>
+        </section>
+
 
 
 
