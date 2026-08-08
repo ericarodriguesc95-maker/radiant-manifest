@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Sparkles, Brain, ChevronRight, Bell, Zap, Settings, MapPin, Shield, Trophy, Crown, Star, Heart, Target, BookOpen, ClipboardCheck, Flame, MessageCircle, ThermometerSun } from "lucide-react";
+import { Sparkles, Brain, ChevronRight, Bell, Zap, Settings, MapPin, Shield, Trophy, Crown, Heart, Target, BookOpen, ClipboardCheck, Flame, MessageCircle, ThermometerSun } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
@@ -22,6 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import brandLogo from "@/assets/gloow-up-club-logo.png";
+import SectionHeading from "@/components/SectionHeading";
 
 const HABITS_COUNT = 6;
 
@@ -111,39 +112,39 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════ */}
       {/* PREMIUM HEADER */}
       {/* ═══════════════════════════════════════════ */}
-      <header className="relative px-5 pt-10 pb-6">
-        {/* Ambient glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[120px] bg-gradient-to-b from-gold/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative flex items-center justify-between">
-          <div className="flex flex-col items-center gap-2">
-            <img src={brandLogo} alt="Gloow Up Club" className="h-14 w-14 object-contain rounded-2xl" />
-            <p className="text-[10px] font-body tracking-[0.3em] uppercase text-gold/70 text-center">{greeting()}, rainha</p>
+      <header className="relative px-5 pt-8 pb-5">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <img src={brandLogo} alt="Gloow Up Club" className="h-11 w-11 object-contain rounded-full border border-border" />
+            <div>
+              <p className="eyebrow">Gloow Up Club</p>
+              <h1 className="font-display text-[26px] leading-none text-foreground">{greeting()}, rainha</h1>
+            </div>
           </div>
           <div className="flex items-center gap-1">
             {isAdmin && (
-              <button onClick={() => navigate("/admin/atividade")} className="p-2.5 rounded-xl glass hover:bg-muted/30 transition-all" title="Painel Admin">
-                <Shield className="h-4 w-4 text-gold" />
+              <button onClick={() => navigate("/admin/atividade")} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors" title="Painel Admin">
+                <Shield className="h-4 w-4 text-primary" />
               </button>
             )}
-            <button onClick={() => (window as any).__startGlowTour?.()} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all" title="Tour guiado">
+            <button onClick={() => (window as any).__startGlowTour?.()} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors" title="Tour guiado">
               <MapPin className="h-4 w-4 text-muted-foreground" />
             </button>
-            <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2.5 rounded-xl hover:bg-muted/30 transition-all">
+            <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2 rounded-full border border-border hover:bg-secondary transition-colors">
               <Bell className="h-4 w-4 text-muted-foreground" />
               {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-gold text-[8px] font-bold text-primary-foreground flex items-center justify-center">{unreadCount > 9 ? "9+" : unreadCount}</span>
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[8px] font-bold text-primary-foreground flex items-center justify-center">{unreadCount > 9 ? "9+" : unreadCount}</span>
               )}
             </button>
-            <button onClick={() => navigate("/settings")} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all">
+            <button onClick={() => navigate("/settings")} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors">
               <Settings className="h-4 w-4 text-muted-foreground" />
             </button>
           </div>
         </div>
 
-        {/* Thin gold separator */}
-        <div className="mt-4 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        <div className="mt-5 hairline" />
       </header>
+
 
       {showUpdates && <AppUpdatesModal onClose={() => { setShowUpdates(false); setHasUnreadUpdates(false); }} />}
       {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); fetchUnread(); }} />}
@@ -156,60 +157,43 @@ const HomePage = () => {
           className="animate-stagger"
           style={{ "--stagger": 0 } as React.CSSProperties}
         >
-          <div className="relative overflow-hidden rounded-3xl border border-gold/40 shadow-glow">
-            {/* glow layers */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gold/20 via-amber-100 to-background" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,hsl(var(--gold)/0.25),transparent_55%)]" />
-            <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-gold/20 blur-3xl animate-pulse" />
+          <div className="ed-hero">
+            <p className="eyebrow text-[hsl(24_30%_25%)]">Comece por aqui</p>
+            <h2 className="mt-1 font-display text-[30px] leading-[1.05]">
+              Apresente-se para o <span className="italic">clube</span>
+            </h2>
+            <p className="mt-2 text-[13px] font-body max-w-md text-[hsl(24_25%_25%)]">
+              Esse é o seu primeiro passo. Conte quem você é, conecte-se com outras extraordinárias e ative o seu lugar na comunidade.
+            </p>
 
-            <div className="relative z-10 p-5 md:p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="h-2 w-2 rounded-full bg-gold animate-pulse" />
-                <span className="text-[10px] font-body tracking-[0.3em] uppercase text-gold font-semibold">
-                  Comece por aqui
-                </span>
-              </div>
-              <h2 className="text-xl md:text-2xl font-display font-bold text-foreground leading-tight">
-                Apresente-se para o <span className="italic text-gold">clube</span> 👑
-              </h2>
-              <p className="mt-1.5 text-xs md:text-sm font-body text-muted-foreground max-w-md">
-                Esse é o seu primeiro passo. Conte quem você é, conecte-se com outras extraordinárias e ative o seu lugar na comunidade.
-              </p>
+            <button
+              onClick={() => navigate("/apresentacoes")}
+              className="mt-5 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-foreground text-background font-body text-[13px] font-semibold tracking-wide hover:opacity-90 active:scale-[0.98] transition-all"
+            >
+              <Heart className="h-4 w-4" />
+              Fazer minha apresentação
+              <ChevronRight className="h-4 w-4" />
+            </button>
 
+            <div className="mt-5 grid grid-cols-2 gap-3">
               <button
-                onClick={() => navigate("/apresentacoes")}
-                className="mt-4 w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gold text-primary-foreground font-display font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-brand"
+                onClick={() => navigate("/bem-vindo")}
+                className="flex items-center gap-2 px-3 py-2.5 rounded-full bg-background/70 border border-background/60 hover:bg-background transition-all text-left"
               >
-                <Heart className="h-4 w-4" />
-                Fazer minha apresentação agora
-                <ChevronRight className="h-4 w-4" />
+                <Crown className="h-4 w-4 text-primary flex-shrink-0" />
+                <span className="text-[11px] font-body font-semibold truncate">Boas-vindas</span>
               </button>
-
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                <button
-                  onClick={() => navigate("/bem-vindo")}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl glass border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all text-left active:scale-[0.98]"
-                >
-                  <Crown className="h-4 w-4 text-gold flex-shrink-0" />
-                  <div className="min-w-0">
-                    <div className="text-[11px] font-display font-bold text-foreground truncate">Boas-vindas</div>
-                    <div className="text-[10px] font-body text-muted-foreground truncate">Primeiros passos</div>
-                  </div>
-                </button>
-                <button
-                  onClick={() => navigate("/ranking-mensal")}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl glass border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all text-left active:scale-[0.98]"
-                >
-                  <Trophy className="h-4 w-4 text-gold flex-shrink-0" />
-                  <div className="min-w-0">
-                    <div className="text-[11px] font-display font-bold text-foreground truncate">Top clubbers</div>
-                    <div className="text-[10px] font-body text-muted-foreground truncate">Ranking mensal</div>
-                  </div>
-                </button>
-              </div>
+              <button
+                onClick={() => navigate("/ranking-mensal")}
+                className="flex items-center gap-2 px-3 py-2.5 rounded-full bg-background/70 border border-background/60 hover:bg-background transition-all text-left"
+              >
+                <Trophy className="h-4 w-4 text-primary flex-shrink-0" />
+                <span className="text-[11px] font-body font-semibold truncate">Top clubbers</span>
+              </button>
             </div>
           </div>
         </section>
+
 
         {/* ═══════════════════════════════════════════ */}
         {/* MENSAGEM DA VERSÃO FUTURA (Bloco 6) */}
@@ -219,103 +203,56 @@ const HomePage = () => {
         {/* ═══════════════════════════════════════════ */}
         {/* COMUNIDADE, WhatsApp group CTA (logo abaixo do Comece por aqui) */}
         {/* ═══════════════════════════════════════════ */}
-        <a
-          href="https://chat.whatsapp.com/KqwvIi2Ht238RoSMVCS7J0"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-green-400/30"
-          style={{ "--stagger": 1 } as React.CSSProperties}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-100 via-green-50 to-teal-50" />
-          <div className="absolute inset-0 border border-emerald-200/60 rounded-2xl" />
-          <div className="relative z-10 h-12 w-12 rounded-2xl bg-emerald-500/15 flex items-center justify-center border border-emerald-500/40 group-hover:bg-emerald-500/25 transition-all">
-            <MessageCircle className="h-6 w-6 text-emerald-700" />
-          </div>
-          <div className="relative z-10 flex-1 text-left">
-            <p className="text-sm font-display font-bold text-foreground">Entre no grupo do WhatsApp</p>
-            <p className="text-[11px] font-body text-muted-foreground mt-0.5">Conecte-se com outras rainhas, troque experiências e cresça junto 👑</p>
-          </div>
-          <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-emerald-700 border border-emerald-500/50 rounded-full px-2 py-0.5">Entrar</span>
-          <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-        </a>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* TERMÔMETRO DE ROTINA, check-in mensal */}
-        {/* ═══════════════════════════════════════════ */}
-        <button
-          onClick={() => navigate("/meu-mes")}
-          className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-gold/30"
-          style={{ "--stagger": 1 } as React.CSSProperties}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-50 via-yellow-50 to-orange-50" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.2),transparent_60%)]" />
-          <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/40 group-hover:bg-gold/25 transition-all">
-            <ThermometerSun className="h-6 w-6 text-gold" />
-          </div>
-          <div className="relative z-10 flex-1 text-left">
-            <p className="text-sm font-display font-bold text-foreground">Termômetro do mês</p>
-            <p className="text-[11px] font-body text-muted-foreground mt-0.5">Três perguntas rápidas pra ajustar o app pro seu momento ✨</p>
-          </div>
-          <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-gold border border-gold/50 rounded-full px-2 py-0.5">Responder</span>
-          <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-        </button>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* RESUMO DE SEXTA, ritual da vitória semanal */}
-        {/* ═══════════════════════════════════════════ */}
-        {(() => {
-          const isFriday = new Date().getDay() === 5;
-          return (
-            <button
-              onClick={() => navigate("/resumo-sexta")}
-              className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-rose-200"
-              style={{ "--stagger": 2 } as React.CSSProperties}
+        <section className="animate-stagger space-y-4" style={{ "--stagger": 1 } as React.CSSProperties}>
+          <SectionHeading eyebrow="Seus rituais" title="Do dia a dia" />
+          <div className="ed-card px-4">
+            <a
+              href="https://chat.whatsapp.com/KqwvIi2Ht238RoSMVCS7J0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ed-row"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-rose-50 via-pink-50 to-amber-50" />
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.18),transparent_60%)]" />
-              <div className="relative z-10 h-12 w-12 rounded-2xl bg-rose-100 flex items-center justify-center border border-rose-200">
-                <Trophy className="h-6 w-6 text-rose-500" />
-              </div>
-              <div className="relative z-10 flex-1 text-left">
-                <p className="text-sm font-display font-bold text-foreground">
-                  {isFriday ? "Sexta da Vitória 🎉" : "Resumo da semana"}
-                </p>
-                <p className="text-[11px] font-body text-muted-foreground mt-0.5">
-                  Veja tudo que você construiu nos últimos 7 dias e celebre.
-                </p>
-              </div>
-              {isFriday && (
-                <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-rose-600 border border-rose-300 rounded-full px-2 py-0.5 animate-pulse">
-                  Hoje
-                </span>
-              )}
-              <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-            </button>
-          );
-        })()}
+              <span className="ed-row-icon"><MessageCircle className="h-5 w-5" /></span>
+              <span className="flex-1">
+                <span className="ed-title block">Grupo do WhatsApp</span>
+                <span className="ed-sub block">Conecte-se com outras rainhas e cresça junto</span>
+              </span>
+              <span className="ed-tag">Entrar</span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </a>
 
-        {/* ═══════════════════════════════════════════ */}
-        {/* PLANO ALIMENTAR SEMANAL, IA nutricional */}
-        {/* ═══════════════════════════════════════════ */}
-        <button
-          onClick={() => navigate("/plano-alimentar")}
-          className="animate-stagger w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-emerald-200"
-          style={{ "--stagger": 3 } as React.CSSProperties}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-50 via-lime-50 to-amber-50" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.18),transparent_60%)]" />
-          <div className="relative z-10 h-12 w-12 rounded-2xl bg-emerald-100 flex items-center justify-center border border-emerald-200">
-            <span className="text-2xl">🥗</span>
+            <button onClick={() => navigate("/meu-mes")} className="ed-row">
+              <span className="ed-row-icon"><ThermometerSun className="h-5 w-5" /></span>
+              <span className="flex-1">
+                <span className="ed-title block">Termômetro do mês</span>
+                <span className="ed-sub block">Três perguntas rápidas pra ajustar o app pro seu momento</span>
+              </span>
+              <span className="ed-tag">Responder</span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </button>
+
+            <button onClick={() => navigate("/resumo-sexta")} className="ed-row">
+              <span className="ed-row-icon"><Trophy className="h-5 w-5" /></span>
+              <span className="flex-1">
+                <span className="ed-title block">{new Date().getDay() === 5 ? "Sexta da vitória" : "Resumo da semana"}</span>
+                <span className="ed-sub block">Veja tudo que você construiu nos últimos 7 dias</span>
+              </span>
+              {new Date().getDay() === 5 && <span className="ed-tag">Hoje</span>}
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </button>
+
+            <button onClick={() => navigate("/plano-alimentar")} className="ed-row">
+              <span className="ed-row-icon"><span className="text-lg">🥗</span></span>
+              <span className="flex-1">
+                <span className="ed-title block">Plano alimentar da semana</span>
+                <span className="ed-sub block">7 dias, 5 refeições, lista de compras pronta</span>
+              </span>
+              <span className="ed-tag">IA</span>
+              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            </button>
           </div>
-          <div className="relative z-10 flex-1 text-left">
-            <p className="text-sm font-display font-bold text-foreground">Plano alimentar da semana</p>
-            <p className="text-[11px] font-body text-muted-foreground mt-0.5">
-              7 dias, 5 refeições, lista de compras pronta.
-            </p>
-          </div>
-          <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-emerald-700 border border-emerald-300 rounded-full px-2 py-0.5">IA</span>
-          <ChevronRight className="relative z-10 h-5 w-5 text-gold/60 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-        </button>
+        </section>
+
 
 
 
@@ -339,10 +276,8 @@ const HomePage = () => {
         {/* DAILY INSPIRATION, Cinematic section */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4">
-          <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 2 } as React.CSSProperties}>
-            <Star className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Para começar o dia</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
+          <div className="animate-stagger" style={{ "--stagger": 2 } as React.CSSProperties}>
+            <SectionHeading eyebrow="Manhã" title="Para começar o dia" />
           </div>
 
           <div className="animate-stagger" style={{ "--stagger": 3 } as React.CSSProperties}>
@@ -354,42 +289,35 @@ const HomePage = () => {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* QUICK ACTIONS, Netflix-style cards */}
+        {/* QUICK ACTIONS, editorial cards */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4">
-          <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 5 } as React.CSSProperties}>
-            <Sparkles className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Comece por aqui</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
+          <div className="animate-stagger" style={{ "--stagger": 5 } as React.CSSProperties}>
+            <SectionHeading eyebrow="Trilhas" title="Comece por aqui" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            {quickActions.map(({ icon: Icon, label, description, to, gradient, iconBg, iconColor }, i) => (
+            {quickActions.map(({ icon: Icon, label, description, to }, i) => (
               <button
                 key={to}
                 onClick={() => navigate(to)}
                 className={cn(
-                  "animate-stagger group relative overflow-hidden rounded-2xl p-4 flex flex-col items-start gap-2 transition-all duration-300 min-h-[140px]",
-                  "border border-white/60 shadow-card",
-                  "hover:shadow-glow hover:-translate-y-0.5 active:scale-[0.97]"
+                  "animate-stagger ed-card group flex min-h-[150px] flex-col items-start gap-2 p-4 text-left transition-all duration-300",
+                  "hover:-translate-y-0.5 active:scale-[0.98]"
                 )}
                 style={{ "--stagger": 6 + i } as React.CSSProperties}
               >
-                {/* Background gradient */}
-                <div className={cn("absolute inset-0 bg-gradient-to-br", gradient)} />
-
-                <div className={cn("relative z-10 h-10 w-10 rounded-xl flex items-center justify-center border shadow-sm", iconBg)}>
-                  <Icon className={cn("h-5 w-5", iconColor)} />
-                </div>
-                <span className="relative z-10 text-xs font-body font-bold text-foreground leading-tight whitespace-pre-line text-left">{label}</span>
-                <span className="relative z-10 text-[10px] font-body text-foreground/75 leading-snug text-left line-clamp-3">{description}</span>
-
-                {/* Corner accent */}
-                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-white/40 to-transparent rounded-bl-3xl" />
+                <span className="ed-row-icon h-10 w-10">
+                  <Icon className="h-[18px] w-[18px]" />
+                </span>
+                <span className="font-display text-base leading-tight whitespace-pre-line text-foreground">{label}</span>
+                <span className="text-[11px] font-body leading-snug text-muted-foreground line-clamp-3">{description}</span>
+                <span className="mt-auto eyebrow text-[9px]">Abrir</span>
               </button>
             ))}
           </div>
         </section>
+
 
         {/* ═══════════════════════════════════════════ */}
         {/* HORMONAL PHASE, personalização biológica */}
@@ -406,143 +334,42 @@ const HomePage = () => {
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* GLOW MOVE, 21 dias · 7 pilares (purple CTA) */}
+        {/* PROGRAMAS, lista editorial */}
         {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 9 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/glow-move")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-gold/30"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-200 via-fuchsia-100 to-pink-100" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.25),transparent_60%)]" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-purple-500/15 flex items-center justify-center border border-purple-500/40 group-hover:bg-purple-500/25 transition-all">
-              <Sparkles className="h-6 w-6 text-purple-700" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Gloow Movimenta</p>
-              <p className="text-[11px] font-body text-foreground/75 mt-0.5">21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida</p>
-            </div>
-            <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-gold border border-gold/40 rounded-full px-2 py-0.5">Iniciar</span>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/70 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* BIBLE 365, Premium CTA */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/biblia-365")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-900/30 via-amber-800/15 to-amber-700/5" />
-            <div className="absolute inset-0 glass-gold" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
-              <BookOpen className="h-6 w-6 text-gold" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Bíblia em 365 Dias</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">1 leitura curta por dia + reflexão prática</p>
-            </div>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* MENTE PODEROSA, IE + Psicologia + Neuro + Neuromarketing */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/mente-poderosa")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-900/30 via-amber-800/15 to-amber-700/5" />
-            <div className="absolute inset-0 glass-gold" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
-              <Brain className="h-6 w-6 text-gold" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Mente Infalível</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Treine emoções, foco e influência com ciência simples</p>
-            </div>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
+        <section className="animate-stagger space-y-4" style={{ "--stagger": 9 } as React.CSSProperties}>
+          <SectionHeading eyebrow="Programas" title="Explore o clube" />
+          <div className="ed-card px-4">
+            {[
+              { icon: Sparkles, title: "Gloow Movimenta", sub: "21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida", to: "/glow-move", tag: "Iniciar" },
+              { icon: BookOpen, title: "Bíblia em 365 dias", sub: "1 leitura curta por dia + reflexão prática", to: "/biblia-365" },
+              { icon: Brain, title: "Mente Infalível", sub: "Treine emoções, foco e influência com ciência simples", to: "/mente-poderosa" },
+              { icon: Crown, title: "Jornada Elite", sub: "Trilha completa em 5 níveis · 80+ aulas + teste de perfil", to: "/jornada-elite" },
+              { icon: ClipboardCheck, title: "Descubra seu perfil", sub: "Testes rápidos: DISC, comportamento e produtividade", to: "/testes" },
+              { icon: Trophy, title: "Desafios progressivos", sub: "Escolha um desafio de 7, 21, 30 ou 90 dias e bora", to: "/desafios" },
+            ].map(({ icon: Icon, title, sub, to, tag }) => (
+              <button key={to} onClick={() => navigate(to)} className="ed-row">
+                <span className="ed-row-icon"><Icon className="h-5 w-5" /></span>
+                <span className="flex-1">
+                  <span className="ed-title block">{title}</span>
+                  <span className="ed-sub block">{sub}</span>
+                </span>
+                {tag && <span className="ed-tag">{tag}</span>}
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </button>
+            ))}
+          </div>
+        </section>
 
         {/* ═══════════════════════════════════════════ */}
         {/* CHAVES DO SUCESSO, 3 cards de mentalidade */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4">
-          <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
-            <Sparkles className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">3 Chaves para Destravar</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
+          <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
+            <SectionHeading eyebrow="Mentalidade" title="3 chaves para destravar" />
           </div>
           <SuccessKeysCards />
         </section>
 
-        {/* ═══════════════════════════════════════════ */}
-        {/* JORNADA ELITE, Programa premium CTA */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/jornada-elite")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-gold/25 via-amber-700/15 to-amber-900/5" />
-            <div className="absolute inset-0 glass-gold" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
-              <Crown className="h-6 w-6 text-gold" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Jornada Elite</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Trilha completa em 5 níveis · 80+ aulas + teste de perfil</p>
-            </div>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* TESTS, Autoconhecimento CTA */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/testes")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-violet-100 via-violet-50 to-white" />
-            <div className="absolute inset-0 glass-gold" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
-              <ClipboardCheck className="h-6 w-6 text-gold" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Descubra seu Perfil</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Testes rápidos: DISC, comportamento e produtividade</p>
-            </div>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* CHALLENGES, Premium CTA */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/desafios")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-gold/20 via-gold/10 to-gold/5" />
-            <div className="absolute inset-0 glass-gold" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
-              <Trophy className="h-6 w-6 text-gold" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Desafios Progressivos</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Escolha um desafio de 7, 21, 30 ou 90 dias e bora</p>
-            </div>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
 
 
 
@@ -551,11 +378,7 @@ const HomePage = () => {
         {/* MONTHLY CALENDAR, Elegant section */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4 animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
-          <div className="flex items-center gap-2">
-            <Star className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Seu mês de relance</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
-          </div>
+          <SectionHeading eyebrow="Agenda" title="Seu mês de relance" />
           <MonthlyCalendar />
         </section>
 
@@ -563,11 +386,7 @@ const HomePage = () => {
         {/* HABIT TRACKER, Refined section */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4 animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Marque seus hábitos de hoje</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
-          </div>
+          <SectionHeading eyebrow="Hoje" title="Marque seus hábitos" />
           <HabitTracker onCompletedChange={setCompletedHabits} />
         </section>
 
@@ -590,12 +409,13 @@ const HomePage = () => {
         </section>
 
         {/* Bottom signature */}
-        <div className="text-center pt-4 pb-2 animate-stagger" style={{ "--stagger": 15 } as React.CSSProperties}>
-          <div className="h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-4" />
-          <p className="text-[9px] font-body tracking-[0.3em] uppercase text-gold/30">
+        <div className="text-center pt-6 pb-2 animate-stagger" style={{ "--stagger": 15 } as React.CSSProperties}>
+          <div className="hairline mb-4" />
+          <p className="eyebrow text-[9px]">
             Gloow Up Club · Feito para mulheres extraordinárias
           </p>
         </div>
+
       </div>
 
       {/* Floating daily checkpoints window */}

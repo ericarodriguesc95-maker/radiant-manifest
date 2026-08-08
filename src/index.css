@@ -217,7 +217,62 @@
     z-index: 2;
   }
   .cinema-tile-wide { width: 260px; aspect-ratio: 16 / 9; }
+
+  /* ===== Editorial UI language ===== */
+  .ed-card {
+    border-radius: 26px;
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Editorial list row: hairline separated, no candy gradients */
+  .ed-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    text-align: left;
+    padding: 1rem 0.25rem;
+    border-bottom: 1px solid hsl(var(--border));
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .ed-row:last-child { border-bottom: 0; }
+  .ed-row:hover { opacity: 0.82; }
+  .ed-row:active { transform: scale(0.995); }
+
+  .ed-row-icon {
+    display: flex; align-items: center; justify-content: center;
+    height: 46px; width: 46px; flex: 0 0 auto;
+    border-radius: 999px;
+    border: 1px solid hsl(var(--border));
+    background: hsl(30 30% 96%);
+    color: hsl(var(--primary));
+  }
+
+  .ed-title { font-family: var(--font-display); font-size: 1.0625rem; line-height: 1.2; color: hsl(var(--foreground)); }
+  .ed-sub { font-size: 0.75rem; line-height: 1.4; color: hsl(var(--muted-foreground)); margin-top: 0.15rem; }
+
+  .ed-tag {
+    display: inline-flex; align-items: center;
+    padding: 0.15rem 0.55rem; border-radius: 999px;
+    border: 1px solid hsl(var(--primary) / 0.35);
+    color: hsl(var(--primary));
+    font-size: 0.5875rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600;
+  }
+
+  .ed-hero {
+    position: relative; overflow: hidden;
+    border-radius: 30px;
+    padding: 1.75rem 1.5rem;
+    background: linear-gradient(150deg, hsl(24 55% 90%), hsl(19 45% 78%));
+    color: hsl(24 30% 15%);
+  }
+
+  .ed-stat-value { font-family: var(--font-display); font-size: 1.75rem; line-height: 1; }
+  .ed-stat-label { font-size: 0.6875rem; color: hsl(var(--muted-foreground)); line-height: 1.2; margin-top: 0.35rem; }
 }
+
 
 /* ===== Material You Premium tokens ===== */
 @layer utilities {

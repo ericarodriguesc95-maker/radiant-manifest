@@ -21,11 +21,11 @@ export default function BackButton() {
       <button
         onClick={handleBack}
         aria-label="Voltar"
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full glass border border-gold/20 text-xs font-body text-foreground hover:bg-gold/10 hover:border-gold/40 transition-all active:scale-95"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-secondary active:scale-95"
       >
-        <ArrowLeft className="h-3.5 w-3.5 text-gold" />
-        Voltar
+        <ArrowLeft className="h-4 w-4" />
       </button>
     </div>
   );
 }
+
