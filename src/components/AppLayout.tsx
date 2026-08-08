@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Outlet } from "react-router-dom";
 import BottomNav from "./BottomNav";
 import DesktopSidebar from "./DesktopSidebar";
 import ViewModeToggle from "./ViewModeToggle";
-import GuidedTour from "./GuidedTour";
 import BackButton from "./BackButton";
 import WelcomeBackAlert from "./WelcomeBackAlert";
 import NpsPopup from "./NpsPopup";
@@ -18,7 +17,6 @@ import { useViewMode } from "@/contexts/ViewModeContext";
 import { cn } from "@/lib/utils";
 
 export default function AppLayout() {
-  const [showTour, setShowTour] = useState(false);
   const { mode } = useViewMode();
   const { user } = useAuth();
   const isDesktop = mode === "desktop";
@@ -30,13 +28,6 @@ export default function AppLayout() {
   useEffect(() => {
     initNotifications(user?.id);
   }, [user?.id]);
-
-  // Tour agora só inicia manualmente pelo botão no header da Home
-
-  useEffect(() => {
-    (window as any).__startGlowTour = () => setShowTour(true);
-    return () => { delete (window as any).__startGlowTour; };
-  }, []);
 
   return (
     <>
@@ -51,7 +42,6 @@ export default function AppLayout() {
           <Outlet />
         </div>
 
-        {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
         <NpsPopup />
         <PushPermissionOnboarding />
         <InstallAppBanner />
