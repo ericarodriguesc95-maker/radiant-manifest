@@ -75,7 +75,7 @@ const Biblia365Page = () => {
   const [savingNote, setSavingNote] = useState(false);
 
   // Active tab (controls visibility of fixed footer nav)
-  const [activeTab, setActiveTab] = useState<"leitura" | "biblia" | "dicionario" | "historico">("leitura");
+  const [activeTab, setActiveTab] = useState<"leitura" | "biblia" | "dicionario" | "oracao" | "historico">("leitura");
   useScrollTopOnChange(activeTab);
 
   // AI study chat
