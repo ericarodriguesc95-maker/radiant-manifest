@@ -226,6 +226,30 @@ export type Database = {
         }
         Relationships: []
       }
+      birthday_posts: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string | null
+          user_id: string
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          user_id: string
+          year: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          user_id?: string
+          year?: number
+        }
+        Relationships: []
+      }
       calendar_events: {
         Row: {
           category: string
@@ -1690,6 +1714,7 @@ export type Database = {
         Row: {
           avatar_url: string | null
           bio: string | null
+          birth_date: string | null
           checkpoint_reminder_enabled: boolean
           checkpoint_reminder_times: string[]
           cover_position: number
@@ -1705,6 +1730,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           bio?: string | null
+          birth_date?: string | null
           checkpoint_reminder_enabled?: boolean
           checkpoint_reminder_times?: string[]
           cover_position?: number
@@ -1720,6 +1746,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           bio?: string | null
+          birth_date?: string | null
           checkpoint_reminder_enabled?: boolean
           checkpoint_reminder_times?: string[]
           cover_position?: number
