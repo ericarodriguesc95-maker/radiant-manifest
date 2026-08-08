@@ -1,26 +1,39 @@
-import { useEffect, useMemo, useState } from "react";
-import { Search, ChevronLeft, ChevronRight, BookOpen, Loader2, Copy, Check } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Search, ChevronLeft, ChevronRight, BookOpen, Loader2, Copy, Check, Highlighter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { bibleBooks, parseReference, normalize, type BibleBook } from "./bibleBooks";
+import { highlightColors, colorBg, colorChip } from "./highlightColors";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Verse {
   verse: number;
   text: string;
 }
 
+interface SavedHighlight {
+  id: string;
+  verse: number;
+  color: string;
+}
+
 const BibleReader = () => {
   const { toast } = useToast();
+  const { user } = useAuth();
   const [query, setQuery] = useState("");
   const [book, setBook] = useState<BibleBook>(bibleBooks.find((b) => b.name === "João")!);
   const [chapter, setChapter] = useState(1);
   const [verses, setVerses] = useState<Verse[]>([]);
   const [highlight, setHighlight] = useState<number[]>([]);
+  const [saved, setSaved] = useState<SavedHighlight[]>([]);
+  const [selected, setSelected] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
 
   const suggestions = useMemo(() => {
     const q = normalize(query.replace(/[\d:.\-]/g, ""));
