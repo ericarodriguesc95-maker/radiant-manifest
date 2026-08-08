@@ -276,10 +276,8 @@ const HomePage = () => {
         {/* DAILY INSPIRATION, Cinematic section */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4">
-          <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 2 } as React.CSSProperties}>
-            <Star className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Para começar o dia</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
+          <div className="animate-stagger" style={{ "--stagger": 2 } as React.CSSProperties}>
+            <SectionHeading eyebrow="Manhã" title="Para começar o dia" />
           </div>
 
           <div className="animate-stagger" style={{ "--stagger": 3 } as React.CSSProperties}>
@@ -291,42 +289,35 @@ const HomePage = () => {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* QUICK ACTIONS, Netflix-style cards */}
+        {/* QUICK ACTIONS, editorial cards */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4">
-          <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 5 } as React.CSSProperties}>
-            <Sparkles className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Comece por aqui</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
+          <div className="animate-stagger" style={{ "--stagger": 5 } as React.CSSProperties}>
+            <SectionHeading eyebrow="Trilhas" title="Comece por aqui" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            {quickActions.map(({ icon: Icon, label, description, to, gradient, iconBg, iconColor }, i) => (
+            {quickActions.map(({ icon: Icon, label, description, to }, i) => (
               <button
                 key={to}
                 onClick={() => navigate(to)}
                 className={cn(
-                  "animate-stagger group relative overflow-hidden rounded-2xl p-4 flex flex-col items-start gap-2 transition-all duration-300 min-h-[140px]",
-                  "border border-white/60 shadow-card",
-                  "hover:shadow-glow hover:-translate-y-0.5 active:scale-[0.97]"
+                  "animate-stagger ed-card group flex min-h-[150px] flex-col items-start gap-2 p-4 text-left transition-all duration-300",
+                  "hover:-translate-y-0.5 active:scale-[0.98]"
                 )}
                 style={{ "--stagger": 6 + i } as React.CSSProperties}
               >
-                {/* Background gradient */}
-                <div className={cn("absolute inset-0 bg-gradient-to-br", gradient)} />
-
-                <div className={cn("relative z-10 h-10 w-10 rounded-xl flex items-center justify-center border shadow-sm", iconBg)}>
-                  <Icon className={cn("h-5 w-5", iconColor)} />
-                </div>
-                <span className="relative z-10 text-xs font-body font-bold text-foreground leading-tight whitespace-pre-line text-left">{label}</span>
-                <span className="relative z-10 text-[10px] font-body text-foreground/75 leading-snug text-left line-clamp-3">{description}</span>
-
-                {/* Corner accent */}
-                <div className="absolute top-0 right-0 w-12 h-12 bg-gradient-to-bl from-white/40 to-transparent rounded-bl-3xl" />
+                <span className="ed-row-icon h-10 w-10">
+                  <Icon className="h-[18px] w-[18px]" />
+                </span>
+                <span className="font-display text-base leading-tight whitespace-pre-line text-foreground">{label}</span>
+                <span className="text-[11px] font-body leading-snug text-muted-foreground line-clamp-3">{description}</span>
+                <span className="mt-auto eyebrow text-[9px]">Abrir</span>
               </button>
             ))}
           </div>
         </section>
+
 
         {/* ═══════════════════════════════════════════ */}
         {/* HORMONAL PHASE, personalização biológica */}
