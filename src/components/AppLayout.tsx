@@ -42,7 +42,6 @@ export default function AppLayout() {
           <Outlet />
         </div>
 
-        {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
         <NpsPopup />
         <PushPermissionOnboarding />
         <InstallAppBanner />
