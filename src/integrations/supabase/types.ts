@@ -142,6 +142,45 @@ export type Database = {
         }
         Relationships: []
       }
+      bible_highlights: {
+        Row: {
+          book: string
+          chapter: number
+          color: string
+          created_at: string
+          id: string
+          note: string | null
+          updated_at: string
+          user_id: string
+          verse: number
+          verse_text: string
+        }
+        Insert: {
+          book: string
+          chapter: number
+          color?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          updated_at?: string
+          user_id: string
+          verse: number
+          verse_text: string
+        }
+        Update: {
+          book?: string
+          chapter?: number
+          color?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          updated_at?: string
+          user_id?: string
+          verse?: number
+          verse_text?: string
+        }
+        Relationships: []
+      }
       bible_journey_notes: {
         Row: {
           content: string
