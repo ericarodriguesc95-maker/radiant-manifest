@@ -8,18 +8,57 @@ const Tabs = TabsPrimitive.Root;
 const TabsList = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.List>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
->(({ className, ...props }, ref) => (
-  <TabsPrimitive.List
-    ref={ref}
-    className={cn(
-      // Editorial: hairline rail, sem caixa. Scroll horizontal no mobile.
-      "flex w-full items-center gap-5 overflow-x-auto border-b border-border/70 bg-transparent pb-0 text-muted-foreground [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
-      className,
-    )}
-    {...props}
-  />
-));
+>(({ className, ...props }, ref) => {
+  const innerRef = React.useRef<HTMLDivElement | null>(null);
+  const drag = React.useRef({ active: false, moved: false, startX: 0, startScroll: 0 });
+
+  React.useImperativeHandle(ref, () => innerRef.current as HTMLDivElement);
+
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = innerRef.current;
+    if (!el || e.pointerType === "touch") return; // touch usa scroll nativo
+    drag.current = { active: true, moved: false, startX: e.clientX, startScroll: el.scrollLeft };
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = innerRef.current;
+    if (!el || !drag.current.active) return;
+    const dx = e.clientX - drag.current.startX;
+    if (Math.abs(dx) > 3) drag.current.moved = true;
+    el.scrollLeft = drag.current.startScroll - dx;
+  };
+
+  const endDrag = () => {
+    drag.current.active = false;
+    setTimeout(() => (drag.current.moved = false), 0);
+  };
+
+  const onClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (drag.current.moved) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
+  return (
+    <TabsPrimitive.List
+      ref={innerRef}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerLeave={endDrag}
+      onClickCapture={onClickCapture}
+      className={cn(
+        // Editorial compacto: trilho hairline, arrastável no desktop/tablet, scroll nativo no mobile.
+        "flex w-full items-center gap-3 sm:gap-4 overflow-x-auto overscroll-x-contain border-b border-border/70 bg-transparent pb-0 text-muted-foreground cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [-webkit-overflow-scrolling:touch]",
+        className,
+      )}
+      {...props}
+    />
+  );
+});
 TabsList.displayName = TabsPrimitive.List.displayName;
+
 
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
