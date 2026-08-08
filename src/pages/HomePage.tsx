@@ -378,11 +378,7 @@ const HomePage = () => {
         {/* MONTHLY CALENDAR, Elegant section */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4 animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
-          <div className="flex items-center gap-2">
-            <Star className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Seu mês de relance</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
-          </div>
+          <SectionHeading eyebrow="Agenda" title="Seu mês de relance" />
           <MonthlyCalendar />
         </section>
 
@@ -390,11 +386,7 @@ const HomePage = () => {
         {/* HABIT TRACKER, Refined section */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4 animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">Marque seus hábitos de hoje</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
-          </div>
+          <SectionHeading eyebrow="Hoje" title="Marque seus hábitos" />
           <HabitTracker onCompletedChange={setCompletedHabits} />
         </section>
 
@@ -417,12 +409,13 @@ const HomePage = () => {
         </section>
 
         {/* Bottom signature */}
-        <div className="text-center pt-4 pb-2 animate-stagger" style={{ "--stagger": 15 } as React.CSSProperties}>
-          <div className="h-px bg-gradient-to-r from-transparent via-gold/20 to-transparent mb-4" />
-          <p className="text-[9px] font-body tracking-[0.3em] uppercase text-gold/30">
+        <div className="text-center pt-6 pb-2 animate-stagger" style={{ "--stagger": 15 } as React.CSSProperties}>
+          <div className="hairline mb-4" />
+          <p className="eyebrow text-[9px]">
             Gloow Up Club · Feito para mulheres extraordinárias
           </p>
         </div>
+
       </div>
 
       {/* Floating daily checkpoints window */}
