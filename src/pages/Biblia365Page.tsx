@@ -22,7 +22,8 @@ import {
 import BibleStudyChat from "@/components/bible/BibleStudyChat";
 import BibleReader from "@/components/bible/BibleReader";
 import BibleDictionary from "@/components/bible/BibleDictionary";
-import { BookOpen, BookMarked } from "lucide-react";
+import { BookOpen, BookMarked, HandHeart } from "lucide-react";
+import DailyPrayerCard from "@/components/bible/DailyPrayerCard";
 import biblicalJourneyMap from "@/assets/biblical-journey-map.jpg";
 import {
   AlertDialog,
