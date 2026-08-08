@@ -71,7 +71,7 @@ export default function HormonalPhaseSuggestion() {
 
   useEffect(() => {
     if (!user) return;
-    (async () => {
+    const load = async () => {
       const { data } = await supabase
         .from("cycle_logs")
         .select("period_start")
@@ -85,12 +85,15 @@ export default function HormonalPhaseSuggestion() {
         let total = 0;
         const n = Math.min(data.length, 5);
         for (let i = 0; i < n - 1; i++) {
-          total += differenceInDays(new Date(data[i].period_start), new Date(data[i + 1].period_start));
+          total += differenceInDays(new Date(`${data[i].period_start}T12:00:00`), new Date(`${data[i + 1].period_start}T12:00:00`));
         }
         avg = Math.max(21, Math.min(35, Math.round(total / (n - 1)) || 28));
       }
-      setPhase(estimatePhase(new Date(data[0].period_start), avg));
-    })();
+      setPhase(estimatePhase(new Date(`${data[0].period_start}T12:00:00`), avg));
+    };
+    load();
+    window.addEventListener("cycle:updated", load);
+    return () => window.removeEventListener("cycle:updated", load);
   }, [user]);
 
   if (!phase) return null;
