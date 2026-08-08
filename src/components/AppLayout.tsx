@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Outlet } from "react-router-dom";
 import BottomNav from "./BottomNav";
 import DesktopSidebar from "./DesktopSidebar";
 import ViewModeToggle from "./ViewModeToggle";
-import GuidedTour from "./GuidedTour";
 import BackButton from "./BackButton";
 import WelcomeBackAlert from "./WelcomeBackAlert";
 import NpsPopup from "./NpsPopup";
