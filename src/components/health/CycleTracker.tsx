@@ -238,10 +238,20 @@ export default function CycleTracker() {
     if (data) setLogs(data as unknown as CycleLog[]);
   }
 
+  // Parse a yyyy-MM-dd string at local noon to avoid timezone drift
+  function d(value: string) {
+    return new Date(`${value}T12:00:00`);
+  }
+
+  function today() {
+    const n = new Date();
+    return new Date(n.getFullYear(), n.getMonth(), n.getDate(), 12, 0, 0);
+  }
+
   async function saveLog() {
     if (!user) return;
     const cycleLength = form.period_end && form.period_start
-      ? differenceInDays(new Date(form.period_end), new Date(form.period_start)) + 1
+      ? differenceInDays(d(form.period_end), d(form.period_start)) + 1
       : null;
 
     const payload = {
@@ -258,14 +268,15 @@ export default function CycleTracker() {
     if (editingId) {
       const { error } = await supabase.from("cycle_logs").update(payload).eq("id", editingId);
       if (error) { toast.error("Erro ao atualizar"); return; }
-      toast.success("Registro atualizado!");
+      toast.success("Registro atualizado! Previsões recalculadas.");
     } else {
       const { error } = await supabase.from("cycle_logs").insert(payload);
       if (error) { toast.error("Erro ao salvar"); return; }
-      toast.success("Ciclo registrado!");
+      toast.success("Ciclo registrado! Previsões recalculadas.");
     }
     resetForm();
-    loadLogs();
+    await loadLogs();
+    window.dispatchEvent(new CustomEvent("cycle:updated"));
   }
 
   function resetForm() {
@@ -290,7 +301,8 @@ export default function CycleTracker() {
   async function deleteLog(id: string) {
     await supabase.from("cycle_logs").delete().eq("id", id);
     toast.success("Registro removido");
-    loadLogs();
+    await loadLogs();
+    window.dispatchEvent(new CustomEvent("cycle:updated"));
   }
 
   function toggleSymptom(s: string) {
@@ -300,25 +312,28 @@ export default function CycleTracker() {
     }));
   }
 
-  // Predict next period
-  const avgCycleLength = logs.length >= 2
-    ? Math.round(logs.slice(0, 5).reduce((acc, log, i, arr) => {
-        if (i === 0) return acc;
-        const diff = differenceInDays(new Date(arr[i - 1].period_start), new Date(log.period_start));
-        return acc + diff;
-      }, 0) / (Math.min(logs.length, 5) - 1))
-    : 28;
+  // Average cycle length from the gap between the most recent starts
+  const avgCycleLength = (() => {
+    if (logs.length < 2) return 28;
+    const n = Math.min(logs.length, 5);
+    let total = 0;
+    for (let i = 0; i < n - 1; i++) {
+      total += differenceInDays(d(logs[i].period_start), d(logs[i + 1].period_start));
+    }
+    const avg = Math.round(total / (n - 1));
+    if (!avg || Number.isNaN(avg)) return 28;
+    return Math.max(21, Math.min(40, avg));
+  })();
 
-  const nextPeriod = logs.length > 0
-    ? addDays(new Date(logs[0].period_start), avgCycleLength)
-    : null;
+  // Everything below is derived from the most recent log, so a new record
+  // instantly refreshes phase, next period, ovulation and fertile window.
+  const lastStart = logs.length > 0 ? d(logs[0].period_start) : null;
 
-  const daysUntilNext = nextPeriod ? differenceInDays(nextPeriod, new Date()) : null;
+  const nextPeriod = lastStart ? addDays(lastStart, avgCycleLength) : null;
 
-  // Current phase estimation
-  const currentDay = logs.length > 0
-    ? differenceInDays(new Date(), new Date(logs[0].period_start)) + 1
-    : null;
+  const daysUntilNext = nextPeriod ? differenceInDays(nextPeriod, today()) : null;
+
+  const currentDay = lastStart ? differenceInDays(today(), lastStart) + 1 : null;
 
   const getCurrentPhase = () => {
     if (!currentDay || currentDay < 1 || currentDay > 35) return null;
@@ -330,7 +345,7 @@ export default function CycleTracker() {
 
   const currentPhaseIndex = getCurrentPhase();
 
-  // Fertility window: ovulation ~day 14, fertile window days 10-16
+  // Fertility window: ovulation ~14 days before the next period
   const ovulationDay = avgCycleLength - 14;
   const fertileStart = ovulationDay - 4;
   const fertileEnd = ovulationDay + 1;
@@ -338,19 +353,18 @@ export default function CycleTracker() {
   const isFertileNow = currentDay ? currentDay >= fertileStart && currentDay <= fertileEnd : false;
   const isOvulationNow = currentDay ? currentDay === ovulationDay : false;
 
-  // Days until fertile window
   const daysUntilFertile = currentDay && currentDay < fertileStart ? fertileStart - currentDay : null;
 
   // Build cycle timeline data for chart
   const cycleTimelineData = logs.slice(0, 8).reverse().map((log, i, arr) => {
     const periodDays = log.period_end
-      ? differenceInDays(new Date(log.period_end + "T12:00:00"), new Date(log.period_start + "T12:00:00")) + 1
+      ? differenceInDays(d(log.period_end), d(log.period_start)) + 1
       : 5;
     const cycleDays = i < arr.length - 1
-      ? differenceInDays(new Date(arr[i + 1].period_start + "T12:00:00"), new Date(log.period_start + "T12:00:00"))
+      ? differenceInDays(d(arr[i + 1].period_start), d(log.period_start))
       : avgCycleLength;
     return {
-      label: format(new Date(log.period_start + "T12:00:00"), "MMM yy", { locale: ptBR }),
+      label: format(d(log.period_start), "MMM yy", { locale: ptBR }),
       cycleLength: cycleDays,
       periodDays,
       fertileStart: cycleDays - 14 - 4,
