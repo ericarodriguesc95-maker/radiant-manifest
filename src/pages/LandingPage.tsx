@@ -345,8 +345,9 @@ export default function LandingPage() {
       {/* HEADER */}
       <header
         style={{
-          background: scrolled ? "rgba(250,247,240,0.90)" : "transparent",
-          backdropFilter: scrolled ? "blur(14px)" : "none",
+          background: scrolled ? "linear-gradient(180deg, hsl(32 30% 97% / 0.82), hsl(30 28% 94% / 0.82))" : "transparent",
+          backdropFilter: scrolled ? "blur(20px) saturate(1.1)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(20px) saturate(1.1)" : "none",
           borderBottom: scrolled ? `1px solid ${C.borderSoft}` : "1px solid transparent",
         }}
         className="fixed top-0 left-0 right-0 z-50 transition-all"
