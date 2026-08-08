@@ -1,8 +1,9 @@
 import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-import { ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const Tabs = TabsPrimitive.Root;
 
@@ -11,88 +12,83 @@ const TabsList = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.List>
 >(({ className, children, ...props }, ref) => {
   const innerRef = React.useRef<HTMLDivElement | null>(null);
-  const drag = React.useRef({ active: false, moved: false, startX: 0, startScroll: 0 });
-  const [showScrollHint, setShowScrollHint] = React.useState(false);
+  const [canScrollLeft, setCanScrollLeft] = React.useState(false);
+  const [canScrollRight, setCanScrollRight] = React.useState(false);
 
   React.useImperativeHandle(ref, () => innerRef.current as HTMLDivElement);
 
-  const checkOverflow = React.useCallback(() => {
+  const checkScroll = React.useCallback(() => {
     const el = innerRef.current;
     if (!el) return;
-    setShowScrollHint(el.scrollWidth > el.clientWidth + 2);
+    const left = Math.round(el.scrollLeft);
+    const max = el.scrollWidth - el.clientWidth;
+    setCanScrollLeft(left > 2);
+    setCanScrollRight(max > 2 && left < max - 2);
   }, []);
 
   React.useEffect(() => {
-    checkOverflow();
+    checkScroll();
     const el = innerRef.current;
     if (!el) return;
-    const resizeObs = new ResizeObserver(checkOverflow);
+    const resizeObs = new ResizeObserver(checkScroll);
     resizeObs.observe(el);
-    window.addEventListener("resize", checkOverflow);
+    window.addEventListener("resize", checkScroll);
     return () => {
       resizeObs.disconnect();
-      window.removeEventListener("resize", checkOverflow);
+      window.removeEventListener("resize", checkScroll);
     };
-  }, [checkOverflow]);
+  }, [checkScroll]);
 
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+  const scrollBy = (direction: -1 | 1) => {
     const el = innerRef.current;
-    if (!el || e.pointerType === "touch") return; // touch usa scroll nativo
-    drag.current = { active: true, moved: false, startX: e.clientX, startScroll: el.scrollLeft };
-  };
-
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    const el = innerRef.current;
-    if (!el || !drag.current.active) return;
-    const dx = e.clientX - drag.current.startX;
-    if (Math.abs(dx) > 3) drag.current.moved = true;
-    el.scrollLeft = drag.current.startScroll - dx;
-  };
-
-  const endDrag = () => {
-    drag.current.active = false;
-    setTimeout(() => (drag.current.moved = false), 0);
-  };
-
-  const onClickCapture = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (drag.current.moved) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    if (!el) return;
+    const gap = parseInt(getComputedStyle(el).gap || "16", 10) || 16;
+    el.scrollBy({ left: direction * (el.clientWidth * 0.55 + gap), behavior: "smooth" });
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative flex w-full items-center">
+      {canScrollLeft && (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={() => scrollBy(-1)}
+          className="absolute left-0 z-10 h-7 w-7 shrink-0 rounded-full bg-gradient-to-r from-[hsl(32,30%,97%,0.95)] to-[hsl(32,30%,97%,0.6)] text-primary shadow-sm hover:text-primary/80"
+          aria-label="Anterior"
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+      )}
       <TabsPrimitive.List
         ref={innerRef}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerLeave={endDrag}
-        onScroll={checkOverflow}
-        onClickCapture={onClickCapture}
+        onScroll={checkScroll}
         className={cn(
-          // Editorial compacto: trilho hairline, arrastável no desktop/tablet, scroll nativo no mobile.
-          "flex w-full items-center gap-3 sm:gap-4 overflow-x-auto overscroll-x-contain border-b border-border/70 bg-transparent pb-0 text-muted-foreground cursor-grab active:cursor-grabbing select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [-webkit-overflow-scrolling:touch]",
+          // Editorial compacto: trilho hairline com botões de navegação, scroll horizontal.
+          "flex w-full items-center gap-3 sm:gap-4 overflow-x-auto overscroll-x-contain border-b border-border/70 bg-transparent pb-0 text-muted-foreground select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [-webkit-overflow-scrolling:touch] px-8 sm:px-9",
           className,
         )}
         {...props}
       >
         {children}
       </TabsPrimitive.List>
-      {showScrollHint && (
-        <div className="pointer-events-none absolute right-0 top-0 flex h-full items-center pl-6 pr-1">
-          <div className="flex items-center gap-0.5 rounded-full bg-gradient-to-l from-[hsl(32,30%,97%,0.95)] via-[hsl(32,30%,97%,0.85)] to-transparent px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary/90 shadow-sm">
-            <span className="hidden sm:inline">arraste</span>
-            <span className="sm:hidden">deslize</span>
-            <ChevronRight className="h-3 w-3 animate-pulse" />
-          </div>
-        </div>
+      {canScrollRight && (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onClick={() => scrollBy(1)}
+          className="absolute right-0 z-10 h-7 w-7 shrink-0 rounded-full bg-gradient-to-l from-[hsl(32,30%,97%,0.95)] to-[hsl(32,30%,97%,0.6)] text-primary shadow-sm hover:text-primary/80"
+          aria-label="Próximo"
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
       )}
     </div>
   );
 });
 TabsList.displayName = TabsPrimitive.List.displayName;
+
 
 
 
