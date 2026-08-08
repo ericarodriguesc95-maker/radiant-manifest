@@ -81,7 +81,21 @@
     font-weight: 500;
   }
 
-  h1 { line-height: 1.05; }
+  h1 { line-height: 1.03; letter-spacing: -0.03em; font-weight: 400; }
+  h2 { letter-spacing: -0.022em; font-weight: 400; }
+  h3 { letter-spacing: -0.018em; }
+
+  /* Editorial helpers */
+  .eyebrow {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: hsl(var(--muted-foreground));
+  }
+  .hairline { height: 1px; background: hsl(var(--border)); }
+
 
   p, li, span, label {
     letter-spacing: 0.005em;
@@ -246,10 +260,11 @@
   .app-shell {
     min-height: 100dvh;
     background:
-      radial-gradient(1200px 600px at 50% -10%, hsl(var(--gold) / 0.10), transparent 60%),
-      radial-gradient(800px 500px at 100% 100%, hsl(var(--gold-light) / 0.08), transparent 60%),
+      radial-gradient(1100px 520px at 50% -12%, hsl(24 45% 88% / 0.55), transparent 62%),
+      radial-gradient(700px 420px at 105% 105%, hsl(19 48% 72% / 0.18), transparent 60%),
       hsl(var(--background));
   }
+
   .app-status-bar {
     height: env(safe-area-inset-top);
     background: hsl(var(--card) / 0.7);
