@@ -261,21 +261,60 @@ const BibleReader = () => {
         ) : error ? (
           <p className="text-sm font-body text-muted-foreground py-6 text-center">{error}</p>
         ) : (
-          <div className="space-y-2.5">
-            {verses.map((v) => (
-              <p
-                key={v.verse}
-                className={cn(
-                  "text-sm font-body leading-relaxed text-foreground/85 rounded-lg px-2 py-1 -mx-2 transition-colors",
-                  highlight.includes(v.verse) && "bg-gold/15 text-foreground"
-                )}
-              >
-                <span className="text-gold font-semibold text-xs mr-1.5 align-super">{v.verse}</span>
-                {v.text}
-              </p>
-            ))}
+          <div className="space-y-1.5">
+            <p className="text-[11px] font-body text-muted-foreground mb-2 flex items-center gap-1.5">
+              <Highlighter className="h-3 w-3 text-gold" />
+              Toque em um versículo para grifar
+            </p>
+            {verses.map((v) => {
+              const mark = savedFor(v.verse);
+              return (
+                <div key={v.verse}>
+                  <button
+                    type="button"
+                    onClick={() => setSelected(selected === v.verse ? null : v.verse)}
+                    aria-label={`Grifar versículo ${v.verse}`}
+                    className={cn(
+                      "w-full text-left text-sm font-body leading-relaxed text-foreground/85 rounded-lg px-2 py-1.5 transition-colors hover:bg-gold/10",
+                      highlight.includes(v.verse) && !mark && "bg-gold/15 text-foreground",
+                      mark && cn(colorBg(mark.color), "text-foreground"),
+                      selected === v.verse && "ring-1 ring-gold/40"
+                    )}
+                  >
+                    <span className="text-gold font-semibold text-xs mr-1.5 align-super">{v.verse}</span>
+                    {v.text}
+                  </button>
+
+                  {selected === v.verse && (
+                    <div className="mt-1.5 mb-2 flex items-center gap-2 flex-wrap glass rounded-xl border border-gold/15 px-3 py-2">
+                      {highlightColors.map((c) => (
+                        <button
+                          key={c.key}
+                          onClick={() => applyHighlight(v.verse, c.key)}
+                          aria-label={`Grifar em ${c.label}`}
+                          className={cn(
+                            "h-6 w-6 rounded-full border border-black/10 transition-transform hover:scale-110",
+                            c.chip,
+                            mark?.color === c.key && "ring-2 ring-gold ring-offset-1 ring-offset-background"
+                          )}
+                        />
+                      ))}
+                      {mark && (
+                        <button
+                          onClick={() => removeHighlight(v.verse)}
+                          className="ml-auto text-[11px] font-body text-destructive/80 inline-flex items-center gap-1 px-2 py-1 rounded-full hover:bg-destructive/10"
+                        >
+                          <X className="h-3 w-3" /> Remover grifo
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
+
 
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-gold/10">
           <button
