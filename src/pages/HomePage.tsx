@@ -111,39 +111,39 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════ */}
       {/* PREMIUM HEADER */}
       {/* ═══════════════════════════════════════════ */}
-      <header className="relative px-5 pt-10 pb-6">
-        {/* Ambient glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[120px] bg-gradient-to-b from-gold/5 to-transparent rounded-full blur-3xl pointer-events-none" />
-
-        <div className="relative flex items-center justify-between">
-          <div className="flex flex-col items-center gap-2">
-            <img src={brandLogo} alt="Gloow Up Club" className="h-14 w-14 object-contain rounded-2xl" />
-            <p className="text-[10px] font-body tracking-[0.3em] uppercase text-gold/70 text-center">{greeting()}, rainha</p>
+      <header className="relative px-5 pt-8 pb-5">
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <img src={brandLogo} alt="Gloow Up Club" className="h-11 w-11 object-contain rounded-full border border-border" />
+            <div>
+              <p className="eyebrow">Gloow Up Club</p>
+              <h1 className="font-display text-[26px] leading-none text-foreground">{greeting()}, rainha</h1>
+            </div>
           </div>
           <div className="flex items-center gap-1">
             {isAdmin && (
-              <button onClick={() => navigate("/admin/atividade")} className="p-2.5 rounded-xl glass hover:bg-muted/30 transition-all" title="Painel Admin">
-                <Shield className="h-4 w-4 text-gold" />
+              <button onClick={() => navigate("/admin/atividade")} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors" title="Painel Admin">
+                <Shield className="h-4 w-4 text-primary" />
               </button>
             )}
-            <button onClick={() => (window as any).__startGlowTour?.()} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all" title="Tour guiado">
+            <button onClick={() => (window as any).__startGlowTour?.()} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors" title="Tour guiado">
               <MapPin className="h-4 w-4 text-muted-foreground" />
             </button>
-            <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2.5 rounded-xl hover:bg-muted/30 transition-all">
+            <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2 rounded-full border border-border hover:bg-secondary transition-colors">
               <Bell className="h-4 w-4 text-muted-foreground" />
               {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 h-4 w-4 rounded-full bg-gold text-[8px] font-bold text-primary-foreground flex items-center justify-center">{unreadCount > 9 ? "9+" : unreadCount}</span>
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[8px] font-bold text-primary-foreground flex items-center justify-center">{unreadCount > 9 ? "9+" : unreadCount}</span>
               )}
             </button>
-            <button onClick={() => navigate("/settings")} className="p-2.5 rounded-xl hover:bg-muted/30 transition-all">
+            <button onClick={() => navigate("/settings")} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors">
               <Settings className="h-4 w-4 text-muted-foreground" />
             </button>
           </div>
         </div>
 
-        {/* Thin gold separator */}
-        <div className="mt-4 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        <div className="mt-5 hairline" />
       </header>
+
 
       {showUpdates && <AppUpdatesModal onClose={() => { setShowUpdates(false); setHasUnreadUpdates(false); }} />}
       {showNotifications && <NotificationsPanel onClose={() => { setShowNotifications(false); fetchUnread(); }} />}
