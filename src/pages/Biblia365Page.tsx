@@ -448,14 +448,28 @@ const Biblia365Page = () => {
       </header>
 
       <div className="px-5 pt-4">
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "leitura" | "historico")} className="w-full">
+        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)} className="w-full">
           <TabsList className="w-full bg-muted/30 rounded-2xl p-1 mb-4">
             <TabsTrigger
               value="leitura"
               className="flex-1 rounded-xl text-xs font-body data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
             >
               <Compass className="h-3.5 w-3.5 mr-1.5" />
-              Leitura do Dia
+              Plano 365
+            </TabsTrigger>
+            <TabsTrigger
+              value="biblia"
+              className="flex-1 rounded-xl text-xs font-body data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
+            >
+              <BookOpen className="h-3.5 w-3.5 mr-1.5" />
+              Bíblia
+            </TabsTrigger>
+            <TabsTrigger
+              value="dicionario"
+              className="flex-1 rounded-xl text-xs font-body data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
+            >
+              <BookMarked className="h-3.5 w-3.5 mr-1.5" />
+              Dicionário
             </TabsTrigger>
             <TabsTrigger
               value="historico"
@@ -465,6 +479,15 @@ const Biblia365Page = () => {
               Histórico
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="biblia" className="mt-0">
+            <BibleReader />
+          </TabsContent>
+
+          <TabsContent value="dicionario" className="mt-0">
+            <BibleDictionary />
+          </TabsContent>
+
 
           <TabsContent value="leitura" className="space-y-5 mt-0">
             {/* Day navigator */}
