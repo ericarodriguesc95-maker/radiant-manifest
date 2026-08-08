@@ -76,7 +76,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: C.bg }}>
+    <div
+      className="min-h-screen relative overflow-hidden"
+      style={{
+        background: `linear-gradient(180deg, hsl(32 30% 97% / 0.92), hsl(30 28% 94% / 0.92)),
+          radial-gradient(100% 60% at 50% 0%, hsl(32 30% 100% / 0.7) 0%, transparent 55%),
+          radial-gradient(100% 60% at 50% 100%, hsl(24 45% 88% / 0.35) 0%, transparent 55%),
+          radial-gradient(45% 90% at -5% 50%, hsl(24 48% 88% / 0.35) 0%, transparent 55%),
+          radial-gradient(45% 90% at 105% 50%, hsl(19 48% 84% / 0.32) 0%, transparent 55%)`,
+        backdropFilter: "blur(18px) saturate(1.05)",
+        WebkitBackdropFilter: "blur(18px) saturate(1.05)",
+      }}
+    >
       {/* Ambient gold glow */}
       <div
         className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none"

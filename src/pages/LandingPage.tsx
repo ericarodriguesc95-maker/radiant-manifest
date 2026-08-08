@@ -329,14 +329,25 @@ export default function LandingPage() {
 
   return (
     <div
-      style={{ background: C.bg, color: C.cream, ...sans }}
+      style={{
+        background: `linear-gradient(180deg, hsl(32 30% 97% / 0.92), hsl(30 28% 94% / 0.92)),
+          radial-gradient(100% 60% at 50% 0%, hsl(32 30% 100% / 0.7) 0%, transparent 55%),
+          radial-gradient(100% 60% at 50% 100%, hsl(24 45% 88% / 0.35) 0%, transparent 55%),
+          radial-gradient(45% 90% at -5% 50%, hsl(24 48% 88% / 0.35) 0%, transparent 55%),
+          radial-gradient(45% 90% at 105% 50%, hsl(19 48% 84% / 0.32) 0%, transparent 55%)`,
+        backdropFilter: "blur(18px) saturate(1.05)",
+        WebkitBackdropFilter: "blur(18px) saturate(1.05)",
+        color: C.cream,
+        ...sans,
+      }}
       className="min-h-screen overflow-x-hidden"
     >
       {/* HEADER */}
       <header
         style={{
-          background: scrolled ? "rgba(250,247,240,0.90)" : "transparent",
-          backdropFilter: scrolled ? "blur(14px)" : "none",
+          background: scrolled ? "linear-gradient(180deg, hsl(32 30% 97% / 0.82), hsl(30 28% 94% / 0.82))" : "transparent",
+          backdropFilter: scrolled ? "blur(20px) saturate(1.1)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(20px) saturate(1.1)" : "none",
           borderBottom: scrolled ? `1px solid ${C.borderSoft}` : "1px solid transparent",
         }}
         className="fixed top-0 left-0 right-0 z-50 transition-all"
