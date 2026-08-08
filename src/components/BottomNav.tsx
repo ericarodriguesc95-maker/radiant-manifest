@@ -22,7 +22,7 @@ export default function BottomNav() {
       className="fixed bottom-0 left-0 right-0 z-50 pb-[env(safe-area-inset-bottom)]"
       aria-label="Navegação principal"
     >
-      <div className="mx-auto max-w-lg px-3 pb-3">
+      <div className="mx-auto w-full max-w-[430px] px-3 pb-3">
         <div className="relative flex items-stretch justify-between rounded-[30px] border border-border/70 bg-[hsl(var(--card)/0.92)] px-1.5 py-2 backdrop-blur-xl shadow-[0_18px_44px_-24px_hsl(24_25%_25%/0.55)]">
           {tabs.map(({ to, icon: Icon, label, match }) => {
             const active = match(location.pathname);
