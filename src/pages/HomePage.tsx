@@ -334,143 +334,42 @@ const HomePage = () => {
         </div>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* GLOW MOVE, 21 dias · 7 pilares (purple CTA) */}
+        {/* PROGRAMAS, lista editorial */}
         {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 9 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/glow-move")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group border border-gold/30"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-200 via-fuchsia-100 to-pink-100" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_50%,hsl(var(--gold)/0.25),transparent_60%)]" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-purple-500/15 flex items-center justify-center border border-purple-500/40 group-hover:bg-purple-500/25 transition-all">
-              <Sparkles className="h-6 w-6 text-purple-700" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Gloow Movimenta</p>
-              <p className="text-[11px] font-body text-foreground/75 mt-0.5">21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida</p>
-            </div>
-            <span className="relative z-10 text-[10px] uppercase tracking-wider font-body text-gold border border-gold/40 rounded-full px-2 py-0.5">Iniciar</span>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/70 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* BIBLE 365, Premium CTA */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/biblia-365")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-900/30 via-amber-800/15 to-amber-700/5" />
-            <div className="absolute inset-0 glass-gold" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
-              <BookOpen className="h-6 w-6 text-gold" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Bíblia em 365 Dias</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">1 leitura curta por dia + reflexão prática</p>
-            </div>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* MENTE PODEROSA, IE + Psicologia + Neuro + Neuromarketing */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/mente-poderosa")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-amber-900/30 via-amber-800/15 to-amber-700/5" />
-            <div className="absolute inset-0 glass-gold" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
-              <Brain className="h-6 w-6 text-gold" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Mente Infalível</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Treine emoções, foco e influência com ciência simples</p>
-            </div>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
+        <section className="animate-stagger space-y-4" style={{ "--stagger": 9 } as React.CSSProperties}>
+          <SectionHeading eyebrow="Programas" title="Explore o clube" />
+          <div className="ed-card px-4">
+            {[
+              { icon: Sparkles, title: "Gloow Movimenta", sub: "21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida", to: "/glow-move", tag: "Iniciar" },
+              { icon: BookOpen, title: "Bíblia em 365 dias", sub: "1 leitura curta por dia + reflexão prática", to: "/biblia-365" },
+              { icon: Brain, title: "Mente Infalível", sub: "Treine emoções, foco e influência com ciência simples", to: "/mente-poderosa" },
+              { icon: Crown, title: "Jornada Elite", sub: "Trilha completa em 5 níveis · 80+ aulas + teste de perfil", to: "/jornada-elite" },
+              { icon: ClipboardCheck, title: "Descubra seu perfil", sub: "Testes rápidos: DISC, comportamento e produtividade", to: "/testes" },
+              { icon: Trophy, title: "Desafios progressivos", sub: "Escolha um desafio de 7, 21, 30 ou 90 dias e bora", to: "/desafios" },
+            ].map(({ icon: Icon, title, sub, to, tag }) => (
+              <button key={to} onClick={() => navigate(to)} className="ed-row">
+                <span className="ed-row-icon"><Icon className="h-5 w-5" /></span>
+                <span className="flex-1">
+                  <span className="ed-title block">{title}</span>
+                  <span className="ed-sub block">{sub}</span>
+                </span>
+                {tag && <span className="ed-tag">{tag}</span>}
+                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+              </button>
+            ))}
+          </div>
+        </section>
 
         {/* ═══════════════════════════════════════════ */}
         {/* CHAVES DO SUCESSO, 3 cards de mentalidade */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4">
-          <div className="flex items-center gap-2 animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
-            <Sparkles className="h-3.5 w-3.5 text-gold" />
-            <h2 className="text-[10px] font-body tracking-[0.25em] uppercase text-gold/80 font-semibold">3 Chaves para Destravar</h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-gold/20 to-transparent" />
+          <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
+            <SectionHeading eyebrow="Mentalidade" title="3 chaves para destravar" />
           </div>
           <SuccessKeysCards />
         </section>
 
-        {/* ═══════════════════════════════════════════ */}
-        {/* JORNADA ELITE, Programa premium CTA */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/jornada-elite")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-gold/25 via-amber-700/15 to-amber-900/5" />
-            <div className="absolute inset-0 glass-gold" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
-              <Crown className="h-6 w-6 text-gold" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Jornada Elite</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Trilha completa em 5 níveis · 80+ aulas + teste de perfil</p>
-            </div>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* TESTS, Autoconhecimento CTA */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/testes")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-violet-100 via-violet-50 to-white" />
-            <div className="absolute inset-0 glass-gold" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
-              <ClipboardCheck className="h-6 w-6 text-gold" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Descubra seu Perfil</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Testes rápidos: DISC, comportamento e produtividade</p>
-            </div>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* CHALLENGES, Premium CTA */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
-          <button
-            onClick={() => navigate("/desafios")}
-            className="w-full relative overflow-hidden rounded-2xl p-5 flex items-center gap-4 transition-all hover:shadow-brand active:scale-[0.98] group"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-gold/20 via-gold/10 to-gold/5" />
-            <div className="absolute inset-0 glass-gold" />
-            <div className="relative z-10 h-12 w-12 rounded-2xl bg-gold/15 flex items-center justify-center border border-gold/30 group-hover:bg-gold/25 transition-all">
-              <Trophy className="h-6 w-6 text-gold" />
-            </div>
-            <div className="relative z-10 flex-1 text-left">
-              <p className="text-sm font-display font-bold text-foreground">Desafios Progressivos</p>
-              <p className="text-[11px] font-body text-muted-foreground mt-0.5">Escolha um desafio de 7, 21, 30 ou 90 dias e bora</p>
-            </div>
-            <ChevronRight className="relative z-10 h-5 w-5 text-gold/50 group-hover:text-gold group-hover:translate-x-0.5 transition-all" />
-          </button>
-        </div>
 
 
 
