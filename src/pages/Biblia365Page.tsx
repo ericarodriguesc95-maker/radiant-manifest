@@ -475,6 +475,13 @@ const Biblia365Page = () => {
               Dicionário
             </TabsTrigger>
             <TabsTrigger
+              value="oracao"
+              className="flex-1 rounded-xl text-xs font-body data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
+            >
+              <HandHeart className="h-3.5 w-3.5 mr-1.5" />
+              Oração
+            </TabsTrigger>
+            <TabsTrigger
               value="historico"
               className="flex-1 rounded-xl text-xs font-body data-[state=active]:bg-gold/20 data-[state=active]:text-gold"
             >
@@ -490,6 +497,11 @@ const Biblia365Page = () => {
           <TabsContent value="dicionario" className="mt-0">
             <BibleDictionary />
           </TabsContent>
+
+          <TabsContent value="oracao" className="mt-0">
+            <DailyPrayerCard />
+          </TabsContent>
+
 
 
           <TabsContent value="leitura" className="space-y-5 mt-0">
