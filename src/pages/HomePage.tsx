@@ -156,60 +156,43 @@ const HomePage = () => {
           className="animate-stagger"
           style={{ "--stagger": 0 } as React.CSSProperties}
         >
-          <div className="relative overflow-hidden rounded-3xl border border-gold/40 shadow-glow">
-            {/* glow layers */}
-            <div className="absolute inset-0 bg-gradient-to-br from-gold/20 via-amber-100 to-background" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_20%,hsl(var(--gold)/0.25),transparent_55%)]" />
-            <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-gold/20 blur-3xl animate-pulse" />
+          <div className="ed-hero">
+            <p className="eyebrow text-[hsl(24_30%_25%)]">Comece por aqui</p>
+            <h2 className="mt-1 font-display text-[30px] leading-[1.05]">
+              Apresente-se para o <span className="italic">clube</span>
+            </h2>
+            <p className="mt-2 text-[13px] font-body max-w-md text-[hsl(24_25%_25%)]">
+              Esse é o seu primeiro passo. Conte quem você é, conecte-se com outras extraordinárias e ative o seu lugar na comunidade.
+            </p>
 
-            <div className="relative z-10 p-5 md:p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="h-2 w-2 rounded-full bg-gold animate-pulse" />
-                <span className="text-[10px] font-body tracking-[0.3em] uppercase text-gold font-semibold">
-                  Comece por aqui
-                </span>
-              </div>
-              <h2 className="text-xl md:text-2xl font-display font-bold text-foreground leading-tight">
-                Apresente-se para o <span className="italic text-gold">clube</span> 👑
-              </h2>
-              <p className="mt-1.5 text-xs md:text-sm font-body text-muted-foreground max-w-md">
-                Esse é o seu primeiro passo. Conte quem você é, conecte-se com outras extraordinárias e ative o seu lugar na comunidade.
-              </p>
+            <button
+              onClick={() => navigate("/apresentacoes")}
+              className="mt-5 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-foreground text-background font-body text-[13px] font-semibold tracking-wide hover:opacity-90 active:scale-[0.98] transition-all"
+            >
+              <Heart className="h-4 w-4" />
+              Fazer minha apresentação
+              <ChevronRight className="h-4 w-4" />
+            </button>
 
+            <div className="mt-5 grid grid-cols-2 gap-3">
               <button
-                onClick={() => navigate("/apresentacoes")}
-                className="mt-4 w-full md:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gold text-primary-foreground font-display font-bold text-sm hover:opacity-90 active:scale-[0.98] transition-all shadow-brand"
+                onClick={() => navigate("/bem-vindo")}
+                className="flex items-center gap-2 px-3 py-2.5 rounded-full bg-background/70 border border-background/60 hover:bg-background transition-all text-left"
               >
-                <Heart className="h-4 w-4" />
-                Fazer minha apresentação agora
-                <ChevronRight className="h-4 w-4" />
+                <Crown className="h-4 w-4 text-primary flex-shrink-0" />
+                <span className="text-[11px] font-body font-semibold truncate">Boas-vindas</span>
               </button>
-
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                <button
-                  onClick={() => navigate("/bem-vindo")}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl glass border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all text-left active:scale-[0.98]"
-                >
-                  <Crown className="h-4 w-4 text-gold flex-shrink-0" />
-                  <div className="min-w-0">
-                    <div className="text-[11px] font-display font-bold text-foreground truncate">Boas-vindas</div>
-                    <div className="text-[10px] font-body text-muted-foreground truncate">Primeiros passos</div>
-                  </div>
-                </button>
-                <button
-                  onClick={() => navigate("/ranking-mensal")}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl glass border border-gold/20 hover:border-gold/40 hover:bg-gold/10 transition-all text-left active:scale-[0.98]"
-                >
-                  <Trophy className="h-4 w-4 text-gold flex-shrink-0" />
-                  <div className="min-w-0">
-                    <div className="text-[11px] font-display font-bold text-foreground truncate">Top clubbers</div>
-                    <div className="text-[10px] font-body text-muted-foreground truncate">Ranking mensal</div>
-                  </div>
-                </button>
-              </div>
+              <button
+                onClick={() => navigate("/ranking-mensal")}
+                className="flex items-center gap-2 px-3 py-2.5 rounded-full bg-background/70 border border-background/60 hover:bg-background transition-all text-left"
+              >
+                <Trophy className="h-4 w-4 text-primary flex-shrink-0" />
+                <span className="text-[11px] font-body font-semibold truncate">Top clubbers</span>
+              </button>
             </div>
           </div>
         </section>
+
 
         {/* ═══════════════════════════════════════════ */}
         {/* MENSAGEM DA VERSÃO FUTURA (Bloco 6) */}
