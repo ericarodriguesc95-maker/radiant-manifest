@@ -49,17 +49,16 @@ export default function AppLayout() {
     <div className={cn("app-shell", isDesktop ? "pl-64" : "pb-28")}>
       {isDesktop ? <DesktopSidebar /> : <BottomNav />}
 
-      <div className={cn(!isDesktop && "phone-frame")}>
-        <div className="flex justify-end px-4 pt-3 pb-1">
-          <ViewModeToggle />
-        </div>
-        <WelcomeBackAlert />
-
-        <div className={cn(isDesktop && "max-w-5xl mx-auto px-6 py-4")}>
-          <BackButton />
-          <Outlet />
-        </div>
+      <div className="flex justify-end px-4 pt-3 pb-1">
+        <ViewModeToggle />
       </div>
+      <WelcomeBackAlert />
+
+      <div className={cn(isDesktop && "max-w-5xl mx-auto px-6 py-4")}>
+        <BackButton />
+        <Outlet />
+      </div>
+
 
 
       {showTour && <GuidedTour onClose={() => setShowTour(false)} />}
