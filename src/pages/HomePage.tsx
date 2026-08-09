@@ -100,7 +100,7 @@ const HomePage = () => {
 
   const quickActions = [
     { icon: Brain, label: "Reprogramar\na Mente", description: "Áudios e exercícios para trocar pensamentos que te travam", to: "/reprogramacao", gradient: "from-violet-200 via-purple-100 to-fuchsia-100", iconBg: "bg-violet-500/15 border-violet-400/40", iconColor: "text-violet-700" },
-    { icon: Zap, label: "Estudar e\nEvoluir", description: "Técnicas, podcasts e cursos para aprender mais rápido", to: "/alta-performance", gradient: "from-amber-200 via-yellow-100 to-orange-100", iconBg: "bg-amber-500/15 border-amber-500/40", iconColor: "text-amber-700" },
+    { icon: Target, label: "Metas &\nManifestação", description: "Defina o que quer e veja sua vida dos sonhos sair do papel", to: "/metas", gradient: "from-rose-200 via-pink-100 to-red-100", iconBg: "bg-rose-500/15 border-rose-400/40", iconColor: "text-rose-700" },
     { icon: Target, label: "Metas &\nManifestação", description: "Defina o que quer e veja sua vida dos sonhos sair do papel", to: "/metas", gradient: "from-rose-200 via-pink-100 to-red-100", iconBg: "bg-rose-500/15 border-rose-400/40", iconColor: "text-rose-700" },
     { icon: Heart, label: "Destravar\nFeminino", description: "14 aulas curtas para soltar o que está te prendendo", to: "/jornada", gradient: "from-emerald-200 via-teal-100 to-green-100", iconBg: "bg-emerald-500/15 border-emerald-500/40", iconColor: "text-emerald-700" },
     { icon: Crown, label: "Autoestima\nde Rainha", description: "Construa uma confiança que ninguém consegue abalar", to: "/identidade-inabalavel", gradient: "from-yellow-200 via-amber-100 to-yellow-50", iconBg: "bg-yellow-500/20 border-yellow-500/50", iconColor: "text-yellow-800" },
