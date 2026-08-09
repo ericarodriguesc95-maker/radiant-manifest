@@ -100,7 +100,7 @@ const HomePage = () => {
   const quickActions = [
     { icon: Brain, label: "Reprogramar\na Mente", description: "Áudios e exercícios para trocar pensamentos que te travam", to: "/reprogramacao", gradient: "from-violet-200 via-purple-100 to-fuchsia-100", iconBg: "bg-violet-500/15 border-violet-400/40", iconColor: "text-violet-700" },
     { icon: Target, label: "Metas &\nManifestação", description: "Defina o que quer e veja sua vida dos sonhos sair do papel", to: "/metas", gradient: "from-rose-200 via-pink-100 to-red-100", iconBg: "bg-rose-500/15 border-rose-400/40", iconColor: "text-rose-700" },
-    { icon: Target, label: "Metas &\nManifestação", description: "Defina o que quer e veja sua vida dos sonhos sair do papel", to: "/metas", gradient: "from-rose-200 via-pink-100 to-red-100", iconBg: "bg-rose-500/15 border-rose-400/40", iconColor: "text-rose-700" },
+    { icon: BookOpen, label: "Bíblia em\n365 dias", description: "1 leitura curta por dia + reflexão prática para aproximar seu coração de Deus", to: "/biblia-365", gradient: "from-amber-200 via-yellow-100 to-orange-100", iconBg: "bg-amber-500/15 border-amber-500/40", iconColor: "text-amber-800" },
     { icon: Heart, label: "Destravar\nFeminino", description: "14 aulas curtas para soltar o que está te prendendo", to: "/jornada", gradient: "from-emerald-200 via-teal-100 to-green-100", iconBg: "bg-emerald-500/15 border-emerald-500/40", iconColor: "text-emerald-700" },
     { icon: Crown, label: "Autoestima\nde Rainha", description: "Construa uma confiança que ninguém consegue abalar", to: "/identidade-inabalavel", gradient: "from-yellow-200 via-amber-100 to-yellow-50", iconBg: "bg-yellow-500/20 border-yellow-500/50", iconColor: "text-yellow-800" },
     { icon: Flame, label: "Reset 14.5\n(5 dias)", description: "5 dias com jejum de 14h por dia para resetar o corpo", to: "/protocolo-14-5", gradient: "from-orange-200 via-red-100 to-amber-100", iconBg: "bg-orange-500/15 border-orange-500/40", iconColor: "text-orange-700" },
@@ -361,7 +361,6 @@ const HomePage = () => {
           <div className="ed-card px-4">
             {[
               { icon: Sparkles, title: "Gloow Movimenta", sub: "21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida", to: "/glow-move", tag: "Iniciar" },
-              { icon: BookOpen, title: "Bíblia em 365 dias", sub: "1 leitura curta por dia + reflexão prática", to: "/biblia-365" },
               { icon: Crown, title: "Jornada Elite", sub: "Trilha completa em 5 níveis · 80+ aulas + teste de perfil", to: "/jornada-elite" },
               { icon: ClipboardCheck, title: "Descubra seu perfil", sub: "Testes rápidos: DISC, comportamento e produtividade", to: "/testes" },
               { icon: Trophy, title: "Desafios progressivos", sub: "Escolha um desafio de 7, 21, 30 ou 90 dias e bora", to: "/desafios" },
