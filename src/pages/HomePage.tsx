@@ -14,7 +14,6 @@ import { useCheckpointReminders } from "@/hooks/useCheckpointReminders";
 
 import StreakMedals from "@/components/StreakMedals";
 import AppUpdatesModal from "@/components/AppUpdatesModal";
-import SuccessKeysCards from "@/components/SuccessKeysCards";
 import HormonalPhaseSuggestion from "@/components/HormonalPhaseSuggestion";
 import ProgressPulseWidget from "@/components/ProgressPulseWidget";
 import FutureSelfMessage from "@/components/FutureSelfMessage";
