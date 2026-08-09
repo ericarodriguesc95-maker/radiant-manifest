@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
 import MonthlyCalendar from "@/components/MonthlyCalendar";
-import HabitTracker from "@/components/HabitTracker";
 import NotificationsPanel from "@/components/NotificationsPanel";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
