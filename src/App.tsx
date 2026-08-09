@@ -34,6 +34,7 @@ import AdminActivityPage from "@/pages/AdminActivityPage";
 import AdminContentPage from "@/pages/AdminContentPage";
 import AdminSubscriptionsPage from "@/pages/AdminSubscriptionsPage";
 import AdminCheckpointsPage from "@/pages/AdminCheckpointsPage";
+import CheckpointsPage from "@/pages/CheckpointsPage";
 import SaudePage from "@/pages/SaudePage";
 import SonoPage from "@/pages/SonoPage";
 import DesafiosPage from "@/pages/DesafiosPage";

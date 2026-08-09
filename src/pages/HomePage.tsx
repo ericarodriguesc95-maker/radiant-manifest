@@ -9,7 +9,7 @@ import NotificationsPanel from "@/components/NotificationsPanel";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
 import PostConquista from "@/components/PostConquista";
-import FloatingDailyCheckpoints from "@/components/FloatingDailyCheckpoints";
+import DailyCheckpoints from "@/components/DailyCheckpoints";
 import { useCheckpointReminders } from "@/hooks/useCheckpointReminders";
 
 import StreakMedals from "@/components/StreakMedals";
@@ -286,12 +286,20 @@ const HomePage = () => {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
+        {/* CHECK-POINTS DO DIA */}
+        {/* ═══════════════════════════════════════════ */}
+        <section className="animate-stagger" style={{ "--stagger": 5 } as React.CSSProperties}>
+          <DailyCheckpoints />
+        </section>
+
+        {/* ═══════════════════════════════════════════ */}
         {/* QUICK ACTIONS, editorial cards */}
         {/* ═══════════════════════════════════════════ */}
         <section className="space-y-4">
-          <div className="animate-stagger" style={{ "--stagger": 5 } as React.CSSProperties}>
+          <div className="animate-stagger" style={{ "--stagger": 6 } as React.CSSProperties}>
             <SectionHeading eyebrow="Trilhas" title="Comece por aqui" />
           </div>
+
 
           <div className="grid grid-cols-2 gap-3">
             {quickActions.map(({ icon: Icon, label, description, to }, i) => (
@@ -414,9 +422,6 @@ const HomePage = () => {
         </div>
 
       </div>
-
-      {/* Floating daily checkpoints window */}
-      <FloatingDailyCheckpoints />
     </div>
   );
 

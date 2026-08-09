@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Wallet, Users, User, Heart, Target, BookOpen } from "lucide-react";
+import { Home, Wallet, Users, User, Heart, Target, BookOpen, ClipboardCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -12,6 +12,7 @@ export default function BottomNav() {
     { to: "/comunidade", icon: Users, label: "Comunidade", match: (p: string) => p.startsWith("/comunidade") },
     { to: "/diario", icon: BookOpen, label: "Diário", match: (p: string) => p.startsWith("/diario") },
     { to: "/metas", icon: Target, label: "Metas", match: (p: string) => p.startsWith("/metas") },
+    { to: "/checkpoints", icon: ClipboardCheck, label: "Check-points", match: (p: string) => p.startsWith("/checkpoints") },
     { to: "/saude", icon: Heart, label: "Saúde", match: (p: string) => p.startsWith("/saude") },
     { to: "/financas", icon: Wallet, label: "Finanças", match: (p: string) => p.startsWith("/financas") },
     { to: user ? `/perfil/${user.id}` : "/comunidade", icon: User, label: "Perfil", match: (p: string) => p.startsWith("/perfil") },

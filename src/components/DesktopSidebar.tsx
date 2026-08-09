@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Target, Wallet, Users, BookOpen, User, Heart, Crown, Smartphone, Settings, Zap, Brain, Trophy, ShieldCheck } from "lucide-react";
+import { Home, Target, Wallet, Users, BookOpen, User, Heart, Crown, Smartphone, Settings, Zap, Brain, Trophy, ShieldCheck, ClipboardCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useViewMode } from "@/contexts/ViewModeContext";
@@ -15,6 +15,7 @@ export default function DesktopSidebar() {
     { to: "/", icon: Home, label: "Home" },
     { to: "/diario", icon: BookOpen, label: "Diário" },
     { to: "/metas", icon: Target, label: "Metas" },
+    { to: "/checkpoints", icon: ClipboardCheck, label: "Check-points" },
     { to: "/saude", icon: Heart, label: "Saúde" },
     { to: "/financas", icon: Wallet, label: "Finanças" },
     { to: "/comunidade", icon: Users, label: "Comunidade" },
