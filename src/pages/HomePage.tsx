@@ -361,7 +361,6 @@ const HomePage = () => {
           <div className="ed-card px-4">
             {[
               { icon: Sparkles, title: "Gloow Movimenta", sub: "21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida", to: "/glow-move", tag: "Iniciar" },
-              { icon: BookOpen, title: "Bíblia em 365 dias", sub: "1 leitura curta por dia + reflexão prática", to: "/biblia-365" },
               { icon: Crown, title: "Jornada Elite", sub: "Trilha completa em 5 níveis · 80+ aulas + teste de perfil", to: "/jornada-elite" },
               { icon: ClipboardCheck, title: "Descubra seu perfil", sub: "Testes rápidos: DISC, comportamento e produtividade", to: "/testes" },
               { icon: Trophy, title: "Desafios progressivos", sub: "Escolha um desafio de 7, 21, 30 ou 90 dias e bora", to: "/desafios" },
