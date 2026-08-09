@@ -380,15 +380,6 @@ const HomePage = () => {
           </div>
         </section>
 
-        {/* ═══════════════════════════════════════════ */}
-        {/* CHAVES DO SUCESSO, 3 cards de mentalidade */}
-        {/* ═══════════════════════════════════════════ */}
-        <section className="space-y-4">
-          <div className="animate-stagger" style={{ "--stagger": 10 } as React.CSSProperties}>
-            <SectionHeading eyebrow="Mentalidade" title="3 chaves para destravar" />
-          </div>
-          <SuccessKeysCards />
-        </section>
 
 
 
