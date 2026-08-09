@@ -34,6 +34,7 @@ import AdminActivityPage from "@/pages/AdminActivityPage";
 import AdminContentPage from "@/pages/AdminContentPage";
 import AdminSubscriptionsPage from "@/pages/AdminSubscriptionsPage";
 import AdminCheckpointsPage from "@/pages/AdminCheckpointsPage";
+import CheckpointsPage from "@/pages/CheckpointsPage";
 import SaudePage from "@/pages/SaudePage";
 import SonoPage from "@/pages/SonoPage";
 import DesafiosPage from "@/pages/DesafiosPage";
@@ -118,6 +119,7 @@ const AppRoutes = () => (
     {/* Protected + subscription required routes */}
     <Route element={<ProtectedRoute><SubscriptionGuard><AppLayout /></SubscriptionGuard></ProtectedRoute>}>
       <Route path="/metas" element={<ErrorBoundary><MetasPage /></ErrorBoundary>} />
+      <Route path="/checkpoints" element={<ErrorBoundary><CheckpointsPage /></ErrorBoundary>} />
       <Route path="/financas" element={<ErrorBoundary><FinancasPage /></ErrorBoundary>} />
       <Route path="/vision-board" element={<ErrorBoundary><VisionBoardPage /></ErrorBoundary>} />
       <Route path="/jornada" element={<ErrorBoundary><JornadaPage /></ErrorBoundary>} />
