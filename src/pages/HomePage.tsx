@@ -9,8 +9,8 @@ import NotificationsPanel from "@/components/NotificationsPanel";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
 import PostConquista from "@/components/PostConquista";
-import DailyCheckpoints from "@/components/DailyCheckpoints";
 import { useCheckpointReminders } from "@/hooks/useCheckpointReminders";
+
 
 import StreakMedals from "@/components/StreakMedals";
 import AppUpdatesModal from "@/components/AppUpdatesModal";
@@ -286,10 +286,26 @@ const HomePage = () => {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* CHECK-POINTS DO DIA */}
+        {/* CHECK-POINTS DO DIA — card direcionador      */}
         {/* ═══════════════════════════════════════════ */}
         <section className="animate-stagger" style={{ "--stagger": 5 } as React.CSSProperties}>
-          <DailyCheckpoints />
+          <button
+            onClick={() => navigate("/checkpoints")}
+            className="w-full text-left group"
+          >
+            <div className="ed-card px-5 py-5 flex items-center gap-4 transition-all hover:shadow-lg active:scale-[0.99]">
+              <div className="h-12 w-12 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold shrink-0">
+                <ClipboardCheck className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-display text-[15px] font-semibold text-foreground">Check-points do dia</p>
+                <p className="text-[12px] font-body text-muted-foreground leading-snug">
+                  Pequenas vitórias diárias que transformam sua rotina. Complete tarefas, acumule pontos e suba no ranking das Extraordinárias do mês.
+                </p>
+              </div>
+              <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-gold transition-colors shrink-0" />
+            </div>
+          </button>
         </section>
 
         {/* ═══════════════════════════════════════════ */}
