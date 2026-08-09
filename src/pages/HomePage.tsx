@@ -391,13 +391,6 @@ const HomePage = () => {
           <MonthlyCalendar />
         </section>
 
-        {/* ═══════════════════════════════════════════ */}
-        {/* HABIT TRACKER, Refined section */}
-        {/* ═══════════════════════════════════════════ */}
-        <section className="space-y-4 animate-stagger" style={{ "--stagger": 12 } as React.CSSProperties}>
-          <SectionHeading eyebrow="Hoje" title="Marque seus hábitos" />
-          <HabitTracker onCompletedChange={setCompletedHabits} />
-        </section>
 
         {/* ═══════════════════════════════════════════ */}
         {/* POST CONQUISTA */}
