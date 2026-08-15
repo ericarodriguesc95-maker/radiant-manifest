@@ -334,10 +334,10 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Promoção + parcelamento info */}
+          {/* Promoção */}
           <div className="text-center pt-2 space-y-2">
             <p className="text-[10px]" style={{ color: C.gold }}>
-              ✦ Promoção de agosto — Aniversário da fundadora
+              ✦ Promoção de agosto · Aniversário da fundadora
             </p>
             <p className="text-[10px]" style={{ color: C.inkDim }}>
               Ainda não é membra?{" "}
@@ -345,6 +345,7 @@ export default function LoginPage() {
                 Entre agora
               </a>{" "}
               por <strong style={{ color: C.gold }}>R$ 19,90 à vista no crédito ou pix</strong>
+              . Pagamento único. Acesso vitalício.
             </p>
           </div>
         </div>

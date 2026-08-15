@@ -266,14 +266,14 @@ const JOURNEY = [
 ];
 
 const BENEFITS = [
-  "Acesso completo aos 10+ módulos",
-  "Acesso pelo navegador no celular, tablet e computador",
-  "Comunidade das Extraordinárias, rede social privada exclusiva",
-  "IA Assistente, IA Nutri Luna, IA do Sono, IA do Eu Superior, IA de Finanças",
-  "Reprogramação Mental e Alta Performance",
+  "Acesso vitalício, sem mensalidade",
+  "Todos os 10+ módulos: saúde, finanças, mente, espiritualidade, Bíblia 365 e diário",
+  "5 assistentes de IA: Nutri Luna, Sono, Eu Superior, Finanças e Assistente geral",
+  "Comunidade Extraordinárias, a rede social privada do clube",
+  "Reprogramação mental e alta performance",
   "Desafios progressivos de 7 a 90 dias",
-  "Saúde, Finanças, Bíblia 365 e Diário",
-  "Atualizações constantes sem custo adicional",
+  "Acesso pelo navegador, no celular, tablet ou computador",
+  "Atualizações e novos módulos sem custo extra",
 ];
 
 const FAQ = [
@@ -303,7 +303,7 @@ const FAQ = [
   },
   {
     q: "Quanto custa e como pago?",
-    a: "R$19,90 à vista no crédito ou pix. Promoção especial do mês de agosto — aniversário da fundadora. Acesso vitalício completo, sem renovação automática.",
+    a: "R$19,90 à vista no crédito ou pix. Promoção de agosto — Aniversário da fundadora, válida até 31/08/2026. Depois disso o valor sobe para R$47,90. Acesso vitalício completo, sem renovação automática.",
   },
   {
     q: "Posso cancelar?",
@@ -791,8 +791,7 @@ export default function LandingPage() {
             <SectionLabel>Acesso ao ecossistema</SectionLabel>
             <H2>Comece sua transformação.</H2>
             <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="mt-8 text-[15px] font-light max-w-[560px] mx-auto">
-              Uma sessão de coaching custa R$300. Um planner premium R$150. Um app de meditação R$40/mês. Um curso de finanças R$200.
-              O Gloow Up Club entrega tudo isso: integrado, atualizado e disponível onde você estiver.
+              Uma sessão de coaching custa R$300. Um planner premium custa R$150. Um app de meditação custa R$40 por mês, o que já passa de R$480 no ano. Um curso de finanças custa R$200. Somado, isso é mais de R$1.100. O Gloow Up Club entrega tudo isso: integrado, atualizado e disponível onde você estiver.
             </p>
           </div>
 
@@ -807,7 +806,7 @@ export default function LandingPage() {
           >
             <div className="text-center">
               <p style={{ ...sans, color: C.gold, letterSpacing: "0.2em" }} className="text-[11px] font-medium uppercase mb-4">
-                ✦ Promoção de agosto — Aniversário da fundadora
+                ✦ Promoção de agosto · Aniversário da fundadora
               </p>
               <div style={{ ...serif, color: C.cream }} className="text-[64px] md:text-[80px] font-light leading-none">
                 R$19<span style={{ color: C.goldMuted }}>,90</span>
@@ -815,11 +814,11 @@ export default function LandingPage() {
               <p style={{ color: C.creamDim }} className="mt-3 text-[14px] font-light">
                 pagamento único · à vista no crédito ou pix
               </p>
-              <p style={{ ...serif, color: C.gold }} className="mt-6 italic text-[16px]">
-                Acesso vitalício por menos de um café por mês.
+              <p style={{ ...serif, color: C.cream }} className="mt-6 italic text-[16px]">
+                Pagamento único. Sem mensalidade, para sempre.
               </p>
               <p style={{ color: C.creamDim, lineHeight: 1.7 }} className="mt-3 text-[13px] font-light max-w-[440px] mx-auto">
-                Oferta especial do mês de agosto em comemoração ao aniversário da fundadora. Aproveite antes que o preço volte ao normal.
+                Oferta especial do mês de agosto em comemoração ao aniversário da fundadora, válida até 31/08/2026. Depois disso o valor sobe para R$47,90.
               </p>
             </div>
 
@@ -836,7 +835,7 @@ export default function LandingPage() {
 
             <div className="mt-10 text-center">
               <PrimaryCTA href={KIWIFY_URL} className="w-full md:w-auto">
-                Quero meu acesso vitalício ✦
+                Quero meu acesso vitalício ✨
               </PrimaryCTA>
               <p style={{ color: C.creamFaint }} className="mt-5 text-[12px] font-light">
                 Já é membra? <Link to="/login" style={{ color: C.gold }}>Faça login →</Link>
@@ -845,7 +844,7 @@ export default function LandingPage() {
           </div>
 
           <p style={{ color: C.creamFaint, lineHeight: 1.75 }} className="mt-8 text-center text-[12px] font-light italic max-w-[560px] mx-auto">
-            O preço atual é de lançamento. Quando os próximos módulos forem lançados, o valor será reajustado. Quem entrar agora garante o acesso às atualizações sem pagar mais.
+            Este é o preço de lançamento. Conforme novos módulos forem lançados, o valor sobe. Quem entra agora garante acesso a todas as atualizações futuras, sem pagar nada a mais.
           </p>
         </div>
       </section>
