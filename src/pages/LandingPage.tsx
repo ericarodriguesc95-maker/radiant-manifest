@@ -1014,7 +1014,15 @@ export default function LandingPage() {
             </span>
           </div>
           <div style={{ color: C.creamFaint }} className="text-[12px] font-light text-center">
-            Gloow Up Club, Feito para Mulheres Extraordinárias · @gloowupclub
+            Gloow Up Club, Feito para Mulheres Extraordinárias · @gloowupclub · Site criado por{" "}
+            <a
+              href="https://www.ericacarvalhor.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: C.gold, textDecoration: "underline", textUnderlineOffset: 2 }}
+            >
+              Érica Carvalho
+            </a>
           </div>
           <div style={{ color: C.creamFaint }} className="text-[12px] font-light">
             © 2026 Gloow Up Club
