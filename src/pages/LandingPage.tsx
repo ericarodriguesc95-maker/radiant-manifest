@@ -61,7 +61,7 @@ const TESTIMONIALS = [
   { name: "Nat, sobre as dinâmicas", img: depoimentoNat2 },
 ];
 
-const KIWIFY_URL = "https://pay.kiwify.com.br/IyO1p06";
+const KIWIFY_URL = "https://pay.kiwify.com.br/sDDf3dG";
 
 // ===== Design tokens (inline to keep this page self-contained) =====
 // Light premium palette, off-white pérola + gold (matches app theme)
@@ -303,11 +303,11 @@ const FAQ = [
   },
   {
     q: "Quanto custa e como pago?",
-    a: "R$47,90 valor único. Acesso vitalício completo, sem renovação automática.",
+    a: "R$19,90 à vista no crédito ou pix. Promoção especial do mês de agosto — aniversário da fundadora. Acesso vitalício completo, sem renovação automática.",
   },
   {
     q: "Posso cancelar?",
-    a: "R$47,90 valor único. Como é pagamento único, não há renovação automática. Você tem 7 dias de garantia e pode solicitar reembolso direto na plataforma de pagamento, caso o Club não faça sentido para você no momento.",
+    a: "R$19,90 à vista no crédito ou pix. Como é pagamento único, não há renovação automática. Você tem 7 dias de garantia e pode solicitar reembolso direto na plataforma de pagamento, caso o Club não faça sentido para você no momento.",
   },
   {
     q: "Recebo atualizações sem pagar mais?",
@@ -807,19 +807,19 @@ export default function LandingPage() {
           >
             <div className="text-center">
               <p style={{ ...sans, color: C.gold, letterSpacing: "0.2em" }} className="text-[11px] font-medium uppercase mb-4">
-                ✦ Acesso Vitalício, Preço de lançamento
+                ✦ Promoção de agosto — Aniversário da fundadora
               </p>
               <div style={{ ...serif, color: C.cream }} className="text-[64px] md:text-[80px] font-light leading-none">
-                R$47<span style={{ color: C.goldMuted }}>,90</span>
+                R$19<span style={{ color: C.goldMuted }}>,90</span>
               </div>
               <p style={{ color: C.creamDim }} className="mt-3 text-[14px] font-light">
-                pagamento único · acesso vitalício completo
+                pagamento único · à vista no crédito ou pix
               </p>
               <p style={{ ...serif, color: C.gold }} className="mt-6 italic text-[16px]">
-                Menos de R$4 por mês.
+                Acesso vitalício por menos de um café por mês.
               </p>
               <p style={{ color: C.creamDim, lineHeight: 1.7 }} className="mt-3 text-[13px] font-light max-w-[440px] mx-auto">
-                O valor de <span style={{ color: C.gold }}>um café</span> por mês para reprogramar sua mente, seu corpo e sua rotina inteira.
+                Oferta especial do mês de agosto em comemoração ao aniversário da fundadora. Aproveite antes que o preço volte ao normal.
               </p>
             </div>
 

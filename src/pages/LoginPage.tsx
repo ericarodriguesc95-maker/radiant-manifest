@@ -334,14 +334,17 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Parcelamento info */}
-          <div className="text-center pt-2">
+          {/* Promoção + parcelamento info */}
+          <div className="text-center pt-2 space-y-2">
+            <p className="text-[10px]" style={{ color: C.gold }}>
+              ✦ Promoção de agosto — Aniversário da fundadora
+            </p>
             <p className="text-[10px]" style={{ color: C.inkDim }}>
-              ✦ Ainda não é membra?{" "}
-              <a href="https://pay.kiwify.com.br/IyO1p06" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: C.gold }}>
-                Assine agora
+              Ainda não é membra?{" "}
+              <a href="https://pay.kiwify.com.br/sDDf3dG" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: C.gold }}>
+                Entre agora
               </a>{" "}
-              por <strong style={{ color: C.gold }}>R$ 47,90 valor único</strong>
+              por <strong style={{ color: C.gold }}>R$ 19,90 à vista no crédito ou pix</strong>
             </p>
           </div>
         </div>
