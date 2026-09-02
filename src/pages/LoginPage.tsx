@@ -337,14 +337,14 @@ export default function LoginPage() {
           {/* Promoção */}
           <div className="text-center pt-2 space-y-2">
             <p className="text-[10px]" style={{ color: C.gold }}>
-              ✦ Promoção de agosto · Aniversário da fundadora
+              ✦ Preço de lançamento · acesso vitalício
             </p>
             <p className="text-[10px]" style={{ color: C.inkDim }}>
               Ainda não é membra?{" "}
-              <a href="https://pay.kiwify.com.br/sDDf3dG" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: C.gold }}>
+              <a href="https://pay.kiwify.com.br/IyO1p06" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: C.gold }}>
                 Entre agora
               </a>{" "}
-              por <strong style={{ color: C.gold }}>R$ 19,90 à vista no crédito ou pix</strong>
+              por <strong style={{ color: C.gold }}>R$ 27,90 à vista no crédito ou pix</strong>
               . Pagamento único. Acesso vitalício.
             </p>
           </div>

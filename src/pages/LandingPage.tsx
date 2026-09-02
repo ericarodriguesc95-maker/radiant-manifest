@@ -61,7 +61,7 @@ const TESTIMONIALS = [
   { name: "Nat, sobre as dinâmicas", img: depoimentoNat2 },
 ];
 
-const KIWIFY_URL = "https://pay.kiwify.com.br/sDDf3dG";
+const KIWIFY_URL = "https://pay.kiwify.com.br/IyO1p06";
 
 // ===== Design tokens (inline to keep this page self-contained) =====
 // Light premium palette, off-white pérola + gold (matches app theme)
@@ -303,11 +303,11 @@ const FAQ = [
   },
   {
     q: "Quanto custa e como pago?",
-    a: "R$19,90 à vista no crédito ou pix. Promoção de agosto — Aniversário da fundadora, válida até 31/08/2026. Depois disso o valor sobe para R$47,90. Acesso vitalício completo, sem renovação automática.",
+    a: "R$27,90 à vista no crédito ou pix. Pagamento único, sem mensalidade. Acesso vitalício completo, sem renovação automática.",
   },
   {
     q: "Posso cancelar?",
-    a: "R$19,90 à vista no crédito ou pix. Como é pagamento único, não há renovação automática. Você tem 7 dias de garantia e pode solicitar reembolso direto na plataforma de pagamento, caso o Club não faça sentido para você no momento.",
+    a: "R$27,90 à vista no crédito ou pix. Como é pagamento único, não há renovação automática. Você tem 7 dias de garantia e pode solicitar reembolso direto na plataforma de pagamento, caso o Club não faça sentido para você no momento.",
   },
   {
     q: "Recebo atualizações sem pagar mais?",
@@ -549,33 +549,65 @@ export default function LandingPage() {
             <SectionLabel>O que você encontra no Club</SectionLabel>
             <H2 highlight="não o contrário.">Uma estrutura que sustenta você,</H2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {MODULES.map((m) => (
+          {/* Pilares principais */}
+          <div className="grid md:grid-cols-3 gap-6">
+            {MODULES.filter((m) => ["01", "02", "08"].includes(m.n)).map((m, i) => (
               <article
                 key={m.n}
                 style={{
                   background: C.bgCard,
                   border: `1px solid ${C.border}`,
-                  borderTop: `2px solid ${C.gold}`,
-                  borderRadius: 16,
+                  borderTop: `3px solid ${C.gold}`,
+                  borderRadius: 20,
                 }}
-                className="p-8 transition-all hover:-translate-y-1"
+                className="p-9 md:p-10 transition-all hover:-translate-y-1"
               >
                 <div
                   style={{ ...sans, color: C.goldMuted, letterSpacing: "0.2em" }}
                   className="text-[11px] font-medium uppercase mb-3"
                 >
-                  {m.n}
+                  Pilar {String(i + 1).padStart(2, "0")}
                 </div>
-                <h3 style={{ ...serif, color: C.cream }} className="text-[22px] font-normal mb-3">
+                <h3 style={{ ...serif, color: C.cream }} className="text-[26px] md:text-[30px] font-normal mb-4">
                   {m.title}
                 </h3>
-                <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="text-[15px] font-light">
+                <p style={{ color: C.creamDim, lineHeight: 1.8 }} className="text-[16px] font-light">
                   {m.desc}
                 </p>
               </article>
             ))}
           </div>
+
+          {/* Bônus inclusos */}
+          <div className="mt-20">
+            <div className="text-center mb-10">
+              <SectionLabel>Bônus inclusos</SectionLabel>
+              <h3 style={{ ...serif, color: C.cream }} className="text-[26px] md:text-[32px] font-light">
+                E ainda vem com
+              </h3>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {MODULES.filter((m) => !["01", "02", "08"].includes(m.n)).map((m) => (
+                <article
+                  key={m.n}
+                  style={{
+                    background: C.bgCard,
+                    border: `1px solid ${C.borderSoft}`,
+                    borderRadius: 14,
+                  }}
+                  className="p-6 transition-all hover:-translate-y-0.5"
+                >
+                  <h4 style={{ ...serif, color: C.cream }} className="text-[19px] font-normal mb-2">
+                    {m.title}
+                  </h4>
+                  <p style={{ color: C.creamDim, lineHeight: 1.65 }} className="text-[14px] font-light">
+                    {m.desc}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+
           <div className="mt-14 text-center">
             <PrimaryCTA href={KIWIFY_URL}>Quero entrar no Club</PrimaryCTA>
           </div>
@@ -806,10 +838,10 @@ export default function LandingPage() {
           >
             <div className="text-center">
               <p style={{ ...sans, color: C.gold, letterSpacing: "0.2em" }} className="text-[11px] font-medium uppercase mb-4">
-                ✦ Promoção de agosto · Aniversário da fundadora
+                ✦ Preço de lançamento · acesso vitalício
               </p>
               <div style={{ ...serif, color: C.cream }} className="text-[64px] md:text-[80px] font-light leading-none">
-                R$19<span style={{ color: C.goldMuted }}>,90</span>
+                R$27<span style={{ color: C.goldMuted }}>,90</span>
               </div>
               <p style={{ color: C.creamDim }} className="mt-3 text-[14px] font-light">
                 pagamento único · à vista no crédito ou pix
@@ -818,7 +850,7 @@ export default function LandingPage() {
                 Pagamento único. Sem mensalidade, para sempre.
               </p>
               <p style={{ color: C.creamDim, lineHeight: 1.7 }} className="mt-3 text-[13px] font-light max-w-[440px] mx-auto">
-                Oferta especial do mês de agosto em comemoração ao aniversário da fundadora, válida até 31/08/2026. Depois disso o valor sobe para R$47,90.
+                Valor único de lançamento. Você paga uma vez e tem acesso vitalício a todos os módulos e às atualizações futuras.
               </p>
             </div>
 
@@ -942,23 +974,55 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Agenda de lives do mês */}
-          <div className="mb-10 max-w-[560px] mx-auto">
+          {/* Agenda de lives */}
+          <div className="mb-10 max-w-[620px] mx-auto space-y-6">
+            {/* Próximas lives */}
             <div
               style={{ background: C.bgCard, border: `1px solid ${C.border}`, borderRadius: 18 }}
+              className="p-5"
+            >
+              <span
+                style={{ ...sans, background: `${C.gold}18`, color: C.gold, border: `1px solid ${C.gold}44`, letterSpacing: "0.15em" }}
+                className="inline-block px-3 py-1 rounded-full text-[10px] uppercase font-medium"
+              >
+                Em breve
+              </span>
+              <h4 style={{ ...serif, color: C.cream }} className="mt-3 text-[20px] font-normal">
+                Próximas lives
+              </h4>
+              <p style={{ color: C.creamDim, lineHeight: 1.7 }} className="mt-2 text-[14px] font-light">
+                A nova agenda de lives com convidadas especiais é divulgada dentro do app e no Instagram do Club. Membras recebem o aviso antes de cada transmissão.
+              </p>
+            </div>
+
+            {/* Lives já realizadas */}
+            <div
+              style={{ background: C.bgCard, border: `1px solid ${C.borderSoft}`, borderRadius: 18 }}
               className="p-4 md:p-5"
             >
+              <div className="flex items-center gap-3 mb-3">
+                <span
+                  style={{ ...sans, background: "rgba(42,35,23,0.06)", color: C.creamDim, border: `1px solid ${C.borderSoft}`, letterSpacing: "0.15em" }}
+                  className="inline-block px-3 py-1 rounded-full text-[10px] uppercase font-medium"
+                >
+                  Realizada · Julho
+                </span>
+                <span style={{ color: C.creamFaint }} className="text-[12px] font-light">
+                  Já rolou
+                </span>
+              </div>
               <img
                 src={agendaLivesJulho.url}
-                alt="Agenda de lives do mês, Gloow Up Club"
+                alt="Agenda de lives já realizadas em julho, Gloow Up Club"
                 className="w-full h-auto rounded-xl"
                 loading="lazy"
               />
               <p style={{ color: C.creamDim }} className="mt-4 text-center text-[13px] font-light">
-                Como foi a agenda de lives do mês para as Extraordinárias do Club.
+                Uma amostra do que já rolou ao vivo para as Extraordinárias do Club. Todas as lives ficam gravadas no app.
               </p>
             </div>
           </div>
+
 
           <div className="grid sm:grid-cols-3 gap-4">
             {[
@@ -1014,7 +1078,7 @@ export default function LandingPage() {
             </span>
           </div>
           <div style={{ color: C.creamFaint }} className="text-[12px] font-light text-center">
-            Gloow Up Club, Feito para Mulheres Extraordinárias · @gloowupclub · Site criado por{" "}
+            Gloow Up Club, Feito para Mulheres Extraordinárias · @guclub.app · Site criado por{" "}
             <a
               href="https://www.ericacarvalhor.com"
               target="_blank"
