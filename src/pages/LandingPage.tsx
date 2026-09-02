@@ -61,7 +61,7 @@ const TESTIMONIALS = [
   { name: "Nat, sobre as dinâmicas", img: depoimentoNat2 },
 ];
 
-const KIWIFY_URL = "https://pay.kiwify.com.br/sDDf3dG";
+const KIWIFY_URL = "https://pay.kiwify.com.br/IyO1p06";
 
 // ===== Design tokens (inline to keep this page self-contained) =====
 // Light premium palette, off-white pérola + gold (matches app theme)
@@ -303,11 +303,11 @@ const FAQ = [
   },
   {
     q: "Quanto custa e como pago?",
-    a: "R$19,90 à vista no crédito ou pix. Promoção de agosto — Aniversário da fundadora, válida até 31/08/2026. Depois disso o valor sobe para R$47,90. Acesso vitalício completo, sem renovação automática.",
+    a: "R$27,90 à vista no crédito ou pix. Pagamento único, sem mensalidade. Acesso vitalício completo, sem renovação automática.",
   },
   {
     q: "Posso cancelar?",
-    a: "R$19,90 à vista no crédito ou pix. Como é pagamento único, não há renovação automática. Você tem 7 dias de garantia e pode solicitar reembolso direto na plataforma de pagamento, caso o Club não faça sentido para você no momento.",
+    a: "R$27,90 à vista no crédito ou pix. Como é pagamento único, não há renovação automática. Você tem 7 dias de garantia e pode solicitar reembolso direto na plataforma de pagamento, caso o Club não faça sentido para você no momento.",
   },
   {
     q: "Recebo atualizações sem pagar mais?",
@@ -806,10 +806,10 @@ export default function LandingPage() {
           >
             <div className="text-center">
               <p style={{ ...sans, color: C.gold, letterSpacing: "0.2em" }} className="text-[11px] font-medium uppercase mb-4">
-                ✦ Promoção de agosto · Aniversário da fundadora
+                ✦ Preço de lançamento · acesso vitalício
               </p>
               <div style={{ ...serif, color: C.cream }} className="text-[64px] md:text-[80px] font-light leading-none">
-                R$19<span style={{ color: C.goldMuted }}>,90</span>
+                R$27<span style={{ color: C.goldMuted }}>,90</span>
               </div>
               <p style={{ color: C.creamDim }} className="mt-3 text-[14px] font-light">
                 pagamento único · à vista no crédito ou pix
@@ -818,7 +818,7 @@ export default function LandingPage() {
                 Pagamento único. Sem mensalidade, para sempre.
               </p>
               <p style={{ color: C.creamDim, lineHeight: 1.7 }} className="mt-3 text-[13px] font-light max-w-[440px] mx-auto">
-                Oferta especial do mês de agosto em comemoração ao aniversário da fundadora, válida até 31/08/2026. Depois disso o valor sobe para R$47,90.
+                Valor único de lançamento. Você paga uma vez e tem acesso vitalício a todos os módulos e às atualizações futuras.
               </p>
             </div>
 
@@ -1014,7 +1014,7 @@ export default function LandingPage() {
             </span>
           </div>
           <div style={{ color: C.creamFaint }} className="text-[12px] font-light text-center">
-            Gloow Up Club, Feito para Mulheres Extraordinárias · @gloowupclub · Site criado por{" "}
+            Gloow Up Club, Feito para Mulheres Extraordinárias · @guclub.app · Site criado por{" "}
             <a
               href="https://www.ericacarvalhor.com"
               target="_blank"
