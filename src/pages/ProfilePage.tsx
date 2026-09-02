@@ -153,11 +153,9 @@ const ProfilePage = () => {
       setMyFollowingSet(prev => new Set(prev).add(tid));
       // Notify
       const { data: latestPost } = await supabase.from("community_posts").select("id").eq("user_id", tid).order("created_at", { ascending: false }).limit(1).single();
-      if (latestPost) {
-        await supabase.from("notifications").insert({
-          user_id: tid, from_user_id: user.id, type: "follow", post_id: latestPost.id,
-        });
-      }
+      await supabase.rpc("create_notification" as any, {
+        p_user_id: tid, p_type: "follow", p_post_id: latestPost?.id ?? null,
+      });
     }
     // Refresh list if open
     if (showListType) fetchList(showListType);

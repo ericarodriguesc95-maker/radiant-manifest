@@ -412,14 +412,11 @@ const ComunidadePage = () => {
     } else {
       await supabase.from("user_follows").insert({ follower_id: user.id, following_id: targetUserId });
       setFollowingSet(prev => new Set(prev).add(targetUserId));
-      // Get a valid post_id for the notification (use the user's latest post or a dummy)
+      // Optionally attach the user's latest post for context
       const { data: latestPost } = await supabase.from("community_posts").select("id").eq("user_id", targetUserId).order("created_at", { ascending: false }).limit(1).single();
-      const postId = latestPost?.id;
-      if (postId) {
-        await supabase.from("notifications").insert({
-          user_id: targetUserId, from_user_id: user.id, type: "follow", post_id: postId,
-        });
-      }
+      await supabase.rpc("create_notification" as any, {
+        p_user_id: targetUserId, p_type: "follow", p_post_id: latestPost?.id ?? null,
+      });
     }
   };
 
@@ -429,12 +426,11 @@ const ComunidadePage = () => {
     const mentionedIds = extractMentionedUserIds(text);
     for (const uid of mentionedIds) {
       if (uid !== user.id) {
-        await supabase.from("notifications").insert({
-          user_id: uid,
-          from_user_id: user.id,
-          type: "mention",
-          post_id: postId,
-          comment_text: text.slice(0, 100),
+        await supabase.rpc("create_notification" as any, {
+          p_user_id: uid,
+          p_type: "mention",
+          p_post_id: postId,
+          p_comment_text: text.slice(0, 100),
         });
       }
     }
@@ -476,12 +472,11 @@ const ComunidadePage = () => {
       const mentionedIds = extractMentionedUserIds(postText);
       for (const u of allUsers) {
         if (u.user_id !== user.id && !mentionedIds.includes(u.user_id)) {
-          await supabase.from("notifications").insert({
-            user_id: u.user_id,
-            from_user_id: user.id,
-            type: "new_post",
-            post_id: insertedPost.id,
-            comment_text: postText.slice(0, 100),
+          await supabase.rpc("create_notification" as any, {
+            p_user_id: u.user_id,
+            p_type: "new_post",
+            p_post_id: insertedPost.id,
+            p_comment_text: postText.slice(0, 100),
           });
         }
       }
@@ -497,8 +492,8 @@ const ComunidadePage = () => {
     if (!user) return;
     const { data: liked } = await supabase.rpc("toggle_post_like", { _post_id: postId });
     if (liked && postOwnerId !== user.id) {
-      await supabase.from("notifications").insert({
-        user_id: postOwnerId, from_user_id: user.id, type: "like", post_id: postId,
+      await supabase.rpc("create_notification" as any, {
+        p_user_id: postOwnerId, p_type: "like", p_post_id: postId,
       });
     }
     fetchPosts();
@@ -509,8 +504,8 @@ const ComunidadePage = () => {
     if (!text || !user) return;
     await supabase.from("post_comments").insert({ post_id: postId, user_id: user.id, text });
     if (postOwnerId !== user.id) {
-      await supabase.from("notifications").insert({
-        user_id: postOwnerId, from_user_id: user.id, type: "comment", post_id: postId, comment_text: text,
+      await supabase.rpc("create_notification" as any, {
+        p_user_id: postOwnerId, p_type: "comment", p_post_id: postId, p_comment_text: text,
       });
     }
     // Send mention notifications from comment
@@ -574,8 +569,8 @@ const ComunidadePage = () => {
       : `[${type}:${url}]`;
     await supabase.from("post_comments").insert({ post_id: postId, user_id: user.id, text: stickerText });
     if (postOwnerId !== user.id) {
-      await supabase.from("notifications").insert({
-        user_id: postOwnerId, from_user_id: user.id, type: "comment", post_id: postId, comment_text: `reagiu com ${type === "gif" ? "um GIF" : "uma figurinha"}`,
+      await supabase.rpc("create_notification" as any, {
+        p_user_id: postOwnerId, p_type: "comment", p_post_id: postId, p_comment_text: `reagiu com ${type === "gif" ? "um GIF" : "uma figurinha"}`,
       });
     }
     setExpandedComments(prev => new Set(prev).add(postId));
