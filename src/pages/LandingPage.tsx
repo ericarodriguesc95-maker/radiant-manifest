@@ -974,23 +974,55 @@ export default function LandingPage() {
             </p>
           </div>
 
-          {/* Agenda de lives do mês */}
-          <div className="mb-10 max-w-[560px] mx-auto">
+          {/* Agenda de lives */}
+          <div className="mb-10 max-w-[620px] mx-auto space-y-6">
+            {/* Próximas lives */}
             <div
               style={{ background: C.bgCard, border: `1px solid ${C.border}`, borderRadius: 18 }}
+              className="p-5"
+            >
+              <span
+                style={{ ...sans, background: `${C.gold}18`, color: C.gold, border: `1px solid ${C.gold}44`, letterSpacing: "0.15em" }}
+                className="inline-block px-3 py-1 rounded-full text-[10px] uppercase font-medium"
+              >
+                Em breve
+              </span>
+              <h4 style={{ ...serif, color: C.cream }} className="mt-3 text-[20px] font-normal">
+                Próximas lives
+              </h4>
+              <p style={{ color: C.creamDim, lineHeight: 1.7 }} className="mt-2 text-[14px] font-light">
+                A nova agenda de lives com convidadas especiais é divulgada dentro do app e no Instagram do Club. Membras recebem o aviso antes de cada transmissão.
+              </p>
+            </div>
+
+            {/* Lives já realizadas */}
+            <div
+              style={{ background: C.bgCard, border: `1px solid ${C.borderSoft}`, borderRadius: 18 }}
               className="p-4 md:p-5"
             >
+              <div className="flex items-center gap-3 mb-3">
+                <span
+                  style={{ ...sans, background: "rgba(42,35,23,0.06)", color: C.creamDim, border: `1px solid ${C.borderSoft}`, letterSpacing: "0.15em" }}
+                  className="inline-block px-3 py-1 rounded-full text-[10px] uppercase font-medium"
+                >
+                  Realizada · Julho
+                </span>
+                <span style={{ color: C.creamFaint }} className="text-[12px] font-light">
+                  Já rolou
+                </span>
+              </div>
               <img
                 src={agendaLivesJulho.url}
-                alt="Agenda de lives do mês, Gloow Up Club"
+                alt="Agenda de lives já realizadas em julho, Gloow Up Club"
                 className="w-full h-auto rounded-xl"
                 loading="lazy"
               />
               <p style={{ color: C.creamDim }} className="mt-4 text-center text-[13px] font-light">
-                Como foi a agenda de lives do mês para as Extraordinárias do Club.
+                Uma amostra do que já rolou ao vivo para as Extraordinárias do Club. Todas as lives ficam gravadas no app.
               </p>
             </div>
           </div>
+
 
           <div className="grid sm:grid-cols-3 gap-4">
             {[
