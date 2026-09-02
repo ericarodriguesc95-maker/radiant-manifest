@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "@/hooks/use-toast";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 import brandLogo from "@/assets/gloow-up-club-logo.png";
 
 const eliteQuotes = [
@@ -76,6 +77,15 @@ export default function LoginPage() {
   };
 
   return (
+    <>
+      <Helmet>
+        <title>Entrar — Gloow Up Club</title>
+        <meta name="description" content="Acesse sua conta do Gloow Up Club e continue sua jornada de evolução: mente, metas, saúde, finanças e comunidade." />
+        <meta property="og:title" content="Entrar — Gloow Up Club" />
+        <meta property="og:description" content="Acesse sua conta do Gloow Up Club e continue sua jornada de evolução." />
+        <meta property="og:url" content="https://www.gloowupclub.com/login" />
+        <link rel="canonical" href="https://www.gloowupclub.com/login" />
+      </Helmet>
     <div
       className="min-h-screen relative overflow-hidden"
       style={{
@@ -359,5 +369,6 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+    </>
   );
 }
