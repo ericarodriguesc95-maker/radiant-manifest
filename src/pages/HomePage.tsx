@@ -116,7 +116,7 @@ const HomePage = () => {
             <img src={brandLogo} alt="Gloow Up Club" className="h-11 w-11 object-contain rounded-full border border-border" />
             <div>
               <p className="eyebrow">Gloow Up Club</p>
-              <h1 className="font-display text-[26px] leading-none text-foreground">{greeting()}, rainha</h1>
+              <h1 aria-label="Home do Gloow Up Club — painel da membra" className="font-display text-[26px] leading-none text-foreground">{greeting()}, rainha</h1>
             </div>
           </div>
           <div className="flex items-center gap-1">
@@ -125,13 +125,13 @@ const HomePage = () => {
                 <Shield className="h-4 w-4 text-primary" />
               </button>
             )}
-            <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2 rounded-full border border-border hover:bg-secondary transition-colors">
+            <button onClick={() => setShowNotifications(!showNotifications)} aria-label="Abrir notificações" className="relative p-2 rounded-full border border-border hover:bg-secondary transition-colors">
               <Bell className="h-4 w-4 text-muted-foreground" />
               {unreadCount > 0 && (
                 <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[8px] font-bold text-primary-foreground flex items-center justify-center">{unreadCount > 9 ? "9+" : unreadCount}</span>
               )}
             </button>
-            <button onClick={() => navigate("/settings")} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors">
+            <button onClick={() => navigate("/settings")} aria-label="Abrir configurações" className="p-2 rounded-full border border-border hover:bg-secondary transition-colors">
               <Settings className="h-4 w-4 text-muted-foreground" />
             </button>
           </div>

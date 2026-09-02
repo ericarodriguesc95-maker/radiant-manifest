@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { ArrowRight, Check, ChevronDown } from "lucide-react";
 import agendaLivesJulho from "@/assets/agenda-lives-julho.png.asset.json";
 import appScreen1 from "@/assets/app-screens/WhatsApp_Image_2026-07-11_at_14.23.26.jpeg.asset.json";
@@ -327,6 +328,26 @@ export default function LandingPage() {
   }, []);
 
   return (
+    <>
+      <Helmet>
+        <title>Gloow Up Club — Comunidade para evolução feminina</title>
+        <meta name="description" content="Ecossistema completo para mulheres: reprogramação mental, metas, saúde, finanças, espiritualidade e uma comunidade que te mantém em movimento. Acesso vitalício." />
+        <meta property="og:title" content="Gloow Up Club — Comunidade para evolução feminina" />
+        <meta property="og:description" content="Mente, metas, saúde, finanças e espiritualidade em um só app, com a comunidade das Extraordinárias." />
+        <meta property="og:url" content="https://www.gloowupclub.com/" />
+        <link rel="canonical" href="https://www.gloowupclub.com/" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: FAQ.map((f) => ({
+              "@type": "Question",
+              name: f.q,
+              acceptedAnswer: { "@type": "Answer", text: f.a },
+            })),
+          })}
+        </script>
+      </Helmet>
     <div
       style={{
         background: `linear-gradient(180deg, hsl(32 30% 97% / 0.92), hsl(30 28% 94% / 0.92)),
@@ -1094,5 +1115,6 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
+    </>
   );
 }

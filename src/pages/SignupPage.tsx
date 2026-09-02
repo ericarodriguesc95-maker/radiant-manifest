@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -40,6 +41,15 @@ export default function SignupPage() {
   };
 
   return (
+    <>
+      <Helmet>
+        <title>Criar conta — Gloow Up Club</title>
+        <meta name="description" content="Crie sua conta no Gloow Up Club e entre para a comunidade de mulheres extraordinárias: mente, metas, saúde, finanças e espiritualidade." />
+        <meta property="og:title" content="Criar conta — Gloow Up Club" />
+        <meta property="og:description" content="Crie sua conta e entre para a comunidade das Extraordinárias." />
+        <meta property="og:url" content="https://www.gloowupclub.com/signup" />
+        <link rel="canonical" href="https://www.gloowupclub.com/signup" />
+      </Helmet>
     <div
       className="min-h-screen flex items-center justify-center px-4"
       style={{
@@ -93,5 +103,6 @@ export default function SignupPage() {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 }

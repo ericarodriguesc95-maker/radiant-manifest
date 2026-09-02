@@ -338,6 +338,7 @@ const Biblia365Page = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate(-1)}
+            aria-label="Voltar para a tela anterior"
             className="p-2 rounded-xl hover:bg-muted/30 transition-all"
           >
             <ArrowLeft className="h-5 w-5 text-muted-foreground" />

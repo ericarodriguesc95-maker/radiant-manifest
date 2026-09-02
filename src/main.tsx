@@ -1,5 +1,6 @@
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
+import { HelmetProvider } from "react-helmet-async";
 import "./index.css";
 import { initNotifications } from "./lib/notifications";
 
@@ -10,4 +11,8 @@ if (localStorage.getItem("theme") === "dark") {
 
 initNotifications();
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(
+  <HelmetProvider>
+    <App />
+  </HelmetProvider>,
+);
