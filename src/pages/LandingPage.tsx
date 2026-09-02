@@ -549,33 +549,65 @@ export default function LandingPage() {
             <SectionLabel>O que você encontra no Club</SectionLabel>
             <H2 highlight="não o contrário.">Uma estrutura que sustenta você,</H2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {MODULES.map((m) => (
+          {/* Pilares principais */}
+          <div className="grid md:grid-cols-3 gap-6">
+            {MODULES.filter((m) => ["01", "02", "08"].includes(m.n)).map((m, i) => (
               <article
                 key={m.n}
                 style={{
                   background: C.bgCard,
                   border: `1px solid ${C.border}`,
-                  borderTop: `2px solid ${C.gold}`,
-                  borderRadius: 16,
+                  borderTop: `3px solid ${C.gold}`,
+                  borderRadius: 20,
                 }}
-                className="p-8 transition-all hover:-translate-y-1"
+                className="p-9 md:p-10 transition-all hover:-translate-y-1"
               >
                 <div
                   style={{ ...sans, color: C.goldMuted, letterSpacing: "0.2em" }}
                   className="text-[11px] font-medium uppercase mb-3"
                 >
-                  {m.n}
+                  Pilar {String(i + 1).padStart(2, "0")}
                 </div>
-                <h3 style={{ ...serif, color: C.cream }} className="text-[22px] font-normal mb-3">
+                <h3 style={{ ...serif, color: C.cream }} className="text-[26px] md:text-[30px] font-normal mb-4">
                   {m.title}
                 </h3>
-                <p style={{ color: C.creamDim, lineHeight: 1.75 }} className="text-[15px] font-light">
+                <p style={{ color: C.creamDim, lineHeight: 1.8 }} className="text-[16px] font-light">
                   {m.desc}
                 </p>
               </article>
             ))}
           </div>
+
+          {/* Bônus inclusos */}
+          <div className="mt-20">
+            <div className="text-center mb-10">
+              <SectionLabel>Bônus inclusos</SectionLabel>
+              <h3 style={{ ...serif, color: C.cream }} className="text-[26px] md:text-[32px] font-light">
+                E ainda vem com
+              </h3>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {MODULES.filter((m) => !["01", "02", "08"].includes(m.n)).map((m) => (
+                <article
+                  key={m.n}
+                  style={{
+                    background: C.bgCard,
+                    border: `1px solid ${C.borderSoft}`,
+                    borderRadius: 14,
+                  }}
+                  className="p-6 transition-all hover:-translate-y-0.5"
+                >
+                  <h4 style={{ ...serif, color: C.cream }} className="text-[19px] font-normal mb-2">
+                    {m.title}
+                  </h4>
+                  <p style={{ color: C.creamDim, lineHeight: 1.65 }} className="text-[14px] font-light">
+                    {m.desc}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+
           <div className="mt-14 text-center">
             <PrimaryCTA href={KIWIFY_URL}>Quero entrar no Club</PrimaryCTA>
           </div>
