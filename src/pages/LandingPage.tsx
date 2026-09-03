@@ -909,7 +909,7 @@ export default function LandingPage() {
           <p style={{ color: C.inkSoft }} className="text-[12px]">
             Gloow Up Club, feito para Mulheres Extraordinárias ·{" "}
             <a href="https://www.instagram.com/guclub.app/" target="_blank" rel="noopener noreferrer" style={{ color: C.goldDeep }} className="font-semibold">
-              @guclub.app
+              @hub.extraordinarias
             </a>{" "}
             · Site criado por{" "}
             <a href="https://www.ericacarvalhor.com" target="_blank" rel="noopener noreferrer" style={{ color: C.goldDeep }} className="font-semibold">
