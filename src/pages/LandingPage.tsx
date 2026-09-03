@@ -122,7 +122,7 @@ const BtnPrimary = ({
     target={href.startsWith("http") ? "_blank" : undefined}
     rel="noreferrer"
     style={{ ...sans, background: C.gold, color: C.cream, borderRadius: 999 }}
-    className={`${block ? "flex w-full" : "inline-flex"} items-center justify-center px-8 py-4 text-[14px] font-bold tracking-[0.3px] transition-all hover:opacity-90 hover:-translate-y-0.5 ${className}`}
+    className={`${block ? "flex w-full" : "flex w-full sm:w-auto sm:inline-flex"} items-center justify-center px-8 py-4 text-[14px] font-bold tracking-[0.3px] transition-all hover:opacity-90 hover:-translate-y-0.5 ${className}`}
   >
     {children}
   </a>
@@ -303,8 +303,8 @@ export default function LandingPage() {
               filter: "blur(10px)",
             }}
           />
-          <div className="relative max-w-[1180px] mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-14 items-center">
-            <div>
+          <div className="relative max-w-[1180px] mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+            <div className="text-center md:text-left flex flex-col items-center md:items-start">
               <Eyebrow>Ecossistema feminino de alta performance</Eyebrow>
               <h1
                 style={{ ...serif, lineHeight: 1.15, letterSpacing: "-0.3px" }}
@@ -314,13 +314,13 @@ export default function LandingPage() {
                 <br />
                 <span style={{ color: C.ink }}>Você tem falta de sistema.</span>
               </h1>
-              <p style={{ color: C.inkSoft, lineHeight: 1.65 }} className="mt-5 text-[15.5px] max-w-[460px]">
+              <p style={{ color: C.inkSoft, lineHeight: 1.65 }} className="mt-5 text-[15.5px] max-w-[460px] mx-auto md:mx-0">
                 Enquanto você tenta se organizar sozinha, outra mulher com os mesmos objetivos que os seus já está executando. A diferença não é talento. É estrutura. O Gloow Up Club é esse sistema.
               </p>
               <div className="mt-8 flex items-center gap-5 flex-wrap">
                 <BtnPrimary href={KIWIFY_URL}>Quero entrar no Club</BtnPrimary>
               </div>
-              <div className="mt-7 flex gap-5 flex-wrap">
+              <div className="mt-7 flex gap-x-5 gap-y-2.5 flex-wrap justify-center md:justify-start">
                 {TRUST.map((t) => (
                   <span key={t.label} className="flex items-center gap-1.5 text-[12.5px]" style={{ color: C.inkSoft }}>
                     <t.icon size={15} style={{ color: C.goldDeep }} />
@@ -331,7 +331,7 @@ export default function LandingPage() {
             </div>
 
             {/* Visual: logo do Gloow Up Club em destaque + cards flutuantes */}
-            <div className="relative h-[420px] md:h-[460px] hidden sm:flex items-center justify-center">
+            <div className="relative h-[340px] sm:h-[420px] md:h-[460px] flex items-center justify-center">
               <div
                 aria-hidden
                 className="absolute inset-0 flex items-center justify-center"
@@ -624,7 +624,7 @@ export default function LandingPage() {
                 </div>
               ))}
               {/* Banner standalone — sem moldura de celular */}
-              <div className="flex flex-col items-center text-center group md:col-span-1 lg:col-span-2">
+              <div className="flex flex-col items-center text-center group col-span-2 md:col-span-1 lg:col-span-2">
                 <div
                   style={{
                     borderRadius: 24,
