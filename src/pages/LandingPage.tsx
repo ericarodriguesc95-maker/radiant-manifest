@@ -330,23 +330,37 @@ export default function LandingPage() {
               </div>
             </div>
 
-            {/* Visual: print real da Home em moldura de celular + cards flutuantes */}
-            <div className="relative h-[420px] md:h-[460px] hidden sm:block">
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[190px]">
+            {/* Visual: logo do Gloow Up Club em destaque + cards flutuantes */}
+            <div className="relative h-[420px] md:h-[460px] hidden sm:flex items-center justify-center">
+              <div
+                aria-hidden
+                className="absolute inset-0 flex items-center justify-center"
+              >
                 <div
                   style={{
-                    borderRadius: 42,
-                    padding: 8,
-                    background: `linear-gradient(160deg, ${C.gold}55, ${C.gold}15)`,
-                    boxShadow: `0 30px 60px rgba(150,105,30,0.28), 0 0 0 1px ${C.line}`,
+                    width: 320,
+                    height: 320,
+                    borderRadius: "50%",
+                    background: `radial-gradient(circle, ${C.goldPale} 0%, ${C.creamDeep} 55%, transparent 72%)`,
+                    filter: "blur(8px)",
+                  }}
+                />
+              </div>
+              <div className="relative w-[240px] md:w-[280px]">
+                <div
+                  style={{
+                    borderRadius: 32,
+                    padding: 18,
+                    background: `linear-gradient(160deg, ${C.gold}40, ${C.goldPale}30)`,
+                    boxShadow: `0 30px 60px rgba(150,105,30,0.22), 0 0 0 1px ${C.line}`,
                   }}
                 >
-                  <div
-                    style={{ borderRadius: 36, overflow: "hidden", background: C.cream, aspectRatio: "9 / 19.5", border: `2px solid ${C.gold}88` }}
-                    className="w-full relative"
-                  >
-                    <img src={appScreen1.url} alt="Tela inicial do app Gloow Up Club" className="w-full h-full object-cover object-top" />
-                  </div>
+                  <img
+                    src={brandLogo}
+                    alt="Gloow Up Club"
+                    className="w-full h-auto object-contain rounded-2xl"
+                    style={{ background: C.card }}
+                  />
                 </div>
               </div>
               {[
