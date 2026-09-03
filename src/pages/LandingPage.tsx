@@ -866,7 +866,7 @@ export default function LandingPage() {
             <div className="grid sm:grid-cols-3 gap-4">
               {[
                 { title: "YouTube", desc: "Canal oficial com conteúdos, aulas e cortes.", href: "https://youtube.com/@guclubapp?si=yzjSHrcwIKf892Xz", label: "Assinar canal", icon: "▶" },
-                { title: "Instagram", desc: "Bastidores, inspirações e novidades diárias.", href: "https://www.instagram.com/guclub.app/", label: "Seguir @guclub.app", icon: "◎" },
+                { title: "Instagram", desc: "Bastidores, inspirações e novidades diárias.", href: "https://www.instagram.com/guclub.app/", label: "Seguir @hub.extraordinarias", icon: "◎" },
                 { title: "Fale com a fundadora", desc: "Tirar dúvidas ou conversar direto no WhatsApp.", href: "https://wa.me/message/M64TKGTEYIZRK1", label: "Chamar no WhatsApp", icon: "whatsapp" },
               ].map((item) => (
                 <a
@@ -909,7 +909,7 @@ export default function LandingPage() {
           <p style={{ color: C.inkSoft }} className="text-[12px]">
             Gloow Up Club, feito para Mulheres Extraordinárias ·{" "}
             <a href="https://www.instagram.com/guclub.app/" target="_blank" rel="noopener noreferrer" style={{ color: C.goldDeep }} className="font-semibold">
-              @guclub.app
+              @hub.extraordinarias
             </a>{" "}
             · Site criado por{" "}
             <a href="https://www.ericacarvalhor.com" target="_blank" rel="noopener noreferrer" style={{ color: C.goldDeep }} className="font-semibold">
