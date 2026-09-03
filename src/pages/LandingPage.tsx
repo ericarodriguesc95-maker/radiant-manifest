@@ -122,7 +122,7 @@ const BtnPrimary = ({
     target={href.startsWith("http") ? "_blank" : undefined}
     rel="noreferrer"
     style={{ ...sans, background: C.gold, color: C.cream, borderRadius: 999 }}
-    className={`${block ? "flex w-full" : "inline-flex"} items-center justify-center px-8 py-4 text-[14px] font-bold tracking-[0.3px] transition-all hover:opacity-90 hover:-translate-y-0.5 ${className}`}
+    className={`${block ? "flex w-full" : "flex w-full sm:w-auto sm:inline-flex"} items-center justify-center px-8 py-4 text-[14px] font-bold tracking-[0.3px] transition-all hover:opacity-90 hover:-translate-y-0.5 ${className}`}
   >
     {children}
   </a>
@@ -303,8 +303,8 @@ export default function LandingPage() {
               filter: "blur(10px)",
             }}
           />
-          <div className="relative max-w-[1180px] mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-14 items-center">
-            <div>
+          <div className="relative max-w-[1180px] mx-auto px-6 md:px-8 grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+            <div className="text-center md:text-left flex flex-col items-center md:items-start">
               <Eyebrow>Ecossistema feminino de alta performance</Eyebrow>
               <h1
                 style={{ ...serif, lineHeight: 1.15, letterSpacing: "-0.3px" }}
