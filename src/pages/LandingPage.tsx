@@ -320,7 +320,7 @@ export default function LandingPage() {
               <div className="mt-8 flex items-center gap-5 flex-wrap">
                 <BtnPrimary href={KIWIFY_URL}>Quero entrar no Club</BtnPrimary>
               </div>
-              <div className="mt-7 flex gap-5 flex-wrap">
+              <div className="mt-7 flex gap-x-5 gap-y-2.5 flex-wrap justify-center md:justify-start">
                 {TRUST.map((t) => (
                   <span key={t.label} className="flex items-center gap-1.5 text-[12.5px]" style={{ color: C.inkSoft }}>
                     <t.icon size={15} style={{ color: C.goldDeep }} />
