@@ -470,6 +470,69 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* O QUE MUDA COM O TEMPO */}
+        <section style={{ background: C.creamDeep }} className="py-16 md:py-24 px-6 md:px-8">
+          <div className="max-w-[1180px] mx-auto">
+            <SectionHead
+              eyebrow="Evolução real"
+              desc="O Club não te transforma da noite para o dia. Ele constrói você aos poucos, com pequenas vitórias que se acumulam até virarem uma nova versão de quem você é."
+            >
+              <span style={{ color: C.inkSoft }}>O que muda</span>
+              <br />
+              <em style={{ color: C.goldDeep, fontStyle: "italic" }}>com o tempo.</em>
+            </SectionHead>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {[
+                {
+                  phase: "1ª semana",
+                  title: "Clareza",
+                  desc: "Você para de viver no piloto automático e começa a enxergar seus padrões com os olhos de quem pode mudá-los.",
+                },
+                {
+                  phase: "30 dias",
+                  title: "Constância",
+                  desc: "A reprogramação mental e os check-points diários viram rotina. Você sente que está no controle do próprio dia.",
+                },
+                {
+                  phase: "90 dias",
+                  title: "Resultados",
+                  desc: "Metas em andamento, finanças organizadas, corpo e mente mais alinhados. A diferença já é visível para você e para quem te conhece.",
+                },
+                {
+                  phase: "6 meses",
+                  title: "Nova identidade",
+                  desc: "Você não faz mais o que precisa fazer. Você passou a ser a mulher que faz. E a comunidade das Extraordinárias te lembra disso todo dia.",
+                },
+              ].map((item, i) => (
+                <article
+                  key={item.phase}
+                  style={{ background: C.card, border: `1px solid ${C.line}`, borderRadius: 18 }}
+                  className="p-6 transition-all hover:-translate-y-0.5 relative overflow-hidden"
+                >
+                  <span
+                    style={{ ...serif, color: C.goldPale }}
+                    className="absolute -top-2 -right-2 text-[64px] font-semibold leading-none opacity-40 select-none"
+                  >
+                    0{i + 1}
+                  </span>
+                  <span
+                    style={{ background: `${C.gold}18`, color: C.goldDeep, border: `1px solid ${C.gold}44`, letterSpacing: "0.15em" }}
+                    className="inline-block px-3 py-1 rounded-full text-[10px] uppercase font-bold mb-4"
+                  >
+                    {item.phase}
+                  </span>
+                  <h3 style={{ ...serif, color: C.ink }} className="text-[20px] font-semibold mb-2">
+                    {item.title}
+                  </h3>
+                  <p style={{ color: C.inkSoft, lineHeight: 1.6 }} className="text-[13.5px]">
+                    {item.desc}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* MÓDULOS */}
         <section id="modulos" style={{ background: C.creamDeep }} className="py-16 md:py-24 px-6 md:px-8">
           <div className="max-w-[1180px] mx-auto">
