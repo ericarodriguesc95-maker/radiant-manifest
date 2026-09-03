@@ -314,7 +314,7 @@ export default function LandingPage() {
                 <br />
                 <span style={{ color: C.ink }}>Você tem falta de sistema.</span>
               </h1>
-              <p style={{ color: C.inkSoft, lineHeight: 1.65 }} className="mt-5 text-[15.5px] max-w-[460px]">
+              <p style={{ color: C.inkSoft, lineHeight: 1.65 }} className="mt-5 text-[15.5px] max-w-[460px] mx-auto md:mx-0">
                 Enquanto você tenta se organizar sozinha, outra mulher com os mesmos objetivos que os seus já está executando. A diferença não é talento. É estrutura. O Gloow Up Club é esse sistema.
               </p>
               <div className="mt-8 flex items-center gap-5 flex-wrap">
@@ -331,7 +331,7 @@ export default function LandingPage() {
             </div>
 
             {/* Visual: logo do Gloow Up Club em destaque + cards flutuantes */}
-            <div className="relative h-[420px] md:h-[460px] hidden sm:flex items-center justify-center">
+            <div className="relative h-[340px] sm:h-[420px] md:h-[460px] flex items-center justify-center">
               <div
                 aria-hidden
                 className="absolute inset-0 flex items-center justify-center"
