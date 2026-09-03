@@ -624,7 +624,7 @@ export default function LandingPage() {
                 </div>
               ))}
               {/* Banner standalone — sem moldura de celular */}
-              <div className="flex flex-col items-center text-center group md:col-span-1 lg:col-span-2">
+              <div className="flex flex-col items-center text-center group col-span-2 md:col-span-1 lg:col-span-2">
                 <div
                   style={{
                     borderRadius: 24,
