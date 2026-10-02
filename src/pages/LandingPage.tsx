@@ -436,10 +436,10 @@ export default function LandingPage() {
               </h2>
               <div className="mt-6 space-y-4">
                 <p style={{ color: C.inkSoft, lineHeight: 1.75 }} className="text-[14.5px]">
-                  <strong style={{ color: C.ink }}>Érica Carvalho</strong> é a criadora do Gloow Up Club, graduanda em Gestão de Recursos Humanos, apaixonada por performance feminina e desenvolvimento pessoal com base em neurociência.
+                  <strong style={{ color: C.ink }}>Érica Carvalho</strong> é a criadora do Gloow Up Club, apaixonada por performance feminina e desenvolvimento pessoal com base em neurociência.
                 </p>
                 <p style={{ color: C.inkSoft, lineHeight: 1.75 }} className="text-[14.5px]">
-                  Supervisora de Atendimento em uma das maiores empresas de educação jurídica do Brasil, ela entendeu na prática o que separa as mulheres que performam em alto nível das que vivem no ciclo de começar e parar: não é talento, não é força de vontade. É estrutura.
+                  Graduada em Gestão de Recursos Humanos e pós-graduanda em Gestão de Negócios e Marketing, ela entendeu na prática o que separa as mulheres que performam em alto nível das que vivem no ciclo de começar e parar: não é talento, não é força de vontade. É estrutura.
                 </p>
                 <p style={{ color: C.inkSoft, lineHeight: 1.75 }} className="text-[14.5px]">
                   O Gloow Up Club nasceu dessa percepção. Foi construído do zero, com neurociência, neuromarketing e muita vivência real. Não é teoria. É o sistema que ela mesma precisava e não existia.
@@ -716,7 +716,7 @@ export default function LandingPage() {
                 Acesso vitalício
               </p>
               <p style={{ ...serif, color: C.ink }} className="text-[52px] font-semibold leading-none">
-                R$27,90
+                R$17,90
               </p>
               <p style={{ color: C.inkSoft }} className="mt-2 text-[12.5px]">
                 pagamento único, à vista no crédito ou pix
