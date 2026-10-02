@@ -351,7 +351,7 @@ export default function LoginPage() {
             </p>
             <p className="text-[10px]" style={{ color: C.inkDim }}>
               Ainda não é membra?{" "}
-              <a href="https://pay.kiwify.com.br/IyO1p06" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: C.gold }}>
+              <a href="https://pay.kiwify.com.br/sDDf3dG" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: C.gold }}>
                 Entre agora
               </a>{" "}
               por <strong style={{ color: C.gold }}>R$ 17,90 à vista no crédito ou pix</strong>

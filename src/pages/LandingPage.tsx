@@ -77,7 +77,7 @@ const TESTIMONIALS = [
   { name: "Nat, sobre as dinâmicas", img: depoimentoNat2 },
 ];
 
-const KIWIFY_URL = "https://pay.kiwify.com.br/IyO1p06";
+const KIWIFY_URL = "https://pay.kiwify.com.br/sDDf3dG";
 
 // ===== Paleta do redesign (mockup aprovado) =====
 const C = {
