@@ -354,7 +354,7 @@ export default function LoginPage() {
               <a href="https://pay.kiwify.com.br/IyO1p06" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: C.gold }}>
                 Entre agora
               </a>{" "}
-              por <strong style={{ color: C.gold }}>R$ 27,90 à vista no crédito ou pix</strong>
+              por <strong style={{ color: C.gold }}>R$ 17,90 à vista no crédito ou pix</strong>
               . Pagamento único. Acesso vitalício.
             </p>
           </div>
