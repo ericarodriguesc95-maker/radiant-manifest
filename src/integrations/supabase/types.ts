@@ -2564,6 +2564,7 @@ export type Database = {
         Args: { _conversation_id: string; _user_id: string }
         Returns: boolean
       }
+      is_member: { Args: { _user_id: string }; Returns: boolean }
       toggle_post_like: { Args: { _post_id: string }; Returns: boolean }
     }
     Enums: {
