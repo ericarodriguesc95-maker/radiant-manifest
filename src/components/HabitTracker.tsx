@@ -1,3 +1,4 @@
+import { celebrate } from "@/lib/celebrate";
 import { useState, useEffect, useCallback } from "react";
 import { Check, Plus, X, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -96,7 +97,7 @@ export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
     setCompleted(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
-      else next.add(id);
+      else { next.add(id); celebrate(); }
       syncCompletion(next);
       return next;
     });

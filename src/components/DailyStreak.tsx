@@ -1,3 +1,4 @@
+import AnimatedEmoji from "@/components/ui/animated-emoji";
 import { useState, useEffect } from "react";
 import { Flame, Trophy, ChevronDown, ChevronUp, CheckCircle2, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -86,17 +87,17 @@ export default function DailyStreak({ completedHabits }: DailyStreakProps) {
   });
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-4">
+    <div className="bg-card rounded-card border border-border p-4 shadow-card">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className={cn(
             "h-12 w-12 rounded-full flex items-center justify-center transition-all",
-            todayCompleted ? "bg-gradient-gold shadow-gold" : "bg-muted"
+            todayCompleted ? "bg-highlight-butter shine" : "bg-muted"
           )}>
-            <Flame className={cn("h-6 w-6", todayCompleted ? "text-primary-foreground" : "text-muted-foreground")} />
+            <AnimatedEmoji name="fire" size={28} motion="pop" />
           </div>
           <div>
-            <p className="text-2xl font-display font-bold text-foreground">
+            <p className="text-3xl font-display font-normal text-foreground">
               {streak} <span className="text-sm font-body font-normal text-muted-foreground">dias</span>
             </p>
             <p className="text-xs font-body text-muted-foreground">
@@ -120,7 +121,7 @@ export default function DailyStreak({ completedHabits }: DailyStreakProps) {
         </div>
         <div className="bg-muted rounded-full h-1.5 overflow-hidden">
           <div
-            className="h-full bg-gradient-gold rounded-full transition-all duration-700"
+            className="h-full bg-primary rounded-full progress-fill"
             style={{ width: `${Math.min((streak / nextMilestone) * 100, 100)}%` }}
           />
         </div>
