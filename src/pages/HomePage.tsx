@@ -212,51 +212,33 @@ const HomePage = () => {
         {/* ═══════════════════════════════════════════ */}
         <section className="animate-stagger space-y-4" style={{ "--stagger": 1 } as React.CSSProperties}>
           <SectionHeading eyebrow="Seus rituais" title="Do dia a dia" />
-          <div className="ed-card px-4">
-            <a
-              href="https://chat.whatsapp.com/KqwvIi2Ht238RoSMVCS7J0"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ed-row"
-            >
-              <span className="ed-row-icon"><MessageCircle className="h-5 w-5" /></span>
-              <span className="flex-1">
-                <span className="ed-title block">Grupo do WhatsApp</span>
-                <span className="ed-sub block">Conecte-se com outras rainhas e cresça junto</span>
-              </span>
-              <span className="ed-tag">Entrar</span>
-              <ChevronRight className="h-4 w-4 text-muted-foreground" />
-            </a>
-
-            <button onClick={() => navigate("/meu-mes")} className="ed-row">
-              <span className="ed-row-icon"><ThermometerSun className="h-5 w-5" /></span>
-              <span className="flex-1">
-                <span className="ed-title block">Termômetro do mês</span>
-                <span className="ed-sub block">Três perguntas rápidas pra ajustar o app pro seu momento</span>
-              </span>
-              <span className="ed-tag">Responder</span>
-              <ChevronRight className="h-4 w-4 text-muted-foreground" />
-            </button>
-
-            <button onClick={() => navigate("/resumo-sexta")} className="ed-row">
-              <span className="ed-row-icon"><Trophy className="h-5 w-5" /></span>
-              <span className="flex-1">
-                <span className="ed-title block">{new Date().getDay() === 5 ? "Sexta da vitória" : "Resumo da semana"}</span>
-                <span className="ed-sub block">Veja tudo que você construiu nos últimos 7 dias</span>
-              </span>
-              {new Date().getDay() === 5 && <span className="ed-tag">Hoje</span>}
-              <ChevronRight className="h-4 w-4 text-muted-foreground" />
-            </button>
-
-            <button onClick={() => navigate("/plano-alimentar")} className="ed-row">
-              <span className="ed-row-icon"><span className="text-lg">🥗</span></span>
-              <span className="flex-1">
-                <span className="ed-title block">Plano alimentar da semana</span>
-                <span className="ed-sub block">7 dias, 5 refeições, lista de compras pronta</span>
-              </span>
-              <span className="ed-tag">IA</span>
-              <ChevronRight className="h-4 w-4 text-muted-foreground" />
-            </button>
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {[
+              { icon: MessageCircle, emoji: null, title: "Grupo do WhatsApp", sub: "Conecte-se com outras rainhas e cresça junto", tag: "Entrar", href: "https://chat.whatsapp.com/KqwvIi2Ht238RoSMVCS7J0", to: undefined },
+              { icon: ThermometerSun, emoji: null, title: "Termômetro do mês", sub: "Três perguntas rápidas pra ajustar o app pro seu momento", tag: "Responder", href: undefined, to: "/meu-mes" },
+              { icon: Trophy, emoji: null, title: new Date().getDay() === 5 ? "Sexta da vitória" : "Resumo da semana", sub: "Veja tudo que você construiu nos últimos 7 dias", tag: new Date().getDay() === 5 ? "Hoje" : null, href: undefined, to: "/resumo-sexta" },
+              { icon: null, emoji: "🥗", title: "Plano alimentar da semana", sub: "7 dias, 5 refeições, lista de compras pronta", tag: "IA", href: undefined, to: "/plano-alimentar" },
+            ].map(({ icon: Icon, emoji, title, sub, tag, href, to }, i) => {
+              const inner = (
+                <>
+                  <span className="ed-row-icon h-10 w-10">
+                    {emoji ? <span className="text-lg">{emoji}</span> : Icon ? <Icon className="h-[18px] w-[18px]" /> : null}
+                  </span>
+                  <span className="font-display text-[15px] leading-tight text-foreground">{title}</span>
+                  <span className="text-[11px] font-body leading-snug text-muted-foreground line-clamp-2">{sub}</span>
+                  <span className="ed-block-tag">{tag}</span>
+                </>
+              );
+              const className = cn(
+                "ed-block group animate-stagger cursor-pointer",
+                "hover:-translate-y-1 active:scale-[0.98]"
+              );
+              return href ? (
+                <a key={href} href={href} target="_blank" rel="noopener noreferrer" className={className} style={{ "--stagger": 2 + i } as React.CSSProperties}>{inner}</a>
+              ) : (
+                <button key={to} onClick={() => navigate(to)} className={className} style={{ "--stagger": 2 + i } as React.CSSProperties}>{inner}</button>
+              );
+            })}
           </div>
         </section>
 
@@ -369,21 +351,28 @@ const HomePage = () => {
         {/* ═══════════════════════════════════════════ */}
         <section className="animate-stagger space-y-4" style={{ "--stagger": 9 } as React.CSSProperties}>
           <SectionHeading eyebrow="Programas" title="Explore o clube" />
-          <div className="ed-card px-4">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
             {[
-              { icon: Sparkles, title: "Gloow Movimenta", sub: "21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida", to: "/glow-move", tag: "Iniciar" },
-              { icon: Crown, title: "Jornada Elite", sub: "Trilha completa em 5 níveis · 80+ aulas + teste de perfil", to: "/jornada-elite" },
-              { icon: ClipboardCheck, title: "Descubra seu perfil", sub: "Testes rápidos: DISC, comportamento e produtividade", to: "/testes" },
-              { icon: Trophy, title: "Desafios progressivos", sub: "Escolha um desafio de 7, 21, 30 ou 90 dias e bora", to: "/desafios" },
-            ].map(({ icon: Icon, title, sub, to, tag }) => (
-              <button key={to} onClick={() => navigate(to)} className="ed-row">
-                <span className="ed-row-icon"><Icon className="h-5 w-5" /></span>
-                <span className="flex-1">
-                  <span className="ed-title block">{title}</span>
-                  <span className="ed-sub block">{sub}</span>
+              { icon: Sparkles, title: "Gloow Movimenta", sub: "21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida", tag: "Iniciar", to: "/glow-move" },
+              { icon: Crown, title: "Jornada Elite", sub: "Trilha completa em 5 níveis · 80+ aulas + teste de perfil", tag: null, to: "/jornada-elite" },
+              { icon: ClipboardCheck, title: "Descubra seu perfil", sub: "Testes rápidos: DISC, comportamento e produtividade", tag: null, to: "/testes" },
+              { icon: Trophy, title: "Desafios progressivos", sub: "Escolha um desafio de 7, 21, 30 ou 90 dias e bora", tag: null, to: "/desafios" },
+            ].map(({ icon: Icon, title, sub, tag, to }, i) => (
+              <button
+                key={to}
+                onClick={() => navigate(to)}
+                className={cn(
+                  "ed-block group animate-stagger cursor-pointer",
+                  "hover:-translate-y-1 active:scale-[0.98]"
+                )}
+                style={{ "--stagger": 10 + i } as React.CSSProperties}
+              >
+                <span className="ed-row-icon h-10 w-10">
+                  <Icon className="h-[18px] w-[18px]" />
                 </span>
-                {tag && <span className="ed-tag">{tag}</span>}
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                <span className="font-display text-[15px] leading-tight text-foreground">{title}</span>
+                <span className="text-[11px] font-body leading-snug text-muted-foreground line-clamp-2">{sub}</span>
+                {tag && <span className="ed-block-tag">{tag}</span>}
               </button>
             ))}
           </div>
