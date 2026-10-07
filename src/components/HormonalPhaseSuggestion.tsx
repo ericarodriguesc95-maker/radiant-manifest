@@ -49,7 +49,6 @@ const SUGGESTIONS: Record<Phase, Suggestion> = {
     message: "Estrogênio subindo: criatividade, foco e memória em alta. Hora de estudar, planejar e começar.",
     gradient: "from-amber-50 via-yellow-50 to-amber-100",
     areas: [
-      { label: "Alta performance", to: "/alta-performance", icon: Zap, hint: "Estudo e foco" },
       { label: "Metas", to: "/metas", icon: Target, hint: "Planejar o mês" },
       { label: "Finanças", to: "/financas", icon: Wallet, hint: "Organizar contas" },
       { label: "Vision board", to: "/vision-board", icon: Image, hint: "Criatividade em alta" },
@@ -70,7 +69,6 @@ const SUGGESTIONS: Record<Phase, Suggestion> = {
       { label: "Metas", to: "/metas", icon: Target, hint: "Executar o difícil" },
       { label: "Saúde", to: "/saude", icon: Dumbbell, hint: "Pico de força" },
       { label: "Ranking", to: "/ranking-mensal", icon: Trophy, hint: "Disputar o topo" },
-      { label: "Alta performance", to: "/alta-performance", icon: Zap, hint: "Conversas difíceis" },
       { label: "Identidade", to: "/identidade-inabalavel", icon: Crown, hint: "Presença e voz" },
       { label: "Finanças", to: "/financas", icon: Wallet, hint: "Negociar e vender" },
     ],

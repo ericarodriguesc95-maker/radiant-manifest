@@ -163,7 +163,6 @@ const FOR_YOU = [
 const MODULES = [
   { icon: Brain, name: "Reprogramação Mental", desc: "Meditações guiadas, PNL e neurociência aplicada ao dia a dia." },
   { icon: Target, name: "Metas e Manifestação", desc: "Defina metas, acompanhe submetas e veja o progresso em tempo real." },
-  { icon: Zap, name: "Alta Performance", desc: "Curadoria de podcasts, técnicas de estudo e cursos." },
   { icon: Heart, name: "Saúde e Fitness", desc: "Dieta, treino, sono e ciclo menstrual integrados, com a IA Nutri Luna." },
   { icon: Wallet, name: "Gestão Financeira", desc: "Controle de renda, despesas e saldo com IA financeira." },
   { icon: BookOpen, name: "Espiritualidade e Diário", desc: "Leitura em 365 dias, devocional diário e diário pessoal." },

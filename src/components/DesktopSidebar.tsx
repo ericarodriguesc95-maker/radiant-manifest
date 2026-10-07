@@ -25,7 +25,6 @@ export default function DesktopSidebar() {
 
   const extraTabs = [
     { to: "/reprogramacao", icon: Brain, label: "Reprogramação" },
-    { to: "/alta-performance", icon: Zap, label: "Alta Performance" },
     { to: "/jornada", icon: Crown, label: "Destravar" },
   ];
 
