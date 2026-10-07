@@ -101,7 +101,6 @@ const discProfiles: Record<string, Profile> = {
       "Limite redes sociais a 2 janelas no dia",
     ],
     tools: [
-      { label: "Alta Performance, Pomodoro e Feynman", route: "/alta-performance" },
       { label: "Metas, prazos visuais", route: "/metas" },
       { label: "Mente Infalível, estrutura PREP", route: "/mente-poderosa" },
       { label: "Vision Board, ancorar foco", route: "/vision-board" },
@@ -143,7 +142,6 @@ const discProfiles: Record<string, Profile> = {
     tools: [
       { label: "Mente Infalível, sair do perfeccionismo", route: "/mente-poderosa" },
       { label: "Reprogramação Mental, relaxar mente analítica", route: "/reprogramacao" },
-      { label: "Alta Performance, timeboxing", route: "/alta-performance" },
       { label: "Manifestação, soltar o controle", route: "/jornada" },
     ],
     cautions: ["Risco de ansiedade generalizada por excesso de análise", "Cuidado com isolamento social pra 'terminar tudo certo'", "Evite criticar a si mesma com dureza"],
@@ -206,7 +204,6 @@ const behavioralProfiles: Record<string, Profile> = {
     tools: [
       { label: "Reprogramação Mental, meditações", route: "/reprogramacao" },
       { label: "Sono, recuperação noturna", route: "/sono" },
-      { label: "Alta Performance, ciclos focados", route: "/alta-performance" },
       { label: "Saúde, cortisol e fadiga", route: "/saude" },
     ],
     cautions: ["Sinais de burnout: insônia, irritabilidade, queda de libido", "Evite cafeína após 14h", "Não confunda autoexigência com autocuidado"],
@@ -322,7 +319,6 @@ const productivityProfiles: Record<string, Profile> = {
     ],
     tools: [
       { label: "Metas SMART", route: "/metas" },
-      { label: "Alta Performance, timeboxing", route: "/alta-performance" },
       { label: "Vision Board, soltar a criatividade", route: "/vision-board" },
       { label: "Manifestação, fluxo intuitivo", route: "/jornada" },
     ],
@@ -341,7 +337,6 @@ const productivityProfiles: Record<string, Profile> = {
       "Audit semanal: o que era urgente x importante?",
     ],
     tools: [
-      { label: "Alta Performance, foco profundo", route: "/alta-performance" },
       { label: "Mente Infalível, pausa de 6s", route: "/mente-poderosa" },
       { label: "Metas, clareza de prioridades", route: "/metas" },
       { label: "Reprogramação, baixar adrenalina", route: "/reprogramacao" },
@@ -362,7 +357,6 @@ const productivityProfiles: Record<string, Profile> = {
     ],
     tools: [
       { label: "Vision Board, ativar visão", route: "/vision-board" },
-      { label: "Alta Performance, Pomodoro", route: "/alta-performance" },
       { label: "Sono, proteger o REM", route: "/sono" },
       { label: "Diário, brain dump", route: "/diario" },
     ],
@@ -382,7 +376,6 @@ const productivityProfiles: Record<string, Profile> = {
     ],
     tools: [
       { label: "Desafios, romper padrões", route: "/desafios" },
-      { label: "Alta Performance, novos métodos", route: "/alta-performance" },
       { label: "Mente Infalível, plasticidade", route: "/mente-poderosa" },
       { label: "Jornada Elite", route: "/jornada-elite" },
     ],
@@ -487,7 +480,6 @@ const neuroProfiles: Record<string, Profile> = {
       { label: "Desafios, ativar drive", route: "/desafios" },
       { label: "Saúde, exercício e energia", route: "/saude" },
       { label: "Metas, ambição saudável", route: "/metas" },
-      { label: "Alta Performance, ritmo", route: "/alta-performance" },
     ],
     cautions: ["Calma demais pode mascarar depressão atípica", "Cuidado em deixar oportunidades passarem", "Atenção a relações onde você é 'a paciente'"],
   },
