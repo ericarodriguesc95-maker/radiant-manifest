@@ -1,3 +1,4 @@
+import AnimatedEmoji from "@/components/ui/animated-emoji";
 import { celebrate } from "@/lib/celebrate";
 import { useState, useEffect } from "react";
 import { Plus, CheckCircle2, Circle, ChevronDown, ChevronUp, Trash2, Pencil, X, Check, History, TrendingUp, Target, Sparkles } from "lucide-react";
@@ -237,7 +238,7 @@ const MetasPage = () => {
     <div className="min-h-screen">
       <header className="px-5 pt-12 pb-4">
         <p className="text-sm text-muted-foreground font-body tracking-widest uppercase">Sua jornada</p>
-        <h1 className="text-2xl font-display font-bold">Metas & <span className="text-gold">Manifestação</span></h1>
+        <h1 className="flex items-center gap-2 text-3xl font-display font-normal">Metas & <span className="title-accent">Manifestação</span> <AnimatedEmoji name="target" /></h1>
         <p className="text-sm text-muted-foreground mt-1">Escreva o que você quer, marque seu progresso e veja acontecer.</p>
       </header>
 

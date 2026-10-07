@@ -1,3 +1,4 @@
+import AnimatedEmoji from "@/components/ui/animated-emoji";
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, Trash2, Pencil, Check, X, TrendingUp, CreditCard, PiggyBank, ArrowUpDown, Lightbulb, Bot, Send, Brain, Briefcase, User as UserIcon, Copy, Target, AlertCircle, Eye, EyeOff, LayoutGrid, Table as TableIcon, ChevronRight, Wallet, PieChart, Tag, Sparkles, Coins, Trophy, FileDown } from "lucide-react";
@@ -804,7 +805,7 @@ const FinancasPage = () => {
       <header className="px-5 pt-10 pb-3">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-display font-bold tracking-tight">Minhas Finanças</h1>
+            <h1 className="flex items-center gap-2 text-3xl font-display font-normal tracking-tight">Minhas <span className="title-accent">Finanças</span> <AnimatedEmoji name="gem" /></h1>
             <button onClick={() => setShowValues(v => !v)} className="text-gold/70 hover:text-gold p-1" aria-label="Mostrar/ocultar valores">
               {showValues ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
             </button>

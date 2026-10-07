@@ -183,7 +183,7 @@ export default function HabitTracker({ onCompletedChange }: HabitTrackerProps) {
               <div className="flex gap-2">
                 <span className="text-lg w-8 flex items-center justify-center">{newEmoji}</span>
                 <Input value={newLabel} onChange={e => setNewLabel(e.target.value)} placeholder="Ex: Ler 15 minutos" className="flex-1 text-sm" onKeyDown={e => e.key === "Enter" && addHabit()} />
-                <Button size="sm" onClick={addHabit} disabled={!newLabel.trim()} className="bg-gold hover:bg-gold/90 text-primary-foreground"><Plus className="h-4 w-4" /></Button>
+                <Button size="sm" onClick={addHabit} disabled={!newLabel.trim()} className="btn-ink hover:opacity-90"><Plus className="h-4 w-4" /></Button>
               </div>
             </div>
             <div className="space-y-1.5 pt-3 border-t border-border mt-3">

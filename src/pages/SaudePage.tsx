@@ -1,3 +1,4 @@
+import AnimatedEmoji from "@/components/ui/animated-emoji";
 import { useState, useEffect, useRef, lazy, Suspense } from "react";
 import { ArrowLeft, Heart, Scale, Utensils, Dumbbell, Pill, Apple, Plus, Trash2, Edit2, Check, X, TrendingDown, TrendingUp, Camera, Calculator, Search, Syringe, ShieldCheck, Moon, ChevronRight, Target, ChevronsRight, Calendar as CalendarIcon, ArrowDown } from "lucide-react";
 
@@ -947,7 +948,7 @@ export default function SaudePage() {
         </button>
         <div className="flex items-center gap-2 mb-2">
           <Heart className="h-5 w-5 text-primary" />
-          <h1 className="text-2xl font-display font-semibold text-foreground">Saúde & Fitness</h1>
+          <h1 className="flex items-center gap-2 text-3xl font-display font-normal text-foreground">Saúde & <span className="title-accent">Fitness</span> <AnimatedEmoji name="drop" /></h1>
         </div>
         <p className="text-sm text-muted-foreground font-body">Acompanhe peso, dieta, treinos, água, ciclo, sono e remédios em um só lugar.</p>
       </div>
