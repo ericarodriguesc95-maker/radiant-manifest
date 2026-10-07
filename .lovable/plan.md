@@ -1,60 +1,55 @@
-# Refazer página de Finanças
+# Modernizar o visual da área logada
 
-Adotar a **estrutura dos prints** (7 abas) e os componentes principais, mas **mantendo 100% o tema visual original do Gloow Up Club**: fundo preto `#0D0D0D`, dourado `#D4AF37`, glassmorphism, fontes display/body, sem rosa/branco do print.
+Só muda a aparência: textos, módulos, IAs, dados, preços, links e regras de acesso continuam iguais. A página de vendas não muda. Não terá modo escuro.
 
-## Cabeçalho da página
+## O que muda
 
-- Título "Minhas Finanças" + ícone de olho (mostrar/ocultar valores) + seletor de mês como **dropdown único** (substituindo a barra horizontal de meses)
-- Botão "Conectar conta" (Pluggy) logo abaixo
-- **4 cards de resumo** (substituindo o grid atual de 6):
-  - Balanço Mensal (azul) — Resultado do mês
-  - Receitas (verde) — Total de entradas
-  - Despesas (vermelho) — Total de saídas
-  - Cartão (roxo) — Fatura atual
-- Toggle PF / CNPJ mantido
+1. **Cores e letras de todo o app logado**
+   - Fundo creme claro, cards claros com borda fina e sombra suave.
+   - Destaques em terracota, cards rosados e amarelados com degradê e um botão escuro principal.
+   - Títulos em Playfair, com a parte final em itálico terracota.
+   - Textos em Raleway, rótulos pequenos em caixa alta e etiquetas em pílula com contorno.
+   - Sai todo o dourado.
 
-## Novas 7 abas (na ordem do print)
+2. **Barra de navegação do celular**
+   - Mesma pílula flutuante, agora mais clara e translúcida.
+   - O item ativo fica escuro, com um sublinhado terracota.
 
-1. **Geral** — Dashboard com 4 blocos:
-   - Gastos por Categoria (donut chart)
-   - Resumo Financeiro (maior categoria, receita do mês, alerta)
-   - Gastos por Método de Pagamento
-   - Cartões de Crédito conectados
-2. **Transações** — Lista única (entradas + saídas + cartão), filtros por tipo/categoria, inline edit/delete (reaproveita lógica atual de `registros`)
-3. **Categorias** — **NOVA**. Sub-abas "Minhas categorias" / "Open Finance" (78 padrão). CRUD em `finance_categories`. Pills coloridas (cor + ícone) agrupadas em Receitas/Despesas. Botão "Nova Categoria"
-4. **Planejar** — Polir o atual: botão "Copiar do mês anterior", card "Resumo do Orçamento", tabela Categoria/Teto/Real/Status com dropdown de ordenação (Padrão / Maior gasto / % usado / A-Z)
-5. **Investir** — **NOVA**. Aproveita aba "Poupança/Guardar" atual + cards de tipos de investimento (Renda Fixa, Variável, Cripto) + total acumulado
-6. **Metas** — **NOVA**. Link/integração com `/metas` filtrando metas financeiras. Cards de progresso por meta
-7. **Dívidas** — Redesenho:
-   - Toggle Cards / Tabela
-   - Botão "Nova Dívida" dourado sólido
-   - 4 cards stat: Total de Dívidas, Total Pago, Juros Mensais, Dívidas Vencidas
-   - Sub-abas: Todas / Ativas / Vencidas / Pagas / Pausadas
-   - Empty state com CTA "Adicionar Primeira Dívida"
+3. **Menu lateral no computador**
+   - Fundo claro de 230px.
+   - O item ativo fica numa pílula rosada.
+   - Embaixo, um card amarelado mostra a sequência de dias.
 
-## Onde vão as abas removidas?
+4. **Home**
+   - **Topo:** logo redonda, saudação em Playfair e ícones redondos.
+   - **Banner "Apresente-se":** degradê que se move devagar, luzes suaves e emojis subindo do lado direito.
+   - **Mensagem de você daqui a 1 ano:** card amarelado com um emoji flutuando.
+   - **Seus rituais:** viram um card único em lista.
+   - **Sequência:** barra que se enche ao carregar.
+   - **Medalhas:** as conquistadas ganham um brilho passando.
+   - **Demais blocos:** ficam com a mesma estrutura, só com o novo estilo.
 
-As abas atuais **Dicas · Consultora IA · Meu Perfil (Quiz)** não estão nos prints. Proposta: mover para um **menu lateral compacto** dentro de "Geral" (três botões "Dicas comportamentais", "Falar com consultora IA", "Refazer quiz de perfil") — não perdemos nada e a navegação principal fica limpa.
+5. **Emojis animados**
+   - No máximo um por item: fogo na sequência, alvo nas metas, troféu nos desafios, mãos juntas no devocional, diamante nas finanças, gota, sono e flor em saúde e ciclo, brilho na IA.
+   - Os ícones do menu continuam simples, sem emoji.
 
-## Visual (mantém o app)
+6. **Movimento**
+   - Fotos de perfil e de capa com um zoom lento.
+   - Cards que sobem um pouco ao passar o mouse e, no computador, inclinam de leve.
+   - Barras de progresso que se enchem.
+   - Troca de página suave e listas que entram uma a uma.
 
-- Fundo: `bg-background` (preto)
-- Cards: `glass` + borda `border-gold/15`
-- Botões críticos: `bg-gold text-background` sólido (sem gradiente)
-- Tabs: dark com indicador dourado, **não** branco/rosa do print
-- Pills de categoria: cores vivas permitidas (azul/verde/laranja/vermelho/rosa) só nos badges das categorias, igual aos prints
-- Travessões `—` evitados nos textos
+7. **Comemoração ao concluir**
+   - Ao marcar tarefa, hábito, check-point ou meta, uma pequena explosão de emojis aparece por cerca de 1 segundo.
 
-## Banco
+8. **Celular e acessibilidade**
+   - No celular: menos partículas, sem inclinação dos cards, toques fáceis e texto legível.
+   - As animações desligam para quem pede menos movimento no aparelho e param quando estão fora da tela.
 
-- `finance_categories` já existe — só adiciono seed das 78 categorias Open Finance em PT-BR via migração
-- `finance_debts` já existe — só uso as colunas
-- `finance_budgets` já existe — uso na aba Planejar
+## Detalhes técnicos
 
-## Escopo da entrega (1 turno)
-
-1. Reescrita do `FinancasPage.tsx` com a nova estrutura de 7 abas + header novo
-2. Migração: seed das 78 categorias Open Finance padrão em PT-BR
-3. Componentização: extrair cada aba (`GeralTab`, `TransacoesTab`, `CategoriasTab`, `PlanejarTab`, `InvestirTab`, `MetasTab`, `DividasTab`) em `src/components/finance/tabs/` para o arquivo principal não passar de 200 linhas
-
-Aprova esse escopo? Se sim, executo tudo. Se quiser cortar algo (ex.: "deixa Investir e Metas pra depois") me avisa.
+- **Tokens e fontes:** reescrever os tokens HSL em `src/index.css` e `tailwind.config.ts` com a nova paleta. Os tokens `gold` e `brand` passam a apontar para terracota, para que todas as telas mudem de uma vez, sem editar página por página. Criar os tokens `--highlight-rose` e `--highlight-butter` e as sombras.
+- **Componentes reutilizáveis:** `AnimatedEmoji` (Noto webp, classes `float` e `pop`), `Tag`, `AnimatedProgress`, `TiltCard`, `HeroBanner` e `celebrate()` para o confete.
+- **Keyframes no CSS global:** gradient-shift, float, pop, shine, ken-burns, rise-fade, page-in e stagger. Tudo dentro de `prefers-reduced-motion`, com pausa por IntersectionObserver através de um hook.
+- **Arquivos editados:** `AppLayout.tsx` (transição de página), `BottomNav.tsx`, `DesktopSidebar.tsx`, `HomePage.tsx` (só apresentação), `DailyCheckpoints.tsx`, `HabitTracker.tsx`, `MetasPage.tsx` (confete ao concluir), `DailyStreak.tsx`, `StreakMedals.tsx`, `FutureSelfMessage.tsx`, além da aplicação de emojis nos cabeçalhos de Metas, Finanças, Saúde e Desafios.
+- **Sem alterações:** `LandingPage.tsx`, `LoginPage.tsx`, banco de dados, rotas e lógica.
