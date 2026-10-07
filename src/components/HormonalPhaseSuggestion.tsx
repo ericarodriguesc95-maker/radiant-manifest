@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Moon, Sparkles, Sun, Flame, ChevronRight,
   Heart, Target, Wallet, Brain, BookOpen, Dumbbell, Users, NotebookPen,
-  Trophy, Utensils, Crown, Image, Zap, ListChecks,
+  Trophy, Utensils, Crown, Image, ListChecks,
 } from "lucide-react";
 import { differenceInDays } from "date-fns";
 import { useAuth } from "@/contexts/AuthContext";

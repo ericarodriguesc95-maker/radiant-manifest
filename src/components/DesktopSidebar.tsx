@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Target, Wallet, Users, BookOpen, User, Heart, Crown, Smartphone, Settings, Zap, Brain, Trophy, ShieldCheck, ClipboardCheck } from "lucide-react";
+import { Home, Target, Wallet, Users, BookOpen, User, Heart, Crown, Smartphone, Settings, Brain, Trophy, ShieldCheck, ClipboardCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useViewMode } from "@/contexts/ViewModeContext";
