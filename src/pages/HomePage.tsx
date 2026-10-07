@@ -1,3 +1,4 @@
+import AnimatedEmoji from "@/components/ui/animated-emoji";
 import { useState, useEffect, useCallback } from "react";
 import { Sparkles, Brain, ChevronRight, Bell, Settings, Shield, Trophy, Crown, Heart, Target, BookOpen, ClipboardCheck, Flame, MessageCircle, ThermometerSun } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -116,23 +117,23 @@ const HomePage = () => {
             <img src={brandLogo} alt="Gloow Up Club" className="h-11 w-11 object-contain rounded-full border border-border" />
             <div>
               <p className="eyebrow">Gloow Up Club</p>
-              <h1 aria-label="Home do Gloow Up Club — painel da membra" className="font-display text-[26px] leading-none text-foreground">{greeting()}, rainha</h1>
+              <h1 aria-label="Home do Gloow Up Club — painel da membra" className="font-display text-[26px] leading-none text-foreground">{greeting()}, <span className="title-accent">rainha</span></h1>
             </div>
           </div>
           <div className="flex items-center gap-1">
             {isAdmin && (
-              <button onClick={() => navigate("/admin/atividade")} className="p-2 rounded-full border border-border hover:bg-secondary transition-colors" title="Painel Admin">
+              <button onClick={() => navigate("/admin/atividade")} className="icon-circle h-10 w-10 hover:bg-secondary transition-colors" title="Painel Admin">
                 <Shield className="h-4 w-4 text-primary" />
               </button>
             )}
-            <button onClick={() => setShowNotifications(!showNotifications)} aria-label="Abrir notificações" className="relative p-2 rounded-full border border-border hover:bg-secondary transition-colors">
-              <Bell className="h-4 w-4 text-muted-foreground" />
+            <button onClick={() => setShowNotifications(!showNotifications)} aria-label="Abrir notificações" className="icon-circle relative h-10 w-10 hover:bg-secondary transition-colors">
+              <Bell className="h-4 w-4 text-primary" strokeWidth={1.6} />
               {unreadCount > 0 && (
                 <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[8px] font-bold text-primary-foreground flex items-center justify-center">{unreadCount > 9 ? "9+" : unreadCount}</span>
               )}
             </button>
-            <button onClick={() => navigate("/settings")} aria-label="Abrir configurações" className="p-2 rounded-full border border-border hover:bg-secondary transition-colors">
-              <Settings className="h-4 w-4 text-muted-foreground" />
+            <button onClick={() => navigate("/settings")} aria-label="Abrir configurações" className="icon-circle h-10 w-10 hover:bg-secondary transition-colors">
+              <Settings className="h-4 w-4 text-primary" strokeWidth={1.6} />
             </button>
           </div>
         </div>
@@ -152,7 +153,17 @@ const HomePage = () => {
           className="animate-stagger"
           style={{ "--stagger": 0 } as React.CSSProperties}
         >
-          <div className="ed-hero">
+          <div className="ed-hero relative overflow-hidden animate-gradient-shift" style={{ backgroundImage: "linear-gradient(135deg,#F3E1D5,#E1C0B0,#F1DB9F,#F3E1D5)" }}>
+            <span aria-hidden className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-background/50 blur-3xl animate-blob" />
+            <span aria-hidden className="pointer-events-none absolute right-24 bottom-0 h-32 w-32 rounded-full bg-[#F1DB9F]/60 blur-3xl animate-blob" style={{ animationDelay: "-6s" }} />
+            <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-1/2">
+              {(["sparkles","flower","crown","star","sparkles","flower"] as const).map((n, i) => (
+                <span key={i} className={cn("absolute bottom-4 animate-emoji-rise", i > 2 && "hide-mobile-particle")} style={{ left: `${10 + i * 15}%`, animationDelay: `${i * 1.15}s` }}>
+                  <AnimatedEmoji name={n} size={26} motion="none" />
+                </span>
+              ))}
+            </div>
+            <div className="relative">
             <p className="eyebrow text-[hsl(24_30%_25%)]">Comece por aqui</p>
             <h2 className="mt-1 font-display text-[30px] leading-[1.05]">
               Apresente-se para o <span className="italic">clube</span>
@@ -185,6 +196,7 @@ const HomePage = () => {
                 <Trophy className="h-4 w-4 text-primary flex-shrink-0" />
                 <span className="text-[11px] font-body font-semibold truncate">Top clubbers</span>
               </button>
+            </div>
             </div>
           </div>
         </section>

@@ -1,3 +1,4 @@
+import AnimatedEmoji from "@/components/ui/animated-emoji";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft, Send, Trophy, Flame, Users, Star, Crown, Diamond, Award, Sparkles, Share2, X, Brain, Heart, Dumbbell, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -1046,7 +1047,7 @@ export default function DesafiosPage() {
         </button>
         <div className="flex items-center gap-2 mb-2">
           <Trophy className="h-5 w-5 text-gold" />
-          <h1 className="text-2xl font-display font-semibold text-foreground">Desafios</h1>
+          <h1 className="flex items-center gap-2 text-3xl font-display font-normal text-foreground"><span className="title-accent">Desafios</span> <AnimatedEmoji name="trophy" /></h1>
         </div>
         <p className="text-sm text-muted-foreground font-body">Escolha um desafio de 7 a 90 dias. Cada dia você recebe uma tarefa simples e prática para virar o jogo na sua vida.</p>
       </div>

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import BottomNav from "./BottomNav";
 import DesktopSidebar from "./DesktopSidebar";
 import ViewModeToggle from "./ViewModeToggle";
@@ -20,6 +20,7 @@ export default function AppLayout() {
   const { mode } = useViewMode();
   const { user } = useAuth();
   const isDesktop = mode === "desktop";
+  const location = useLocation();
 
   useActivityTracker();
   usePushNotificationListener();
@@ -31,13 +32,13 @@ export default function AppLayout() {
 
   return (
     <>
-      <div className={cn("app-shell", isDesktop ? "pl-64" : "pb-28")}>
+      <div className={cn("app-shell", isDesktop ? "pl-[230px]" : "pb-32")}>
         <div className="flex justify-end px-4 pt-3 pb-1">
           <ViewModeToggle />
         </div>
         <WelcomeBackAlert />
 
-        <div className={cn(isDesktop && "max-w-5xl mx-auto px-6 py-4")}>
+        <div key={location.pathname} className={cn("page-in", isDesktop && "max-w-5xl mx-auto px-6 py-4")}>
           <BackButton />
           <Outlet />
         </div>

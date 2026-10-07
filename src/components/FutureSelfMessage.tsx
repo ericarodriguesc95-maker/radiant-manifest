@@ -1,3 +1,4 @@
+import AnimatedEmoji from "@/components/ui/animated-emoji";
 import { useEffect, useState } from "react";
 import { Sparkles, RefreshCw } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -67,14 +68,12 @@ export default function FutureSelfMessage() {
   return (
     <div
       className={cn(
-        "animate-stagger relative overflow-hidden rounded-3xl p-5 border border-gold/40 shadow-brand",
-        "bg-gradient-to-br from-[#fff8e1] via-[#fdf3d0] to-[#f7e5b8]"
+        "animate-stagger relative overflow-hidden rounded-card p-5 border border-border shadow-card lift",
+        "bg-highlight-butter"
       )}
       style={{ "--stagger": 1 } as React.CSSProperties}
     >
-      {/* Holographic sheen */}
-      <div className="pointer-events-none absolute inset-0 opacity-70 mix-blend-screen bg-[conic-gradient(from_120deg_at_50%_50%,rgba(255,220,150,0.35),rgba(255,255,255,0),rgba(212,175,55,0.35),rgba(255,255,255,0),rgba(255,220,150,0.35))] animate-[spin_18s_linear_infinite]" />
-      <div className="pointer-events-none absolute -inset-1 bg-[radial-gradient(circle_at_80%_10%,rgba(212,175,55,0.35),transparent_55%)]" />
+      <span aria-hidden className="pointer-events-none absolute right-4 top-4"><AnimatedEmoji name="letter" size={36} /></span>
 
       <div className="relative z-10 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">

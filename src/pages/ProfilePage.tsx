@@ -301,7 +301,7 @@ const ProfilePage = () => {
           <img
             src={profile.cover_url}
             alt=""
-            className={`w-full h-full object-cover ${repositioningCover ? "cursor-grab active:cursor-grabbing" : ""}`}
+            className={`w-full h-full object-cover ${repositioningCover ? "cursor-grab active:cursor-grabbing" : "ken-burns"}`}
             style={{ objectPosition: `center ${coverPosition}%` }}
             onMouseDown={(e) => { if (repositioningCover) { e.preventDefault(); handleCoverDragStart(e.clientY); } }}
             onMouseMove={(e) => { if (repositioningCover) handleCoverDragMove(e.clientY); }}
@@ -378,7 +378,7 @@ const ProfilePage = () => {
         {/* Avatar */}
         <div className="relative inline-block">
           {profile.avatar_url ? (
-            <img src={profile.avatar_url} alt="" className="h-24 w-24 rounded-full object-cover border-4 border-card shadow-lg" />
+            <div className="h-24 w-24 overflow-hidden rounded-full border-4 border-card shadow-lg"><img src={profile.avatar_url} alt="" className="h-full w-full object-cover ken-burns" /></div>
           ) : (
             <div className="h-24 w-24 rounded-full bg-gold/20 flex items-center justify-center text-2xl font-bold text-gold border-4 border-card shadow-lg">
               {getInitials(profile.display_name)}

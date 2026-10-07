@@ -24,21 +24,21 @@ export default function BottomNav() {
       aria-label="Navegação principal"
     >
       <div className="mx-auto max-w-lg px-3 pb-3">
-        <div className="relative flex items-stretch justify-between rounded-[30px] border border-border/70 bg-[hsl(var(--card)/0.92)] px-1.5 py-2 backdrop-blur-xl shadow-[0_18px_44px_-24px_hsl(24_25%_25%/0.55)]">
+        <div className="relative flex items-stretch justify-between rounded-[30px] border border-border/70 bg-card/80 px-1.5 py-1.5 backdrop-blur-md shadow-card">
           {tabs.map(({ to, icon: Icon, label, match }) => {
             const active = match(location.pathname);
             return (
               <NavLink
                 key={label}
                 to={to}
-                className="group relative flex flex-1 flex-col items-center justify-center gap-1 pt-1 outline-none"
+                className="group relative flex min-h-[44px] flex-1 flex-col items-center justify-center gap-1 pt-1 outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-2xl"
               >
                 <Icon
                   className={cn(
                     "h-[19px] w-[19px] transition-all duration-300",
-                    active ? "text-primary" : "text-foreground/45 group-hover:text-foreground/75",
+                    active ? "text-foreground" : "text-muted-foreground group-hover:text-foreground",
                   )}
-                  strokeWidth={active ? 2.1 : 1.6}
+                  strokeWidth={active ? 1.9 : 1.5}
                 />
                 <span
                   className={cn(
@@ -50,7 +50,7 @@ export default function BottomNav() {
                 </span>
                 <span
                   className={cn(
-                    "mt-0.5 h-[3px] rounded-full bg-primary transition-all duration-300",
+                    "mt-0.5 h-[2px] rounded-full bg-primary transition-all duration-300",
                     active ? "w-4 opacity-100" : "w-0 opacity-0",
                   )}
                 />

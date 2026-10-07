@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useViewMode } from "@/contexts/ViewModeContext";
 import FourPointStar from "./FourPointStar";
+import StreakSidebarCard from "./StreakSidebarCard";
 import brandLogo from "@/assets/gloow-up-club-logo.png";
 
 export default function DesktopSidebar() {
@@ -37,7 +38,7 @@ export default function DesktopSidebar() {
         className={cn(
           "flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 text-sm font-body",
           active
-            ? "bg-gold/10 text-gold font-semibold border border-gold/20"
+            ? "bg-[linear-gradient(135deg,#F3E1D5,#E8C9BA)] text-foreground font-semibold"
             : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
         )}
       >
@@ -48,10 +49,10 @@ export default function DesktopSidebar() {
   };
 
   return (
-    <aside className="fixed left-0 top-0 bottom-0 w-64 bg-card border-r border-border z-40 flex flex-col overflow-y-auto">
+    <aside className="fixed left-0 top-0 bottom-0 w-[230px] bg-[#F6F0EB] border-r border-border z-40 flex flex-col overflow-y-auto">
       {/* Brand */}
       <div className="px-5 pt-6 pb-4 flex items-center justify-center border-b border-border">
-        <img src={brandLogo} alt="Gloow Up Club" className="h-16 w-auto object-contain rounded-2xl" />
+        <img src={brandLogo} alt="Gloow Up Club" className="h-16 w-16 object-cover rounded-full" />
       </div>
 
       {/* Navigation */}
@@ -68,6 +69,8 @@ export default function DesktopSidebar() {
         {renderLink({ to: "/admin/assinaturas", icon: ShieldCheck, label: "Assinaturas" })}
       </nav>
 
+      <div className="px-3 pb-3"><StreakSidebarCard /></div>
+
       {/* Profile + mode toggle */}
       <div className="border-t border-border px-3 py-3 space-y-2">
         <NavLink
@@ -75,7 +78,7 @@ export default function DesktopSidebar() {
           className={cn(
             "flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all text-sm font-body",
             location.pathname.startsWith("/perfil/")
-              ? "bg-gold/10 text-gold font-semibold border border-gold/20"
+              ? "bg-[linear-gradient(135deg,#F3E1D5,#E8C9BA)] text-foreground font-semibold"
               : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
           )}
         >
@@ -88,7 +91,7 @@ export default function DesktopSidebar() {
           className={cn(
             "flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all text-sm font-body",
             location.pathname === "/settings"
-              ? "bg-gold/10 text-gold font-semibold border border-gold/20"
+              ? "bg-[linear-gradient(135deg,#F3E1D5,#E8C9BA)] text-foreground font-semibold"
               : "text-muted-foreground hover:text-foreground hover:bg-muted/40"
           )}
         >

@@ -1,3 +1,4 @@
+import { celebrate } from "@/lib/celebrate";
 import { useEffect, useState, useCallback } from "react";
 import { Check, Sparkles, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -69,6 +70,7 @@ export default function DailyCheckpoints({ className, showHeader = true }: Daily
         page: "/",
       }).then(() => {});
       const next = new Set(done); next.add(cp.key); setDone(next);
+      celebrate();
       toast({ title: `+${cp.points} pontos ✨`, description: cp.label });
     }
   };
