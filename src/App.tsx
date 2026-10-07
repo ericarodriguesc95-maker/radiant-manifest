@@ -19,7 +19,6 @@ import ComunidadePage from "@/pages/ComunidadePage";
 import VisionBoardPage from "@/pages/VisionBoardPage";
 import ReprogramacaoPage from "@/pages/ReprogramacaoPage";
 import GuiasPage from "@/pages/GuiasPage";
-import AltaPerformancePage from "@/pages/AltaPerformancePage";
 import JornadaPage from "@/pages/JornadaPage";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
@@ -31,7 +30,6 @@ import NotFound from "./pages/NotFound";
 import ProfilePage from "@/pages/ProfilePage";
 import DiarioPage from "@/pages/DiarioPage";
 import AdminActivityPage from "@/pages/AdminActivityPage";
-import AdminContentPage from "@/pages/AdminContentPage";
 import AdminSubscriptionsPage from "@/pages/AdminSubscriptionsPage";
 import AdminCheckpointsPage from "@/pages/AdminCheckpointsPage";
 import CheckpointsPage from "@/pages/CheckpointsPage";
@@ -125,12 +123,10 @@ const AppRoutes = () => (
       <Route path="/jornada" element={<ErrorBoundary><JornadaPage /></ErrorBoundary>} />
       <Route path="/reprogramacao" element={<ErrorBoundary><ReprogramacaoPage /></ErrorBoundary>} />
       <Route path="/guias" element={<ErrorBoundary><GuiasPage /></ErrorBoundary>} />
-      <Route path="/alta-performance" element={<ErrorBoundary><AltaPerformancePage /></ErrorBoundary>} />
       <Route path="/diario" element={<ErrorBoundary><DiarioPage /></ErrorBoundary>} />
       <Route path="/settings" element={<ErrorBoundary><SettingsPage /></ErrorBoundary>} />
       <Route path="/lembretes-historico" element={<ErrorBoundary><LembretesHistoricoPage /></ErrorBoundary>} />
       <Route path="/admin/atividade" element={<ErrorBoundary><AdminActivityPage /></ErrorBoundary>} />
-      <Route path="/admin/conteudo" element={<ErrorBoundary><AdminContentPage /></ErrorBoundary>} />
       <Route path="/admin/assinaturas" element={<ErrorBoundary><AdminSubscriptionsPage /></ErrorBoundary>} />
       <Route path="/admin/biblioteca-elite" element={<ErrorBoundary><AdminBibliotecaElitePage /></ErrorBoundary>} />
       <Route path="/admin/sugestoes" element={<ErrorBoundary><AdminSugestoesPage /></ErrorBoundary>} />

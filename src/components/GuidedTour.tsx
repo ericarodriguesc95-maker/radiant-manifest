@@ -112,8 +112,8 @@ const TOUR_STEPS: TourStep[] = [
   },
   {
     icon: Zap,
-    tab: "Performance",
-    route: "/alta-performance",
+    tab: "Reprogramação",
+    route: "/reprogramacao",
     title: "Reprogramação Mental 🧠",
     description: "Neurociência + PNL, Ho'oponopono, Meditações Guiadas, Lei da Atração e Pomodoro com técnica Feynman.",
     tips: [

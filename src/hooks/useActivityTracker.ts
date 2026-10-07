@@ -7,7 +7,6 @@ const PAGE_NAMES: Record<string, string> = {
   "/": "Home",
   "/diario": "Diário",
   "/metas": "Metas",
-  "/alta-performance": "Alta Performance",
   "/financas": "Finanças",
   "/comunidade": "Comunidade",
   "/settings": "Configurações",
