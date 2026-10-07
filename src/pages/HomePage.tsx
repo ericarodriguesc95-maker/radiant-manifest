@@ -226,7 +226,7 @@ const HomePage = () => {
                   </span>
                   <span className="font-display text-[15px] leading-tight text-foreground">{title}</span>
                   <span className="text-[11px] font-body leading-snug text-muted-foreground line-clamp-2">{sub}</span>
-                  <span className="ed-block-tag">{tag}</span>
+                  {tag && <span className="ed-block-tag">{tag}</span>}
                 </>
               );
               const className = cn(
