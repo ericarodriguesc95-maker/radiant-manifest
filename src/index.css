@@ -224,8 +224,8 @@
 
   /* ===== Editorial UI language ===== */
   .ed-card {
-    border-radius: 26px;
-    background: linear-gradient(145deg, hsl(var(--card) / 0.72), hsl(30 28% 96% / 0.68));
+    border-radius: 20px;
+    background: hsl(var(--card));
     border: 1px solid hsl(var(--border) / 0.75);
     box-shadow: var(--shadow-card);
     backdrop-filter: blur(16px) saturate(1.1);
@@ -252,8 +252,9 @@
     height: 46px; width: 46px; flex: 0 0 auto;
     border-radius: 999px;
     border: 1px solid hsl(var(--border));
-    background: hsl(30 30% 96%);
+    background: hsl(var(--muted));
     color: hsl(var(--primary));
+    border-color: transparent;
   }
 
   .ed-title { font-family: var(--font-display); font-size: 1.0625rem; line-height: 1.2; color: hsl(var(--foreground)); }
@@ -262,7 +263,7 @@
   .ed-tag {
     display: inline-flex; align-items: center;
     padding: 0.15rem 0.55rem; border-radius: 999px;
-    border: 1px solid hsl(var(--primary) / 0.35);
+    border: 1px solid hsl(var(--border));
     color: hsl(var(--primary));
     font-size: 0.5875rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600;
   }
