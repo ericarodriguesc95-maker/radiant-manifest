@@ -32,9 +32,18 @@ const TabsList = React.forwardRef<
     if (!el) return;
     const resizeObs = new ResizeObserver(checkScroll);
     resizeObs.observe(el);
+    const mutations = new MutationObserver(() => {
+      checkScroll();
+      const active = el.querySelector<HTMLElement>('[data-state="active"]');
+      if (active && (active.offsetLeft < el.scrollLeft || active.offsetLeft + active.offsetWidth > el.scrollLeft + el.clientWidth)) {
+        el.scrollTo({ left: active.offsetLeft - el.clientWidth / 2 + active.offsetWidth / 2, behavior: "instant" });
+      }
+    });
+    mutations.observe(el, { childList: true, subtree: true, attributes: true, attributeFilter: ["data-state"] });
     window.addEventListener("resize", checkScroll);
     return () => {
       resizeObs.disconnect();
+      mutations.disconnect();
       window.removeEventListener("resize", checkScroll);
     };
   }, [checkScroll]);
@@ -43,18 +52,18 @@ const TabsList = React.forwardRef<
     const el = innerRef.current;
     if (!el) return;
     const gap = parseInt(getComputedStyle(el).gap || "16", 10) || 16;
-    el.scrollBy({ left: direction * (el.clientWidth * 0.55 + gap), behavior: "smooth" });
+    el.scrollBy({ left: direction * (el.clientWidth * 0.55 + gap), behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
   };
 
   return (
-    <div className="relative flex w-full items-center">
+    <div className={cn("compact-tabs relative flex min-w-0 w-full items-center", (canScrollLeft || canScrollRight) && "px-9")}>
       {canScrollLeft && (
         <Button
           type="button"
           variant="ghost"
           size="icon"
           onClick={() => scrollBy(-1)}
-          className="absolute left-0 z-10 h-7 w-7 shrink-0 rounded-full bg-gradient-to-r from-[hsl(32,30%,97%,0.95)] to-[hsl(32,30%,97%,0.6)] text-primary shadow-sm hover:text-primary/80"
+          className="absolute left-0 z-10 h-9 w-9 shrink-0 rounded-lg bg-card text-primary hover:text-primary/80"
           aria-label="Anterior"
         >
           <ChevronLeft className="h-4 w-4" />
@@ -65,7 +74,7 @@ const TabsList = React.forwardRef<
         onScroll={checkScroll}
         className={cn(
           // Editorial compacto: trilho hairline com botões de navegação, scroll horizontal.
-          "flex w-full items-center gap-3 sm:gap-4 overflow-x-auto overscroll-x-contain border-b border-border/70 bg-transparent pb-0 text-muted-foreground select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [-webkit-overflow-scrolling:touch] px-8 sm:px-9",
+          "flex min-w-0 w-full items-center gap-2 sm:gap-4 overflow-x-auto overscroll-x-contain border-b border-border/70 bg-transparent pb-0 text-muted-foreground select-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [-webkit-overflow-scrolling:touch] px-0",
           className,
         )}
         {...props}
@@ -78,7 +87,7 @@ const TabsList = React.forwardRef<
           variant="ghost"
           size="icon"
           onClick={() => scrollBy(1)}
-          className="absolute right-0 z-10 h-7 w-7 shrink-0 rounded-full bg-gradient-to-l from-[hsl(32,30%,97%,0.95)] to-[hsl(32,30%,97%,0.6)] text-primary shadow-sm hover:text-primary/80"
+          className="absolute right-0 z-10 h-9 w-9 shrink-0 rounded-lg bg-card text-primary hover:text-primary/80"
           aria-label="Próximo"
         >
           <ChevronRight className="h-4 w-4" />
@@ -99,7 +108,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "relative inline-flex shrink-0 items-center justify-center gap-1 whitespace-nowrap border-b-2 border-transparent bg-transparent px-0.5 pb-2 pt-1 text-[10px] font-semibold uppercase tracking-[0.1em] leading-none transition-all duration-300 hover:text-foreground focus-visible:outline-none data-[state=active]:border-primary data-[state=active]:text-foreground disabled:pointer-events-none disabled:opacity-50 md:text-[11px]",
+      "relative inline-flex min-h-10 shrink-0 items-center justify-center gap-1.5 whitespace-nowrap border-b-2 border-transparent bg-transparent px-2 py-2 text-[11px] font-semibold tracking-normal leading-normal transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring data-[state=active]:border-primary data-[state=active]:text-foreground disabled:pointer-events-none disabled:opacity-50 md:text-xs",
       className,
     )}
     {...props}
@@ -114,7 +123,7 @@ const TabsContent = React.forwardRef<
   <TabsPrimitive.Content
     ref={ref}
     className={cn(
-      "mt-5 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+      "mt-3 sm:mt-4 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
       className,
     )}
     {...props}
