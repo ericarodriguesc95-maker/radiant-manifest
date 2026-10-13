@@ -179,45 +179,45 @@ export default function DiarioPage() {
 
   // List view
   return (
-    <div className="p-4 pb-24 max-w-2xl mx-auto space-y-6">
+    <div className="px-4 pt-3 pb-6 max-w-4xl mx-auto space-y-4 sm:space-y-5">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex min-w-0 flex-1 items-center gap-2.5">
+          <div className="h-9 w-9 shrink-0 rounded-full bg-gradient-gold flex items-center justify-center shadow-gold">
             <BookOpen className="h-5 w-5 text-primary-foreground" />
           </div>
-          <div>
+          <div className="min-w-0">
             <h1 className="text-xl font-heading font-bold text-foreground">Meu Diário</h1>
             <p className="text-xs font-body text-muted-foreground">Só você lê o que escreve aqui. Desabafe, planeje, sonhe.</p>
           </div>
         </div>
         {tab === "notas" && (
-          <Button variant="gold" size="sm" onClick={createNote} className="gap-1.5">
+          <Button variant="gold" size="sm" onClick={createNote} className="gap-1 px-3 text-xs">
             <Plus className="h-4 w-4" /> Nova nota
           </Button>
         )}
       </div>
 
       {/* Tabs */}
-      <div className="grid grid-cols-2 gap-2 bg-muted/40 p-1 rounded-2xl">
-        <button
+      <div className="grid grid-cols-2 gap-1 bg-muted/40 p-1 rounded-xl lg:max-w-md">
+        <Button variant="ghost" size="sm"
           onClick={() => setTab("notas")}
           className={cn(
-            "flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-body font-semibold transition-all",
+            "h-10 gap-1.5 px-2 rounded-lg text-xs font-body font-semibold transition-all",
             tab === "notas" ? "bg-card shadow-sm text-foreground" : "text-muted-foreground"
           )}
         >
           <BookOpen className="h-3.5 w-3.5" /> Notas
-        </button>
-        <button
+        </Button>
+        <Button variant="ghost" size="sm"
           onClick={() => setTab("compras")}
           className={cn(
-            "flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-body font-semibold transition-all",
+            "h-10 gap-1.5 px-2 rounded-lg text-xs font-body font-semibold transition-all",
             tab === "compras" ? "bg-card shadow-sm text-foreground" : "text-muted-foreground"
           )}
         >
           <ShoppingBasket className="h-3.5 w-3.5" /> Lista de compras
-        </button>
+        </Button>
       </div>
 
       {tab === "compras" ? <ShoppingList /> : (<></>)}
@@ -241,7 +241,7 @@ export default function DiarioPage() {
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
           {notes.map(note => (
             <div
               key={note.id}

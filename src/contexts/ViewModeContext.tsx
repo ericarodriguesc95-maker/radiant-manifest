@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 type ViewMode = "mobile" | "desktop";
 
@@ -15,13 +15,25 @@ const ViewModeContext = createContext<ViewModeContextType>({
 export const useViewMode = () => useContext(ViewModeContext);
 
 export function ViewModeProvider({ children }: { children: ReactNode }) {
-  const [mode, setModeState] = useState<ViewMode>(() => {
-    return (localStorage.getItem("glowup-view-mode") as ViewMode) || "mobile";
+  const [wideScreen, setWideScreen] = useState(() => window.matchMedia("(min-width: 1024px)").matches);
+  const [preferredMode, setModeState] = useState<ViewMode | null>(() => {
+    try {
+      const saved = localStorage.getItem("glowup-view-mode");
+      return saved === "mobile" || saved === "desktop" ? saved : null;
+    } catch { return null; }
   });
+  const mode: ViewMode = wideScreen ? preferredMode || "desktop" : "mobile";
+
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 1024px)");
+    const update = () => setWideScreen(media.matches);
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
 
   const setMode = (m: ViewMode) => {
     setModeState(m);
-    localStorage.setItem("glowup-view-mode", m);
+    try { localStorage.setItem("glowup-view-mode", m); } catch {}
   };
 
   return (
