@@ -5,11 +5,13 @@ import {
   Heart, Target, Wallet, Brain, BookOpen, Dumbbell, Users, NotebookPen,
   Trophy, Utensils, Crown, Image, ListChecks,
 } from "lucide-react";
-import { differenceInDays } from "date-fns";
+import { useCurrentPhase, type Phase } from "@/hooks/useCurrentPhase";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 
-type Phase = "menstrual" | "folicular" | "ovulatoria" | "lutea";
+
 
 interface AreaTip {
   label: string;
@@ -91,46 +93,11 @@ const SUGGESTIONS: Record<Phase, Suggestion> = {
   },
 };
 
-function estimatePhase(periodStart: Date, cycleLength: number): Phase {
-  const day = (differenceInDays(new Date(), periodStart) % cycleLength + cycleLength) % cycleLength + 1;
-  if (day <= 5) return "menstrual";
-  if (day <= 13) return "folicular";
-  if (day <= 16) return "ovulatoria";
-  return "lutea";
-}
-
-export default function HormonalPhaseSuggestion() {
-  const { user } = useAuth();
+export default function HormonalPhaseSuggestion({ cardOnly = false }: { cardOnly?: boolean }) {
   const navigate = useNavigate();
-  const [phase, setPhase] = useState<Phase | null>(null);
+  const phase = useCurrentPhase();
 
-  useEffect(() => {
-    if (!user) return;
-    const load = async () => {
-      const { data } = await supabase
-        .from("cycle_logs")
-        .select("period_start")
-        .eq("user_id", user.id)
-        .order("period_start", { ascending: false })
-        .limit(6);
-      if (!data || data.length === 0) return;
-
-      let avg = 28;
-      if (data.length >= 2) {
-        let total = 0;
-        const n = Math.min(data.length, 5);
-        for (let i = 0; i < n - 1; i++) {
-          total += differenceInDays(new Date(`${data[i].period_start}T12:00:00`), new Date(`${data[i + 1].period_start}T12:00:00`));
-        }
-        avg = Math.max(21, Math.min(35, Math.round(total / (n - 1)) || 28));
-      }
-      setPhase(estimatePhase(new Date(`${data[0].period_start}T12:00:00`), avg));
-    };
-    load();
-    window.addEventListener("cycle:updated", load);
-    return () => window.removeEventListener("cycle:updated", load);
-  }, [user]);
-
+  if (!phase && cardOnly) return <div className="ed-card p-4 flex items-center justify-between gap-3"><p className="text-sm text-muted-foreground">Minha fase</p><Button asChild size="sm" variant="outline"><Link to="/saude">Registrar ciclo</Link></Button></div>;
   if (!phase) return null;
   const s = SUGGESTIONS[phase];
   const Icon = s.icon;
@@ -151,7 +118,7 @@ export default function HormonalPhaseSuggestion() {
         </div>
       </div>
 
-      <div className="relative z-10 mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+      {!cardOnly && <div className="relative z-10 mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
         {s.areas.map((a) => {
           const AIcon = a.icon;
           return (
@@ -171,7 +138,7 @@ export default function HormonalPhaseSuggestion() {
             </button>
           );
         })}
-      </div>
+      </div>}
     </div>
   );
 }
