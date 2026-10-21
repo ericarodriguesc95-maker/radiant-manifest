@@ -228,6 +228,22 @@ export default function AdminActivityPage() {
         </button>
       </div>
 
+      {/* Admin quick access */}
+      <div className="grid grid-cols-2 gap-2">
+        <Button variant="outline" size="sm" onClick={() => navigate("/admin/assinaturas")} className="justify-start gap-2 h-9 text-xs border-border">
+          👑 Usuárias & assinaturas
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => navigate("/admin/checkpoints")} className="justify-start gap-2 h-9 text-xs border-border">
+          ✅ Check-points
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => navigate("/admin/sugestoes")} className="justify-start gap-2 h-9 text-xs border-border">
+          💬 Sugestões
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => navigate("/admin/biblioteca-elite")} className="justify-start gap-2 h-9 text-xs border-border">
+          📚 Biblioteca Elite
+        </Button>
+      </div>
+
       {/* Stats bar */}
       <div className="grid grid-cols-3 gap-2">
         <div className="bg-card rounded-xl border border-border p-3 text-center">
