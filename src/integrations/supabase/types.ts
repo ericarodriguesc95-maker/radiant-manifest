@@ -1558,6 +1558,42 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_deliveries: {
+        Row: {
+          created_at: string
+          delivery_key: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          delivery_key: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          delivery_key?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      notification_scheduler_config: {
+        Row: {
+          id: boolean
+          secret: string
+          vapid_keys: Json | null
+        }
+        Insert: {
+          id?: boolean
+          secret?: string
+          vapid_keys?: Json | null
+        }
+        Update: {
+          id?: boolean
+          secret?: string
+          vapid_keys?: Json | null
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           comment_text: string | null
@@ -1760,7 +1796,9 @@ export type Database = {
           cover_url: string | null
           created_at: string
           display_name: string | null
+          future_self_details: Json
           id: string
+          notification_schedule: Json
           phone_number: string | null
           skin_tone: string | null
           updated_at: string
@@ -1776,7 +1814,9 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           display_name?: string | null
+          future_self_details?: Json
           id?: string
+          notification_schedule?: Json
           phone_number?: string | null
           skin_tone?: string | null
           updated_at?: string
@@ -1792,7 +1832,9 @@ export type Database = {
           cover_url?: string | null
           created_at?: string
           display_name?: string | null
+          future_self_details?: Json
           id?: string
+          notification_schedule?: Json
           phone_number?: string | null
           skin_tone?: string | null
           updated_at?: string
@@ -2538,6 +2580,7 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_notification_public_key: { Args: never; Returns: string }
       get_public_profiles: {
         Args: never
         Returns: {

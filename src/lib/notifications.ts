@@ -34,6 +34,8 @@ export function getPermissionStatus(): NotificationPermission | "unsupported" {
  */
 export async function subscribeToPush(userId: string): Promise<boolean> {
   try {
+    const { data: publicKey, error: keyError } = await supabase.rpc("get_notification_public_key");
+    if (keyError || !publicKey) return false;
     const registration = await navigator.serviceWorker?.ready;
     if (!registration?.pushManager) {
       console.log('PushManager not available');
@@ -42,11 +44,21 @@ export async function subscribeToPush(userId: string): Promise<boolean> {
 
     // Check existing subscription
     let subscription = await registration.pushManager.getSubscription();
+    if (subscription?.options.applicationServerKey) {
+      const expected = urlBase64ToUint8Array(publicKey);
+      const current = new Uint8Array(subscription.options.applicationServerKey);
+      if (current.length !== expected.length || current.some((value, index) => value !== expected[index])) {
+        const endpoint = subscription.endpoint;
+        await subscription.unsubscribe();
+        await supabase.from("push_subscriptions").delete().eq("user_id", userId).eq("endpoint", endpoint);
+        subscription = null;
+      }
+    }
     
     if (!subscription) {
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) as BufferSource,
+        applicationServerKey: urlBase64ToUint8Array(publicKey) as BufferSource,
       });
     }
 
@@ -327,9 +339,8 @@ function scheduleAllNotifications() {
  * Initialize notification system, requests permission, subscribes to push, schedules local.
  */
 export async function initNotifications(userId?: string) {
-  const granted = await requestNotificationPermission();
-  if (granted) {
-    scheduleAllNotifications();
+  clearAllScheduled();
+  if (getPermissionStatus() === "granted") {
     // Subscribe to Web Push if userId available
     if (userId) {
       subscribeToPush(userId).catch(console.error);

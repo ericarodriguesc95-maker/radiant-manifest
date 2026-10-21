@@ -95,16 +95,8 @@ export function useCheckpointReminders() {
       } catch {}
     };
 
-    const schedule = () => {
-      const now = new Date();
-      const msToNextMinute = 60000 - (now.getSeconds() * 1000 + now.getMilliseconds());
-      timerId = window.setTimeout(async () => {
-        if (cancelled) return;
-        await tick();
-        schedule();
-      }, msToNextMinute + 50);
-    };
-    schedule();
+    // Standard reminders are sent by the server, even when the app is closed.
+    // Keep this listener only for existing snooze actions and completion history.
 
     // Log "completed" once per day when the user marks any checkpoint AFTER a reminder was received today
     const channel = supabase

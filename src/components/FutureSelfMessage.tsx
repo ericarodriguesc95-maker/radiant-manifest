@@ -1,130 +1,74 @@
 import AnimatedEmoji from "@/components/ui/animated-emoji";
 import { useEffect, useState } from "react";
-import { Sparkles, RefreshCw } from "lucide-react";
+import { Sparkles, RefreshCw, ChevronDown, ChevronUp, Pencil, Save } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
+import { parseFutureSelfDetails, type FutureSelfDetails } from "../../supabase/functions/_shared/future-self-details";
 
-interface CachedMessage {
-  message: string;
-  title: string;
-  date: string;
-}
-
+const empty = { goal: "", challenge: "", feeling: "", age: 0, city: "" };
 export default function FutureSelfMessage() {
   const { user } = useAuth();
-  const [data, setData] = useState<CachedMessage | null>(null);
-  const [loading, setLoading] = useState(false);
-
+  const [message, setMessage] = useState<{ message: string; title: string } | null>(null);
+  const [details, setDetails] = useState<FutureSelfDetails>(empty);
+  const [editing, setEditing] = useState(false);
+  const [minimized, setMinimized] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
   const today = new Date().toISOString().slice(0, 10);
-  const cacheKey = user ? `future-self:${user.id}:${today}` : null;
-
-  const fetchMessage = async (force = false) => {
-    if (!user || !cacheKey) return;
-    if (!force) {
-      const cached = localStorage.getItem(cacheKey);
-      if (cached) {
-        try {
-          setData(JSON.parse(cached));
-          return;
-        } catch {
-          /* ignore */
-        }
-      }
-    }
-    setLoading(true);
+  const generate = async (info: FutureSelfDetails, force = false) => {
+    if (!user) return;
+    const key = `future-self:v2:${user.id}:${today}:${JSON.stringify(info)}`;
+    if (!force) { try { const cached = JSON.parse(localStorage.getItem(key) || "null"); if (cached?.message) { setMessage(cached); return; } } catch {} }
+    setBusy(true);setError("");
     try {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("display_name")
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      const { data: resp, error } = await supabase.functions.invoke("future-self-message", {
-        body: { name: profile?.display_name || null, date: today },
-      });
-      if (error) throw error;
-      if (resp?.message) {
-        const payload: CachedMessage = {
-          message: resp.message,
-          title: resp.title || "Uma cena da sua vida daqui a 1 ano",
-          date: today,
-        };
-        setData(payload);
-        localStorage.setItem(cacheKey, JSON.stringify(payload));
-      }
-    } catch (err) {
-      console.error("future-self fetch", err);
-    } finally {
-      setLoading(false);
-    }
+      const { data, error: failure } = await supabase.functions.invoke("future-self-message", { body: { details: info, date: today } });
+      if (failure || !data?.message) throw new Error();
+      setMessage(data);localStorage.setItem(key, JSON.stringify(data));
+    } catch { setError("Não foi possível gerar sua mensagem agora. Tente novamente."); }
+    finally { setBusy(false); }
   };
-
   useEffect(() => {
-    fetchMessage(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id]);
-
-  return (
-    <div
-      className={cn(
-        "animate-stagger relative overflow-hidden rounded-card p-5 border border-border shadow-card lift",
-        "bg-highlight-butter"
-      )}
-      style={{ "--stagger": 1 } as React.CSSProperties}
-    >
-      <span aria-hidden className="pointer-events-none absolute right-4 top-4"><AnimatedEmoji name="letter" size={36} /></span>
-
-      <div className="relative z-10 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-full bg-gold/20 border border-gold/50 flex items-center justify-center">
-            <Sparkles className="h-4 w-4 text-gold" />
-          </div>
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.22em] font-body font-bold text-gold">
-              Mensagem de você daqui a 1 ano
-            </p>
-            <p className="text-[10px] font-body text-foreground/60">Renova todos os dias</p>
-          </div>
-        </div>
-        <button
-          onClick={() => fetchMessage(true)}
-          disabled={loading}
-          aria-label="Gerar nova mensagem"
-          className="h-8 w-8 rounded-full bg-white/60 border border-gold/40 flex items-center justify-center hover:bg-white transition disabled:opacity-50"
-        >
-          <RefreshCw className={cn("h-3.5 w-3.5 text-gold", loading && "animate-spin")} />
-        </button>
-      </div>
-
-      <div className="relative z-10 mt-4 space-y-2">
-        {loading && !data ? (
-          <div className="space-y-2">
-            <div className="h-3 w-2/3 bg-gold/20 rounded animate-pulse" />
-            <div className="h-3 w-full bg-gold/20 rounded animate-pulse" />
-            <div className="h-3 w-5/6 bg-gold/20 rounded animate-pulse" />
-          </div>
-        ) : data ? (
-          <>
-            <p className="text-sm font-display font-bold text-foreground italic">
-              "{data.title}"
-            </p>
-            <p className="text-[13px] font-body leading-relaxed text-foreground/90">
-              {data.message}
-            </p>
-            <p className="text-[10px] font-body text-foreground/60 pt-1">
-              Com amor, você daqui a 1 ano 👑
-            </p>
-          </>
-        ) : (
-          <button
-            onClick={() => fetchMessage(true)}
-            className="text-xs font-body text-foreground/70 underline underline-offset-2"
-          >
-            Toque para receber sua mensagem de hoje
-          </button>
-        )}
-      </div>
-    </div>
-  );
+    if (!user) return;
+    let active = true;
+    setLoading(true);setMessage(null);setError("");
+    setMinimized(localStorage.getItem(`future-self-minimized:${user.id}`) === "true");
+    supabase.from("profiles").select("future_self_details").eq("user_id", user.id).single().then(({ data, error: failure }) => {
+      if (!active) return;
+      setLoading(false);
+      if (failure) { setError("Não foi possível carregar suas informações. Reabra a página.");return; }
+      const saved = parseFutureSelfDetails(data?.future_self_details);
+      setDetails(saved || empty);setEditing(!saved);
+      if (saved) void generate(saved);
+    });
+    return () => { active = false; };
+  }, [user?.id, today]);
+  const save = async (event: React.FormEvent) => {
+    event.preventDefault();const info = parseFutureSelfDetails(details);
+    if (!user || !info) return;
+    setBusy(true);
+    const { error: failure } = await supabase.from("profiles").update({ future_self_details: { ...info } }).eq("user_id", user.id).select("user_id").single();
+    setBusy(false);
+    if (failure) { toast({ title: "Não foi possível salvar suas informações", variant: "destructive" });return; }
+    setDetails(info);setEditing(false);setMessage(null);await generate(info, true);
+  };
+  const toggle = () => { const next = !minimized;setMinimized(next);if (user) localStorage.setItem(`future-self-minimized:${user.id}`, String(next)); };
+  return <section className="relative rounded-card p-4 border border-border shadow-card bg-highlight-butter">
+    <div className="flex items-start justify-between gap-2"><div className="flex min-w-0 items-center gap-2"><Sparkles className="h-5 w-5 text-primary shrink-0" /><div><p className="text-[10px] uppercase font-bold text-primary">Mensagem de você daqui a 1 ano</p><p className="text-[10px] text-muted-foreground">Renova todos os dias</p></div></div><div className="flex shrink-0">
+      {!minimized && !editing && !loading && <><Button variant="ghost" size="icon" className="h-7 w-7" aria-label="Editar informações da mensagem futura" title="Editar informações" onClick={() => setEditing(true)}><Pencil className="h-3.5 w-3.5" /></Button><Button variant="ghost" size="icon" className="h-7 w-7" aria-label="Gerar nova mensagem" title="Gerar nova mensagem" disabled={busy} onClick={() => void generate(details, true)}><RefreshCw className="h-3.5 w-3.5" /></Button></>}
+      <Button variant="ghost" size="icon" className="h-7 w-7" aria-label={minimized ? "Expandir mensagem futura" : "Minimizar mensagem futura"} title={minimized ? "Expandir mensagem" : "Minimizar mensagem"} aria-expanded={!minimized} onClick={toggle}>{minimized ? <ChevronDown /> : <ChevronUp />}</Button>
+    </div></div>
+    {!minimized && <div className="mt-3 space-y-3">
+      {loading ? <p role="status" className="text-xs text-muted-foreground">Carregando...</p> : editing ? <form onSubmit={save} className="space-y-3">
+        <div className="grid grid-cols-[80px_minmax(0,1fr)] gap-2"><div className="space-y-1"><Label htmlFor="future-age" className="text-xs">Idade</Label><Input id="future-age" type="number" min={1} max={120} required value={details.age || ""} onChange={e => setDetails({ ...details, age: Number(e.target.value) })} disabled={busy} /></div><div className="space-y-1"><Label htmlFor="future-city" className="text-xs">Cidade</Label><Input id="future-city" required maxLength={100} value={details.city} onChange={e => setDetails({ ...details, city: e.target.value })} disabled={busy} /></div></div>
+        {([["goal", "O que você quer conquistar em um ano?", "Ex.: cuidar melhor da minha saúde"], ["challenge", "Qual é seu maior desafio hoje?", "Ex.: manter a constância"], ["feeling", "Como você quer se sentir?", "Ex.: confiante e realizada"]] as const).map(([key,label,placeholder]) => <div key={key} className="space-y-1"><Label htmlFor={`future-${key}`} className="text-xs">{label}</Label><Input id={`future-${key}`} value={details[key]} onChange={e => setDetails({ ...details, [key]: e.target.value })} required maxLength={300} placeholder={placeholder} disabled={busy} /></div>)}
+        <Button type="submit" size="sm" disabled={busy || !parseFutureSelfDetails(details)} className="w-full"><Save />{busy ? "Salvando..." : "Salvar e receber mensagem"}</Button>
+      </form> : busy && !message ? <p role="status" className="text-xs text-muted-foreground">Preparando sua mensagem...</p> : message ? <><div className="flex items-start gap-2"><div className="min-w-0 space-y-2"><p className="text-sm font-display font-bold italic">“{message.title}”</p><p className="text-[13px] leading-relaxed">{message.message}</p></div><span aria-hidden className="shrink-0"><AnimatedEmoji name="letter" size={32} /></span></div><p className="text-[10px] text-muted-foreground">Com amor, você daqui a 1 ano 👑</p></> : null}
+      {error && <p role="alert" className="text-xs text-destructive">{error}</p>}
+    </div>}
+  </section>;
 }

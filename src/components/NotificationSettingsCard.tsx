@@ -1,160 +1,62 @@
-import { useState } from "react";
-import { Bell, BellOff, Send, Cloud } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Bell, Save } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "@/hooks/use-toast";
-import {
-  requestNotificationPermission,
-  getPermissionStatus,
-  sendTestNotifications,
-  subscribeToPush,
-} from "@/lib/notifications";
+import { requestNotificationPermission, getPermissionStatus, initNotifications } from "@/lib/notifications";
+import { normalizeSchedule, DEFAULT_NOTIFICATION_SCHEDULE, NotificationSchedule } from "@/lib/notification-preferences";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
+const slots = [
+  ["morning", "Afirmação e Palavra do Dia"], ["noon", "Pausa e autocuidado"],
+  ["afternoon", "Metas e movimento"], ["evening", "Hábitos e gratidão"], ["night", "Sono e descanso"],
+] as const;
+
 export default function NotificationSettingsCard() {
-  const [permStatus, setPermStatus] = useState(getPermissionStatus());
-  const [sendingPush, setSendingPush] = useState(false);
   const { user } = useAuth();
-
-  const handleEnable = async () => {
-    const granted = await requestNotificationPermission();
-    setPermStatus(getPermissionStatus());
-    if (granted) {
-      toast({
-        title: "Notificações ativadas! 🔔",
-        description: "Você receberá a afirmação e palavra do dia às 08:00 e lembrete de hábitos às 20:00.",
-      });
-    } else {
-      toast({
-        title: "Permissão negada",
-        description: "Ative as notificações nas configurações do navegador.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleTest = () => {
-    if (permStatus !== "granted") {
-      toast({
-        title: "Ative as notificações primeiro",
-        description: "Clique no botão acima para ativar.",
-        variant: "destructive",
-      });
-      return;
-    }
-    sendTestNotifications();
-    toast({
-      title: "Notificações de teste enviadas! 🔔",
-      description: "Verifique sua barra de notificações.",
+  const [permission, setPermission] = useState(getPermissionStatus());
+  const [schedule, setSchedule] = useState<NotificationSchedule>({ ...DEFAULT_NOTIFICATION_SCHEDULE });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    if (!user) return;
+    let active = true;
+    supabase.from("profiles").select("notification_schedule").eq("user_id", user.id).single().then(({ data, error }) => {
+      if (!active) return;
+      setFailed(Boolean(error));
+      if (data) setSchedule(normalizeSchedule(data.notification_schedule));
+      setLoading(false);
     });
+    return () => { active = false; };
+  }, [user]);
+  const enablePermission = async () => {
+    const granted = await requestNotificationPermission();
+    setPermission(getPermissionStatus());
+    if (granted) { await initNotifications(user?.id); toast({ title: "Notificações autorizadas! 🔔" }); }
+    else toast({ title: "Notificações não autorizadas", description: "Permita as notificações nas configurações do navegador.", variant: "destructive" });
   };
-
-  const handleTestWebPush = async () => {
-    if (permStatus !== "granted") {
-      toast({ title: "Ative as notificações primeiro", variant: "destructive" });
-      return;
-    }
-    if (!user?.id) {
-      toast({ title: "Faça login primeiro", variant: "destructive" });
-      return;
-    }
-    setSendingPush(true);
-    try {
-      // Garante subscription registrada antes de enviar
-      await subscribeToPush(user.id);
-      const { data, error } = await supabase.functions.invoke("send-push", {
-        body: {
-          title: "👑 Teste de Web Push",
-          body: "Funcionou, rainha! Suas notificações estão ativas ✨",
-          tag: "test-" + Date.now(),
-          url: "/",
-          user_ids: [user.id],
-        },
-      });
-      if (error) throw error;
-      const sent = (data as any)?.sent ?? 0;
-      if (sent > 0) {
-        toast({
-          title: "Push enviado! 📨",
-          description: `Enviado para ${sent} dispositivo(s). Aguarde alguns segundos.`,
-        });
-      } else {
-        toast({
-          title: "Nenhum dispositivo registrado",
-          description: "Recarregue a página com permissão concedida e tente novamente.",
-          variant: "destructive",
-        });
-      }
-    } catch (e: any) {
-      toast({
-        title: "Erro ao enviar push",
-        description: e?.message ?? "Tente novamente",
-        variant: "destructive",
-      });
-    } finally {
-      setSendingPush(false);
-    }
+  const save = async () => {
+    if (!user) return;
+    setSaving(true);
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const next = { ...schedule, timezone };
+    const { error } = await supabase.from("profiles").update({ notification_schedule: next }).eq("user_id", user.id).select("user_id").single();
+    setSaving(false);
+    if (error) toast({ title: "Não foi possível salvar os horários", variant: "destructive" });
+    else { setSchedule(next); toast({ title: "Horários salvos! 🔔" }); }
   };
-
-  const isGranted = permStatus === "granted";
-
-  return (
-    <Card>
-      <CardHeader className="pb-3">
-        <div className="flex items-center gap-2">
-          {isGranted ? (
-            <Bell className="h-5 w-5 text-primary" />
-          ) : (
-            <BellOff className="h-5 w-5 text-muted-foreground" />
-          )}
-          <CardTitle className="text-base">Notificações Push</CardTitle>
-        </div>
-        <CardDescription>
-          {permStatus === "unsupported"
-            ? "Seu navegador não suporta notificações"
-            : permStatus === "denied"
-            ? "Permissão negada, ative nas configurações do navegador"
-            : isGranted
-            ? "✅ Ativadas! Afirmação e Palavra do Dia às 08:00 · Hábitos às 20:00"
-            : "Receba lembretes diários na barra de notificação"}
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="space-y-3">
-        {!isGranted && permStatus !== "denied" && permStatus !== "unsupported" && (
-          <Button className="w-full gap-2" onClick={handleEnable}>
-            <Bell className="h-4 w-4" />
-            Ativar Notificações
-          </Button>
-        )}
-
-        {isGranted && (
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full gap-2"
-              onClick={handleTest}
-            >
-              <Send className="h-4 w-4" />
-              Teste local (instantâneo)
-            </Button>
-            <Button
-              size="sm"
-              disabled={sendingPush}
-              className="w-full gap-2 bg-[#D4AF37] text-black hover:bg-[#b8941f] font-semibold"
-              onClick={handleTestWebPush}
-            >
-              <Cloud className="h-4 w-4" />
-              {sendingPush ? "Enviando..." : "Testar Web Push real (servidor)"}
-            </Button>
-            <p className="text-xs text-muted-foreground text-center">
-              O teste real envia push do servidor, funciona com app fechado.
-            </p>
-          </>
-        )}
-      </CardContent>
-    </Card>
-  );
+  return <Card><CardHeader className="pb-3"><CardTitle className="text-base flex items-center gap-2"><Bell className="h-5 w-5 text-primary" />Notificações automáticas</CardTitle><CardDescription>
+    {permission === "denied" ? "Notificações bloqueadas. Permita nas configurações do navegador." : permission === "unsupported" ? "Este navegador não permite notificações." : permission === "granted" ? "Notificações autorizadas neste dispositivo." : "Autorize as notificações neste dispositivo para receber os lembretes."}
+  </CardDescription></CardHeader><CardContent className="space-y-4">
+    {permission === "default" && <Button onClick={enablePermission} className="w-full"><Bell />Permitir notificações</Button>}
+    {failed && <p role="alert" className="text-sm text-destructive">Não foi possível carregar seus horários. Reabra as configurações.</p>}
+    <div className="flex items-center justify-between gap-3"><Label htmlFor="automatic-reminders">Lembretes padrão</Label><Switch id="automatic-reminders" checked={schedule.enabled} disabled={loading || saving || failed} onCheckedChange={enabled => setSchedule({ ...schedule, enabled })} /></div>
+    <div className="space-y-3">{slots.map(([slot, label]) => <div key={slot} className="flex items-center justify-between gap-3"><Label htmlFor={`notification-${slot}`} className="text-sm">{label}</Label><Input id={`notification-${slot}`} type="time" required value={schedule[slot]} disabled={loading || saving || failed} onChange={e => { if (e.target.value) setSchedule({ ...schedule, [slot]: e.target.value }); }} className="w-28 shrink-0" /></div>)}</div>
+    <Button onClick={save} disabled={loading || saving || failed} className="w-full"><Save />{saving ? "Salvando..." : "Salvar horários"}</Button>
+  </CardContent></Card>;
 }
