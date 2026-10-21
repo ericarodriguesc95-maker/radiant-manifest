@@ -1,5 +1,5 @@
 # Current tasks
-- [ ] Compact phone and notebook screens and reorganize navigation from the supplied brief without changing existing destinations.
-- [ ] Move Home catalog, calendar, Bible entry and phase shortcuts into separate tab views.
-- [ ] Verify signed-in navigation, real Bible progress and compact layouts on phone, tablet and notebook.
-- [ ] Round the corners of the site favicon while preserving the current logo.
+- [x] Compact phone and notebook screens and reorganize navigation from the supplied brief without changing existing destinations.
+- [x] Move Home catalog, calendar, Bible entry and phase shortcuts into separate tab views.
+- [x] Verify signed-in navigation, real Bible progress and compact layouts on phone, tablet and notebook.
+- [x] Round the corners of the site favicon while preserving the current logo.
