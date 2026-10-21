@@ -17,7 +17,7 @@ import { useViewMode } from "@/contexts/ViewModeContext";
 import { cn } from "@/lib/utils";
 
 export default function AppLayout() {
-  const { mode } = useViewMode();
+  const { mode, sidebarCollapsed } = useViewMode();
   const { user } = useAuth();
   const isDesktop = mode === "desktop";
   const location = useLocation();
@@ -32,13 +32,13 @@ export default function AppLayout() {
 
   return (
     <>
-      <div className={cn("app-shell", isDesktop ? "app-shell-site pl-[230px]" : "app-shell-mobile pb-24")}>
-        <div className={cn("flex justify-end px-4 pt-2 pb-0", isDesktop ? "mx-auto max-w-6xl px-6 pt-4" : "mx-auto max-w-2xl")}>
+      <div className={cn("app-shell", isDesktop ? sidebarCollapsed ? "app-shell-site pl-[72px]" : "app-shell-site pl-[248px]" : "app-shell-mobile pb-24")}>
+        <div className={cn("flex justify-end px-4 pt-2 pb-0", isDesktop ? "mx-auto max-w-5xl px-4 pt-2" : "mx-auto max-w-2xl")}>
           <ViewModeToggle />
         </div>
         <WelcomeBackAlert />
 
-        <div key={location.pathname} className={cn("page-in min-w-0", isDesktop ? "max-w-6xl mx-auto px-6 py-3" : "max-w-2xl mx-auto")}>
+        <div key={location.pathname + location.search} className={cn("page-in min-w-0", isDesktop ? "max-w-5xl mx-auto px-3 py-2" : "max-w-2xl mx-auto")}>
           <BackButton />
           <Outlet />
         </div>
