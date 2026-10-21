@@ -1,10 +1,10 @@
 import AnimatedEmoji from "@/components/ui/animated-emoji";
 import { useState, useEffect, useCallback } from "react";
 import { Sparkles, Brain, ChevronRight, Bell, Settings, Shield, Trophy, Crown, Heart, Target, BookOpen, ClipboardCheck, Flame, MessageCircle, ThermometerSun } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import HomeTabViews from "@/components/HomeTabViews";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
-import MonthlyCalendar from "@/components/MonthlyCalendar";
 import NotificationsPanel from "@/components/NotificationsPanel";
 import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
@@ -14,7 +14,6 @@ import { useCheckpointReminders } from "@/hooks/useCheckpointReminders";
 
 import StreakMedals from "@/components/StreakMedals";
 import AppUpdatesModal from "@/components/AppUpdatesModal";
-import HormonalPhaseSuggestion from "@/components/HormonalPhaseSuggestion";
 import ProgressPulseWidget from "@/components/ProgressPulseWidget";
 import FutureSelfMessage from "@/components/FutureSelfMessage";
 import { supabase } from "@/integrations/supabase/client";
@@ -33,6 +32,8 @@ const HomePage = () => {
   const [completedHabits, setCompletedHabits] = useState<Set<string>>(new Set());
   const [unreadCount, setUnreadCount] = useState(0);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const view = searchParams.get("view");
   const { user } = useAuth();
   useCheckpointReminders();
 
@@ -97,17 +98,11 @@ const HomePage = () => {
     return "Boa noite";
   };
 
-  const quickActions = [
-    { icon: Brain, label: "Reprogramar\na Mente", description: "Áudios e exercícios para trocar pensamentos que te travam", to: "/reprogramacao", gradient: "from-violet-200 via-purple-100 to-fuchsia-100", iconBg: "bg-violet-500/15 border-violet-400/40", iconColor: "text-violet-700" },
-    { icon: Target, label: "Metas &\nManifestação", description: "Defina o que quer e veja sua vida dos sonhos sair do papel", to: "/metas", gradient: "from-rose-200 via-pink-100 to-red-100", iconBg: "bg-rose-500/15 border-rose-400/40", iconColor: "text-rose-700" },
-    { icon: BookOpen, label: "Bíblia em\n365 dias", description: "1 leitura curta por dia + reflexão prática para aproximar seu coração de Deus", to: "/biblia-365", gradient: "from-amber-200 via-yellow-100 to-orange-100", iconBg: "bg-amber-500/15 border-amber-500/40", iconColor: "text-amber-800" },
-    { icon: Heart, label: "Destravar\nFeminino", description: "14 aulas curtas para soltar o que está te prendendo", to: "/jornada", gradient: "from-emerald-200 via-teal-100 to-green-100", iconBg: "bg-emerald-500/15 border-emerald-500/40", iconColor: "text-emerald-700" },
-    { icon: Crown, label: "Autoestima\nde Rainha", description: "Construa uma confiança que ninguém consegue abalar", to: "/identidade-inabalavel", gradient: "from-yellow-200 via-amber-100 to-yellow-50", iconBg: "bg-yellow-500/20 border-yellow-500/50", iconColor: "text-yellow-800" },
-    { icon: Flame, label: "Reset 14.5\n(5 dias)", description: "5 dias com jejum de 14h por dia para resetar o corpo", to: "/protocolo-14-5", gradient: "from-orange-200 via-red-100 to-amber-100", iconBg: "bg-orange-500/15 border-orange-500/40", iconColor: "text-orange-700" },
-  ];
+
+  if (view && ["trilhas", "programas", "agenda", "biblia", "fase"].includes(view)) return <HomeTabViews view={view} />;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="home-compact min-h-screen bg-background">
       {/* ═══════════════════════════════════════════ */}
       {/* PREMIUM HEADER */}
       {/* ═══════════════════════════════════════════ */}
@@ -301,96 +296,11 @@ const HomePage = () => {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* QUICK ACTIONS, editorial cards */}
-        {/* ═══════════════════════════════════════════ */}
-        <section className="space-y-4">
-          <div className="animate-stagger" style={{ "--stagger": 6 } as React.CSSProperties}>
-            <SectionHeading eyebrow="Trilhas" title="Comece por aqui" />
-          </div>
-
-
-          <div className="grid grid-cols-2 gap-3">
-            {quickActions.map(({ icon: Icon, label, description, to }, i) => (
-              <button
-                key={to}
-                onClick={() => navigate(to)}
-                className={cn(
-                  "animate-stagger ed-card group flex min-h-[150px] flex-col items-start gap-2 p-4 text-left transition-all duration-300",
-                  "hover:-translate-y-0.5 active:scale-[0.98]"
-                )}
-                style={{ "--stagger": 6 + i } as React.CSSProperties}
-              >
-                <span className="ed-row-icon h-10 w-10">
-                  <Icon className="h-[18px] w-[18px]" />
-                </span>
-                <span className="font-display text-base leading-tight whitespace-pre-line text-foreground">{label}</span>
-                <span className="text-[11px] font-body leading-snug text-muted-foreground line-clamp-3">{description}</span>
-                <span className="mt-auto eyebrow text-[9px]">Abrir</span>
-              </button>
-            ))}
-          </div>
-        </section>
-
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* HORMONAL PHASE, personalização biológica */}
-        {/* ═══════════════════════════════════════════ */}
-        <div className="animate-stagger" style={{ "--stagger": 8 } as React.CSSProperties}>
-          <HormonalPhaseSuggestion />
-        </div>
-
-        {/* ═══════════════════════════════════════════ */}
         {/* PROGRESS PULSE, Metas + Finanças (dopamina visual) */}
         {/* ═══════════════════════════════════════════ */}
         <div className="animate-stagger" style={{ "--stagger": 8 } as React.CSSProperties}>
           <ProgressPulseWidget />
         </div>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* PROGRAMAS, lista editorial */}
-        {/* ═══════════════════════════════════════════ */}
-        <section className="animate-stagger space-y-4" style={{ "--stagger": 9 } as React.CSSProperties}>
-          <SectionHeading eyebrow="Programas" title="Explore o clube" />
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            {[
-              { icon: Sparkles, title: "Gloow Movimenta", sub: "21 dias · 5 missões por dia: corpo, mente, alma, finanças e vida", tag: "Iniciar", to: "/glow-move" },
-              { icon: Crown, title: "Jornada Elite", sub: "Trilha completa em 5 níveis · 80+ aulas + teste de perfil", tag: null, to: "/jornada-elite" },
-              { icon: ClipboardCheck, title: "Descubra seu perfil", sub: "Testes rápidos: DISC, comportamento e produtividade", tag: null, to: "/testes" },
-              { icon: Trophy, title: "Desafios progressivos", sub: "Escolha um desafio de 7, 21, 30 ou 90 dias e bora", tag: null, to: "/desafios" },
-            ].map(({ icon: Icon, title, sub, tag, to }, i) => (
-              <button
-                key={to}
-                onClick={() => navigate(to)}
-                className={cn(
-                  "ed-block group animate-stagger cursor-pointer",
-                  "hover:-translate-y-1 active:scale-[0.98]"
-                )}
-                style={{ "--stagger": 10 + i } as React.CSSProperties}
-              >
-                <span className="ed-row-icon h-10 w-10">
-                  <Icon className="h-[18px] w-[18px]" />
-                </span>
-                <span className="font-display text-[15px] leading-tight text-foreground">{title}</span>
-                <span className="text-[11px] font-body leading-snug text-muted-foreground line-clamp-2">{sub}</span>
-                {tag && <span className="ed-block-tag">{tag}</span>}
-              </button>
-            ))}
-          </div>
-        </section>
-
-
-
-
-
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* MONTHLY CALENDAR, Elegant section */}
-        {/* ═══════════════════════════════════════════ */}
-        <section className="space-y-4 animate-stagger" style={{ "--stagger": 11 } as React.CSSProperties}>
-          <SectionHeading eyebrow="Agenda" title="Seu mês de relance" />
-          <MonthlyCalendar />
-        </section>
-
 
         {/* ═══════════════════════════════════════════ */}
         {/* POST CONQUISTA */}
