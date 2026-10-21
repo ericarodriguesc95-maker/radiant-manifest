@@ -6,10 +6,8 @@ import HomeTabViews from "@/components/HomeTabViews";
 import AffirmationCard from "@/components/AffirmationCard";
 import DailyDevotional from "@/components/DailyDevotional";
 import NotificationsPanel from "@/components/NotificationsPanel";
-import NotificationSettingsCard from "@/components/NotificationSettingsCard";
 import DailyStreak from "@/components/DailyStreak";
 import PostConquista from "@/components/PostConquista";
-import { useCheckpointReminders } from "@/hooks/useCheckpointReminders";
 
 
 import StreakMedals from "@/components/StreakMedals";
@@ -35,7 +33,6 @@ const HomePage = () => {
   const [searchParams] = useSearchParams();
   const view = searchParams.get("view");
   const { user } = useAuth();
-  useCheckpointReminders();
 
   useEffect(() => {
     if (!user) return;
@@ -108,14 +105,14 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════ */}
       <header className="relative px-5 pt-8 pb-5">
         <div className="flex items-start justify-between gap-3">
-          <div className="flex items-center gap-3">
+          <div className="flex min-w-0 items-center gap-3">
             <img src={brandLogo} alt="Gloow Up Club" className="h-11 w-11 object-contain rounded-full border border-border" />
-            <div>
+            <div className="min-w-0">
               <p className="eyebrow">Gloow Up Club</p>
-              <h1 aria-label="Home do Gloow Up Club — painel da membra" className="font-display text-[26px] leading-none text-foreground">{greeting()}, <span className="title-accent">rainha</span></h1>
+              <h1 aria-label="Home do Gloow Up Club — painel da membra" className="font-display text-[26px] leading-tight text-foreground">{greeting()}, <span className="title-accent block sm:inline">extraordinárias</span></h1>
             </div>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex shrink-0 items-center gap-1">
             {isAdmin && (
               <button onClick={() => navigate("/admin/atividade")} className="icon-circle h-10 w-10 hover:bg-secondary transition-colors" title="Painel Admin">
                 <Shield className="h-4 w-4 text-primary" />
@@ -312,13 +309,6 @@ const HomePage = () => {
             streak={streakCount}
           />
         </div>
-
-        {/* ═══════════════════════════════════════════ */}
-        {/* NOTIFICATION SETTINGS */}
-        {/* ═══════════════════════════════════════════ */}
-        <section className="animate-stagger" style={{ "--stagger": 14 } as React.CSSProperties}>
-          <NotificationSettingsCard />
-        </section>
 
         {/* Bottom signature */}
         <div className="text-center pt-6 pb-2 animate-stagger" style={{ "--stagger": 15 } as React.CSSProperties}>

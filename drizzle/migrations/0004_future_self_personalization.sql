@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS future_self_details jsonb NOT NULL DEFAULT '{}'::jsonb;

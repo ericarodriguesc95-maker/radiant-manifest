@@ -15,6 +15,34 @@
       "when": 1791058602646,
       "tag": "0001_restrict_community_reads_to_members",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792596165522,
+      "tag": "0002_automatic_reminder_preferences",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792596288215,
+      "tag": "0003_scheduled_notification_delivery",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792596470766,
+      "tag": "0004_future_self_personalization",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792596638230,
+      "tag": "0005_managed_push_signing_keys",
+      "breakpoints": true
     }
   ]
 }

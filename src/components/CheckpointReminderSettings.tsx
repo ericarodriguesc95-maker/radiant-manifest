@@ -11,7 +11,7 @@ import { toast } from "@/hooks/use-toast";
 
 export default function CheckpointReminderSettings() {
   const { user } = useAuth();
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
   const [times, setTimes] = useState<string[]>(["09:00", "15:00", "21:00"]);
   const [newTime, setNewTime] = useState("12:00");
   const [saving, setSaving] = useState(false);

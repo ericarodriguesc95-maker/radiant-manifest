@@ -1,0 +1,2 @@
+ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS notification_schedule jsonb NOT NULL DEFAULT '{"enabled":true,"morning":"08:00","noon":"12:00","afternoon":"16:30","evening":"20:00","night":"23:30","timezone":"America/Sao_Paulo"}'::jsonb;
+ALTER TABLE public.profiles ALTER COLUMN checkpoint_reminder_enabled SET DEFAULT true;

@@ -13,6 +13,7 @@ import { useActivityTracker } from "@/hooks/useActivityTracker";
 import { usePushNotificationListener } from "@/hooks/usePushNotificationListener";
 import { useCycleNotifications } from "@/hooks/useCycleNotifications";
 import { initNotifications } from "@/lib/notifications";
+import { useCheckpointReminders } from "@/hooks/useCheckpointReminders";
 import { useViewMode } from "@/contexts/ViewModeContext";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,7 @@ export default function AppLayout() {
   useActivityTracker();
   usePushNotificationListener();
   useCycleNotifications();
+  useCheckpointReminders();
 
   useEffect(() => {
     initNotifications(user?.id);

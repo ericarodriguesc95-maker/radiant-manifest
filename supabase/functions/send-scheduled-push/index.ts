@@ -1,15 +1,8 @@
-// Edge function: dispara notificações push agendadas baseadas no slot do dia.
-// Chamada por cron jobs do pg_cron em 5 horários fixos.
-
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
-
+import webpush from 'npm:web-push@3.6.7';
+import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { normalizeSchedule, dueNotificationSlots, scheduleClock } from '../_shared/notification-schedule.ts';
 type Slot = 'morning' | 'noon' | 'afternoon' | 'evening' | 'night';
-
 const POOLS: Record<Slot, { title: string; body: string }[]> = {
   morning: [
     { title: '🌅 Bom dia, rainha', body: 'Comece o dia com 1 afirmação poderosa. Seu glow começa agora ✨' },
@@ -28,9 +21,9 @@ const POOLS: Record<Slot, { title: string; body: string }[]> = {
   afternoon: [
     { title: '🔥 Não desacelera agora', body: 'Volte para sua Jornada Elite e desbloqueie o próximo módulo.' },
     { title: '💪 Treino calling', body: 'Já se mexeu hoje? Registre seu workout em Saúde.' },
-    { title: '🎯 Foque no que importa', body: 'Use o Pomodoro em Alta Performance e produza com elite.' },
+    { title: '🎯 Foque no que importa', body: 'Atualize suas metas e avance um passo hoje.' },
     { title: '✨ Visualize seu sonho', body: 'Abra seu Vision Board por 60s. Sinta como se já fosse seu.' },
-    { title: '👯 Conecte com as girls', body: 'Sua comunidade tem novidades te esperando 💛' },
+    { title: '👯 Conecte com a comunidade', body: 'Sua comunidade tem novidades te esperando 💛' },
   ],
   evening: [
     { title: '📝 Como foi seu dia?', body: 'Registre uma nota no Diário antes de tudo se perder.' },
@@ -48,75 +41,61 @@ const POOLS: Record<Slot, { title: string; body: string }[]> = {
   ],
 };
 
-function pickRandom<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
-  }
-
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
+  const response = (value: unknown, status = 200) => new Response(JSON.stringify(value), { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   try {
-    // Validate shared secret (set CRON_SECRET in Edge Function secrets and pg_cron header)
-    const cronSecret = Deno.env.get('CRON_SECRET');
-    const provided = req.headers.get('x-cron-secret');
-    if (!cronSecret || provided !== cronSecret) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-        status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    const url = Deno.env.get('SUPABASE_URL');
+    const key = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    if (!url || !key) return response({ error: 'Missing configuration' }, 500);
+    const db = createClient(url, key);
+    const { data: config, error: configError } = await db.from('notification_scheduler_config').select('secret,vapid_keys').eq('id', true).single();
+    if (configError || !config || req.headers.get('x-scheduler-secret') !== config.secret) return response({ error: 'Unauthorized' }, 401);
+    if (!config.vapid_keys) {
+      const keys = webpush.generateVAPIDKeys();
+      const { error: keyError } = await db.from('notification_scheduler_config').update({ vapid_keys: keys }).eq('id', true).is('vapid_keys', null);
+      if (keyError) throw keyError;
     }
-
-    const body = await req.json().catch(() => ({}));
-    const slot: Slot = body.slot || 'morning';
-
-    const pool = POOLS[slot] || POOLS.morning;
-    const message = pickRandom(pool);
-
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, serviceRoleKey);
-
-    // Pega todas as subscriptions ativas
-    const { data: subscriptions, error } = await supabase
-      .from('push_subscriptions')
-      .select('endpoint, p256dh, auth');
-
-    if (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    const { data: signing, error: signingError } = await db.from('notification_scheduler_config').select('vapid_keys').eq('id', true).single();
+    if (signingError || !signing?.vapid_keys) throw new Error('Signing configuration unavailable');
+    webpush.setVapidDetails('mailto:contato@gloowupclub.com', signing.vapid_keys.publicKey, signing.vapid_keys.privateKey);
+    const { data: subscriptions, error } = await db.from('push_subscriptions').select('id,user_id,endpoint,p256dh,auth');
+    if (error) throw error;
+    const users = [...new Set((subscriptions || []).map(s => s.user_id))];
+    if (!users.length) return response({ sent: 0 });
+    const { data: profiles, error: profileError } = await db.from('profiles').select('user_id,notification_schedule,checkpoint_reminder_enabled,checkpoint_reminder_times').in('user_id', users);
+    if (profileError) throw profileError;
+    const now = new Date();
+    let sent = 0; let failed = 0;
+    for (const profile of profiles || []) {
+      const schedule = normalizeSchedule(profile.notification_schedule);
+      const clock = scheduleClock(now, schedule.timezone);
+      const messages = dueNotificationSlots(schedule, now).map(slot => ({ key: `${clock.day}-${slot}-${clock.time}`, tag: `scheduled-${slot}`, ...POOLS[slot][Math.floor(Math.random() * POOLS[slot].length)] }));
+      if (profile.checkpoint_reminder_enabled && profile.checkpoint_reminder_times?.includes(clock.time)) messages.push({ key: `${clock.day}-checkpoint-${clock.time}`, tag: 'checkpoints-reminder', title: 'Check-points do dia 👑', body: 'Bora somar pontos, rainha! Complete os seus check-points e suba no ranking.' });
+      for (const message of messages) {
+        const { error: claimError } = await db.from('notification_deliveries').insert({ user_id: profile.user_id, delivery_key: message.key });
+        if (claimError?.code === '23505') continue;
+        if (claimError) throw claimError;
+        let delivered = false;
+        for (const sub of (subscriptions || []).filter(s => s.user_id === profile.user_id)) {
+          try {
+            await webpush.sendNotification({ endpoint: sub.endpoint, keys: { p256dh: sub.p256dh, auth: sub.auth } }, JSON.stringify({ title: message.title, body: message.body, tag: message.tag, url: message.tag === 'checkpoints-reminder' ? '/checkpoints' : '/', kind: message.tag === 'checkpoints-reminder' ? 'checkpoint-reminder' : 'generic' }), { TTL: 300 });
+            sent++; delivered = true;
+          } catch (err) {
+            failed++;
+            const status = (err as { statusCode?: number }).statusCode;
+            if (status === 404 || status === 410) await db.from('push_subscriptions').delete().eq('id', sub.id);
+          }
+        }
+        if (!delivered) await db.from('notification_deliveries').delete().eq('user_id', profile.user_id).eq('delivery_key', message.key);
+        else if (message.tag === 'checkpoints-reminder') await db.from('reminder_events').insert({ user_id: profile.user_id, event_type: 'received', source: 'scheduled', metadata: { time: clock.time } });
+      }
     }
-
-    const payload = JSON.stringify({
-      title: message.title,
-      body: message.body,
-      tag: `scheduled-${slot}`,
-      url: '/',
-    });
-
-    // Envia em paralelo (best-effort)
-    const results = await Promise.allSettled(
-      (subscriptions || []).map((sub) =>
-        fetch(sub.endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', TTL: '86400' },
-          body: payload,
-        })
-      )
-    );
-
-    const sent = results.filter((r) => r.status === 'fulfilled').length;
-
-    return new Response(
-      JSON.stringify({ slot, sent, total: subscriptions?.length || 0, message }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
-  } catch (err) {
-    return new Response(JSON.stringify({ error: String(err) }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return response({ sent, failed });
+  } catch (error) {
+    const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : 'SIGNING_SETUP';
+    console.error('Scheduled delivery error code', code);
+    return response({ error: 'Scheduled delivery failed', code }, 500);
   }
 });
