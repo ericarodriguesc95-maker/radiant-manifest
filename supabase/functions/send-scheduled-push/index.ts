@@ -93,5 +93,9 @@ Deno.serve(async (req) => {
       }
     }
     return response({ sent, failed });
-  } catch { return response({ error: 'Scheduled delivery failed' }, 500); }
+  } catch (error) {
+    const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : 'SIGNING_SETUP';
+    console.error('Scheduled delivery error code', code);
+    return response({ error: 'Scheduled delivery failed', code }, 500);
+  }
 });

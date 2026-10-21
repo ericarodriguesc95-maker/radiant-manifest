@@ -1,7 +1,7 @@
 # Current tasks
-- [ ] Include age and city in future-self personalization.
-- [ ] Personalize future-self messages with basic user input and allow minimizing the Home message.
-- [ ] Change Home greeting from rainha to extraordinárias.
+- [x] Include age and city in future-self personalization.
+- [x] Personalize future-self messages with basic user input and allow minimizing the Home message.
+- [x] Change Home greeting from rainha to extraordinárias.
 - [ ] Enable standard automatic reminders and editable hours in Settings.
 - [ ] Remove Home push settings block and verify scheduling and saving.
 - [x] Compact phone and notebook screens and reorganize navigation from the supplied brief without changing existing destinations.
