@@ -20,8 +20,10 @@ export default function FutureSelfMessage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const today = new Date().toISOString().slice(0, 10);
-  const generate = async (info: FutureSelfDetails, force = false) => {
+  const generate = async (raw: FutureSelfDetails, force = false) => {
     if (!user) return;
+    const info = parseFutureSelfDetails(raw);
+    if (!info) { setError("Preencha suas informações básicas para receber a mensagem."); setEditing(true); return; }
     const key = `future-self:v2:${user.id}:${today}:${JSON.stringify(info)}`;
     if (!force) { try { const cached = JSON.parse(localStorage.getItem(key) || "null"); if (cached?.message) { setMessage(cached); return; } } catch {} }
     setBusy(true);setError("");

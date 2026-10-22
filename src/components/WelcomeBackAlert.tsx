@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import { Sparkles, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useViewMode } from "@/contexts/ViewModeContext";
+import { cn } from "@/lib/utils";
 
 const LAST_VISIT_KEY = "glowup-last-visit";
 
 export default function WelcomeBackAlert() {
   const { user, profile } = useAuth();
+  const { mode, sidebarCollapsed } = useViewMode();
   const [show, setShow] = useState(false);
   const [newUpdatesCount, setNewUpdatesCount] = useState(0);
 
@@ -48,8 +51,14 @@ export default function WelcomeBackAlert() {
 
   const name = profile?.display_name?.split(" ")[0] || "Girl";
 
+  const isSite = mode === "desktop";
   return (
-    <div className="fixed top-4 left-3 right-3 z-50 animate-slide-down">
+    <div
+      className={cn(
+        "fixed top-4 left-3 right-3 z-50 animate-slide-down",
+        isSite && (sidebarCollapsed ? "left-[88px] right-6" : "left-[264px] right-6")
+      )}
+    >
       <div className="bg-card border border-gold/30 rounded-2xl shadow-[0_8px_32px_hsl(43_72%_52%/0.12)] p-3 flex items-center gap-3">
         <div className="flex-shrink-0 w-9 h-9 rounded-xl bg-gold/10 flex items-center justify-center">
           <Sparkles className="h-4 w-4 text-gold" />
