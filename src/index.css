@@ -65,7 +65,7 @@
     --highlight-rose: linear-gradient(135deg, #F3E1D5, #DDB9AB);
     --highlight-butter: linear-gradient(135deg, #FFF7DE, #EFDC9D);
     --text-faint: 26 13% 60%;
-    --sidebar-surface: 28 38% 94%;
+    --sidebar-surface: 345 40% 96%;
     --sidebar-active: linear-gradient(135deg, #F3E1D5, #E8C9BA);
     --shadow-glow: 0 0 28px hsl(19 48% 55% / 0.22);
   }
