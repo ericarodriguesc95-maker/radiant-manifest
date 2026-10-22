@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import { Sparkles, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useViewMode } from "@/contexts/ViewModeContext";
+import { cn } from "@/lib/utils";
 
 const LAST_VISIT_KEY = "glowup-last-visit";
 
 export default function WelcomeBackAlert() {
   const { user, profile } = useAuth();
+  const { mode, sidebarCollapsed } = useViewMode();
   const [show, setShow] = useState(false);
   const [newUpdatesCount, setNewUpdatesCount] = useState(0);
 
