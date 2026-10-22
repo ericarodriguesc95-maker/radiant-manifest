@@ -10,10 +10,10 @@
     --background: 36 33% 97%;
     --foreground: 26 21% 13%;
 
-    --card: 30 50% 98%;
+    --card: 345 45% 98%;
     --card-foreground: 24 22% 13%;
 
-    --popover: 30 50% 98%;
+    --popover: 345 45% 98%;
     --popover-foreground: 24 22% 13%;
 
     --primary: 19 47% 56%;
@@ -59,7 +59,7 @@
     --gradient-brand: linear-gradient(135deg, hsl(19 48% 55%), hsl(15 42% 40%));
     --gradient-gold: linear-gradient(135deg, hsl(19 48% 55%), hsl(24 62% 74%));
     --gradient-dark: linear-gradient(180deg, hsl(32 32% 98%), hsl(30 26% 94%));
-    --gradient-card: linear-gradient(145deg, hsl(34 42% 99% / 0.82), hsl(30 30% 96% / 0.78));
+    --gradient-card: linear-gradient(145deg, hsl(345 55% 99% / 0.78), hsl(340 40% 96% / 0.7));
     --shadow-brand: 0 10px 34px -10px hsl(19 48% 45% / 0.32);
     --shadow-card: 0 6px 20px rgba(120,80,60,.05);
     --highlight-rose: linear-gradient(135deg, #F3E1D5, #DDB9AB);
@@ -154,21 +154,21 @@
 
   /* Glassmorphism utilities, espelhado transparente */
   .glass {
-    background: hsl(var(--card) / 0.62);
+    background: hsl(345 55% 99% / 0.6);
     backdrop-filter: blur(22px) saturate(1.25);
     -webkit-backdrop-filter: blur(22px) saturate(1.25);
-    border: 1px solid hsl(var(--border) / 0.7);
+    border: 1px solid hsl(345 40% 88% / 0.7);
     border-radius: 26px;
   }
   .glass-strong {
-    background: hsl(var(--card) / 0.78);
+    background: hsl(345 55% 99% / 0.76);
     backdrop-filter: blur(30px) saturate(1.35);
     -webkit-backdrop-filter: blur(30px) saturate(1.35);
     border: 1px solid hsl(var(--border) / 0.85);
     border-radius: 26px;
   }
   .glass-gold {
-    background: linear-gradient(160deg, hsl(24 55% 92% / 0.7), hsl(30 40% 96% / 0.7));
+    background: linear-gradient(160deg, hsl(345 55% 92% / 0.7), hsl(340 40% 96% / 0.7));
     backdrop-filter: blur(24px) saturate(1.25);
     -webkit-backdrop-filter: blur(24px) saturate(1.25);
     border: 1px solid hsl(var(--primary) / 0.18);
@@ -227,7 +227,7 @@
   /* ===== Editorial UI language ===== */
   .ed-card {
     border-radius: 20px;
-    background: hsl(var(--card));
+    background: hsl(345 55% 99% / 0.72);
     border: 1px solid hsl(var(--border) / 0.75);
     box-shadow: var(--shadow-card);
     backdrop-filter: blur(16px) saturate(1.1);
@@ -265,7 +265,7 @@
   /* Editorial block tile: standalone inviting card */
   .ed-block {
     border-radius: 20px;
-    background: hsl(var(--card));
+    background: hsl(345 55% 99% / 0.72);
     border: 1px solid hsl(var(--border) / 0.75);
     box-shadow: var(--shadow-card);
     backdrop-filter: blur(16px) saturate(1.1);
@@ -321,7 +321,7 @@
 
   .surface-container      { background: hsl(30 28% 95%); }
   .surface-container-high { background: hsl(30 30% 93%); }
-  .surface-tinted         { background: linear-gradient(180deg, hsl(var(--card)), hsl(30 28% 96%)); }
+  .surface-tinted         { background: linear-gradient(180deg, hsl(345 55% 99% / 0.75), hsl(340 35% 96% / 0.68)); }
 
   .m3-chip {
     display: inline-flex; align-items: center; gap: 0.375rem;
