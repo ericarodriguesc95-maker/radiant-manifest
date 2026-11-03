@@ -276,7 +276,7 @@ export default function LandingPage() {
               <img
                 src={brandLogo}
                 alt="Gloow Up Club"
-                className="h-12 w-12 object-contain rounded-xl shadow-[0_2px_10px_rgba(169,98,63,0.18)] ring-1 ring-[#EADFD8] transition-transform hover:scale-105"
+                className="h-12 w-12 object-contain rounded-xl bg-white p-[3px] ring-1 ring-[#EADFD8] shadow-[0_2px_10px_rgba(169,98,63,0.18)] transition-transform hover:scale-105"
               />
               <span style={{ ...serif, color: C.ink }} className="text-[20px] font-semibold hidden sm:inline">
                 Gloow Up Club
