@@ -26,19 +26,18 @@ export const MagicLinkEmail = ({
     <Head>
       <style>{darkModeCss}</style>
     </Head>
-    <Preview>Your login link for {siteName}</Preview>
+    <Preview>Seu link de acesso ao {siteName}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={h1}>Your login link</Heading>
+        <Heading style={h1}>Seu link de acesso 👑</Heading>
         <Text style={text}>
-          Click the button below to log in to {siteName}. This link will expire
-          shortly.
+          Toque no botão abaixo para entrar no {siteName}. Este link expira em breve.
         </Text>
         <Button className="dm-btn" style={button} href={confirmationUrl}>
-          Log In
+          Entrar no clube
         </Button>
         <Text style={footer}>
-          If you didn't request this link, you can safely ignore this email.
+          Se não foi você que pediu, pode ignorar este e-mail.
         </Text>
       </Container>
     </Body>
