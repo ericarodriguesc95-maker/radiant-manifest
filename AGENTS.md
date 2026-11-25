@@ -9,3 +9,4 @@
 - Keep shared tab overflow and arrow controls inside ui/tabs.tsx, reserving arrow space only when needed. Why: compact tab navigation stays consistent without changing page behavior.
 - Keep Home catalog views in HomeTabViews, selected through the existing root route's view query, and share destinations in app-navigation. Why: separate navigation screens preserve existing module routes and business logic.
 - Share the existing cycle phase read and estimation through useCurrentPhase. Why: the sidebar and phase card must show the same current phase without changing prediction rules.
+- Pass the optional sticker ink override to both previews and PNG rendering for every effect. Why: custom text colors must match downloaded stickers without replacing preset backgrounds.
