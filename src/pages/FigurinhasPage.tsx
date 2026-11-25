@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import { Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,8 +30,11 @@ const STYLES = [
   { bg: "#D8BE84", fg: "#28201A" },
 ];
 
-export type Effect = "pilula" | "escrita" | "giz";
+export type Effect = "editorial" | "foco" | "arco" | "pilula" | "escrita" | "giz";
 export const EFFECTS: { id: Effect; label: string }[] = [
+  { id: "editorial", label: "✨ Editorial" },
+  { id: "foco", label: "🌙 Modo foco" },
+  { id: "arco", label: "↗️ Texto em arco" },
   { id: "escrita", label: "✍️ Escrita" },
   { id: "giz", label: "🖍️ Giz" },
   { id: "pilula", label: "💊 Pílula" },
@@ -39,9 +42,9 @@ export const EFFECTS: { id: Effect; label: string }[] = [
 type St = { bg: string; fg: string };
 
 function splitLines(text: string) {
-  const w = text.split(" ");
+  const w = text.trim().split(/\s+/);
   if (w.length < 2) return ["", text];
-  const k = Math.ceil(w.length / 2) - (w.length > 2 ? 0 : 0);
+  const k = Math.ceil(w.length / 2);
   return [w.slice(0, k).join(" "), w.slice(k).join(" ")];
 }
 
@@ -59,12 +62,71 @@ function chalkify(x: CanvasRenderingContext2D, w: number, h: number) {
   x.globalCompositeOperation = "destination-over"; x.restore();
 }
 
+function drawArcText(x: CanvasRenderingContext2D, text: string) {
+  const phrase = `${text}  •  ${text}  •  ${text}`.toUpperCase();
+  const chars = [...phrase];
+  const radius = 250;
+  let fontSize = 25;
+  let widths: number[] = [];
+  let totalAngle = 0;
+  do {
+    x.font = `500 ${fontSize}px 'Raleway', sans-serif`;
+    widths = chars.map((char) => x.measureText(char).width + 3);
+    totalAngle = widths.reduce((sum, width) => sum + width, 0) / radius;
+    if (totalAngle > Math.PI * 0.9) fontSize -= 1;
+  } while (totalAngle > Math.PI * 0.9 && fontSize > 12);
+
+  let angle = Math.PI * 1.5 - totalAngle / 2;
+  chars.forEach((char, index) => {
+    const charAngle = widths[index] / radius;
+    angle += charAngle / 2;
+    x.save();
+    x.translate(400 + Math.cos(angle) * radius, 370 + Math.sin(angle) * radius);
+    x.rotate(angle + Math.PI / 2);
+    x.fillText(char, 0, 0);
+    x.restore();
+    angle += charAngle / 2;
+  });
+}
+
 function drawSticker(text: string, emoji: string, s: St, effect: Effect) {
   const c = document.createElement("canvas");
   c.width = 800; c.height = 400;
   const x = c.getContext("2d")!;
   x.textAlign = "center"; x.textBaseline = "middle";
-  if (effect === "pilula") {
+  const [l1, l2] = splitLines(text);
+
+  if (effect === "editorial") {
+    x.fillStyle = "rgba(250,248,245,0.96)";
+    x.beginPath(); x.roundRect(330, 24, 140, 54, 27); x.fill();
+    x.font = "34px serif"; x.fillText(emoji, 400, 52);
+    x.fillStyle = "#FAF8F5";
+    if (l1) {
+      fit(x, l1, (n) => `600 ${n}px 'DM Sans', sans-serif`, 70, 700);
+      x.fillText(l1, 400, 165);
+      fit(x, l2, (n) => `italic 500 ${n}px 'Playfair Display', serif`, 82, 700);
+      x.fillText(l2, 400, 255);
+    } else {
+      fit(x, l2, (n) => `600 ${n}px 'Playfair Display', serif`, 104, 700);
+      x.fillText(l2, 400, 220);
+    }
+  } else if (effect === "foco") {
+    x.fillStyle = "rgba(238,232,227,0.88)";
+    x.beginPath(); x.roundRect(55, 100, 690, 200, 100); x.fill();
+    x.save(); x.filter = "grayscale(1)"; x.globalAlpha = 0.65;
+    x.font = "86px serif"; x.fillText(emoji, 150, 200); x.restore();
+    x.fillStyle = "#28201A";
+    fit(x, text, (n) => `600 ${n}px 'DM Sans', sans-serif`, 58, 400);
+    x.fillText(text, 410, 176);
+    x.fillStyle = "#A09287"; x.font = "400 32px 'DM Sans', sans-serif";
+    x.fillText("ativado", 410, 238);
+    x.fillStyle = "rgba(111,98,90,0.55)";
+    [625, 655, 685].forEach((cx) => { x.beginPath(); x.arc(cx, 200, 9, 0, Math.PI * 2); x.fill(); });
+  } else if (effect === "arco") {
+    x.fillStyle = "#FAF8F5";
+    drawArcText(x, text);
+    x.font = "58px serif"; x.fillText(emoji, 400, 72);
+  } else if (effect === "pilula") {
     x.fillStyle = s.bg; x.strokeStyle = "#FFFFFF"; x.lineWidth = 16;
     x.beginPath(); x.roundRect(20, 50, 760, 300, 150); x.fill(); x.stroke();
     x.font = "90px serif"; x.fillText(emoji, 400, 150);
@@ -72,7 +134,6 @@ function drawSticker(text: string, emoji: string, s: St, effect: Effect) {
     fit(x, text, (n) => `italic 700 ${n}px 'Playfair Display', serif`, 64, 680);
     x.fillText(text, 400, 265);
   } else {
-    const [l1, l2] = splitLines(text);
     const color = effect === "giz" ? "#FFFFFF" : s.bg;
     x.fillStyle = color;
     x.shadowColor = effect === "giz" ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.9)";
@@ -91,7 +152,16 @@ function drawSticker(text: string, emoji: string, s: St, effect: Effect) {
 }
 
 async function download(text: string, emoji: string, s: St, effect: Effect) {
-  try { await document.fonts.load("700 40px Caveat"); await document.fonts.load("40px 'Gochi Hand'"); await document.fonts.load("700 40px Fredoka"); } catch { /* ignore */ }
+  try {
+    await Promise.all([
+      document.fonts.load("700 40px Caveat"),
+      document.fonts.load("40px 'Gochi Hand'"),
+      document.fonts.load("700 40px Fredoka"),
+      document.fonts.load("600 40px 'DM Sans'"),
+      document.fonts.load("italic 500 40px 'Playfair Display'"),
+      document.fonts.load("500 40px Raleway"),
+    ]);
+  } catch { /* usa as fontes disponíveis */ }
   const a = document.createElement("a");
   a.href = drawSticker(text, emoji, s, effect);
   a.download = `figurinha-${text.toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/gi, "-")}.png`;
@@ -100,20 +170,57 @@ async function download(text: string, emoji: string, s: St, effect: Effect) {
 
 function Preview({ text, emoji, s, effect }: { text: string; emoji: string; s: St; effect: Effect }) {
   const [l1, l2] = splitLines(text);
+  const arcId = `arco-${useId().replace(/:/g, "")}`;
+  const downloadIcon = <Download className="absolute right-2 top-2 h-3 w-3 opacity-60 transition group-hover:opacity-100" />;
+
+  if (effect === "editorial") return (
+    <button onClick={() => download(text, emoji, s, effect)} className="group relative flex aspect-[2/1] flex-col items-center justify-center overflow-hidden rounded-2xl border border-white/10 shadow-sm transition hover:-translate-y-1" style={{ background: "hsl(var(--foreground))", color: "hsl(var(--primary-foreground))" }} aria-label={`Baixar figurinha ${text}`}>
+      <span className="mb-1 rounded-full bg-white/95 px-2 py-0.5 text-[10px] leading-none">{emoji}</span>
+      {l1 && <span className="px-2 text-center font-body text-sm font-semibold leading-none tracking-tight">{l1}</span>}
+      <span className={`px-2 text-center font-display italic leading-tight ${l1 ? "text-lg" : "text-2xl"}`}>{l2}</span>
+      {downloadIcon}
+    </button>
+  );
+
+  if (effect === "foco") return (
+    <button onClick={() => download(text, emoji, s, effect)} className="group relative flex aspect-[2/1] items-center justify-center rounded-full border border-white/20 shadow-sm transition hover:-translate-y-1" style={{ background: "hsl(var(--muted) / 0.88)", color: "hsl(var(--foreground))" }} aria-label={`Baixar figurinha ${text}`}>
+      <span className="absolute left-[9%] text-3xl opacity-60 grayscale">{emoji}</span>
+      <span className="flex max-w-[58%] flex-col items-center">
+        <span className="text-center font-body text-xs font-semibold leading-tight sm:text-sm">{text}</span>
+        <span className="text-[10px] font-normal text-muted-foreground">ativado</span>
+      </span>
+      <span className="absolute right-[8%] text-xs tracking-[0.2em] text-muted-foreground">•••</span>
+      {downloadIcon}
+    </button>
+  );
+
+  if (effect === "arco") return (
+    <button onClick={() => download(text, emoji, s, effect)} className="group relative flex aspect-[2/1] items-center justify-center overflow-hidden rounded-2xl border border-white/10 shadow-sm transition hover:-translate-y-1" style={{ background: "hsl(var(--foreground))", color: "hsl(var(--primary-foreground))" }} aria-label={`Baixar figurinha ${text}`}>
+      <span className="absolute top-[12%] text-lg">{emoji}</span>
+      <svg viewBox="0 0 400 200" className="h-full w-full" aria-hidden="true">
+        <defs><path id={arcId} d="M 45 165 A 155 155 0 0 1 355 165" fill="none" /></defs>
+        <text fill="currentColor" fontFamily="Raleway, sans-serif" fontSize="13" letterSpacing="2">
+          <textPath href={`#${arcId}`} startOffset="50%" textAnchor="middle">{`${text} • ${text} • ${text}`.toUpperCase()}</textPath>
+        </text>
+      </svg>
+      {downloadIcon}
+    </button>
+  );
+
   if (effect === "pilula") return (
     <button onClick={() => download(text, emoji, s, effect)} className="group relative flex aspect-[2/1] flex-col items-center justify-center rounded-full border-4 border-background shadow-md transition hover:-translate-y-1" style={{ background: s.bg, color: s.fg }} aria-label={`Baixar figurinha ${text}`}>
       <span className="text-2xl leading-none">{emoji}</span>
       <span className="px-2 text-center font-display text-xs font-bold italic leading-tight">{text}</span>
-      <Download className="absolute right-2 top-2 h-3 w-3 opacity-0 group-hover:opacity-80" />
+      {downloadIcon}
     </button>
   );
   const giz = effect === "giz";
   return (
-    <button onClick={() => download(text, emoji, s, effect)} className="group relative flex aspect-[2/1] flex-col items-center justify-center overflow-hidden rounded-2xl border shadow-sm transition hover:-translate-y-1" style={{ background: giz ? "#2F3B33" : "repeating-conic-gradient(#f4efe9 0% 25%, #fbf8f5 0% 50%) 50% / 16px 16px", color: giz ? "#FFFFFF" : s.bg }} aria-label={`Baixar figurinha ${text}`}>
+    <button onClick={() => download(text, emoji, s, effect)} className="group relative flex aspect-[2/1] flex-col items-center justify-center overflow-hidden rounded-2xl border shadow-sm transition hover:-translate-y-1" style={{ background: giz ? "hsl(var(--foreground))" : "repeating-conic-gradient(hsl(var(--muted)) 0% 25%, hsl(var(--background)) 0% 50%) 50% / 16px 16px", color: giz ? "hsl(var(--primary-foreground))" : s.bg }} aria-label={`Baixar figurinha ${text}`}>
       {l1 && <span className="px-2 text-center text-lg leading-none" style={{ fontFamily: giz ? "'Gochi Hand', cursive" : "'Caveat', cursive", fontWeight: 700, opacity: giz ? 0.9 : 1 }}>{l1}</span>}
       <span className="px-2 text-center text-base leading-tight" style={{ fontFamily: giz ? "'Gochi Hand', cursive" : "'Fredoka', sans-serif", fontWeight: 700, textShadow: giz ? "0 0 2px rgba(255,255,255,.7)" : "0 0 6px #fff" }}>{l2}</span>
       <span className="text-sm leading-none">{emoji}</span>
-      <Download className="absolute right-2 top-2 h-3 w-3 opacity-0 group-hover:opacity-80" />
+      {downloadIcon}
     </button>
   );
 }
@@ -126,7 +233,7 @@ export default function FigurinhasPage() {
   const [myText, setMyText] = useState("Meu dia extraordinário");
   const [myEmoji, setMyEmoji] = useState("👑");
   const [myStyle, setMyStyle] = useState(0);
-  const [effect, setEffect] = useState<Effect>("escrita");
+  const [effect, setEffect] = useState<Effect>("editorial");
 
   const all = useMemo(() => {
     const list: { text: string; emoji: string; s: (typeof STYLES)[number] }[] = [];
@@ -142,7 +249,7 @@ export default function FigurinhasPage() {
       <header>
         <p className="text-[11px] uppercase tracking-widest text-muted-foreground">Stories</p>
         <h1 className="font-display text-3xl">Figurinhas <em className="text-primary">para stories</em></h1>
-        <p className="text-sm text-muted-foreground">{total}+ figurinhas prontas para baixar. Escolha o efeito (escrita, giz ou pílula), toque para salvar com fundo transparente e use no Instagram.</p>
+        <p className="text-sm text-muted-foreground">{total}+ figurinhas prontas para baixar. Escolha editorial, modo foco, texto em arco, escrita, giz ou pílula. Toque para salvar e usar no Instagram.</p>
       </header>
 
       <section className="space-y-3 rounded-3xl border bg-card p-4">
