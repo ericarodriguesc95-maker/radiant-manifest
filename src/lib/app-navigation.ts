@@ -1,4 +1,4 @@
-import { Home, Compass, Sparkles, CalendarDays, BookOpen, Wallet, User, Brain, NotebookPen, ListChecks, Trophy, Utensils, Moon } from "lucide-react";
+import { Home, Compass, Sparkles, CalendarDays, BookOpen, Wallet, User, Brain, NotebookPen, ListChecks, Trophy, Utensils, Moon, Sticker } from "lucide-react";
 
 export const phaseLinks = [
   { label: "Reprogramação", to: "/reprogramacao", icon: Brain, sub: "Áudios e exercícios" },
@@ -8,6 +8,7 @@ export const phaseLinks = [
   { label: "Plano alimentar", to: "/plano-alimentar", icon: Utensils, sub: "Refeições da semana" },
   { label: "Sono", to: "/sono", icon: Moon, sub: "Dormir melhor" },
   { label: "Mente poderosa", to: "/mente-poderosa", icon: Sparkles, sub: "Regulação emocional" },
+  { label: "Figurinhas", to: "/figurinhas", icon: Sticker, sub: "Stickers para stories" },
   { label: "Guias", to: "/guias", icon: BookOpen, sub: "Autocuidado" },
 ];
 
