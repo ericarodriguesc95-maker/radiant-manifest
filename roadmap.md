@@ -8,3 +8,4 @@
 - [x] Move Home catalog, calendar, Bible entry and phase shortcuts into separate tab views.
 - [x] Verify signed-in navigation, real Bible progress and compact layouts on phone, tablet and notebook.
 - [x] Round the corners of the site favicon while preserving the current logo.
+- [x] Add a "só escrita, sem emoji" option that removes the emoji from every sticker effect (editorial, modo foco, texto em arco, pílula, escrita, giz) in both the catalog and the custom sticker creator.

@@ -89,17 +89,20 @@ function drawArcText(x: CanvasRenderingContext2D, text: string) {
   });
 }
 
-function drawSticker(text: string, emoji: string, s: St, effect: Effect) {
+function drawSticker(text: string, emoji: string, s: St, effect: Effect, noEmoji = false) {
   const c = document.createElement("canvas");
   c.width = 800; c.height = 400;
   const x = c.getContext("2d")!;
   x.textAlign = "center"; x.textBaseline = "middle";
   const [l1, l2] = splitLines(text);
+  const show = !noEmoji && emoji.trim() !== "";
 
   if (effect === "editorial") {
-    x.fillStyle = "rgba(250,248,245,0.96)";
-    x.beginPath(); x.roundRect(330, 24, 140, 54, 27); x.fill();
-    x.font = "34px serif"; x.fillText(emoji, 400, 52);
+    if (show) {
+      x.fillStyle = "rgba(250,248,245,0.96)";
+      x.beginPath(); x.roundRect(330, 24, 140, 54, 27); x.fill();
+      x.font = "34px serif"; x.fillText(emoji, 400, 52);
+    }
     x.fillStyle = "#FAF8F5";
     if (l1) {
       fit(x, l1, (n) => `600 ${n}px 'DM Sans', sans-serif`, 70, 700);
@@ -113,26 +116,29 @@ function drawSticker(text: string, emoji: string, s: St, effect: Effect) {
   } else if (effect === "foco") {
     x.fillStyle = "rgba(238,232,227,0.88)";
     x.beginPath(); x.roundRect(55, 100, 690, 200, 100); x.fill();
-    x.save(); x.filter = "grayscale(1)"; x.globalAlpha = 0.65;
-    x.font = "86px serif"; x.fillText(emoji, 150, 200); x.restore();
+    if (show) {
+      x.save(); x.filter = "grayscale(1)"; x.globalAlpha = 0.65;
+      x.font = "86px serif"; x.fillText(emoji, 150, 200); x.restore();
+    }
     x.fillStyle = "#28201A";
-    fit(x, text, (n) => `600 ${n}px 'DM Sans', sans-serif`, 58, 400);
-    x.fillText(text, 410, 176);
+    fit(x, text, (n) => `600 ${n}px 'DM Sans', sans-serif`, 58, show ? 400 : 620);
+    x.fillText(text, show ? 410 : 400, 176);
     x.fillStyle = "#A09287"; x.font = "400 32px 'DM Sans', sans-serif";
-    x.fillText("ativado", 410, 238);
+    x.fillText("ativado", show ? 410 : 400, 238);
     x.fillStyle = "rgba(111,98,90,0.55)";
     [625, 655, 685].forEach((cx) => { x.beginPath(); x.arc(cx, 200, 9, 0, Math.PI * 2); x.fill(); });
   } else if (effect === "arco") {
     x.fillStyle = "#FAF8F5";
+    if (!show) x.translate(0, 40);
     drawArcText(x, text);
-    x.font = "58px serif"; x.fillText(emoji, 400, 72);
+    if (show) { x.font = "58px serif"; x.fillText(emoji, 400, 72); }
   } else if (effect === "pilula") {
     x.fillStyle = s.bg; x.strokeStyle = "#FFFFFF"; x.lineWidth = 16;
     x.beginPath(); x.roundRect(20, 50, 760, 300, 150); x.fill(); x.stroke();
-    x.font = "90px serif"; x.fillText(emoji, 400, 150);
+    if (show) { x.font = "90px serif"; x.fillText(emoji, 400, 150); }
     x.fillStyle = s.fg;
     fit(x, text, (n) => `italic 700 ${n}px 'Playfair Display', serif`, 64, 680);
-    x.fillText(text, 400, 265);
+    x.fillText(text, 400, show ? 265 : 205);
   } else {
     const color = effect === "giz" ? "#FFFFFF" : s.bg;
     x.fillStyle = color;
@@ -140,18 +146,18 @@ function drawSticker(text: string, emoji: string, s: St, effect: Effect) {
     x.shadowBlur = effect === "giz" ? 4 : 10;
     if (l1) {
       fit(x, l1, (n) => effect === "giz" ? `${n}px 'Gochi Hand', cursive` : `700 ${n}px 'Caveat', cursive`, 96, 680);
-      x.fillText(l1, 400, 140);
+      x.fillText(l1, 400, show ? 140 : 160);
     }
     fit(x, l2, (n) => effect === "giz" ? `${n}px 'Gochi Hand', cursive` : `700 ${n}px 'Fredoka', sans-serif`, 120, 700);
-    x.fillText(l2, 400, l1 ? 250 : 200);
+    x.fillText(l2, 400, l1 ? (show ? 250 : 270) : (show ? 200 : 210));
     x.shadowBlur = 0;
-    x.font = "54px serif"; x.fillText(emoji, 400, 350);
+    if (show) { x.font = "54px serif"; x.fillText(emoji, 400, 350); }
     if (effect === "giz") chalkify(x, 800, 330);
   }
   return c.toDataURL("image/png");
 }
 
-async function download(text: string, emoji: string, s: St, effect: Effect) {
+async function download(text: string, emoji: string, s: St, effect: Effect, noEmoji = false) {
   try {
     await Promise.all([
       document.fonts.load("700 40px Caveat"),
@@ -163,19 +169,20 @@ async function download(text: string, emoji: string, s: St, effect: Effect) {
     ]);
   } catch { /* usa as fontes disponíveis */ }
   const a = document.createElement("a");
-  a.href = drawSticker(text, emoji, s, effect);
+  a.href = drawSticker(text, emoji, s, effect, noEmoji);
   a.download = `figurinha-${text.toLowerCase().normalize("NFD").replace(/[^a-z0-9]+/gi, "-")}.png`;
   a.click();
 }
 
-function Preview({ text, emoji, s, effect }: { text: string; emoji: string; s: St; effect: Effect }) {
+function Preview({ text, emoji, s, effect, noEmoji = false }: { text: string; emoji: string; s: St; effect: Effect; noEmoji?: boolean }) {
   const [l1, l2] = splitLines(text);
   const arcId = `arco-${useId().replace(/:/g, "")}`;
+  const show = !noEmoji && emoji.trim() !== "";
   const downloadIcon = <Download className="absolute right-2 top-2 h-3 w-3 opacity-60 transition group-hover:opacity-100" />;
 
   if (effect === "editorial") return (
-    <button onClick={() => download(text, emoji, s, effect)} className="group relative flex aspect-[2/1] flex-col items-center justify-center overflow-hidden rounded-2xl border border-white/10 shadow-sm transition hover:-translate-y-1" style={{ background: "hsl(var(--foreground))", color: "hsl(var(--primary-foreground))" }} aria-label={`Baixar figurinha ${text}`}>
-      <span className="mb-1 rounded-full bg-white/95 px-2 py-0.5 text-[10px] leading-none">{emoji}</span>
+    <button onClick={() => download(text, emoji, s, effect, noEmoji)} className="group relative flex aspect-[2/1] flex-col items-center justify-center overflow-hidden rounded-2xl border border-white/10 shadow-sm transition hover:-translate-y-1" style={{ background: "hsl(var(--foreground))", color: "hsl(var(--primary-foreground))" }} aria-label={`Baixar figurinha ${text}`}>
+      {show && <span className="mb-1 rounded-full bg-white/95 px-2 py-0.5 text-[10px] leading-none">{emoji}</span>}
       {l1 && <span className="px-2 text-center font-body text-sm font-semibold leading-none tracking-tight">{l1}</span>}
       <span className={`px-2 text-center font-display italic leading-tight ${l1 ? "text-lg" : "text-2xl"}`}>{l2}</span>
       {downloadIcon}
@@ -183,9 +190,9 @@ function Preview({ text, emoji, s, effect }: { text: string; emoji: string; s: S
   );
 
   if (effect === "foco") return (
-    <button onClick={() => download(text, emoji, s, effect)} className="group relative flex aspect-[2/1] items-center justify-center rounded-full border border-white/20 shadow-sm transition hover:-translate-y-1" style={{ background: "hsl(var(--muted) / 0.88)", color: "hsl(var(--foreground))" }} aria-label={`Baixar figurinha ${text}`}>
-      <span className="absolute left-[9%] text-3xl opacity-60 grayscale">{emoji}</span>
-      <span className="flex max-w-[58%] flex-col items-center">
+    <button onClick={() => download(text, emoji, s, effect, noEmoji)} className="group relative flex aspect-[2/1] items-center justify-center rounded-full border border-white/20 shadow-sm transition hover:-translate-y-1" style={{ background: "hsl(var(--muted) / 0.88)", color: "hsl(var(--foreground))" }} aria-label={`Baixar figurinha ${text}`}>
+      {show && <span className="absolute left-[9%] text-3xl opacity-60 grayscale">{emoji}</span>}
+      <span className={`flex max-w-[58%] flex-col items-center ${show ? "" : "max-w-[80%]"}`}>
         <span className="text-center font-body text-xs font-semibold leading-tight sm:text-sm">{text}</span>
         <span className="text-[10px] font-normal text-muted-foreground">ativado</span>
       </span>
@@ -194,32 +201,37 @@ function Preview({ text, emoji, s, effect }: { text: string; emoji: string; s: S
     </button>
   );
 
-  if (effect === "arco") return (
-    <button onClick={() => download(text, emoji, s, effect)} className="group relative flex aspect-[2/1] items-center justify-center overflow-hidden rounded-2xl border border-white/10 shadow-sm transition hover:-translate-y-1" style={{ background: "hsl(var(--foreground))", color: "hsl(var(--primary-foreground))" }} aria-label={`Baixar figurinha ${text}`}>
-      <span className="absolute top-[12%] text-lg">{emoji}</span>
-      <svg viewBox="0 0 400 200" className="h-full w-full" aria-hidden="true">
-        <defs><path id={arcId} d="M 45 165 A 155 155 0 0 1 355 165" fill="none" /></defs>
-        <text fill="currentColor" fontFamily="Raleway, sans-serif" fontSize="13" letterSpacing="2">
-          <textPath href={`#${arcId}`} startOffset="50%" textAnchor="middle">{`${text} • ${text} • ${text}`.toUpperCase()}</textPath>
-        </text>
-      </svg>
-      {downloadIcon}
-    </button>
-  );
+  if (effect === "arco") {
+    const arcStr = `${text} • ${text} • ${text}`.toUpperCase();
+    const arcN = Math.max([...arcStr].length, 1);
+    const arcFs = Math.max(6, Math.min(13, (470 / arcN - 2) / 0.62));
+    return (
+      <button onClick={() => download(text, emoji, s, effect, noEmoji)} className="group relative flex aspect-[2/1] items-center justify-center overflow-hidden rounded-2xl border border-white/10 shadow-sm transition hover:-translate-y-1" style={{ background: "hsl(var(--foreground))", color: "hsl(var(--primary-foreground))" }} aria-label={`Baixar figurinha ${text}`}>
+        {show && <span className="absolute top-[12%] text-lg">{emoji}</span>}
+        <svg viewBox="0 0 400 200" className={`h-full w-full ${show ? "" : "translate-y-[10%]"}`} aria-hidden="true">
+          <defs><path id={arcId} d="M 45 165 A 155 155 0 0 1 355 165" fill="none" /></defs>
+          <text fill="currentColor" fontFamily="Raleway, sans-serif" fontSize={arcFs} letterSpacing={arcFs * 0.15}>
+            <textPath href={`#${arcId}`} startOffset="50%" textAnchor="middle">{arcStr}</textPath>
+          </text>
+        </svg>
+        {downloadIcon}
+      </button>
+    );
+  }
 
   if (effect === "pilula") return (
-    <button onClick={() => download(text, emoji, s, effect)} className="group relative flex aspect-[2/1] flex-col items-center justify-center rounded-full border-4 border-background shadow-md transition hover:-translate-y-1" style={{ background: s.bg, color: s.fg }} aria-label={`Baixar figurinha ${text}`}>
-      <span className="text-2xl leading-none">{emoji}</span>
+    <button onClick={() => download(text, emoji, s, effect, noEmoji)} className="group relative flex aspect-[2/1] flex-col items-center justify-center rounded-full border-4 border-background shadow-md transition hover:-translate-y-1" style={{ background: s.bg, color: s.fg }} aria-label={`Baixar figurinha ${text}`}>
+      {show && <span className="text-2xl leading-none">{emoji}</span>}
       <span className="px-2 text-center font-display text-xs font-bold italic leading-tight">{text}</span>
       {downloadIcon}
     </button>
   );
   const giz = effect === "giz";
   return (
-    <button onClick={() => download(text, emoji, s, effect)} className="group relative flex aspect-[2/1] flex-col items-center justify-center overflow-hidden rounded-2xl border shadow-sm transition hover:-translate-y-1" style={{ background: giz ? "hsl(var(--foreground))" : "repeating-conic-gradient(hsl(var(--muted)) 0% 25%, hsl(var(--background)) 0% 50%) 50% / 16px 16px", color: giz ? "hsl(var(--primary-foreground))" : s.bg }} aria-label={`Baixar figurinha ${text}`}>
+    <button onClick={() => download(text, emoji, s, effect, noEmoji)} className="group relative flex aspect-[2/1] flex-col items-center justify-center overflow-hidden rounded-2xl border shadow-sm transition hover:-translate-y-1" style={{ background: giz ? "hsl(var(--foreground))" : "repeating-conic-gradient(hsl(var(--muted)) 0% 25%, hsl(var(--background)) 0% 50%) 50% / 16px 16px", color: giz ? "hsl(var(--primary-foreground))" : s.bg }} aria-label={`Baixar figurinha ${text}`}>
       {l1 && <span className="px-2 text-center text-lg leading-none" style={{ fontFamily: giz ? "'Gochi Hand', cursive" : "'Caveat', cursive", fontWeight: 700, opacity: giz ? 0.9 : 1 }}>{l1}</span>}
       <span className="px-2 text-center text-base leading-tight" style={{ fontFamily: giz ? "'Gochi Hand', cursive" : "'Fredoka', sans-serif", fontWeight: 700, textShadow: giz ? "0 0 2px rgba(255,255,255,.7)" : "0 0 6px #fff" }}>{l2}</span>
-      <span className="text-sm leading-none">{emoji}</span>
+      {show && <span className="text-sm leading-none">{emoji}</span>}
       {downloadIcon}
     </button>
   );
@@ -234,6 +246,7 @@ export default function FigurinhasPage() {
   const [myEmoji, setMyEmoji] = useState("👑");
   const [myStyle, setMyStyle] = useState(0);
   const [effect, setEffect] = useState<Effect>("editorial");
+  const [noEmoji, setNoEmoji] = useState(false);
 
   const all = useMemo(() => {
     const list: { text: string; emoji: string; s: (typeof STYLES)[number] }[] = [];
@@ -249,23 +262,24 @@ export default function FigurinhasPage() {
       <header>
         <p className="text-[11px] uppercase tracking-widest text-muted-foreground">Stories</p>
         <h1 className="font-display text-3xl">Figurinhas <em className="text-primary">para stories</em></h1>
-        <p className="text-sm text-muted-foreground">{total}+ figurinhas prontas para baixar. Escolha editorial, modo foco, texto em arco, escrita, giz ou pílula. Toque para salvar e usar no Instagram.</p>
+        <p className="text-sm text-muted-foreground">{total}+ figurinhas prontas para baixar. Escolha editorial, modo foco, texto em arco, escrita, giz ou pílula — e, se quiser, só escrita, sem emoji. Toque para salvar e usar no Instagram.</p>
       </header>
 
       <section className="space-y-3 rounded-3xl border bg-card p-4">
         <h2 className="font-display text-xl">Crie a sua ✨</h2>
         <div className="grid gap-3 sm:grid-cols-[1fr_90px]">
           <Input value={myText} maxLength={40} onChange={(e) => setMyText(e.target.value)} placeholder="Seu texto" />
-          <Input value={myEmoji} maxLength={4} onChange={(e) => setMyEmoji(e.target.value)} placeholder="Emoji" />
+          <Input value={myEmoji} maxLength={4} onChange={(e) => setMyEmoji(e.target.value)} placeholder="Emoji" disabled={noEmoji} />
         </div>
+        <button onClick={() => setNoEmoji(!noEmoji)} aria-pressed={noEmoji} className={`rounded-full border px-4 py-1.5 text-sm ${noEmoji ? "bg-primary text-primary-foreground" : ""}`}>✏️ Só escrita, sem emoji</button>
         <div className="flex flex-wrap gap-2">
           {STYLES.map((s, i) => (
             <button key={i} onClick={() => setMyStyle(i)} aria-label={`Estilo ${i + 1}`} className={`h-8 w-8 rounded-full border-2 ${myStyle === i ? "ring-2 ring-primary" : ""}`} style={{ background: s.bg }} />
           ))}
         </div>
         <div className="flex items-center gap-4">
-          <div className="w-48"><Preview text={myText || " "} emoji={myEmoji} s={STYLES[myStyle]} effect={effect} /></div>
-          <Button className="rounded-full" onClick={() => download(myText, myEmoji, STYLES[myStyle], effect)}><Download className="mr-2 h-4 w-4" />Baixar</Button>
+          <div className="w-48"><Preview text={myText || " "} emoji={myEmoji} s={STYLES[myStyle]} effect={effect} noEmoji={noEmoji} /></div>
+          <Button className="rounded-full" onClick={() => download(myText, myEmoji, STYLES[myStyle], effect, noEmoji)}><Download className="mr-2 h-4 w-4" />Baixar</Button>
         </div>
       </section>
 
@@ -274,6 +288,7 @@ export default function FigurinhasPage() {
         {EFFECTS.map((e) => (
           <button key={e.id} onClick={() => setEffect(e.id)} className={`rounded-full border px-4 py-1.5 text-sm ${effect === e.id ? "bg-primary text-primary-foreground" : ""}`}>{e.label}</button>
         ))}
+        <button onClick={() => setNoEmoji(!noEmoji)} aria-pressed={noEmoji} className={`rounded-full border px-4 py-1.5 text-sm ${noEmoji ? "bg-primary text-primary-foreground" : ""}`}>✏️ Só escrita, sem emoji</button>
       </div>
       <div className="flex flex-wrap gap-2">
         {cats.map((c) => (
@@ -283,7 +298,7 @@ export default function FigurinhasPage() {
       <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar figurinha..." />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-6">
-        {all.slice(0, limit).map((f, i) => <Preview key={i} {...f} effect={effect} />)}
+        {all.slice(0, limit).map((f, i) => <Preview key={i} {...f} effect={effect} noEmoji={noEmoji} />)}
       </div>
       {limit < all.length && (
         <div className="text-center"><Button variant="outline" className="rounded-full" onClick={() => setLimit(limit + 84)}>Ver mais</Button></div>
