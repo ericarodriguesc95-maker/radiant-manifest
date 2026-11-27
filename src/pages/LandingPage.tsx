@@ -209,11 +209,11 @@ const FAQ = [
   },
   {
     q: "Quanto custa e como pago?",
-    a: "R$17,90 à vista no crédito ou pix. Pagamento único, sem mensalidade. Acesso vitalício completo, sem renovação automática.",
+    a: "R$27,90 à vista no crédito ou pix. Pagamento único, sem mensalidade. Acesso vitalício completo, sem renovação automática.",
   },
   {
     q: "Posso cancelar?",
-    a: "R$17,90 à vista no crédito ou pix. Como é pagamento único, não há renovação automática. Você tem 7 dias de garantia e pode solicitar reembolso direto na plataforma de pagamento, caso o Club não faça sentido para você no momento.",
+    a: "R$27,90 à vista no crédito ou pix. Como é pagamento único, não há renovação automática. Você tem 7 dias de garantia e pode solicitar reembolso direto na plataforma de pagamento, caso o Club não faça sentido para você no momento.",
   },
   {
     q: "Recebo atualizações sem pagar mais?",
@@ -719,7 +719,7 @@ export default function LandingPage() {
                 Acesso vitalício
               </p>
               <p style={{ ...serif, color: C.ink }} className="text-[52px] font-semibold leading-none">
-                R$17,90
+                R$27,90
               </p>
               <p style={{ color: C.inkSoft }} className="mt-2 text-[12.5px]">
                 pagamento único, à vista no crédito ou pix
